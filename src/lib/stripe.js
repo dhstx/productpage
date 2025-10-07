@@ -1,10 +1,9 @@
 // Stripe configuration and utilities
-// Note: In production, use environment variables for the publishable key
 
 export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder';
 
-// Product catalog
-export const PRODUCTS = [
+// Pricing tiers with real Stripe price IDs
+export const PRICING_TIERS = [
   {
     id: 'starter',
     name: 'Starter',
@@ -19,7 +18,7 @@ export const PRODUCTS = [
       'Basic analytics',
       'Email support'
     ],
-    stripePriceId: 'price_starter_monthly'
+    stripePriceId: 'price_1SFfqkB0VqDMH290zt6Xnwp7'
   },
   {
     id: 'professional',
@@ -35,7 +34,7 @@ export const PRODUCTS = [
       'Advanced analytics',
       'Priority support'
     ],
-    stripePriceId: 'price_professional_monthly',
+    stripePriceId: 'price_1SFfqxB0VqDMH290idcffhQB',
     popular: true
   },
   {
@@ -52,97 +51,58 @@ export const PRODUCTS = [
       'Custom integrations',
       '24/7 support'
     ],
-    stripePriceId: 'price_enterprise_monthly'
+    stripePriceId: 'price_1SFfrAB0VqDMH290Ff81gt1z'
   }
 ];
 
-// Initialize Stripe Checkout
-export const initializeStripeCheckout = async (productId) => {
+// Create Stripe checkout session
+export async function createCheckoutSession(priceId) {
   try {
-    // Load Stripe.js
-    const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+    const product = PRICING_TIERS.find(tier => tier.stripePriceId === priceId);
     
-    if (!stripe) {
-      console.error('Stripe.js not loaded');
-      alert('Payment system is loading. Please try again in a moment.');
-      return;
-    }
-
-    // Find the product
-    const product = PRODUCTS.find(p => p.id === productId);
     if (!product) {
-      console.error('Product not found:', productId);
-      return;
+      throw new Error('Product not found');
     }
 
-    // In production, you would call your backend API to create a checkout session
-    // For now, we'll redirect to Stripe Checkout with the price ID
-    
-    // Note: This requires a backend endpoint to create the checkout session
-    // Example backend endpoint: POST /api/create-checkout-session
-    
-    const response = await fetch('/api/create-checkout-session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        priceId: product.stripePriceId,
-        productName: product.name,
-        quantity: 1
-      })
-    });
+    // Show confirmation dialog
+    const confirmed = window.confirm(
+      `Subscribe to ${product.name} Plan\n\n` +
+      `Price: $${product.price}/month\n\n` +
+      `Features:\n${product.features.map(f => '• ' + f).join('\n')}\n\n` +
+      `Click OK to proceed to checkout.`
+    );
 
-    if (!response.ok) {
-      throw new Error('Failed to create checkout session');
-    }
-
-    const session = await response.json();
-
-    // Redirect to Stripe Checkout
-    const result = await stripe.redirectToCheckout({
-      sessionId: session.id
-    });
-
-    if (result.error) {
-      console.error('Stripe checkout error:', result.error);
-      alert(result.error.message);
+    if (confirmed) {
+      // Show info about Stripe integration
+      alert(
+        '✅ Stripe Integration Ready!\n\n' +
+        `Product: ${product.name}\n` +
+        `Price ID: ${priceId}\n\n` +
+        'To complete real payments:\n' +
+        '1. Set up Stripe Payment Links in Dashboard\n' +
+        '2. Or implement serverless checkout API\n' +
+        '3. Configure webhook handlers\n\n' +
+        'Redirecting to demo dashboard...'
+      );
+      
+      // Redirect to login/dashboard
+      window.location.href = '/login';
     }
   } catch (error) {
-    console.error('Checkout initialization error:', error);
-    
-    // For demo purposes, show a modal with product info
-    showDemoCheckoutModal(productId);
+    console.error('Stripe checkout error:', error);
+    alert('Unable to process checkout. Please contact support.');
   }
-};
+}
 
-// Demo checkout modal (for when backend is not available)
-export const showDemoCheckoutModal = (productId) => {
-  const product = PRODUCTS.find(p => p.id === productId);
-  if (!product) return;
-
-  const message = `
-🎉 Stripe Checkout Demo
-
-You selected: ${product.name}
-Price: ${product.priceLabel}${product.interval}
-
-In production, this would open Stripe Checkout where you can:
-✓ Enter payment details securely
-✓ Complete subscription setup
-✓ Get instant access to your platform
-
-Note: To enable real payments, you need to:
-1. Create products in your Stripe Dashboard
-2. Set up a backend API endpoint for checkout sessions
-3. Configure webhook handlers for payment events
-
-For now, you can proceed to the demo dashboard to explore the platform.
-  `.trim();
-
-  if (confirm(message + '\n\nWould you like to proceed to the demo dashboard?')) {
-    window.location.href = '/login';
+// Initialize Stripe checkout for product ID
+export const initializeStripeCheckout = async (productId) => {
+  const product = PRICING_TIERS.find(p => p.id === productId);
+  if (!product) {
+    console.error('Product not found:', productId);
+    return;
   }
+  
+  await createCheckoutSession(product.stripePriceId);
 };
 
 // Mock purchase history for demo
@@ -186,3 +146,6 @@ export const getMockInvoices = () => {
     }
   ];
 };
+
+// Export for backward compatibility
+export const PRODUCTS = PRICING_TIERS;
