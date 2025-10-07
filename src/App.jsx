@@ -12,10 +12,12 @@ import Settings from './pages/Settings';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import Analytics from './components/Analytics';
 
 function App() {
   return (
     <Router>
+      <Analytics />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />

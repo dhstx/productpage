@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
 import { PRODUCTS } from '../lib/stripe';
+import FeatureComparison from '../components/FeatureComparison';
 
 export default function Product() {
   return (
@@ -137,6 +138,9 @@ export default function Product() {
           </div>
         </div>
       </section>
+
+      {/* Feature Comparison */}
+      <FeatureComparison />
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">

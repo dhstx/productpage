@@ -1,5 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles } from 'lucide-react';
+import Testimonials from '../components/Testimonials';
+import EmailCapture from '../components/EmailCapture';
+import TrustBadges from '../components/TrustBadges';
+import FAQ from '../components/FAQ';
 
 export default function Landing() {
   return (
@@ -79,6 +83,18 @@ export default function Landing() {
           </p>
         </div>
       </section>
+
+      {/* Testimonials */}
+      <Testimonials />
+
+      {/* Email Capture */}
+      <EmailCapture />
+
+      {/* Trust Badges */}
+      <TrustBadges />
+
+      {/* FAQ */}
+      <FAQ />
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
