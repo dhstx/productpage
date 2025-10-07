@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
-import { PRODUCTS } from '../lib/stripe';
+import { PRODUCTS, initializeStripeCheckout } from '../lib/stripe';
 import FeatureComparison from '../components/FeatureComparison';
 
 export default function Product() {
+  const handleCheckout = (productId) => {
+    initializeStripeCheckout(productId);
+  };
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
       {/* Header */}
@@ -114,7 +117,7 @@ export default function Product() {
         </h2>
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {PRODUCTS.map((product) => (
-            <PricingCard key={product.id} product={product} />
+            <PricingCard key={product.id} product={product} onCheckout={handleCheckout} />
           ))}
         </div>
       </section>
@@ -183,7 +186,7 @@ function CapabilityCard({ icon, title, description, features }) {
   );
 }
 
-function PricingCard({ product }) {
+function PricingCard({ product, onCheckout }) {
   return (
     <div className={`panel-system p-6 relative ${product.popular ? 'border-[#FFC96C]' : ''}`}>
       {product.popular && (
@@ -207,9 +210,12 @@ function PricingCard({ product }) {
           </li>
         ))}
       </ul>
-      <Link to="/login" className="btn-system w-full text-center block">
+      <button 
+        onClick={() => onCheckout(product.id)}
+        className="btn-system w-full text-center block"
+      >
         Get Started
-      </Link>
+      </button>
     </div>
   );
 }
