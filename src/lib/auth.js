@@ -6,7 +6,7 @@ export const login = (email, password) => {
   if (email && password) {
     const user = {
       email,
-      name: 'Board Administrator',
+      name: 'Digital Asset Administrator',
       role: 'admin',
       id: Date.now().toString()
     };

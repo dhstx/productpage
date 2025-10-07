@@ -162,7 +162,7 @@ export default function Billing() {
             </div>
             <div>
               <p className="text-[#B3B3B3] text-sm mb-1 uppercase tracking-tight">Address</p>
-              <p className="text-[#F2F2F2]">123 Board Street, Suite 100</p>
+              <p className="text-[#F2F2F2]">123 Asset Way, Suite 100</p>
             </div>
             <div>
               <p className="text-[#B3B3B3] text-sm mb-1 uppercase tracking-tight">Tax ID</p>

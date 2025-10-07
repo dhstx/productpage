@@ -33,12 +33,21 @@ export default function AdminLayout({ children }) {
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C] sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-8">
-              <Link to="/dashboard" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
-                ADMIN PORTAL
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center justify-between md:justify-start gap-4">
+              <Link to="/dashboard" className="text-[#F2F2F2] text-xl font-bold tracking-tight" aria-label="Dashboard home">
+                ASSET ADMIN
               </Link>
-              <nav className="hidden md:flex items-center gap-1">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden text-[#F2F2F2] p-2"
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-admin-navigation"
+              >
+                <span className="sr-only">Toggle navigation</span>
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+              <nav aria-label="Admin navigation" className="hidden md:flex items-center gap-1">
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.href;
@@ -82,19 +91,14 @@ export default function AdminLayout({ children }) {
               </button>
 
               {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden text-[#F2F2F2] p-2"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+              <div className="md:hidden" aria-hidden="true"></div>
             </div>
           </div>
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-[#202020] pt-4">
-              <nav className="space-y-2">
+            <div className="md:hidden mt-4 pb-4 border-t border-[#202020] pt-4" id="mobile-admin-navigation">
+              <nav className="space-y-2" aria-label="Mobile admin navigation">
                 {navigation.map((item) => {
                   const Icon = item.icon;
                   const isActive = location.pathname === item.href;

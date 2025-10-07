@@ -1,4 +1,4 @@
-# DHStx Company Platform - Quick Start
+# DHStx Digital Asset Platform - Quick Start
 
 ## 🚀 Fastest Way to Deploy
 
@@ -21,15 +21,15 @@ vercel login
 vercel --prod
 ```
 
-That's it! Your platform will be live in minutes.
+That's it! Your digital asset control plane will be live in minutes.
 
 ## 📋 What's Included
 
 ✅ **Complete React Application**
-- Landing page with platform overview
+- Landing page with asset-focused messaging
 - Product/pricing page (3 tiers: $999, $2,499, $5,999)
 - User authentication system
-- Admin dashboard
+- Admin dashboard with integration health and analytics
 - Billing management with Stripe
 - Platform access management
 - Settings page
@@ -59,8 +59,11 @@ That's it! Your platform will be live in minutes.
 After deployment, go to your Vercel project settings and add:
 
 ```
+VITE_SUPABASE_URL=https://your-supabase-instance.supabase.co
+VITE_SUPABASE_ANON_KEY=public-anon-key
 VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
-VITE_API_URL=https://your-api-url.com
+VITE_STRIPE_WEBHOOK_SECRET=whsec_your_secret
+VITE_SENTRY_DSN=https://public@sentry.io/project
 ```
 
 ### Set up Stripe Products

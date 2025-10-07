@@ -1,4 +1,5 @@
-import { ExternalLink, Target, Settings, CheckCircle } from 'lucide-react';
+import { ExternalLink, Target, Settings, CheckCircle, LineChart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { getMockPurchases } from '../lib/stripe';
 
 export default function Platforms() {
@@ -11,7 +12,7 @@ export default function Platforms() {
           MY PLATFORMS
         </h1>
         <p className="text-[#B3B3B3]">
-          Access and manage your purchased platform instances.
+          Access and manage every purchased digital asset environment from a single control plane.
         </p>
       </div>
 
@@ -26,7 +27,7 @@ export default function Platforms() {
                 </div>
                 <div>
                   <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-2">
-                    Board Management Portal
+                    Digital Asset Hub
                   </h3>
                   <p className="text-[#B3B3B3] text-sm mb-3">
                     {purchase.productName} • Purchased {purchase.purchaseDate}
@@ -37,7 +38,7 @@ export default function Platforms() {
                       <span className="text-[#B3B3B3] text-sm capitalize">{purchase.status}</span>
                     </div>
                     <span className="text-[#B3B3B3] text-sm">•</span>
-                    <span className="text-[#B3B3B3] text-sm">board.yourorganization.com</span>
+                    <span className="text-[#B3B3B3] text-sm">assets.yourorganization.com</span>
                   </div>
                 </div>
               </div>
@@ -45,13 +46,13 @@ export default function Platforms() {
 
             <div className="border-t border-[#202020] pt-6 mb-6">
               <h4 className="text-[#F2F2F2] font-bold mb-4 uppercase tracking-tight text-sm">
-                Platform Features
+                Platform Signals
               </h4>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <FeatureStat label="Active Initiatives" value="0" />
-                <FeatureStat label="Board Members" value="0" />
-                <FeatureStat label="Upcoming Events" value="0" />
-                <FeatureStat label="Committees" value="0" />
+                <FeatureStat label="Optimization Plans" value="0" />
+                <FeatureStat label="Stakeholders" value="0" />
+                <FeatureStat label="Renewals Due" value="0" />
+                <FeatureStat label="Compliance Tasks" value="0" />
               </div>
             </div>
 
@@ -60,16 +61,16 @@ export default function Platforms() {
                 Quick Actions
               </h4>
               <div className="flex flex-wrap gap-3">
-                <a 
+                <a
                   href={purchase.platformUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-system flex items-center gap-2"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Open Portal
+                  Open Hub
                 </a>
-                <a 
+                <a
                   href={purchase.adminUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -81,9 +82,10 @@ export default function Platforms() {
                 <button className="btn-system">
                   Copy Portal Link
                 </button>
-                <button className="btn-system">
+                <Link to="/dashboard#analytics" className="btn-system flex items-center gap-2">
+                  <LineChart className="w-4 h-4" />
                   View Analytics
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -94,10 +96,10 @@ export default function Platforms() {
       <section>
         <div className="panel-system p-8 text-center">
           <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-3">
-            NEED ANOTHER PLATFORM?
+            NEED ANOTHER ENVIRONMENT?
           </h3>
           <p className="text-[#B3B3B3] mb-6">
-            Purchase additional platform instances for different organizations or departments.
+            Purchase additional environments for new business units, compliance regions, or sandbox testing.
           </p>
           <button className="btn-system">
             View Pricing Plans

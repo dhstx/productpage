@@ -29,7 +29,7 @@ describe('Authentication', () => {
   it('should return current user after login', () => {
     login('admin', 'admin123');
     const user = getCurrentUser();
-    expect(user).toHaveProperty('name', 'Board Administrator');
+    expect(user).toHaveProperty('name', 'Digital Asset Administrator');
     expect(user).toHaveProperty('email', 'admin');
     expect(user).toHaveProperty('role', 'admin');
     expect(user).toHaveProperty('id');

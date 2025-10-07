@@ -65,8 +65,8 @@ export const getMockPurchases = () => {
       productName: 'Professional Plan',
       purchaseDate: '2024-09-15',
       status: 'active',
-      platformUrl: 'https://board.yourorganization.com',
-      adminUrl: 'https://board.yourorganization.com/admin'
+      platformUrl: 'https://assets.yourorganization.com',
+      adminUrl: 'https://assets.yourorganization.com/admin'
     }
   ];
 };

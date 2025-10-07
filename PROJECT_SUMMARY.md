@@ -68,11 +68,11 @@
    - Demo credentials provided
 
 4. **Dashboard** (`/dashboard`) - Protected
-   - Board portal access card
+   - Asset hub access card
    - System status overview
-   - Urgent actions section
-   - Upcoming events
-   - Committee progress tracking
+   - Integration health section
+   - Renewal schedule
+   - Portfolio alerts
 
 5. **My Platforms** (`/platforms`) - Protected
    - List of purchased platforms

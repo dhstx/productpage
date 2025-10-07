@@ -1,6 +1,6 @@
-# DHStx Company Platform
+# DHStx Digital Asset Platform
 
-A complete company product page platform with Stripe integration, user authentication, admin dashboard, and billing management. Built with React, Tailwind CSS, and the DHStx design system.
+An enterprise-ready web application for managing purchased digital products, licenses, and subscriptions. The platform ships with Stripe billing, Supabase-ready authentication hooks, integration health monitoring, and a responsive admin workspace. Built with React, Tailwind CSS, and the DHStx design system.
 
 ## Features
 
@@ -10,8 +10,8 @@ A complete company product page platform with Stripe integration, user authentic
 - **Login Page**: Secure authentication with demo credentials
 
 ### Admin Portal (Protected)
-- **Dashboard**: Overview of purchased platforms and system status
-- **My Platforms**: Access and manage purchased platform instances
+- **Dashboard**: Portfolio analytics, integration health, and renewal visibility
+- **My Platforms**: Access and manage every purchased asset environment
 - **Billing**: Subscription management, payment methods, and invoice history
 - **Settings**: Account preferences, security, and notifications
 
@@ -100,7 +100,23 @@ productpage/
 └── vite.config.js      # Vite configuration
 \`\`\`
 
-## Stripe Integration
+## API & Integration Setup
+
+### Environment Variables
+
+Create an `.env` or `.env.local` file with the following keys:
+
+```
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_key_here
+VITE_STRIPE_WEBHOOK_SECRET=whsec_your_secret
+VITE_SENTRY_DSN=https://public@sentry.io/project
+```
+
+These variables power Supabase authentication, Stripe payments/webhooks, and Sentry error logging. The dashboard renders integration health cards based on their presence.
+
+### Stripe Integration
 
 ### Setup
 
@@ -109,6 +125,7 @@ productpage/
 3. Add the key to your `.env` file
 4. Configure products and prices in Stripe Dashboard
 5. Update `src/lib/stripe.js` with your price IDs
+6. Add your webhook signing secret to `VITE_STRIPE_WEBHOOK_SECRET`
 
 ### Features
 - Product catalog with three tiers (Starter, Professional, Enterprise)
@@ -116,6 +133,18 @@ productpage/
 - Payment method handling
 - Invoice history and downloads
 - Billing information management
+- Mock webhook event logging helpers (extend within your serverless functions)
+
+### Supabase Authentication
+
+- Configure Supabase URL and anon key via environment variables
+- Extend `src/lib/auth.js` with Supabase client logic for production authentication
+- Use Supabase Functions for secure webhook relays if preferred
+
+### Error Logging & Health Checks
+
+- Provide a Sentry DSN to enable runtime error forwarding via `logIntegrationIssue`
+- The dashboard's **Integration Health** section surfaces missing configuration at a glance
 
 ## Deployment
 

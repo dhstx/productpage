@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, ArrowLeft } from 'lucide-react';
 import { login } from '../lib/auth';
+import { sanitizeInput } from '../lib/utils';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -12,8 +13,16 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    
-    const user = login(email, password);
+
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
+    if (!sanitizedEmail || !sanitizedPassword) {
+      setError('Please remove unsupported characters and try again.');
+      return;
+    }
+
+    const user = login(sanitizedEmail, sanitizedPassword);
     if (user) {
       navigate('/dashboard');
     } else {

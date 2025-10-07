@@ -29,7 +29,7 @@ export default function Settings() {
               </label>
               <input
                 type="text"
-                defaultValue={user?.name || 'Board Administrator'}
+                defaultValue={user?.name || 'Digital Asset Administrator'}
                 className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
               />
             </div>

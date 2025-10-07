@@ -26,10 +26,10 @@ export default function Product() {
           <span className="text-[#FFC96C] text-sm uppercase tracking-wider">PLATFORM OVERVIEW</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
-          COMPLETE BOARD MANAGEMENT SYSTEM
+          ENTERPRISE DIGITAL ASSET MANAGEMENT
         </h1>
         <p className="text-xl text-[#B3B3B3] mb-12 max-w-3xl mx-auto text-center">
-          The all-in-one platform for board management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
+          A unified command center for tracking every purchased license, subscription, and entitlement. Govern spend, automate renewals, and empower teams with accurate asset intelligence.
         </p>
         <div className="flex gap-4 justify-center">
           <a href="#pricing" className="btn-system">
@@ -52,23 +52,23 @@ export default function Product() {
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           <FeatureCard
             icon={<Target className="w-6 h-6" />}
-            title="Strategic Initiatives Tracker"
-            description="Visualize and prioritize initiatives using effort-impact matrices. Track progress, assign owners, and ensure alignment with organizational goals."
+            title="Portfolio Intelligence"
+            description="Surface spend trends, renewal risks, and redundancy opportunities across all SaaS and digital assets."
           />
           <FeatureCard
             icon={<Users className="w-6 h-6" />}
-            title="Member Engagement Database"
-            description="Manage comprehensive member records with engagement tracking, participation history, and professional networking capabilities."
+            title="Entitlement Directory"
+            description="Manage purchaser and end-user records with seat allocation, access history, and compliance notes."
           />
           <FeatureCard
             icon={<Calendar className="w-6 h-6" />}
-            title="Events & Calendar Management"
-            description="Plan board meetings, member gatherings, and events with RSVP tracking, attendance management, and automated reminders."
+            title="Renewal Automation"
+            description="Trigger procurement workflows, reminders, and approvals so renewals and true-ups happen on time."
           />
           <FeatureCard
             icon={<Sparkles className="w-6 h-6" />}
-            title="AI-Powered Intelligence"
-            description="Three specialized AI agents provide board assistance, committee coordination, and analytics insights to enhance decision-making."
+            title="AI Spend Guidance"
+            description="Proactive agents recommend optimization scenarios and forecast budget impact in seconds."
           />
         </div>
       </section>
@@ -91,8 +91,8 @@ export default function Product() {
           <CapabilityCard
             icon={<Zap className="w-8 h-8" />}
             title="Automation & Workflows"
-            description="Automated email notifications, task assignments, and progress tracking keep your board aligned and informed."
-            features={['Email Alerts', 'Task Automation', 'Progress Tracking', 'Smart Reminders']}
+            description="Automated notifications, procurement tasks, and lifecycle policies keep your asset estate current."
+            features={['Renewal Alerts', 'Workflow Automation', 'Lifecycle Policies', 'Smart Reminders']}
           />
           <CapabilityCard
             icon={<Database className="w-8 h-8" />}
@@ -122,10 +122,10 @@ export default function Product() {
       <section className="container mx-auto px-6 py-16">
         <div className="panel-system p-12 text-center max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-            READY TO TRANSFORM YOUR BOARD?
+            READY TO GOVERN EVERY DIGITAL ASSET?
           </h2>
           <p className="text-[#B3B3B3] mb-8 text-lg">
-            Join organizations that have modernized their board operations. Schedule a demo today.
+            Join teams eliminating shadow IT and wasted spend with a unified asset command center.
           </p>
           <div className="flex gap-4 justify-center">
             <Link to="/login" className="btn-system">
@@ -142,8 +142,8 @@ export default function Product() {
       <footer className="border-t border-[#202020] mt-24">
         <div className="container mx-auto px-6 py-8">
           <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
-            <p>© 2025 Board Management Platform. All rights reserved.</p>
-            <p>Empowering boards, committees, and organizations worldwide</p>
+            <p>© 2025 Digital Asset Management Platform. All rights reserved.</p>
+            <p>Trusted by finance, IT, and procurement teams worldwide.</p>
           </div>
         </div>
       </footer>

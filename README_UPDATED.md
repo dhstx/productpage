@@ -1,6 +1,6 @@
-# DHStx Company Platform
+# DHStx Digital Asset Platform
 
-Complete company product page platform with Stripe integration, authentication, and admin dashboard.
+Production-grade digital asset management workspace with Stripe billing, Supabase-ready authentication, analytics, and health monitoring.
 
 ## ✅ Recent Improvements
 
@@ -57,8 +57,11 @@ vercel --prod
 
 ### Environment Variables
 ```
+VITE_SUPABASE_URL=https://your-supabase-instance.supabase.co
+VITE_SUPABASE_ANON_KEY=public-anon-key
 VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
-VITE_API_URL=https://your-api-url.com
+VITE_STRIPE_WEBHOOK_SECRET=whsec_...
+VITE_SENTRY_DSN=https://public@sentry.io/project
 ```
 
 ## 🧪 Testing
