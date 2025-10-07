@@ -5,13 +5,20 @@ import { logout, getCurrentUser } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const user = getCurrentUser();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setIsLoggingOut(false);
+    }
   };
 
   const navigation = [
@@ -67,10 +74,11 @@ export default function AdminLayout({ children }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="hidden md:flex btn-system items-center gap-2"
+                disabled={isLoggingOut}
+                className="hidden md:flex btn-system items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <LogOut className="w-4 h-4" />
-                Logout
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
               </button>
 
               {/* Mobile Menu Button */}
@@ -108,10 +116,11 @@ export default function AdminLayout({ children }) {
                 })}
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full"
+                  disabled={isLoggingOut}
+                  className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <LogOut className="w-5 h-5" />
-                  <span className="uppercase tracking-tight">Logout</span>
+                  <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </nav>
             </div>
