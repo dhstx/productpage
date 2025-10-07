@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-xl: 4px;
+  
+  /* DHStx Color System */
+  --color-dhstx-black: #0C0C0C;
+  --color-dhstx-panel: #1A1A1A;
+  --color-dhstx-border: #202020;
+  --color-dhstx-text: #F2F2F2;
+  --color-dhstx-muted: #B3B3B3;
+  --color-dhstx-accent: #FFC96C;
+  --color-dhstx-silver: #C0C0C0;
+  
+  --color-background: var(--dhstx-black);
+  --color-foreground: var(--dhstx-text);
+  --color-card: var(--dhstx-panel);
+  --color-card-foreground: var(--dhstx-text);
+  --color-popover: var(--dhstx-panel);
+  --color-popover-foreground: var(--dhstx-text);
+  --color-primary: var(--dhstx-accent);
+  --color-primary-foreground: #000000;
+  --color-secondary: var(--dhstx-panel);
+  --color-secondary-foreground: var(--dhstx-text);
+  --color-muted: var(--dhstx-panel);
+  --color-muted-foreground: var(--dhstx-muted);
+  --color-accent: var(--dhstx-accent);
+  --color-accent-foreground: #000000;
+  --color-destructive: #DC2626;
+  --color-border: var(--dhstx-border);
+  --color-input: var(--dhstx-border);
+  --color-ring: var(--dhstx-accent);
+}
+
+:root {
+  --radius: 4px;
+  --background: #0C0C0C;
+  --foreground: #F2F2F2;
+  --card: #1A1A1A;
+  --card-foreground: #F2F2F2;
+  --popover: #1A1A1A;
+  --popover-foreground: #F2F2F2;
+  --primary: #FFC96C;
+  --primary-foreground: #000000;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #F2F2F2;
+  --muted: #1A1A1A;
+  --muted-foreground: #B3B3B3;
+  --accent: #FFC96C;
+  --accent-foreground: #000000;
+  --destructive: #DC2626;
+  --border: #202020;
+  --input: #202020;
+  --ring: #FFC96C;
+  --dhstx-black: #0C0C0C;
+  --dhstx-panel: #1A1A1A;
+  --dhstx-border: #202020;
+  --dhstx-text: #F2F2F2;
+  --dhstx-muted: #B3B3B3;
+  --dhstx-accent: #FFC96C;
+  --dhstx-silver: #C0C0C0;
+}
+
+.dark {
+  --background: #0C0C0C;
+  --foreground: #F2F2F2;
+  --card: #1A1A1A;
+  --card-foreground: #F2F2F2;
+  --popover: #1A1A1A;
+  --popover-foreground: #F2F2F2;
+  --primary: #FFC96C;
+  --primary-foreground: #000000;
+  --secondary: #1A1A1A;
+  --secondary-foreground: #F2F2F2;
+  --muted: #1A1A1A;
+  --muted-foreground: #B3B3B3;
+  --accent: #FFC96C;
+  --accent-foreground: #000000;
+  --destructive: #DC2626;
+  --border: #202020;
+  --input: #202020;
+  --ring: #FFC96C;
+}
+
+@layer base {
+  * {
+    @apply border-[#202020] outline-ring/50;
+  }
+  
+  body {
+    @apply bg-[#0C0C0C] text-[#F2F2F2] antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-[#F2F2F2] uppercase tracking-tight;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  /* DHStx System Buttons */
+  .btn-system {
+    @apply px-4 py-2 rounded-[2px] border border-[#202020] bg-[#C0C0C0] text-black font-medium transition-all duration-200;
+  }
+  
+  .btn-system:hover,
+  .btn-system:active {
+    @apply bg-[#FFC96C] text-black;
+  }
+  
+  /* DHStx Panels */
+  .panel-system {
+    @apply bg-[#1A1A1A] border border-[#202020] rounded-[4px];
+  }
+  
+  /* DHStx Mini Box */
+  .mini-box {
+    @apply border-b border-[#202020] last:border-b-0 transition-colors duration-200;
+  }
+  
+  .mini-box:hover {
+    @apply bg-[#1A1A1A];
+  }
+  
+  /* DHStx Text Utilities */
+  .text-primary {
+    @apply text-[#F2F2F2];
+  }
+  
+  .text-secondary {
+    @apply text-[#B3B3B3];
+  }
+  
+  .text-accent {
+    @apply text-[#FFC96C];
+  }
+  
+  .bg-system {
+    @apply bg-[#0C0C0C];
+  }
+  
+  .bg-panel {
+    @apply bg-[#1A1A1A];
+  }
+  
+  .bg-accent {
+    @apply bg-[#FFC96C];
+  }
+}
+
+@layer utilities {
+  .tracking-tighter {
+    letter-spacing: -0.05em;
+  }
+}

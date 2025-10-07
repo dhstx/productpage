@@ -1,0 +1,66 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
+
+// Pages
+import Landing from './pages/Landing';
+import Product from './pages/Product';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Platforms from './pages/Platforms';
+import Billing from './pages/Billing';
+import Settings from './pages/Settings';
+
+// Components
+import ProtectedRoute from './components/ProtectedRoute';
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/platforms"
+          element={
+            <ProtectedRoute>
+              <Platforms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <Billing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch all - redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
