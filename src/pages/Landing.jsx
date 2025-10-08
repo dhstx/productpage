@@ -5,6 +5,7 @@ import EmailCapture from '../components/EmailCapture';
 import TrustBadges from '../components/TrustBadges';
 import FAQ from '../components/FAQ';
 import ProductDemo from '../components/ProductDemo';
+import CustomerReviews from '../components/CustomerReviews';
 
 export default function Landing() {
   return (
@@ -90,6 +91,9 @@ export default function Landing() {
 
       {/* Testimonials */}
       <Testimonials />
+
+      {/* Customer Reviews */}
+      <CustomerReviews />
 
       {/* Email Capture */}
       <EmailCapture />
