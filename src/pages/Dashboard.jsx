@@ -5,6 +5,11 @@ import { getMockPurchases } from '../lib/stripe';
 export default function Dashboard() {
   const purchases = getMockPurchases();
 
+  const handleCopyLink = (url) => {
+    navigator.clipboard.writeText(url);
+    alert('Portal link copied to clipboard!');
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -59,14 +64,12 @@ export default function Dashboard() {
                 <ExternalLink className="w-4 h-4" />
                 Open Board Portal
               </a>
-              <a 
-                href={purchase.adminUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button 
+                onClick={() => handleCopyLink(purchase.platformUrl)}
                 className="btn-system flex items-center gap-2"
               >
                 Copy Portal Link
-              </a>
+              </button>
             </div>
           </div>
         ))}

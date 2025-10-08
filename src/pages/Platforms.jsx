@@ -1,8 +1,23 @@
 import { ExternalLink, Target, Settings, CheckCircle } from 'lucide-react';
 import { getMockPurchases } from '../lib/stripe';
+import { useNavigate } from 'react-router-dom';
 
 export default function Platforms() {
   const purchases = getMockPurchases();
+  const navigate = useNavigate();
+
+  const handleCopyLink = (url) => {
+    navigator.clipboard.writeText(url);
+    alert('Portal link copied to clipboard!');
+  };
+
+  const handleViewAnalytics = () => {
+    alert('Analytics Dashboard\n\nThis would show:\n• User engagement metrics\n• Platform usage statistics\n• Member activity reports\n• Event participation data\n\nComing soon!');
+  };
+
+  const handleViewPricing = () => {
+    navigate('/product');
+  };
 
   return (
     <div className="space-y-8">
@@ -78,10 +93,16 @@ export default function Platforms() {
                   <Settings className="w-4 h-4" />
                   Admin Panel
                 </a>
-                <button className="btn-system">
+                <button 
+                  onClick={() => handleCopyLink(purchase.platformUrl)}
+                  className="btn-system"
+                >
                   Copy Portal Link
                 </button>
-                <button className="btn-system">
+                <button 
+                  onClick={handleViewAnalytics}
+                  className="btn-system"
+                >
                   View Analytics
                 </button>
               </div>
@@ -99,7 +120,10 @@ export default function Platforms() {
           <p className="text-[#B3B3B3] mb-6">
             Purchase additional platform instances for different organizations or departments.
           </p>
-          <button className="btn-system">
+          <button 
+            onClick={handleViewPricing}
+            className="btn-system"
+          >
             View Pricing Plans
           </button>
         </div>
