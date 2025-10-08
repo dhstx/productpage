@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw } from 'lucide-react';
+import { agents as agentData, getAgentStats } from '../lib/agents';
 
 export default function AgentManagement() {
   const [selectedAgent, setSelectedAgent] = useState(null);
@@ -7,74 +8,7 @@ export default function AgentManagement() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   
-  const [agents, setAgents] = useState([
-    {
-      id: 1,
-      name: 'Strategic Advisor',
-      type: 'strategic',
-      status: 'active',
-      icon: Brain,
-      description: 'Analyzes board initiatives and provides strategic recommendations',
-      metrics: {
-        tasksProcessed: 1247,
-        accuracy: 94,
-        avgResponseTime: '1.2s',
-        uptime: 99.8
-      },
-      capabilities: [
-        'Initiative prioritization',
-        'Risk assessment',
-        'Resource allocation',
-        'Timeline optimization'
-      ],
-      lastActive: '2 minutes ago',
-      version: 'v2.4.1'
-    },
-    {
-      id: 2,
-      name: 'Engagement Analyst',
-      type: 'analytics',
-      status: 'active',
-      icon: TrendingUp,
-      description: 'Tracks member participation and predicts engagement trends',
-      metrics: {
-        tasksProcessed: 892,
-        accuracy: 91,
-        avgResponseTime: '0.8s',
-        uptime: 99.9
-      },
-      capabilities: [
-        'Participation tracking',
-        'Engagement predictions',
-        'Communication optimization',
-        'Retention insights'
-      ],
-      lastActive: '5 minutes ago',
-      version: 'v2.3.8'
-    },
-    {
-      id: 3,
-      name: 'Operations Assistant',
-      type: 'automation',
-      status: 'active',
-      icon: Zap,
-      description: 'Automates routine tasks and optimizes operational workflows',
-      metrics: {
-        tasksProcessed: 3421,
-        accuracy: 97,
-        avgResponseTime: '0.3s',
-        uptime: 99.7
-      },
-      capabilities: [
-        'Task automation',
-        'Workflow optimization',
-        'Document generation',
-        'Meeting summaries'
-      ],
-      lastActive: '1 minute ago',
-      version: 'v2.5.0'
-    }
-  ]);
+  const [agents, setAgents] = useState(agentData);
 
   const handlePauseAgent = (agent) => {
     setSelectedAgent(agent);
@@ -160,7 +94,7 @@ export default function AgentManagement() {
             <TrendingUp className="w-5 h-5 text-[#FFC96C]" />
           </div>
           <p className="text-3xl font-bold text-[#F2F2F2]">
-            {Math.round(agents.reduce((acc, a) => acc + a.metrics.accuracy, 0) / agents.length)}%
+            {Math.round(agents.reduce((acc, a) => acc + a.accuracy, 0) / agents.length)}%
           </p>
         </div>
 
@@ -170,37 +104,34 @@ export default function AgentManagement() {
             <Zap className="w-5 h-5 text-[#FFC96C]" />
           </div>
           <p className="text-3xl font-bold text-[#F2F2F2]">
-            {agents.reduce((acc, a) => acc + a.metrics.tasksProcessed, 0).toLocaleString()}
+            {agents.reduce((acc, a) => acc + a.tasks, 0).toLocaleString()}
           </p>
         </div>
       </div>
 
-      {/* Agent Cards */}
-      <div className="space-y-6">
+      {/* Agent Cards - 2x6 Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {agents.map((agent) => {
           const StatusIcon = getStatusIcon(agent.status);
-          const AgentIcon = agent.icon;
 
           return (
             <div key={agent.id} className="panel-system p-6">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-lg bg-[#202020] flex items-center justify-center">
-                    <AgentIcon className="w-8 h-8 text-[#FFC96C]" />
+                  <div className="w-12 h-12 rounded-lg bg-[#202020] flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-6 h-6 text-[#FFC96C]" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold text-[#F2F2F2]">{agent.name}</h3>
-                      <span className={`flex items-center gap-1 text-sm ${getStatusColor(agent.status)}`}>
-                        <StatusIcon className="w-4 h-4" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-bold text-[#F2F2F2]">{agent.name}</h3>
+                      <span className={`flex items-center gap-1 text-xs ${getStatusColor(agent.status)}`}>
+                        <StatusIcon className="w-3 h-3" />
                         {agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
                       </span>
                     </div>
-                    <p className="text-[#B3B3B3] mb-2">{agent.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-[#B3B3B3]">
-                      <span>Version {agent.version}</span>
-                      <span>•</span>
-                      <span>Last active: {agent.lastActive}</span>
+                    <p className="text-[#B3B3B3] text-sm mb-2">{agent.description}</p>
+                    <div className="flex items-center gap-2 text-xs text-[#B3B3B3]">
+                      <span>v{agent.version}</span>
                     </div>
                   </div>
                 </div>
@@ -235,41 +166,41 @@ export default function AgentManagement() {
               </div>
 
               {/* Metrics */}
-              <div className="grid md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-[#0C0C0C] rounded-lg p-4">
-                  <p className="text-[#B3B3B3] text-sm mb-1">Tasks Processed</p>
-                  <p className="text-2xl font-bold text-[#F2F2F2]">
-                    {agent.metrics.tasksProcessed.toLocaleString()}
+              <div className="grid grid-cols-4 gap-3 mb-4">
+                <div className="bg-[#0C0C0C] rounded-lg p-3">
+                  <p className="text-[#B3B3B3] text-xs mb-1">Tasks</p>
+                  <p className="text-lg font-bold text-[#F2F2F2]">
+                    {agent.tasks.toLocaleString()}
                   </p>
                 </div>
-                <div className="bg-[#0C0C0C] rounded-lg p-4">
-                  <p className="text-[#B3B3B3] text-sm mb-1">Accuracy</p>
-                  <p className="text-2xl font-bold text-[#F2F2F2]">
-                    {agent.metrics.accuracy}%
+                <div className="bg-[#0C0C0C] rounded-lg p-3">
+                  <p className="text-[#B3B3B3] text-xs mb-1">Accuracy</p>
+                  <p className="text-lg font-bold text-[#F2F2F2]">
+                    {agent.accuracy}%
                   </p>
                 </div>
-                <div className="bg-[#0C0C0C] rounded-lg p-4">
-                  <p className="text-[#B3B3B3] text-sm mb-1">Avg Response</p>
-                  <p className="text-2xl font-bold text-[#F2F2F2]">
-                    {agent.metrics.avgResponseTime}
+                <div className="bg-[#0C0C0C] rounded-lg p-3">
+                  <p className="text-[#B3B3B3] text-xs mb-1">Response</p>
+                  <p className="text-lg font-bold text-[#F2F2F2]">
+                    {agent.responseTime}s
                   </p>
                 </div>
-                <div className="bg-[#0C0C0C] rounded-lg p-4">
-                  <p className="text-[#B3B3B3] text-sm mb-1">Uptime</p>
-                  <p className="text-2xl font-bold text-[#F2F2F2]">
-                    {agent.metrics.uptime}%
+                <div className="bg-[#0C0C0C] rounded-lg p-3">
+                  <p className="text-[#B3B3B3] text-xs mb-1">Uptime</p>
+                  <p className="text-lg font-bold text-[#F2F2F2]">
+                    {agent.uptime}%
                   </p>
                 </div>
               </div>
 
               {/* Capabilities */}
               <div>
-                <p className="text-[#B3B3B3] text-sm mb-3 uppercase tracking-wide">Capabilities</p>
-                <div className="flex flex-wrap gap-2">
+                <p className="text-[#B3B3B3] text-xs mb-2 uppercase tracking-wide">Capabilities</p>
+                <div className="flex flex-wrap gap-1.5">
                   {agent.capabilities.map((capability, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-[#0C0C0C] text-[#F2F2F2] text-sm rounded-full border border-[#202020]"
+                      className="px-2 py-0.5 bg-[#0C0C0C] text-[#F2F2F2] text-xs rounded-full border border-[#202020]"
                     >
                       {capability}
                     </span>

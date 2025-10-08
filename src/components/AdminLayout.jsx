@@ -31,12 +31,6 @@ export default function AdminLayout({ children }) {
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
-    { 
-      name: shouldUpgrade ? 'Upgrade' : 'Billing', 
-      href: '/billing', 
-      icon: shouldUpgrade ? Zap : CreditCard,
-      highlight: shouldUpgrade
-    },
   ];
 
   return (

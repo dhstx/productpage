@@ -230,6 +230,22 @@ export default function IntegrationsManagement() {
         {filteredIntegrations.map((integration) => (
           <IntegrationCard key={integration.id} integration={integration} />
         ))}
+        
+        {/* Custom Integration Card */}
+        <div className="panel-system p-6 border-2 border-dashed border-[#FFC96C]/30 hover:border-[#FFC96C] transition-colors">
+          <div className="flex flex-col items-center justify-center text-center h-full min-h-[200px]">
+            <Webhook className="w-12 h-12 text-[#FFC96C] mb-4" />
+            <h3 className="text-[#F2F2F2] font-bold uppercase tracking-tight mb-2">
+              CUSTOM INTEGRATION
+            </h3>
+            <p className="text-[#B3B3B3] text-sm mb-4">
+              Need a specific integration? We can build custom connectors for your workflow.
+            </p>
+            <button className="btn-system text-sm">
+              Request Integration
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -19,6 +19,9 @@ import Security from './pages/Security';
 import Integrations from './pages/Integrations';
 import Status from './pages/Status';
 import Changelog from './pages/Changelog';
+import TermsOfService from './pages/policies/TermsOfService';
+import PrivacyPolicy from './pages/policies/PrivacyPolicy';
+import CookiePolicy from './pages/policies/CookiePolicy';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -41,6 +44,9 @@ function App() {
         <Route path="/integrations" element={<Integrations />} />
         <Route path="/status" element={<Status />} />
         <Route path="/changelog" element={<Changelog />} />
+        <Route path="/policies/terms" element={<TermsOfService />} />
+        <Route path="/policies/privacy" element={<PrivacyPolicy />} />
+        <Route path="/policies/cookies" element={<CookiePolicy />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}
