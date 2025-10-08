@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown, Bot } from 'lucide-react';
 import { useState } from 'react';
 import { logout, getCurrentUser } from '../lib/auth';
 
@@ -27,6 +27,7 @@ export default function AdminLayout({ children }) {
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
+    { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Billing', href: '/billing', icon: CreditCard },
   ];
 

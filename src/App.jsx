@@ -10,6 +10,7 @@ import Platforms from './pages/Platforms';
 import Team from './pages/Team';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
+import AgentManagement from './pages/AgentManagement';
 import UseCaseHealthcare from './pages/UseCaseHealthcare';
 import UseCaseEducation from './pages/UseCaseEducation';
 import UseCaseNonprofit from './pages/UseCaseNonprofit';
@@ -79,6 +80,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/agents"
+          element={
+            <ProtectedRoute>
+              <AgentManagement />
             </ProtectedRoute>
           }
         />

@@ -71,26 +71,6 @@ export default function Testimonials() {
             </div>
           ))}
         </div>
-
-        {/* Trust Indicators */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-8 px-8 py-4 panel-system">
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[#FFC96C]">500+</p>
-              <p className="text-[#B3B3B3] text-sm">Organizations</p>
-            </div>
-            <div className="h-12 w-px bg-[#202020]"></div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[#FFC96C]">98%</p>
-              <p className="text-[#B3B3B3] text-sm">Satisfaction Rate</p>
-            </div>
-            <div className="h-12 w-px bg-[#202020]"></div>
-            <div className="text-center">
-              <p className="text-3xl font-bold text-[#FFC96C]">24/7</p>
-              <p className="text-[#B3B3B3] text-sm">Support</p>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
