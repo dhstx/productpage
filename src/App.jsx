@@ -10,6 +10,7 @@ import Platforms from './pages/Platforms';
 import Team from './pages/Team';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
+import UseCaseHealthcare from './pages/UseCaseHealthcare';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -23,6 +24,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/product" element={<Product />} />
+        <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}

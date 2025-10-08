@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
 import { PRODUCTS, initializeStripeCheckout } from '../lib/stripe';
 import FeatureComparison from '../components/FeatureComparison';
+import ROICalculator from '../components/ROICalculator';
 
 export default function Product() {
   const handleCheckout = (productId) => {
@@ -141,6 +142,9 @@ export default function Product() {
           </div>
         </div>
       </section>
+
+      {/* ROI Calculator */}
+      <ROICalculator />
 
       {/* Feature Comparison */}
       <FeatureComparison />

@@ -4,6 +4,7 @@ import Testimonials from '../components/Testimonials';
 import EmailCapture from '../components/EmailCapture';
 import TrustBadges from '../components/TrustBadges';
 import FAQ from '../components/FAQ';
+import ProductDemo from '../components/ProductDemo';
 
 export default function Landing() {
   return (
@@ -83,6 +84,9 @@ export default function Landing() {
           </p>
         </div>
       </section>
+
+      {/* Product Demo */}
+      <ProductDemo />
 
       {/* Testimonials */}
       <Testimonials />
