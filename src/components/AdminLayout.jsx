@@ -1,10 +1,11 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { logout, getCurrentUser } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -12,6 +13,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
+    setProfileMenuOpen(false);
     try {
       await logout();
       navigate('/login');
@@ -23,10 +25,9 @@ export default function AdminLayout({ children }) {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'My Platforms', href: '/platforms', icon: Package },
+    { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Billing', href: '/billing', icon: CreditCard },
-    { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   return (
@@ -62,22 +63,43 @@ export default function AdminLayout({ children }) {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[4px] bg-[#202020] flex items-center justify-center">
-                  <span className="text-[#FFC96C] text-sm font-bold">
-                    {user?.name?.charAt(0) || 'A'}
-                  </span>
-                </div>
-                <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
+              {/* Profile Dropdown */}
+              <div className="hidden md:block relative">
+                <button
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-[2px] hover:bg-[#1A1A1A] transition-colors"
+                >
+                  <div className="w-7 h-7 rounded-[4px] bg-[#202020] flex items-center justify-center">
+                    <span className="text-[#FFC96C] text-sm font-bold">
+                      {user?.name?.charAt(0) || 'A'}
+                    </span>
+                  </div>
+                  <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
+                  <ChevronDown className="w-4 h-4 text-[#B3B3B3]" />
+                </button>
+
+                {/* Dropdown Menu */}
+                {profileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-[#202020] rounded-[4px] shadow-lg z-50">
+                    <Link
+                      to="/settings"
+                      onClick={() => setProfileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors"
+                    >
+                      <Settings className="w-4 h-4" />
+                      <span className="text-sm">Settings</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors w-full text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="text-sm">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+                    </button>
+                  </div>
+                )}
               </div>
-              <button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="hidden md:flex btn-system items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <LogOut className="w-4 h-4" />
-                {isLoggingOut ? 'Logging out...' : 'Logout'}
-              </button>
 
               {/* Mobile Menu Button */}
               <button

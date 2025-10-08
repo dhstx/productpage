@@ -27,7 +27,7 @@ export default function Landing() {
       <section className="container mx-auto px-6 py-24">
         <div className="max-w-4xl">
           <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
-            TRANSFORM YOUR BOARD INTO A POWERHOUSE
+            TRANSFORM YOUR COMPANY INTO A POWERHOUSE
           </h1>
           <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl">
             The all-in-one platform for management, strategic planning, and organizational excellence
