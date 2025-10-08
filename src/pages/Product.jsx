@@ -3,6 +3,7 @@ import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, Ch
 import { PRODUCTS, initializeStripeCheckout } from '../lib/stripe';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
+import ScrollGears from '../components/graphics/ScrollGears';
 
 export default function Product() {
   const handleCheckout = (productId) => {
@@ -145,6 +146,11 @@ export default function Product() {
 
       {/* ROI Calculator */}
       <ROICalculator />
+
+      {/* Scroll Gears Animation */}
+      <section className="py-24 border-b border-[#202020]">
+        <ScrollGears color="#FFC96C" />
+      </section>
 
       {/* Feature Comparison */}
       <FeatureComparison />

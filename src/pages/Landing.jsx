@@ -6,6 +6,7 @@ import TrustBadges from '../components/TrustBadges';
 import FAQ from '../components/FAQ';
 import ProductDemo from '../components/ProductDemo';
 import CustomerReviews from '../components/CustomerReviews';
+import ScrollGears from '../components/graphics/ScrollGears';
 
 export default function Landing() {
   return (
@@ -88,6 +89,11 @@ export default function Landing() {
 
       {/* Product Demo */}
       <ProductDemo />
+
+      {/* Scroll Gears Animation */}
+      <section className="py-24 border-b border-[#202020]">
+        <ScrollGears color="#FFC96C" />
+      </section>
 
       {/* Testimonials */}
       <Testimonials />
