@@ -13,6 +13,8 @@ import Settings from './pages/Settings';
 import UseCaseHealthcare from './pages/UseCaseHealthcare';
 import Security from './pages/Security';
 import Integrations from './pages/Integrations';
+import Status from './pages/Status';
+import Changelog from './pages/Changelog';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -29,6 +31,8 @@ function App() {
         <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
         <Route path="/security" element={<Security />} />
         <Route path="/integrations" element={<Integrations />} />
+        <Route path="/status" element={<Status />} />
+        <Route path="/changelog" element={<Changelog />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}
