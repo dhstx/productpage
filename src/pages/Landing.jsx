@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles } from 'lucide-react';
 import Testimonials from '../components/Testimonials';
-import TrustBadges from '../components/TrustBadges';
-import FAQ from '../components/FAQ';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
-import BackgroundGears from '../components/graphics/BackgroundGears';
 import AnimatedButton from '../components/AnimatedButton';
 import AnimatedCounter from '../components/AnimatedCounter';
 import FadeInSection from '../components/FadeInSection';
@@ -15,12 +12,8 @@ import PageTransition from '../components/PageTransition';
 export default function Landing() {
   return (
     <PageTransition>
-    <div className="min-h-screen bg-[#0C0C0C] relative">
-      {/* Background Gears - Fixed and animated */}
-      <BackgroundGears color="#FFC96C" opacity={0.18} />
-
-      {/* Content layer with higher z-index */}
-      <div className="relative z-10">
+    <div className="min-h-screen bg-[#0C0C0C]">
+      <div>
         {/* Header */}
         <header className="border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur-sm">
           <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -167,16 +160,6 @@ export default function Landing() {
         {/* Contact Form */}
         <FadeInSection>
           <ContactForm />
-        </FadeInSection>
-
-        {/* Trust Badges */}
-        <FadeInSection>
-          <TrustBadges />
-        </FadeInSection>
-
-        {/* FAQ */}
-        <FadeInSection>
-          <FAQ />
         </FadeInSection>
 
         {/* Footer */}
