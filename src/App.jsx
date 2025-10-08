@@ -12,6 +12,7 @@ import Billing from './pages/Billing';
 import Settings from './pages/Settings';
 import UseCaseHealthcare from './pages/UseCaseHealthcare';
 import Security from './pages/Security';
+import Integrations from './pages/Integrations';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
         <Route path="/security" element={<Security />} />
+        <Route path="/integrations" element={<Integrations />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}
