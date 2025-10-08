@@ -17,11 +17,11 @@ export default function Dashboard() {
           ACCOUNT DASHBOARD
         </h1>
         <p className="text-[#B3B3B3]">
-          Welcome back! Manage your organization and access your board portal.
+          Welcome back! Manage your organization and access your portal.
         </p>
       </div>
 
-      {/* Board Portal Access */}
+      {/* Portal Access */}
       <section>
         <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
           YOUR BOARD PORTAL
@@ -51,7 +51,7 @@ export default function Dashboard() {
             </div>
 
             <p className="text-[#B3B3B3] mb-6">
-              Access your organization's dedicated board management portal where members can view initiatives, manage tasks, coordinate events, and collaborate on strategic planning.
+              Access your organization's dedicated management portal where members can view initiatives, manage tasks, coordinate events, and collaborate on strategic planning.
             </p>
 
             <div className="flex gap-3">
@@ -62,7 +62,7 @@ export default function Dashboard() {
                 className="btn-system flex items-center gap-2"
               >
                 <ExternalLink className="w-4 h-4" />
-                Open Board Portal
+                Open Portal
               </a>
               <button 
                 onClick={() => handleCopyLink(purchase.platformUrl)}

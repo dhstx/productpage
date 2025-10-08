@@ -41,7 +41,7 @@ export default function Platforms() {
                 </div>
                 <div>
                   <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-2">
-                    Board Management Portal
+                    Management Portal
                   </h3>
                   <p className="text-[#B3B3B3] text-sm mb-3">
                     {purchase.productName} • Purchased {purchase.purchaseDate}
@@ -64,7 +64,7 @@ export default function Platforms() {
               </h4>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <FeatureStat label="Active Initiatives" value="0" />
-                <FeatureStat label="Board Members" value="0" />
+                <FeatureStat label="Team Members" value="0" />
                 <FeatureStat label="Upcoming Events" value="0" />
                 <FeatureStat label="Committees" value="0" />
               </div>

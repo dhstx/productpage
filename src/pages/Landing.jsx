@@ -30,7 +30,7 @@ export default function Landing() {
             TRANSFORM YOUR BOARD INTO A POWERHOUSE
           </h1>
           <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl">
-            The all-in-one platform for board management, strategic planning, and organizational excellence
+            The all-in-one platform for management, strategic planning, and organizational excellence
           </p>
           <div className="flex gap-4">
             <Link to="/product" className="btn-system">
@@ -100,7 +100,7 @@ export default function Landing() {
       <footer className="border-t border-[#202020] mt-24">
         <div className="container mx-auto px-6 py-8">
           <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
-            <p>© 2025 Board Management Platform. All rights reserved.</p>
+            <p>© 2025 Management Platform. All rights reserved.</p>
             <p>Empowering boards, committees, and organizations worldwide</p>
           </div>
         </div>

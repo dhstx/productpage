@@ -38,7 +38,7 @@ export default function EmailCapture() {
             </h2>
             
             <p className="text-[#B3B3B3] text-lg mb-8 max-w-2xl mx-auto">
-              Download our comprehensive 25-page guide on modern board management best practices, 
+              Download our comprehensive 25-page guide on modern management best practices, 
               strategic planning frameworks, and digital transformation strategies.
             </p>
 

@@ -7,6 +7,7 @@ import Product from './pages/Product';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Platforms from './pages/Platforms';
+import Team from './pages/Team';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
 
@@ -38,6 +39,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Platforms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/team"
+          element={
+            <ProtectedRoute>
+              <Team />
             </ProtectedRoute>
           }
         />

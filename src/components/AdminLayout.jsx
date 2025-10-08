@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users } from 'lucide-react';
 import { useState } from 'react';
 import { logout, getCurrentUser } from '../lib/auth';
 
@@ -24,6 +24,7 @@ export default function AdminLayout({ children }) {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'My Platforms', href: '/platforms', icon: Package },
+    { name: 'Team', href: '/team', icon: Users },
     { name: 'Billing', href: '/billing', icon: CreditCard },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
@@ -61,16 +62,13 @@ export default function AdminLayout({ children }) {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-3 px-4 py-2 panel-system">
-                <div className="w-8 h-8 rounded-full bg-[#202020] flex items-center justify-center">
+              <div className="hidden md:flex items-center gap-2">
+                <div className="w-8 h-8 rounded-[4px] bg-[#202020] flex items-center justify-center">
                   <span className="text-[#FFC96C] text-sm font-bold">
                     {user?.name?.charAt(0) || 'A'}
                   </span>
                 </div>
-                <div className="text-right">
-                  <p className="text-[#F2F2F2] text-sm font-medium">{user?.name || 'Administrator'}</p>
-                  <p className="text-[#B3B3B3] text-xs">{user?.role || 'Admin'}</p>
-                </div>
+                <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
               </div>
               <button
                 onClick={handleLogout}

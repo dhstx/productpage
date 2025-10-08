@@ -7,11 +7,11 @@ export default function FAQ() {
   const faqs = [
     {
       question: "How long does implementation take?",
-      answer: "Most organizations are up and running within 1-2 weeks. Our team provides dedicated onboarding support, data migration assistance, and training for your board members. Enterprise clients receive white-glove implementation services."
+      answer: "Most organizations are up and running within 1-2 weeks. Our team provides dedicated onboarding support, data migration assistance, and training for your team members. Enterprise clients receive white-glove implementation services."
     },
     {
       question: "Can we migrate data from our existing systems?",
-      answer: "Yes! We support data migration from spreadsheets, BoardEffect, Diligent, and other board management platforms. Our team handles the entire migration process to ensure a smooth transition with zero data loss."
+      answer: "Yes! We support data migration from spreadsheets, BoardEffect, Diligent, and other management platforms. Our team handles the entire migration process to ensure a smooth transition with zero data loss."
     },
     {
       question: "What kind of support do you provide?",
@@ -30,7 +30,7 @@ export default function FAQ() {
       answer: "You can cancel anytime with no penalties. We offer a 30-day money-back guarantee on all plans. Upon cancellation, you'll receive a complete export of all your data in standard formats (CSV, PDF)."
     },
     {
-      question: "Do you offer training for board members?",
+      question: "Do you offer training for team members?",
       answer: "Yes! All plans include access to our video tutorial library and documentation. Professional and Enterprise plans include live training sessions, and Enterprise clients can request custom training programs for their specific needs."
     },
     {

@@ -1,9 +1,36 @@
-import { CreditCard, Download, Calendar } from 'lucide-react';
+import { CreditCard, Download, FileText } from 'lucide-react';
 import { getMockInvoices, PRODUCTS } from '../lib/stripe';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Billing() {
   const invoices = getMockInvoices();
   const currentPlan = PRODUCTS[1]; // Professional plan
+  const navigate = useNavigate();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showBillingModal, setShowBillingModal] = useState(false);
+
+  const handleChangePlan = () => {
+    navigate('/product');
+  };
+
+  const handleCancelSubscription = () => {
+    if (confirm('Are you sure you want to cancel your subscription?\n\nYour access will continue until the end of the current billing period (November 1, 2024).')) {
+      alert('Subscription cancellation scheduled.\n\nYou will receive a confirmation email shortly.');
+    }
+  };
+
+  const handleUpdatePayment = () => {
+    setShowPaymentModal(true);
+  };
+
+  const handleUpdateBilling = () => {
+    setShowBillingModal(true);
+  };
+
+  const handleDownloadInvoice = (invoice) => {
+    alert(`Downloading invoice ${invoice.id}...\n\nThis would download a PDF of your invoice.`);
+  };
 
   return (
     <div className="space-y-8">
@@ -57,10 +84,10 @@ export default function Billing() {
           </div>
 
           <div className="flex gap-3">
-            <button className="btn-system">
+            <button onClick={handleChangePlan} className="btn-system">
               Change Plan
             </button>
-            <button className="btn-system">
+            <button onClick={handleCancelSubscription} className="btn-system">
               Cancel Subscription
             </button>
           </div>
@@ -83,7 +110,7 @@ export default function Billing() {
                 <p className="text-[#B3B3B3] text-sm">Expires 12/2025</p>
               </div>
             </div>
-            <button className="btn-system">
+            <button onClick={handleUpdatePayment} className="btn-system">
               Update Payment Method
             </button>
           </div>
@@ -170,12 +197,108 @@ export default function Billing() {
             </div>
           </div>
           <div className="mt-6">
-            <button className="btn-system">
+            <button onClick={handleUpdateBilling} className="btn-system">
               Update Billing Information
             </button>
           </div>
         </div>
       </section>
+
+      {/* Payment Method Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="panel-system p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              UPDATE PAYMENT METHOD
+            </h3>
+            <p className="text-[#B3B3B3] mb-6">
+              This would open Stripe's secure payment form to update your card details.
+            </p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => {
+                  alert('Redirecting to Stripe...');
+                  setShowPaymentModal(false);
+                }}
+                className="btn-system flex-1"
+              >
+                Continue to Stripe
+              </button>
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="px-4 py-2 rounded-[4px] bg-[#202020] text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Billing Info Modal */}
+      {showBillingModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="panel-system p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              UPDATE BILLING INFORMATION
+            </h3>
+            <form onSubmit={(e) => { e.preventDefault(); alert('Billing information updated!'); setShowBillingModal(false); }} className="space-y-4">
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Company Name
+                </label>
+                <input
+                  type="text"
+                  defaultValue="Your Organization"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                />
+              </div>
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  defaultValue="billing@yourorganization.com"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                />
+              </div>
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  defaultValue="123 Board Street, Suite 100"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                />
+              </div>
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Tax ID
+                </label>
+                <input
+                  type="text"
+                  defaultValue="XX-XXXXXXX"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="submit" className="btn-system flex-1">
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowBillingModal(false)}
+                  className="px-4 py-2 rounded-[4px] bg-[#202020] text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

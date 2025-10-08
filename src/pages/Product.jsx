@@ -33,7 +33,7 @@ export default function Product() {
           COMPLETE BOARD MANAGEMENT SYSTEM
         </h1>
         <p className="text-xl text-[#B3B3B3] mb-12 max-w-3xl mx-auto text-center">
-          The all-in-one platform for board management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
+          The all-in-one platform for management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
         </p>
         <div className="flex gap-4 justify-center">
           <a href="#pricing" className="btn-system">
@@ -149,7 +149,7 @@ export default function Product() {
       <footer className="border-t border-[#202020] mt-24">
         <div className="container mx-auto px-6 py-8">
           <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
-            <p>© 2025 Board Management Platform. All rights reserved.</p>
+            <p>© 2025 Management Platform. All rights reserved.</p>
             <p>Empowering boards, committees, and organizations worldwide</p>
           </div>
         </div>
