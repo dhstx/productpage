@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown, Bot } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
-import { logout, getCurrentUser } from '../lib/auth';
+import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,12 +23,19 @@ export default function AdminLayout({ children }) {
     }
   };
 
+  const shouldUpgrade = canUpgrade();
+  
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Agents', href: '/agents', icon: Bot },
-    { name: 'Billing', href: '/billing', icon: CreditCard },
+    { 
+      name: shouldUpgrade ? 'Upgrade' : 'Billing', 
+      href: '/billing', 
+      icon: shouldUpgrade ? Zap : CreditCard,
+      highlight: shouldUpgrade
+    },
   ];
 
   return (
@@ -50,7 +57,9 @@ export default function AdminLayout({ children }) {
                       key={item.name}
                       to={item.href}
                       className={`flex items-center gap-2 px-4 py-2 rounded-[2px] transition-colors ${
-                        isActive
+                        item.highlight
+                          ? 'bg-[#FFC96C]/10 text-[#FFC96C] border border-[#FFC96C] hover:bg-[#FFC96C]/20'
+                          : isActive
                           ? 'bg-[#1A1A1A] text-[#FFC96C]'
                           : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
                       }`}

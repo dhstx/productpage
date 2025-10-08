@@ -4,6 +4,7 @@ import Testimonials from '../components/Testimonials';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
+import AIChatInterface from '../components/AIChatInterface';
 import AnimatedButton from '../components/AnimatedButton';
 import AnimatedCounter from '../components/AnimatedCounter';
 import FadeInSection from '../components/FadeInSection';
@@ -54,6 +55,9 @@ export default function Landing() {
             </div>
           </FadeInSection>
         </section>
+
+        {/* AI Chat Interface */}
+        <AIChatInterface />
 
         {/* Core Modules */}
         <section className="container mx-auto px-6 py-16">

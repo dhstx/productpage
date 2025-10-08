@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
-import { ExternalLink, Target, AlertCircle, Calendar, Users, CheckCircle } from 'lucide-react';
+import { ExternalLink, Target, AlertCircle, Calendar, Users, CheckCircle, Zap } from 'lucide-react';
 import { getMockPurchases } from '../lib/stripe';
+import { getCurrentUser, hasFeature } from '../lib/auth';
 
 export default function Dashboard() {
   const purchases = getMockPurchases();
+  const user = getCurrentUser();
+  const hasPortalAccess = hasFeature('portal');
+  const hasAnalytics = hasFeature('analytics');
 
   const handleCopyLink = (url) => {
     navigator.clipboard.writeText(url);
@@ -21,12 +25,36 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Portal Access */}
-      <section>
-        <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-          YOUR BOARD PORTAL
-        </h2>
-        {purchases.map((purchase) => (
+      {/* Upgrade Notice for Free Users */}
+      {!hasPortalAccess && (
+        <section className="panel-system p-6 border-2 border-[#FFC96C]">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-[4px] bg-[#FFC96C]/10 flex items-center justify-center flex-shrink-0">
+              <Zap className="w-6 h-6 text-[#FFC96C]" />
+            </div>
+            <div className="flex-grow">
+              <h2 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+                UNLOCK PREMIUM FEATURES
+              </h2>
+              <p className="text-[#B3B3B3] mb-4">
+                Upgrade to Professional or Enterprise to access your dedicated board portal, advanced analytics, and more.
+              </p>
+              <Link to="/billing" className="btn-system inline-flex items-center gap-2">
+                <Zap className="w-4 h-4" />
+                View Upgrade Options
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Portal Access - Only for paid subscribers */}
+      {hasPortalAccess && (
+        <section>
+          <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+            YOUR BOARD PORTAL
+          </h2>
+          {purchases.map((purchase) => (
           <div key={purchase.id} className="panel-system p-6">
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -73,7 +101,8 @@ export default function Dashboard() {
             </div>
           </div>
         ))}
-      </section>
+        </section>
+      )}
 
       {/* System Status */}
       <section>
