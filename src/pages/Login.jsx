@@ -117,12 +117,18 @@ export default function Login() {
           </div>
 
           <div className="mt-8 pt-6 border-t border-[#202020]">
-            <p className="text-[#B3B3B3] text-xs text-center mono mb-2">
-              Demo Credentials:
+            <p className="text-[#B3B3B3] text-xs text-center mb-3 uppercase tracking-tight">
+              Demo Credentials
             </p>
-            <div className="space-y-1 text-xs text-center mono text-[#808080]">
-              <p>Admin: admin@dhstx.com / admin123</p>
-              <p>User: user@example.com / user123</p>
+            <div className="space-y-3">
+              <div className="p-3 bg-[#0C0C0C] border border-[#202020] rounded-[2px]">
+                <p className="text-[#FFC96C] text-xs font-medium mb-1 uppercase tracking-tight">Admin (Full Access)</p>
+                <p className="text-[#B3B3B3] text-xs font-mono">admin / admin123</p>
+              </div>
+              <div className="p-3 bg-[#0C0C0C] border border-[#202020] rounded-[2px]">
+                <p className="text-[#B3B3B3] text-xs font-medium mb-1 uppercase tracking-tight">Non-Subscriber (Free Tier)</p>
+                <p className="text-[#B3B3B3] text-xs font-mono">user / user123</p>
+              </div>
             </div>
           </div>
         </div>

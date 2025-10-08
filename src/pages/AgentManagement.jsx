@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw } from 'lucide-react';
 
 export default function AgentManagement() {
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  
   const [agents, setAgents] = useState([
     {
       id: 1,
@@ -71,12 +76,43 @@ export default function AgentManagement() {
     }
   ]);
 
-  const toggleAgentStatus = (agentId) => {
-    setAgents(agents.map(agent => 
-      agent.id === agentId 
-        ? { ...agent, status: agent.status === 'active' ? 'paused' : 'active' }
-        : agent
-    ));
+  const handlePauseAgent = (agent) => {
+    setSelectedAgent(agent);
+    setConfirmAction('pause');
+    setShowConfirmModal(true);
+  };
+
+  const handleRestartAgent = (agent) => {
+    setSelectedAgent(agent);
+    setConfirmAction('restart');
+    setShowConfirmModal(true);
+  };
+
+  const handleConfigureAgent = (agent) => {
+    setSelectedAgent(agent);
+    setShowConfigModal(true);
+  };
+
+  const confirmAgentAction = () => {
+    if (!selectedAgent) {return;}
+    
+    if (confirmAction === 'pause') {
+      setAgents(agents.map(agent => 
+        agent.id === selectedAgent.id 
+          ? { ...agent, status: 'paused' }
+          : agent
+      ));
+    } else if (confirmAction === 'restart') {
+      setAgents(agents.map(agent => 
+        agent.id === selectedAgent.id 
+          ? { ...agent, status: 'active', lastActive: 'Just now' }
+          : agent
+      ));
+    }
+    
+    setShowConfirmModal(false);
+    setSelectedAgent(null);
+    setConfirmAction(null);
   };
 
   const getStatusColor = (status) => {
@@ -171,7 +207,7 @@ export default function AgentManagement() {
 
                 <div className="flex gap-2">
                   <button
-                    onClick={() => toggleAgentStatus(agent.id)}
+                    onClick={() => agent.status === 'active' ? handlePauseAgent(agent) : handleRestartAgent(agent)}
                     className="btn-system-secondary p-2"
                     title={agent.status === 'active' ? 'Pause Agent' : 'Resume Agent'}
                   >
@@ -181,10 +217,18 @@ export default function AgentManagement() {
                       <Play className="w-5 h-5" />
                     )}
                   </button>
-                  <button className="btn-system-secondary p-2" title="Restart Agent">
+                  <button 
+                    onClick={() => handleRestartAgent(agent)}
+                    className="btn-system-secondary p-2" 
+                    title="Restart Agent"
+                  >
                     <RefreshCw className="w-5 h-5" />
                   </button>
-                  <button className="btn-system-secondary p-2" title="Configure Agent">
+                  <button 
+                    onClick={() => handleConfigureAgent(agent)}
+                    className="btn-system-secondary p-2" 
+                    title="Configure Agent"
+                  >
                     <Settings className="w-5 h-5" />
                   </button>
                 </div>
@@ -263,6 +307,125 @@ export default function AgentManagement() {
           ))}
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && selectedAgent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="panel-system p-8 max-w-md w-full">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              Confirm Action
+            </h3>
+            <p className="text-[#B3B3B3] mb-6">
+              Are you sure you want to {confirmAction} <span className="text-[#FFC96C]">{selectedAgent.name}</span>?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={confirmAgentAction}
+                className="flex-1 btn-system"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => {
+                  setShowConfirmModal(false);
+                  setSelectedAgent(null);
+                  setConfirmAction(null);
+                }}
+                className="flex-1 btn-system-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Configuration Modal */}
+      {showConfigModal && selectedAgent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="panel-system p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              Configure {selectedAgent.name}
+            </h3>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
+                  Agent Name
+                </label>
+                <input
+                  type="text"
+                  defaultValue={selectedAgent.name}
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
+                  Description
+                </label>
+                <textarea
+                  defaultValue={selectedAgent.description}
+                  rows={3}
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
+                  Response Time Threshold (seconds)
+                </label>
+                <input
+                  type="number"
+                  defaultValue="2"
+                  step="0.1"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
+                  Capabilities
+                </label>
+                <div className="space-y-2">
+                  {selectedAgent.capabilities.map((capability, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        defaultChecked
+                        className="w-4 h-4 rounded border-[#202020] bg-[#0C0C0C] text-[#FFC96C] focus:ring-[#FFC96C]"
+                      />
+                      <span className="text-[#B3B3B3]">{capability}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => {
+                    alert('Configuration saved!');
+                    setShowConfigModal(false);
+                    setSelectedAgent(null);
+                  }}
+                  className="flex-1 btn-system"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => {
+                    setShowConfigModal(false);
+                    setSelectedAgent(null);
+                  }}
+                  className="flex-1 btn-system-secondary"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

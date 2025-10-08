@@ -30,6 +30,7 @@ export default function AdminLayout({ children }) {
     { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
     { name: 'Agents', href: '/agents', icon: Bot },
+    { name: 'Integrations', href: '/integrations-management', icon: Zap },
     { 
       name: shouldUpgrade ? 'Upgrade' : 'Billing', 
       href: '/billing', 

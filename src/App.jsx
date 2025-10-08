@@ -11,6 +11,7 @@ import Team from './pages/Team';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
 import AgentManagement from './pages/AgentManagement';
+import IntegrationsManagement from './pages/IntegrationsManagement';
 import UseCaseHealthcare from './pages/UseCaseHealthcare';
 import UseCaseEducation from './pages/UseCaseEducation';
 import UseCaseNonprofit from './pages/UseCaseNonprofit';
@@ -88,6 +89,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AgentManagement />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/integrations-management"
+          element={
+            <ProtectedRoute>
+              <IntegrationsManagement />
             </ProtectedRoute>
           }
         />

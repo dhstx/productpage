@@ -11,6 +11,24 @@ export const SUBSCRIPTION_TIERS = {
 
 // Demo users with different subscription levels
 const DEMO_USERS = {
+  'admin': {
+    password: 'admin123',
+    user: {
+      email: 'admin@dhstx.com',
+      name: 'Administrator',
+      role: 'admin',
+      subscription: SUBSCRIPTION_TIERS.ENTERPRISE,
+      features: {
+        agents: 'unlimited',
+        workflows: 'unlimited',
+        connections: 'unlimited',
+        analytics: true,
+        portal: true,
+        prioritySupport: true,
+        teamLicenses: 'unlimited'
+      }
+    }
+  },
   'admin@dhstx.com': {
     password: 'admin123',
     user: {
@@ -26,6 +44,24 @@ const DEMO_USERS = {
         portal: true,
         prioritySupport: true,
         teamLicenses: 'unlimited'
+      }
+    }
+  },
+  'user': {
+    password: 'user123',
+    user: {
+      email: 'user@example.com',
+      name: 'Free User',
+      role: 'user',
+      subscription: SUBSCRIPTION_TIERS.FREE,
+      features: {
+        agents: 1,
+        workflows: 1,
+        connections: 5,
+        analytics: false,
+        portal: false,
+        prioritySupport: false,
+        teamLicenses: 1
       }
     }
   },
