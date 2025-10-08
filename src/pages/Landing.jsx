@@ -1,14 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles } from 'lucide-react';
-import Testimonials from '../components/Testimonials';
-import TrustBadges from '../components/TrustBadges';
 import FAQ from '../components/FAQ';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
-import BackgroundGears from '../components/graphics/BackgroundGears';
 import AnimatedButton from '../components/AnimatedButton';
-import AnimatedCounter from '../components/AnimatedCounter';
 import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
@@ -16,9 +12,6 @@ export default function Landing() {
   return (
     <PageTransition>
     <div className="min-h-screen bg-[#0C0C0C] relative">
-      {/* Background Gears - Fixed and animated */}
-      <BackgroundGears color="#FFC96C" opacity={0.18} />
-
       {/* Content layer with higher z-index */}
       <div className="relative z-10">
         {/* Header */}
@@ -101,40 +94,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Stats Section with Animated Counters */}
-        <section className="container mx-auto px-6 py-16">
-          <FadeInSection>
-            <div className="panel-system p-12">
-              <div className="grid md:grid-cols-3 gap-12 text-center">
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={500} duration={2000} suffix="+" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Organizations
-                  </div>
-                </div>
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={10000} duration={2000} suffix="+" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Active Users
-                  </div>
-                </div>
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={99} duration={2000} suffix="%" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Satisfaction Rate
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeInSection>
-        </section>
-
         {/* AI Agents Section */}
         <FadeInSection>
           <AIAgents />
@@ -159,19 +118,9 @@ export default function Landing() {
           <ProductDemo />
         </FadeInSection>
 
-        {/* Testimonials */}
-        <FadeInSection>
-          <Testimonials />
-        </FadeInSection>
-
         {/* Contact Form */}
         <FadeInSection>
           <ContactForm />
-        </FadeInSection>
-
-        {/* Trust Badges */}
-        <FadeInSection>
-          <TrustBadges />
         </FadeInSection>
 
         {/* FAQ */}
