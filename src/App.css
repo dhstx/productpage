@@ -164,3 +164,71 @@
     letter-spacing: -0.05em;
   }
 }
+
+/* Light Mode */
+:root:not(.dark) {
+  --background: #FFFFFF;
+  --foreground: #0C0C0C;
+  --card: #F5F5F5;
+  --card-foreground: #0C0C0C;
+  --popover: #FFFFFF;
+  --popover-foreground: #0C0C0C;
+  --primary: #FFC96C;
+  --primary-foreground: #000000;
+  --secondary: #F5F5F5;
+  --secondary-foreground: #0C0C0C;
+  --muted: #F5F5F5;
+  --muted-foreground: #666666;
+  --accent: #FFC96C;
+  --accent-foreground: #000000;
+  --destructive: #DC2626;
+  --border: #E5E5E5;
+  --input: #E5E5E5;
+  --ring: #FFC96C;
+  --dhstx-black: #FFFFFF;
+  --dhstx-panel: #F5F5F5;
+  --dhstx-border: #E5E5E5;
+  --dhstx-text: #0C0C0C;
+  --dhstx-muted: #666666;
+  --dhstx-accent: #FFC96C;
+  --dhstx-silver: #999999;
+}
+
+:root:not(.dark) body {
+  @apply bg-white text-[#0C0C0C];
+}
+
+:root:not(.dark) .btn-system {
+  @apply bg-[#999999] text-white border-[#E5E5E5];
+}
+
+:root:not(.dark) .btn-system:hover,
+:root:not(.dark) .btn-system:active {
+  @apply bg-[#FFC96C] text-black;
+}
+
+:root:not(.dark) .panel-system {
+  @apply bg-[#F5F5F5] border-[#E5E5E5];
+}
+
+:root:not(.dark) .mini-box {
+  @apply border-[#E5E5E5];
+}
+
+:root:not(.dark) .mini-box:hover {
+  @apply bg-[#F5F5F5];
+}
+
+/* Accessibility - Improved color contrast */
+.text-[#666666] {
+  color: #666666 !important; /* WCAG AA compliant */
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

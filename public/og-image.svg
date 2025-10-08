@@ -1,0 +1,7 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0C0C0C"/>
+  <text x="600" y="250" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#F2F2F2" text-anchor="middle">DHStx</text>
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="36" fill="#B3B3B3" text-anchor="middle">Enterprise Management Platform</text>
+  <rect x="500" y="400" width="200" height="60" rx="4" fill="#FFC96C"/>
+  <text x="600" y="440" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#0C0C0C" text-anchor="middle">GET STARTED</text>
+</svg>

@@ -21,11 +21,13 @@ import Changelog from './pages/Changelog';
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import Analytics from './components/Analytics';
+import ThemeToggle from './components/ThemeToggle';
 
 function App() {
   return (
     <Router>
       <Analytics />
+      <ThemeToggle />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
