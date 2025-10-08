@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles } from 'lucide-react';
 import Testimonials from '../components/Testimonials';
-import EmailCapture from '../components/EmailCapture';
 import TrustBadges from '../components/TrustBadges';
 import FAQ from '../components/FAQ';
 import ProductDemo from '../components/ProductDemo';
-import CustomerReviews from '../components/CustomerReviews';
+import AIAgents from '../components/AIAgents';
+import ContactForm from '../components/ContactForm';
 import BackgroundGears from '../components/graphics/BackgroundGears';
 import AnimatedButton from '../components/AnimatedButton';
 import AnimatedCounter from '../components/AnimatedCounter';
@@ -69,7 +69,7 @@ export default function Landing() {
               CORE MODULES
             </h2>
           </FadeInSection>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FadeInSection delay={0.1}>
               <ModuleCard
                 icon={<Target className="w-6 h-6" />}
@@ -135,6 +135,11 @@ export default function Landing() {
           </FadeInSection>
         </section>
 
+        {/* AI Agents Section */}
+        <FadeInSection>
+          <AIAgents />
+        </FadeInSection>
+
         {/* Mission */}
         <section className="container mx-auto px-6 py-16">
           <FadeInSection>
@@ -159,14 +164,9 @@ export default function Landing() {
           <Testimonials />
         </FadeInSection>
 
-        {/* Customer Reviews */}
+        {/* Contact Form */}
         <FadeInSection>
-          <CustomerReviews />
-        </FadeInSection>
-
-        {/* Email Capture */}
-        <FadeInSection>
-          <EmailCapture />
+          <ContactForm />
         </FadeInSection>
 
         {/* Trust Badges */}
