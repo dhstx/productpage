@@ -11,7 +11,7 @@ import Gear from "./Gear";
  * - Smooth anime.js animations
  * - Fixed background positioning
  */
-export default function BackgroundGears({ color = "#FFC96C", opacity = 0.12 }) {
+export default function BackgroundGears({ color = "#FFC96C", opacity = 0.18 }) {
   const containerRef = useRef(null);
   const gearsRef = useRef([]);
   const scrollProgressRef = useRef(0);
@@ -65,8 +65,8 @@ export default function BackgroundGears({ color = "#FFC96C", opacity = 0.12 }) {
 
     // Continuous rotation animation using requestAnimationFrame
     const animateGears = () => {
-      const baseSpeed = 0.3; // Base rotation speed
-      const scrollMultiplier = 1 + scrollProgressRef.current * 2; // Speed up with scroll
+      const baseSpeed = 0.5; // Base rotation speed (increased for more visible movement)
+      const scrollMultiplier = 1 + scrollProgressRef.current * 3; // Speed up with scroll (increased multiplier)
 
       gearConfig.forEach((gear, index) => {
         const gearRef = gearsRef.current[index];

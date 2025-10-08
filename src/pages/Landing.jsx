@@ -17,7 +17,7 @@ export default function Landing() {
     <PageTransition>
     <div className="min-h-screen bg-[#0C0C0C] relative">
       {/* Background Gears - Fixed and animated */}
-      <BackgroundGears color="#FFC96C" opacity={0.12} />
+      <BackgroundGears color="#FFC96C" opacity={0.18} />
 
       {/* Content layer with higher z-index */}
       <div className="relative z-10">
