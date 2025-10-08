@@ -1,0 +1,60 @@
+# CODEOWNERS
+# This file defines individuals or teams responsible for code in this repository.
+# Code owners are automatically requested for review when someone opens a pull request
+# that modifies code that they own.
+#
+# Learn more about CODEOWNERS: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+# Unless a later match takes precedence, these users will be requested for review
+* @dhstx
+
+# Documentation
+*.md @dhstx
+/docs/ @dhstx
+
+# Configuration files
+/.github/ @dhstx
+*.yml @dhstx
+*.yaml @dhstx
+*.json @dhstx
+*.config.js @dhstx
+
+# Frontend components
+/src/components/ @dhstx
+/src/pages/ @dhstx
+
+# Styling
+*.css @dhstx
+/src/App.css @dhstx
+
+# Backend integrations
+/src/lib/supabase.js @dhstx
+/src/lib/stripe.js @dhstx
+/src/lib/auth.js @dhstx
+
+# Database schema
+supabase-schema.sql @dhstx
+
+# Tests
+/src/test/ @dhstx
+*.test.js @dhstx
+*.test.jsx @dhstx
+*.spec.js @dhstx
+*.spec.jsx @dhstx
+vitest.config.js @dhstx
+
+# Build configuration
+vite.config.js @dhstx
+package.json @dhstx
+pnpm-lock.yaml @dhstx
+
+# Deployment
+vercel.json @dhstx
+/api/ @dhstx
+
+# Security and governance
+/SECURITY.md @dhstx
+/CODE_OF_CONDUCT.md @dhstx
+/CONTRIBUTING.md @dhstx
+/LICENSE @dhstx

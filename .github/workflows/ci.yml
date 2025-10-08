@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-test-build:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run ESLint
+        run: pnpm run lint
+      
+      - name: Run tests
+        run: pnpm run test
+      
+      - name: Generate coverage report
+        run: pnpm run test:coverage
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+      
+      - name: Build project
+        run: pnpm run build
+      
+      - name: Check build size
+        run: |
+          BUILD_SIZE=$(du -sh dist | cut -f1)
+          echo "Build size: $BUILD_SIZE"
+          echo "BUILD_SIZE=$BUILD_SIZE" >> $GITHUB_ENV
+      
+      - name: Comment PR with build info
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Build successful!\n\n**Build Size:** ${process.env.BUILD_SIZE}\n**Node Version:** ${{ matrix.node-version }}`
+            })
+  
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run npm audit
+        run: pnpm audit --audit-level=moderate || true
+      
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+  
+  validate-files:
+    name: Validate Required Files
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check required files
+        run: |
+          echo "Checking for required files..."
+          
+          REQUIRED_FILES=(
+            "README.md"
+            "LICENSE"
+            "CONTRIBUTING.md"
+            "CODE_OF_CONDUCT.md"
+            "SECURITY.md"
+            ".gitignore"
+            "package.json"
+          )
+          
+          MISSING_FILES=()
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              MISSING_FILES+=("$file")
+            fi
+          done
+          
+          if [ ${#MISSING_FILES[@]} -gt 0 ]; then
+            echo "❌ Missing required files:"
+            printf '%s\n' "${MISSING_FILES[@]}"
+            exit 1
+          else
+            echo "✅ All required files present"
+          fi
+      
+      - name: Validate package.json
+        run: |
+          if ! jq empty package.json 2>/dev/null; then
+            echo "❌ Invalid package.json"
+            exit 1
+          fi
+          echo "✅ package.json is valid"
+      
+      - name: Check for .env in git
+        run: |
+          if git ls-files | grep -q "^\.env$"; then
+            echo "❌ .env file should not be committed"
+            exit 1
+          fi
+          echo "✅ No .env file in git"

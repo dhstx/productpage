@@ -34,7 +34,7 @@ export default function AnimatedButton({ children, onClick, className = "", vari
       });
     }
 
-    if (onClick) onClick(e);
+    if (onClick) {onClick(e);}
   };
 
   const baseClass = variant === "primary" 

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { animate } from "animejs";
 import Gear from "./Gear";
 
 export default function ScrollGearsAnime({
@@ -14,7 +13,7 @@ export default function ScrollGearsAnime({
 
   useEffect(() => {
     const el = rootRef.current;
-    if (!el) return;
+    if (!el) {return;}
 
     // Scroll-based rotation using direct DOM manipulation for performance
     const handleScroll = () => {

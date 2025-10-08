@@ -28,9 +28,10 @@ export default function Billing() {
     setShowBillingModal(true);
   };
 
-  const handleDownloadInvoice = (invoice) => {
-    alert(`Downloading invoice ${invoice.id}...\n\nThis would download a PDF of your invoice.`);
-  };
+  // TODO: Implement invoice download functionality
+  // const handleDownloadInvoice = (invoice) => {
+  //   alert(`Downloading invoice ${invoice.id}...\n\nThis would download a PDF of your invoice.`);
+  // };
 
   return (
     <div className="space-y-8">

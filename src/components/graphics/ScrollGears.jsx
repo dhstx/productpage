@@ -17,7 +17,7 @@ export default function ScrollGears({
 
   useEffect(() => {
     const el = rootRef.current;
-    if (!el) return;
+    if (!el) {return;}
 
     const io = new IntersectionObserver(
       ([entry]) => setIsInView(entry.isIntersecting),
@@ -26,7 +26,7 @@ export default function ScrollGears({
     io.observe(el);
 
     const onScroll = () => {
-      if (!el) return;
+      if (!el) {return;}
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 1;
       const middle = vh / 2;
@@ -38,7 +38,7 @@ export default function ScrollGears({
 
     let rafId = 0;
     const loop = () => {
-      if (isInView) onScroll();
+      if (isInView) {onScroll();}
       rafId = requestAnimationFrame(loop);
     };
     rafId = requestAnimationFrame(loop);

@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || 'placeholder-key';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
 
 // Check if Supabase is properly configured
 const isSupabaseConfigured = 
@@ -21,7 +21,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 export async function submitContactForm(data) {
   // If Supabase is not configured, log to console and return success (for demo purposes)
   if (!isSupabaseConfigured) {
-    console.log('Supabase not configured. Contact form data:', data);
+    console.warn('Supabase not configured. Contact form data:', data);
     console.warn('To enable contact form submissions, configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel environment variables.');
     return { 
       success: true, 
@@ -43,7 +43,7 @@ export async function submitContactForm(data) {
       ])
       .select();
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { success: true, data: result };
   } catch (error) {
     console.error('Error submitting contact form:', error);
@@ -55,7 +55,7 @@ export async function submitContactForm(data) {
 export async function captureEmail(email, source = 'landing') {
   // If Supabase is not configured, log to console and return success (for demo purposes)
   if (!isSupabaseConfigured) {
-    console.log('Supabase not configured. Email capture:', { email, source });
+    console.warn('Supabase not configured. Email capture:', { email, source });
     console.warn('To enable email capture, configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel environment variables.');
     return { 
       success: true, 
@@ -75,7 +75,7 @@ export async function captureEmail(email, source = 'landing') {
       ])
       .select();
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { success: true, data: result };
   } catch (error) {
     console.error('Error capturing email:', error);

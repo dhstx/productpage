@@ -1,7 +1,35 @@
 {
-  "name": "productpage-temp",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@dhstx/productpage",
+  "version": "0.1.0",
+  "description": "Enterprise product page platform with AI-powered agents, Supabase backend, and Stripe payments",
+  "author": "DHStx (Daley House Stacks) <contact@daleyhousestacks.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/dhstx/productpage#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhstx/productpage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dhstx/productpage/issues",
+    "email": "contact@daleyhousestacks.com"
+  },
+  "keywords": [
+    "react",
+    "vite",
+    "product-page",
+    "landing-page",
+    "supabase",
+    "stripe",
+    "ai-agents",
+    "animations",
+    "tailwindcss",
+    "dhstx"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",

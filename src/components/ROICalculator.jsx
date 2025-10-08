@@ -23,7 +23,7 @@ export default function ROICalculator() {
   }, [inputs]);
 
   const calculateROI = () => {
-    const { teamMembers, currentToolsCost, adminHoursPerWeek, platformsManaged } = inputs;
+    const { teamMembers: _teamMembers, currentToolsCost, adminHoursPerWeek, platformsManaged: _platformsManaged } = inputs;
 
     // Assumptions
     const avgHourlyRate = 50; // Average hourly rate for admin staff
@@ -33,7 +33,7 @@ export default function ROICalculator() {
 
     // Calculations
     const currentAnnualToolsCost = currentToolsCost * 12;
-    const currentAnnualLaborCost = adminHoursPerWeek * 52 * avgHourlyRate;
+    const _currentAnnualLaborCost = adminHoursPerWeek * 52 * avgHourlyRate;
     const dhstxAnnualCost = dhstxMonthlyCost * 12;
 
     // Savings from tool consolidation

@@ -14,7 +14,7 @@ export default function EmailCapture() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // TODO: Integrate with your email service (Mailchimp, SendGrid, etc.)
-    console.log('Email captured:', email);
+    console.warn('Email captured:', email);
     
     setLoading(false);
     setSubmitted(true);

@@ -7,7 +7,7 @@ export default function PageTransition({ children }) {
   const contentRef = useRef(null);
 
   useEffect(() => {
-    if (!contentRef.current) return;
+    if (!contentRef.current) {return;}
 
     // Fade in and slide up animation on route change
     animate(contentRef.current, {

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { animate } from "animejs";
 import Gear from "./Gear";
 
 /**
@@ -58,7 +57,7 @@ export default function BackgroundGears({ color = "#FFC96C", opacity = 0.18 }) {
   ];
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current) {return;}
 
     // Initialize gear refs
     gearsRef.current = gearConfig.map(() => ({ rotation: 0 }));
@@ -70,7 +69,7 @@ export default function BackgroundGears({ color = "#FFC96C", opacity = 0.18 }) {
 
       gearConfig.forEach((gear, index) => {
         const gearRef = gearsRef.current[index];
-        if (!gearRef) return;
+        if (!gearRef) {return;}
 
         // Calculate rotation based on speed, direction, and scroll
         gearRef.rotation += baseSpeed * gear.speed * gear.direction * scrollMultiplier;
