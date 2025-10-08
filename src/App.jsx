@@ -11,6 +11,8 @@ import Team from './pages/Team';
 import Billing from './pages/Billing';
 import Settings from './pages/Settings';
 import UseCaseHealthcare from './pages/UseCaseHealthcare';
+import UseCaseEducation from './pages/UseCaseEducation';
+import UseCaseNonprofit from './pages/UseCaseNonprofit';
 import Security from './pages/Security';
 import Integrations from './pages/Integrations';
 import Status from './pages/Status';
@@ -29,6 +31,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/product" element={<Product />} />
         <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
+        <Route path="/use-cases/education" element={<UseCaseEducation />} />
+        <Route path="/use-cases/nonprofit" element={<UseCaseNonprofit />} />
         <Route path="/security" element={<Security />} />
         <Route path="/integrations" element={<Integrations />} />
         <Route path="/status" element={<Status />} />
