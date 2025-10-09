@@ -17,7 +17,6 @@ export default function AIChatInterface() {
 
   // Get current agent configuration
   const agentConfig = getAgentConfig(selectedAgent);
-  const agentKey = getAgentKey(selectedAgent);
 
   // Construct the full text for typing animation
   const fullText = `Hello. I am your ${selectedAgent}`;
