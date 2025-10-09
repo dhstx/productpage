@@ -24,6 +24,16 @@
 - [Contributing](#-contributing)
 - [License](#-license)
 
+## 🔍 Project Assessment
+
+**New**: Comprehensive project critique and improvement roadmap available:
+
+- 📊 [**Project Critique Summary**](./CRITIQUE_SUMMARY.md) - Quick overview and scores
+- 📄 [**Full Project Critique**](./PROJECT_CRITIQUE.md) - Detailed analysis of all aspects
+- ✅ [**Improvement Checklist**](./IMPROVEMENT_CHECKLIST.md) - Actionable tasks
+
+These documents provide an honest assessment of the project's current state, identifying strengths, weaknesses, and a clear roadmap to production readiness.
+
 ---
 
 ## ✨ Features
