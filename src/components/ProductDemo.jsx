@@ -83,21 +83,7 @@ export default function ProductDemo() {
                 )}
               </div>
 
-              {/* Stats Below Video */}
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="text-center p-4 bg-[#1A1A1A] rounded-[4px] border border-[#202020]">
-                  <div className="text-2xl font-bold text-[#FFC96C]">500+</div>
-                  <div className="text-xs text-[#B3B3B3] uppercase tracking-tight mt-1">Organizations</div>
-                </div>
-                <div className="text-center p-4 bg-[#1A1A1A] rounded-[4px] border border-[#202020]">
-                  <div className="text-2xl font-bold text-[#FFC96C]">98%</div>
-                  <div className="text-xs text-[#B3B3B3] uppercase tracking-tight mt-1">Satisfaction</div>
-                </div>
-                <div className="text-center p-4 bg-[#1A1A1A] rounded-[4px] border border-[#202020]">
-                  <div className="text-2xl font-bold text-[#FFC96C]">24/7</div>
-                  <div className="text-xs text-[#B3B3B3] uppercase tracking-tight mt-1">Support</div>
-                </div>
-              </div>
+
             </div>
 
             {/* Features List */}

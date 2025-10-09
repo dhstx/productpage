@@ -29,7 +29,7 @@ export default function Landing() {
         </header>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-6 pt-32 pb-48 min-h-screen flex items-center">
+        <section className="container mx-auto px-6 pt-24 pb-32 min-h-[calc(100vh-8rem)] flex items-center">
           <FadeInSection>
             <div className="max-w-4xl">
               <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">

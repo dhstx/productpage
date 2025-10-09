@@ -2,11 +2,13 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
+import BillingModal from './admin/BillingModal';
 
 export default function AdminLayout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [billingModalOpen, setBillingModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const user = getCurrentUser();
@@ -95,6 +97,16 @@ export default function AdminLayout({ children }) {
                       <span className="text-sm">Settings</span>
                     </Link>
                     <button
+                      onClick={() => {
+                        setProfileMenuOpen(false);
+                        setBillingModalOpen(true);
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors w-full text-left"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span className="text-sm">{shouldUpgrade ? 'Upgrade' : 'Billing'}</span>
+                    </button>
+                    <button
                       onClick={handleLogout}
                       disabled={isLoggingOut}
                       className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors w-full text-left disabled:opacity-50 disabled:cursor-not-allowed"
@@ -166,6 +178,13 @@ export default function AdminLayout({ children }) {
           </div>
         </div>
       </footer>
+
+      {/* Billing Modal */}
+      <BillingModal
+        isOpen={billingModalOpen}
+        onClose={() => setBillingModalOpen(false)}
+        userPlan={user?.plan || 'free'}
+      />
     </div>
   );
 }

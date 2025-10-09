@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
-import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
 
@@ -126,9 +125,6 @@ export default function Product() {
       <section className="py-24 border-b border-[#202020]">
         <ScrollGears color="#FFC96C" />
       </section>
-
-      {/* Feature Comparison */}
-      <FeatureComparison />
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
