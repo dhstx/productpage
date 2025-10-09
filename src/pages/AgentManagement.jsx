@@ -3,7 +3,8 @@ import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, 
 import { agents as agentData, getAgentStats } from '../lib/agents';
 
 export default function AgentManagement() {
-  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [selectedAgents, setSelectedAgents] = useState([]); // Changed to array for multi-selection
+  const [configAgent, setConfigAgent] = useState(null); // For configuration modal
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showCustomTeamModal, setShowCustomTeamModal] = useState(false);
@@ -53,43 +54,60 @@ export default function AgentManagement() {
     }
   };
 
+  // Toggle agent selection (multi-select)
+  const handleAgentSelect = (agent) => {
+    setSelectedAgents(prev => {
+      const isSelected = prev.some(a => a.id === agent.id);
+      if (isSelected) {
+        return prev.filter(a => a.id !== agent.id);
+      } else {
+        return [...prev, agent];
+      }
+    });
+  };
+
+  // Remove specific agent from selection
+  const handleRemoveAgent = (agentId) => {
+    setSelectedAgents(prev => prev.filter(a => a.id !== agentId));
+  };
+
   const handlePauseAgent = (agent) => {
-    setSelectedAgent(agent);
+    setConfigAgent(agent);
     setConfirmAction('pause');
     setShowConfirmModal(true);
   };
 
   const handleRestartAgent = (agent) => {
-    setSelectedAgent(agent);
+    setConfigAgent(agent);
     setConfirmAction('restart');
     setShowConfirmModal(true);
   };
 
   const handleConfigureAgent = (agent, e) => {
     e.stopPropagation(); // Prevent agent selection when clicking cog
-    setSelectedAgent(agent);
+    setConfigAgent(agent);
     setShowConfigModal(true);
   };
 
   const confirmAgentAction = () => {
-    if (!selectedAgent) return;
+    if (!configAgent) return;
     
     if (confirmAction === 'pause') {
       setAgents(agents.map(agent => 
-        agent.id === selectedAgent.id 
+        agent.id === configAgent.id 
           ? { ...agent, status: 'paused' }
           : agent
       ));
     } else if (confirmAction === 'restart') {
       setAgents(agents.map(agent => 
-        agent.id === selectedAgent.id 
+        agent.id === configAgent.id 
           ? { ...agent, status: 'active', lastActive: 'Just now' }
           : agent
       ));
     }
     
     setShowConfirmModal(false);
-    setSelectedAgent(null);
+    setConfigAgent(null);
     setConfirmAction(null);
   };
 
@@ -178,7 +196,7 @@ export default function AgentManagement() {
           
           {agents.map((agent) => {
             const StatusIcon = getStatusIcon(agent.status);
-            const isSelected = selectedAgent?.id === agent.id;
+            const isSelected = selectedAgents.some(a => a.id === agent.id);
             
             return (
               <div
@@ -188,7 +206,7 @@ export default function AgentManagement() {
                     ? 'bg-[#FFC96C]/10 border-[#FFC96C] ring-2 ring-[#FFC96C]/50' 
                     : 'hover:bg-[#202020] border-transparent'
                 }`}
-                onClick={() => setSelectedAgent(agent)}
+                onClick={() => handleAgentSelect(agent)}
               >
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#202020] flex items-center justify-center flex-shrink-0">
@@ -227,94 +245,64 @@ export default function AgentManagement() {
               Agent Text Box
             </h3>
             
-            {/* Selected Agent Info */}
-            {selectedAgent ? (
+            {/* Selected Agents - Display as chips with X button */}
+            {selectedAgents.length > 0 ? (
               <div className="mb-4 panel-system p-4 bg-[#0C0C0C]">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-[#202020] flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-6 h-6 text-[#FFC96C]" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-[#F2F2F2] mb-1">{selectedAgent.name}</h4>
-                      <p className="text-[#B3B3B3] text-sm mb-3">{selectedAgent.description}</p>
-                      
-                      {/* Agent Metrics */}
-                      <div className="grid grid-cols-4 gap-3">
-                        <div>
-                          <p className="text-[#B3B3B3] text-xs">Tasks</p>
-                          <p className="text-lg font-bold text-[#F2F2F2]">{selectedAgent.tasks.toLocaleString()}</p>
-                        </div>
-                        <div>
-                          <p className="text-[#B3B3B3] text-xs">Accuracy</p>
-                          <p className="text-lg font-bold text-[#F2F2F2]">{selectedAgent.accuracy}%</p>
-                        </div>
-                        <div>
-                          <p className="text-[#B3B3B3] text-xs">Response</p>
-                          <p className="text-lg font-bold text-[#F2F2F2]">{selectedAgent.responseTime}s</p>
-                        </div>
-                        <div>
-                          <p className="text-[#B3B3B3] text-xs">Uptime</p>
-                          <p className="text-lg font-bold text-[#F2F2F2]">{selectedAgent.uptime}%</p>
-                        </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedAgents.map((agent) => (
+                    <div
+                      key={agent.id}
+                      className="flex items-center gap-2 bg-[#202020] border border-[#FFC96C]/30 rounded-lg px-3 py-2 group hover:border-[#FFC96C] transition-colors"
+                    >
+                      <div className="w-6 h-6 rounded bg-[#0C0C0C] flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-4 h-4 text-[#FFC96C]" />
                       </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-sm font-semibold text-[#F2F2F2] truncate">{agent.name}</span>
+                        <span className="text-xs text-[#B3B3B3]">v{agent.version}</span>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveAgent(agent.id)}
+                        className="ml-2 text-[#B3B3B3] hover:text-[#F2F2F2] transition-colors flex-shrink-0"
+                        title="Remove agent"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
-                  </div>
-                  
-                  {/* Action Buttons */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => selectedAgent.status === 'active' ? handlePauseAgent(selectedAgent) : handleRestartAgent(selectedAgent)}
-                      className="btn-system-secondary p-2"
-                      title={selectedAgent.status === 'active' ? 'Pause Agent' : 'Resume Agent'}
-                    >
-                      {selectedAgent.status === 'active' ? (
-                        <Pause className="w-4 h-4" />
-                      ) : (
-                        <Play className="w-4 h-4" />
-                      )}
-                    </button>
-                    <button 
-                      onClick={() => handleRestartAgent(selectedAgent)}
-                      className="btn-system-secondary p-2" 
-                      title="Restart Agent"
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={(e) => handleConfigureAgent(selectedAgent, e)}
-                      className="btn-system-secondary p-2" 
-                      title="Configure Agent"
-                    >
-                      <Settings className="w-4 h-4" />
-                    </button>
-                  </div>
+                  ))}
+                </div>
+                <div className="mt-3 text-xs text-[#B3B3B3]">
+                  {selectedAgents.length} agent{selectedAgents.length !== 1 ? 's' : ''} selected
                 </div>
               </div>
             ) : (
               <div className="mb-4 panel-system p-6 bg-[#0C0C0C] text-center">
                 <Bot className="w-12 h-12 text-[#FFC96C] mx-auto mb-3" />
-                <p className="text-[#B3B3B3]">Select an agent from the left panel to interact</p>
+                <p className="text-[#B3B3B3]">Select agents from the left panel to interact</p>
               </div>
             )}
 
             {/* Conversation Area - Reduced initial size, grows with content */}
             <div className="flex-1 bg-[#0C0C0C] rounded-[2px] p-4 mb-4 overflow-y-auto min-h-[120px]">
               <div className="space-y-4">
-                {selectedAgent ? (
+                {selectedAgents.length > 0 ? (
                   <>
-                    <div className="text-[#B3B3B3] text-sm">
-                      <p className="mb-2">
-                        <span className="text-[#FFC96C] font-semibold">{selectedAgent.name}:</span> Hello! I'm ready to assist you with {selectedAgent.capabilities[0].toLowerCase()}.
-                      </p>
-                      <p className="text-xs text-[#808080]">
-                        Type your message below to interact with this agent.
+                    <div className="text-[#B3B3B3] text-sm space-y-3">
+                      {selectedAgents.map((agent, index) => (
+                        <p key={agent.id} className="mb-2">
+                          <span className="text-[#FFC96C] font-semibold">{agent.name}:</span> Hello! I'm ready to assist you with {agent.capabilities[0].toLowerCase()}.
+                        </p>
+                      ))}
+                      <p className="text-xs text-[#808080] mt-4">
+                        Type your message below to interact with {selectedAgents.length === 1 ? 'this agent' : `all ${selectedAgents.length} agents`}.
                       </p>
                     </div>
                   </>
                 ) : (
                   <p className="text-[#808080] text-sm text-center py-4">
-                    No agent selected. Choose an agent from the left panel to start.
+                    No agents selected. Choose agents from the left panel to start.
                   </p>
                 )}
               </div>
@@ -325,8 +313,14 @@ export default function AgentManagement() {
               <textarea
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
-                placeholder={selectedAgent ? `Message ${selectedAgent.name}...` : "Select an agent to start messaging..."}
-                disabled={!selectedAgent}
+                placeholder={
+                  selectedAgents.length === 0 
+                    ? "Select agents to start messaging..." 
+                    : selectedAgents.length === 1 
+                      ? `Message ${selectedAgents[0].name}...` 
+                      : `Message ${selectedAgents.length} agents...`
+                }
+                disabled={selectedAgents.length === 0}
                 className="flex-1 px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                 rows={2}
                 style={{ minHeight: '60px', maxHeight: '200px' }}
@@ -337,7 +331,7 @@ export default function AgentManagement() {
               />
               <button
                 type="submit"
-                disabled={!selectedAgent || !agentInput.trim()}
+                disabled={selectedAgents.length === 0 || !agentInput.trim()}
                 className="btn-system px-6 self-end disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send
