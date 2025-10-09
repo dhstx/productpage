@@ -113,10 +113,7 @@ export default function Product() {
           </p>
           <div className="flex gap-4 justify-center">
             <Link to="/login" className="btn-system">
-              Schedule Demo
-            </Link>
-            <Link to="/login" className="btn-system">
-              Contact Sales
+              Get Started
             </Link>
           </div>
         </div>

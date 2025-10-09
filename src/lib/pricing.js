@@ -134,7 +134,7 @@ export const PRICING_TIERS = {
       'On-premise deployment option',
       'Advanced security features'
     ],
-    cta: 'Contact Sales',
+    cta: 'Get Started',
     highlighted: false,
     stripePrice: 'price_enterprise_monthly'
   }

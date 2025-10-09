@@ -85,10 +85,10 @@ export default function FAQ() {
               Still have questions?
             </p>
             <a
-              href="mailto:sales@dhstx.com"
+              href="/login"
               className="btn-system inline-flex"
             >
-              Contact Sales
+              Get Started
             </a>
           </div>
         </div>

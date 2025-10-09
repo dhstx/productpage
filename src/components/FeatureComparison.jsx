@@ -133,8 +133,8 @@ export default function FeatureComparison() {
             <a href="/product" className="btn-system">
               View Pricing Details
             </a>
-            <a href="mailto:sales@dhstx.com" className="btn-system-outline">
-              Contact Sales
+            <a href="/login" className="btn-system-outline">
+              Get Started
             </a>
           </div>
         </div>
