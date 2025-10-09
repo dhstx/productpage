@@ -109,12 +109,6 @@ export default function ProductDemo() {
                   <Play className="w-4 h-4" />
                   Watch Full Demo
                 </button>
-                <a
-                  href="/product"
-                  className="btn-system w-full flex items-center justify-center"
-                >
-                  View Pricing
-                </a>
               </div>
 
               {/* Trust Signal */}
