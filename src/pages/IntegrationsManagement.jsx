@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Check, X, Settings, ExternalLink, Zap, Database, 
   Mail, MessageSquare, Calendar, DollarSign, Users,
@@ -309,13 +310,23 @@ function IntegrationCard({ integration }) {
       <div className="flex gap-2">
         {integration.connected ? (
           <>
-            <button
-              onClick={handleConfigure}
-              className="flex-1 px-3 py-2 bg-[#202020] rounded-[2px] text-[#F2F2F2] text-sm font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
-            >
-              <Settings className="w-4 h-4" />
-              Configure
-            </button>
+            {(integration.id === 'stripe' || integration.id === 'supabase') ? (
+              <Link
+                to={integration.id === 'stripe' ? '/billing' : '/platforms'}
+                className="flex-1 px-3 py-2 bg-[#202020] rounded-[2px] text-[#F2F2F2] text-sm font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                Manage
+              </Link>
+            ) : (
+              <button
+                onClick={handleConfigure}
+                className="flex-1 px-3 py-2 bg-[#202020] rounded-[2px] text-[#F2F2F2] text-sm font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+              >
+                <Settings className="w-4 h-4" />
+                Configure
+              </button>
+            )}
             <button
               onClick={handleDisconnect}
               className="px-3 py-2 bg-red-900/20 border border-red-900 rounded-[2px] text-red-400 text-sm font-medium hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2"

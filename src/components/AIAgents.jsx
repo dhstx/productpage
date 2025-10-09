@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Bot, Brain, Lightbulb } from 'lucide-react';
 import FadeInSection from './FadeInSection';
 
@@ -103,11 +104,15 @@ export default function AIAgents() {
               <h4 className="text-[#F2F2F2] font-bold mb-2 uppercase tracking-tight">
                 Continuous Learning
               </h4>
-              <p className="text-[#B3B3B3]">
+              <p className="text-[#B3B3B3] mb-4">
                 Our AI agents continuously learn from your organization's patterns and preferences, 
                 becoming more effective over time. They adapt to your unique workflows and provide 
                 increasingly personalized recommendations as they understand your needs better.
               </p>
+              <Link to="/agent-management" className="btn-system inline-flex items-center gap-2">
+                <Bot className="w-4 h-4" />
+                View All 12 AI Agents
+              </Link>
             </div>
           </div>
         </div>

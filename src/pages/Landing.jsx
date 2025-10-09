@@ -1,12 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles } from 'lucide-react';
-import Testimonials from '../components/Testimonials';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
 import AIChatInterface from '../components/AIChatInterface';
 import AnimatedButton from '../components/AnimatedButton';
-import AnimatedCounter from '../components/AnimatedCounter';
 import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
@@ -98,40 +96,6 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Stats Section with Animated Counters */}
-        <section className="container mx-auto px-6 py-16">
-          <FadeInSection>
-            <div className="panel-system p-12">
-              <div className="grid md:grid-cols-3 gap-12 text-center">
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={500} duration={2000} suffix="+" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Organizations
-                  </div>
-                </div>
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={10000} duration={2000} suffix="+" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Active Users
-                  </div>
-                </div>
-                <div>
-                  <div className="text-5xl font-bold text-[#FFC96C] mb-2">
-                    <AnimatedCounter end={99} duration={2000} suffix="%" />
-                  </div>
-                  <div className="text-[#B3B3B3] uppercase tracking-wide text-sm">
-                    Satisfaction Rate
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeInSection>
-        </section>
-
         {/* AI Agents Section */}
         <FadeInSection>
           <AIAgents />
@@ -154,11 +118,6 @@ export default function Landing() {
         {/* Product Demo */}
         <FadeInSection>
           <ProductDemo />
-        </FadeInSection>
-
-        {/* Testimonials */}
-        <FadeInSection>
-          <Testimonials />
         </FadeInSection>
 
         {/* Contact Form */}
