@@ -1,0 +1,20 @@
+{
+  "name": "DHStx - Enterprise Management Platform",
+  "short_name": "DHStx",
+  "description": "Transform your board operations with DHStx - the all-in-one platform for board management, strategic planning, and organizational excellence.",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFC96C",
+  "background_color": "#0C0C0C",
+  "display": "standalone"
+}
