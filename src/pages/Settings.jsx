@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { 
   User, Users, CreditCard, Key, UserPlus, FileText, 
-  Palette, LogOut, Save, Mail, Building, Phone 
+  Palette, LogOut, Save, Mail, Building, Phone, Download 
 } from 'lucide-react';
 import { logout, getCurrentUser } from '../lib/auth';
 import { useNavigate } from 'react-router-dom';
+import { downloadInvoicePDF } from '../lib/stripe';
 
 export default function Settings() {
   const user = getCurrentUser();
@@ -389,7 +390,11 @@ function BillingSection() {
                   <span className="px-2 py-1 bg-green-900/20 border border-green-900 rounded-[2px] text-green-400 text-xs font-bold">
                     {invoice.status}
                   </span>
-                  <button className="text-[#FFC96C] hover:text-[#FFD700] text-sm font-medium transition-colors">
+                  <button 
+                    onClick={() => downloadInvoicePDF(invoice.id || `inv_${invoice.date.replace(/\s/g, '_')}`)}
+                    className="text-[#FFC96C] hover:text-[#FFD700] text-sm font-medium transition-colors flex items-center gap-1"
+                  >
+                    <Download className="w-3 h-3" />
                     Download
                   </button>
                 </div>

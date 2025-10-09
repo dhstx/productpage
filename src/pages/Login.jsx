@@ -104,7 +104,35 @@ export default function Login() {
             <button
               type="button"
               className="mt-4 w-full flex items-center justify-center gap-3 px-4 py-2 border border-[#202020] rounded-[2px] bg-[#0C0C0C] text-[#F2F2F2] hover:bg-[#202020] transition-colors"
-              onClick={() => setError('Google OAuth integration coming soon')}
+              onClick={() => {
+                // Google OAuth flow
+                // In production, this would redirect to your OAuth endpoint
+                const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+                  `client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID'}` +
+                  `&redirect_uri=${encodeURIComponent(window.location.origin + '/auth/google/callback')}` +
+                  `&response_type=code` +
+                  `&scope=${encodeURIComponent('openid profile email')}` +
+                  `&access_type=offline` +
+                  `&prompt=consent`;
+                
+                // For demo, show alert
+                if (!import.meta.env.VITE_GOOGLE_CLIENT_ID) {
+                  alert(
+                    '🔐 Google OAuth Configuration\n\n' +
+                    'To enable Google Sign-In:\n\n' +
+                    '1. Create OAuth 2.0 credentials in Google Cloud Console\n' +
+                    '2. Add authorized redirect URI:\n' +
+                    `   ${window.location.origin}/auth/google/callback\n\n` +
+                    '3. Set VITE_GOOGLE_CLIENT_ID in .env file\n' +
+                    '4. Implement /auth/google/callback endpoint\n\n' +
+                    'OAuth URL would be:\n' +
+                    googleOAuthUrl.substring(0, 100) + '...'
+                  );
+                } else {
+                  // Redirect to Google OAuth
+                  window.location.href = googleOAuthUrl;
+                }
+              }}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
