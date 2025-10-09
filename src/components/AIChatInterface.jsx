@@ -1,5 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Send, Paperclip, Mic, ArrowUp, Sparkles } from 'lucide-react';
+import { useTypewriter } from '../hooks/useTypewriter';
+import { AGENT_COLORS, getAgentKey, getAgentConfig } from '../lib/agentTheme';
 
 export default function AIChatInterface() {
   const [message, setMessage] = useState('');
@@ -8,10 +10,51 @@ export default function AIChatInterface() {
   const textareaRef = useRef(null);
 
   const agents = [
-    { name: 'Strategic Advisor', color: '#FFC96C' },
-    { name: 'Engagement Analyst', color: '#8B5CF6' },
-    { name: 'Operations Assistant', color: '#10B981' }
+    { name: 'Strategic Advisor', color: AGENT_COLORS.strategic.hex },
+    { name: 'Engagement Analyst', color: AGENT_COLORS.engagement.hex },
+    { name: 'Operations Assistant', color: AGENT_COLORS.operations.hex }
   ];
+
+  // Get current agent configuration
+  const agentConfig = getAgentConfig(selectedAgent);
+  const agentKey = getAgentKey(selectedAgent);
+
+  // Construct the full text for typing animation
+  const fullText = `Hello. I am your ${selectedAgent}`;
+  
+  // Find the pause index (after "Hello.")
+  const pauseIndex = fullText.indexOf('.') >= 0 ? fullText.indexOf('.') : -1;
+
+  // Check for reduced motion preference
+  const reducedMotion = useMemo(() => {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    return false;
+  }, []);
+
+  // Use the typewriter hook
+  const { text: typedText, done: typingDone } = useTypewriter({
+    fullText,
+    speedMs: 50,
+    pauseAfterIndex: pauseIndex,
+    pauseMs: 1500,
+    play: true,
+    reducedMotion,
+  });
+
+  // Split the typed text to color the agent name
+  // After typing is done, always show the current selectedAgent (not the typed one)
+  const [prefix, displayAgent] = useMemo(() => {
+    const p = `Hello. I am your `;
+    if (typingDone) {
+      // After animation completes, show current agent
+      return [p, selectedAgent];
+    }
+    // During typing, show what's been typed
+    if (!typedText.startsWith(p)) return [typedText, ''];
+    return [p, typedText.slice(p.length)];
+  }, [typedText, typingDone, selectedAgent]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,7 +88,7 @@ export default function AIChatInterface() {
               onClick={() => setShowAgentMenu(!showAgentMenu)}
               className="px-6 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#F2F2F2] text-sm font-medium hover:bg-[#1A1A1A] transition-colors flex items-center gap-2"
             >
-              <Sparkles className="w-4 h-4 text-[#FFC96C]" />
+              <Sparkles className="w-4 h-4" style={{ color: agentConfig.hex }} />
               Select Agent
             </button>
             
@@ -64,7 +107,7 @@ export default function AIChatInterface() {
                       className="w-2 h-2 rounded-full" 
                       style={{ backgroundColor: agent.color }}
                     />
-                    <span className={`text-sm ${selectedAgent === agent.name ? 'text-[#FFC96C]' : 'text-[#F2F2F2]'}`}>
+                    <span className={`text-sm ${selectedAgent === agent.name ? 'font-semibold' : ''}`} style={{ color: selectedAgent === agent.name ? agent.color : '#F2F2F2' }}>
                       {agent.name}
                     </span>
                   </button>
@@ -74,101 +117,145 @@ export default function AIChatInterface() {
           </div>
         </div>
 
-        {/* AI Greeting */}
+        {/* AI Greeting with Typewriter Animation */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="text-[#B3B3B3]">Hey, I am </span>
-            <span className="text-[#FFC96C] relative inline-block">
-              {selectedAgent}
-              <span className="absolute bottom-0 left-0 w-full h-1 bg-[#FFC96C] opacity-30"></span>
-            </span>
+          <h2 
+            className="text-5xl md:text-6xl font-bold mb-4"
+            aria-live={typingDone ? 'off' : 'polite'}
+          >
+            <span className="text-[#B3B3B3]">{prefix}</span>
+            {displayAgent && (
+              <span 
+                className="relative inline-block font-extrabold"
+                style={{ color: agentConfig.hex }}
+              >
+                {displayAgent}
+                <span 
+                  className="absolute bottom-0 left-0 w-full h-1 opacity-30"
+                  style={{ backgroundColor: agentConfig.hex }}
+                ></span>
+              </span>
+            )}
+            {/* Show cursor while typing */}
+            {!typingDone && (
+              <span className="inline-block w-0.5 h-12 ml-1 bg-[#FFC96C] animate-pulse"></span>
+            )}
           </h2>
-          <p className="text-[#B3B3B3] text-xl md:text-2xl">
-            What would you like to do today?
-          </p>
+          
+          {/* Fade in the subtitle after typing is done */}
+          <div
+            className={`transition-all duration-400 ease-out ${
+              typingDone ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+            }`}
+          >
+            <p className="text-[#B3B3B3] text-xl md:text-2xl">
+              What would you like to do today?
+            </p>
+          </div>
         </div>
 
-        {/* Chat Input */}
-        <form onSubmit={handleSubmit} className="relative">
-          <div className="panel-system p-6">
-            <div className="flex items-start gap-4">
-              {/* Attachment Button */}
-              <button
-                type="button"
-                className="mt-2 w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors flex-shrink-0"
-                onClick={() => alert('File attachment coming soon')}
-              >
-                <Paperclip className="w-5 h-5 text-[#B3B3B3]" />
-              </button>
+        {/* Chat Input - Fade in after typing is done */}
+        <div
+          className={`transition-all duration-400 ease-out ${
+            typingDone 
+              ? 'opacity-100 translate-y-0 pointer-events-auto' 
+              : 'opacity-0 translate-y-3 pointer-events-none'
+          }`}
+        >
+          <form onSubmit={handleSubmit} className="relative">
+            <div className="panel-system p-6">
+              <div className="flex items-start gap-4">
+                {/* Attachment Button */}
+                <button
+                  type="button"
+                  className="mt-2 w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors flex-shrink-0"
+                  onClick={() => alert('File attachment coming soon')}
+                >
+                  <Paperclip className="w-5 h-5 text-[#B3B3B3]" />
+                </button>
 
-              {/* Text Input */}
-              <div className="flex-grow">
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Describe what you need help with..."
-                  className="w-full bg-transparent text-[#F2F2F2] placeholder-[#666666] resize-none outline-none min-h-[24px] max-h-[200px]"
-                  rows={1}
-                />
-              </div>
+                {/* Text Input */}
+                <div className="flex-grow">
+                  <textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Describe what you need help with..."
+                    className="w-full bg-transparent text-[#F2F2F2] placeholder-[#666666] resize-none outline-none min-h-[24px] max-h-[200px]"
+                    rows={1}
+                  />
+                </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
-                >
-                  Chat
-                </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
-                >
-                  AGI
-                </button>
-                <button
-                  type="button"
-                  className="w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors"
-                  onClick={() => alert('Voice input coming soon')}
-                >
-                  <Mic className="w-5 h-5 text-[#B3B3B3]" />
-                </button>
-                <button
-                  type="submit"
-                  disabled={!message.trim()}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                    message.trim()
-                      ? 'bg-[#FFC96C] hover:bg-[#FFD700]'
-                      : 'bg-[#202020] cursor-not-allowed'
-                  }`}
-                >
-                  <ArrowUp className={`w-5 h-5 ${message.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
-                </button>
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
+                  >
+                    Chat
+                  </button>
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
+                  >
+                    AGI
+                  </button>
+                  <button
+                    type="button"
+                    className="w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors"
+                    onClick={() => alert('Voice input coming soon')}
+                  >
+                    <Mic className="w-5 h-5 text-[#B3B3B3]" />
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!message.trim()}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                      message.trim()
+                        ? 'hover:opacity-90'
+                        : 'cursor-not-allowed opacity-50'
+                    }`}
+                    style={{
+                      backgroundColor: message.trim() ? agentConfig.hex : '#202020'
+                    }}
+                  >
+                    <ArrowUp className={`w-5 h-5 ${message.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
 
-        {/* Suggested Prompts */}
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          {[
-            'Analyze board engagement trends',
-            'Draft meeting agenda',
-            'Prioritize initiatives',
-            'Generate progress report'
-          ].map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => setMessage(prompt)}
-              className="px-4 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#B3B3B3] text-sm hover:bg-[#1A1A1A] hover:text-[#F2F2F2] hover:border-[#FFC96C] transition-colors"
-            >
-              {prompt}
-            </button>
-          ))}
+          {/* Suggested Prompts */}
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {[
+              'Analyze board engagement trends',
+              'Draft meeting agenda',
+              'Prioritize initiatives',
+              'Generate progress report'
+            ].map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => setMessage(prompt)}
+                className="px-4 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#B3B3B3] text-sm hover:bg-[#1A1A1A] hover:text-[#F2F2F2] transition-colors"
+                style={{
+                  borderColor: '#202020'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = agentConfig.hex;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#202020';
+                }}
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
