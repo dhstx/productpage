@@ -15,9 +15,7 @@ export default function Platforms() {
     alert('Analytics Dashboard\n\nThis would show:\n• User engagement metrics\n• Platform usage statistics\n• Member activity reports\n• Event participation data\n\nComing soon!');
   };
 
-  const handleViewPricing = () => {
-    navigate('/product');
-  };
+
 
   return (
     <div className="space-y-8">
@@ -111,23 +109,7 @@ export default function Platforms() {
         ))}
       </section>
 
-      {/* Add Platform CTA */}
-      <section>
-        <div className="panel-system p-8 text-center">
-          <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-3">
-            NEED ANOTHER PLATFORM?
-          </h3>
-          <p className="text-[#B3B3B3] mb-6">
-            Purchase additional platform instances for different organizations or departments.
-          </p>
-          <button 
-            onClick={handleViewPricing}
-            className="btn-system"
-          >
-            View Pricing Plans
-          </button>
-        </div>
-      </section>
+
     </div>
   );
 }

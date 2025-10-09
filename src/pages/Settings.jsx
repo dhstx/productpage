@@ -189,19 +189,215 @@ function TeamSection() {
 }
 
 function BillingSection() {
-  const navigate = useNavigate();
+  const user = getCurrentUser();
+  const currentTier = { 
+    id: user?.subscription || 'free',
+    name: user?.subscription === 'professional' ? 'Professional' : user?.subscription === 'starter' ? 'Starter' : user?.subscription === 'enterprise' ? 'Enterprise' : 'Free',
+    description: 'Current subscription plan',
+    price: user?.subscription === 'professional' ? 49 : user?.subscription === 'starter' ? 19 : user?.subscription === 'enterprise' ? 199 : 0,
+    billingPeriod: 'month',
+    highlighted: user?.subscription === 'professional',
+    featureList: user?.subscription === 'professional' ? [
+      '12 AI Agents',
+      'Unlimited workflows',
+      'Unlimited connections',
+      'Priority support',
+      'Advanced analytics',
+      'Custom integrations'
+    ] : user?.subscription === 'starter' ? [
+      '3 AI Agents',
+      '50 workflows/month',
+      '100 connections',
+      'Email support',
+      'Basic analytics'
+    ] : user?.subscription === 'enterprise' ? [
+      'Unlimited AI Agents',
+      'Unlimited workflows',
+      'Unlimited connections',
+      'Dedicated support',
+      'Custom deployment',
+      'SLA guarantee'
+    ] : [
+      '1 AI Agent',
+      '10 workflows/month',
+      '25 connections',
+      'Community support'
+    ],
+    features: {
+      agents: user?.subscription === 'professional' ? '12' : user?.subscription === 'starter' ? '3' : user?.subscription === 'enterprise' ? 'unlimited' : '1',
+      workflows: user?.subscription === 'professional' ? 'unlimited' : user?.subscription === 'starter' ? '50' : user?.subscription === 'enterprise' ? 'unlimited' : '10',
+      connections: user?.subscription === 'professional' ? 'unlimited' : user?.subscription === 'starter' ? '100' : user?.subscription === 'enterprise' ? 'unlimited' : '25',
+      teamLicenses: user?.subscription === 'professional' ? '10' : user?.subscription === 'starter' ? '5' : user?.subscription === 'enterprise' ? 'unlimited' : '1'
+    }
+  };
   
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const canUserUpgrade = !user || user.subscription === 'free' || user.subscription === 'starter';
+
+  const handleUpgrade = (tierName) => {
+    if (tierName === 'Enterprise') {
+      alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
+    } else {
+      // Trigger Stripe checkout
+      alert(`Upgrading to ${tierName} plan...\n\nThis would redirect to Stripe checkout.`);
+    }
+  };
+
+  const handleCancelSubscription = () => {
+    if (confirm('Are you sure you want to cancel your subscription?\n\nYour access will continue until the end of the current billing period.')) {
+      alert('Subscription cancellation scheduled.\n\nYou will receive a confirmation email shortly.');
+    }
+  };
+
   return (
-    <div className="panel-system p-6">
-      <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-        BILLING & SUBSCRIPTION
-      </h2>
-      <p className="text-[#B3B3B3] mb-6">
-        Manage your subscription plan and payment methods.
-      </p>
-      <button onClick={() => navigate('/billing')} className="btn-system">
-        Go to Billing
-      </button>
+    <div className="space-y-6">
+      {/* Current Plan Status */}
+      <div className="panel-system p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight">
+                CURRENT PLAN: {currentTier.name}
+              </h2>
+              {currentTier.highlighted && (
+                <span className="px-2 py-1 bg-[#FFC96C]/10 border border-[#FFC96C] rounded-[2px] text-[#FFC96C] text-xs font-bold uppercase">
+                  MOST POPULAR
+                </span>
+              )}
+            </div>
+            <p className="text-[#B3B3B3] mb-4">{currentTier.description}</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-[#F2F2F2]">
+                ${currentTier.price}
+              </span>
+              <span className="text-[#B3B3B3]">/{currentTier.billingPeriod}</span>
+            </div>
+          </div>
+          {canUserUpgrade && (
+            <button
+              onClick={() => setShowUpgradeModal(true)}
+              className="btn-system flex items-center gap-2"
+            >
+              <CreditCard className="w-4 h-4" />
+              Upgrade Plan
+            </button>
+          )}
+        </div>
+
+        {/* Current Plan Features */}
+        <div className="mt-6 pt-6 border-t border-[#202020]">
+          <h3 className="text-sm font-bold text-[#F2F2F2] mb-3 uppercase tracking-tight">
+            YOUR CURRENT FEATURES
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {currentTier.featureList.map((feature, index) => (
+              <div key={index} className="flex items-start gap-2">
+                <span className="text-[#FFC96C] text-sm">✓</span>
+                <span className="text-[#B3B3B3] text-sm">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Usage Stats */}
+        <div className="mt-6 pt-6 border-t border-[#202020]">
+          <h3 className="text-sm font-bold text-[#F2F2F2] mb-3 uppercase tracking-tight">
+            CURRENT USAGE
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">AI Agents</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">
+                {currentTier.features.agents === 'unlimited' ? '∞' : '3'} / {currentTier.features.agents === 'unlimited' ? '∞' : currentTier.features.agents}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">Workflows</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">
+                {currentTier.features.workflows === 'unlimited' ? '∞' : '12'} / {currentTier.features.workflows === 'unlimited' ? '∞' : currentTier.features.workflows}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">Connections</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">
+                {currentTier.features.connections === 'unlimited' ? '∞' : '47'} / {currentTier.features.connections === 'unlimited' ? '∞' : currentTier.features.connections}
+              </p>
+            </div>
+            <div>
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">Team Licenses</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">
+                {currentTier.features.teamLicenses === 'unlimited' ? '∞' : '8'} / {currentTier.features.teamLicenses === 'unlimited' ? '∞' : currentTier.features.teamLicenses}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {user && user.subscription !== 'free' && (
+          <div className="mt-6 pt-6 border-t border-[#202020] flex gap-4">
+            <button
+              onClick={handleCancelSubscription}
+              className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
+            >
+              Cancel Subscription
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Payment Method (for paid plans) */}
+      {user && user.subscription !== 'free' && (
+        <div className="panel-system p-6">
+          <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+            PAYMENT METHOD
+          </h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-[4px] bg-[#202020] flex items-center justify-center">
+                <CreditCard className="w-6 h-6 text-[#FFC96C]" />
+              </div>
+              <div>
+                <p className="text-[#F2F2F2] font-medium">•••• •••• •••• 4242</p>
+                <p className="text-[#B3B3B3] text-sm">Expires 12/2025</p>
+              </div>
+            </div>
+            <button className="btn-system">
+              Update Payment
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Billing History (for paid plans) */}
+      {user && user.subscription !== 'free' && (
+        <div className="panel-system p-6">
+          <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+            BILLING HISTORY
+          </h2>
+          <div className="space-y-3">
+            {[
+              { date: 'Oct 1, 2025', amount: currentTier.price, status: 'Paid' },
+              { date: 'Sep 1, 2025', amount: currentTier.price, status: 'Paid' },
+              { date: 'Aug 1, 2025', amount: currentTier.price, status: 'Paid' }
+            ].map((invoice, index) => (
+              <div key={index} className="flex items-center justify-between py-3 border-b border-[#202020] last:border-0">
+                <div>
+                  <p className="text-[#F2F2F2] font-medium">{invoice.date}</p>
+                  <p className="text-[#B3B3B3] text-sm">Monthly subscription</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#F2F2F2] font-bold">${invoice.amount}</span>
+                  <span className="px-2 py-1 bg-green-900/20 border border-green-900 rounded-[2px] text-green-400 text-xs font-bold">
+                    {invoice.status}
+                  </span>
+                  <button className="text-[#FFC96C] hover:text-[#FFD700] text-sm font-medium transition-colors">
+                    Download
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

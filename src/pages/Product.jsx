@@ -1,14 +1,10 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
-import { PRODUCTS, initializeStripeCheckout } from '../lib/stripe';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
 
 export default function Product() {
-  const handleCheckout = (productId) => {
-    initializeStripeCheckout(productId);
-  };
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
       {/* Header */}
@@ -38,9 +34,6 @@ export default function Product() {
           The all-in-one platform for management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
         </p>
         <div className="flex gap-4 justify-center">
-          <a href="#pricing" className="btn-system">
-            View Pricing
-          </a>
           <Link to="/login" className="btn-system">
             Request Demo
           </Link>
@@ -106,21 +99,6 @@ export default function Product() {
             description="Import/export capabilities, bulk operations, and seamless migration from existing systems."
             features={['Bulk Import', 'CSV Export', 'Data Migration', 'API Access']}
           />
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="container mx-auto px-6 py-16">
-        <div className="text-center mb-4">
-          <span className="text-[#FFC96C] text-sm uppercase tracking-wider">PRICING</span>
-        </div>
-        <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
-          SIMPLE, TRANSPARENT
-        </h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {PRODUCTS.map((product) => (
-            <PricingCard key={product.id} product={product} onCheckout={handleCheckout} />
-          ))}
         </div>
       </section>
 
@@ -196,36 +174,4 @@ function CapabilityCard({ icon, title, description, features }) {
   );
 }
 
-function PricingCard({ product, onCheckout }) {
-  return (
-    <div className={`panel-system p-6 relative ${product.popular ? 'border-[#FFC96C]' : ''}`}>
-      {product.popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FFC96C] text-black px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-[2px]">
-          Most Popular
-        </div>
-      )}
-      <div className="mb-6">
-        <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-2">{product.name}</h3>
-        <div className="flex items-baseline gap-1 mb-2">
-          <span className="text-4xl font-bold text-[#F2F2F2]">{product.priceLabel}</span>
-          <span className="text-[#B3B3B3]">{product.interval}</span>
-        </div>
-        <p className="text-[#B3B3B3] text-sm">{product.description}</p>
-      </div>
-      <ul className="space-y-3 mb-6">
-        {product.features.map((feature, idx) => (
-          <li key={idx} className="flex items-center gap-2 text-[#B3B3B3]">
-            <CheckCircle className="w-4 h-4 text-[#FFC96C] flex-shrink-0" />
-            {feature}
-          </li>
-        ))}
-      </ul>
-      <button 
-        onClick={() => onCheckout(product.id)}
-        className="btn-system w-full text-center block"
-      >
-        Get Started
-      </button>
-    </div>
-  );
-}
+
