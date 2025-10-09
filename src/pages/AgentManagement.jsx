@@ -1,25 +1,57 @@
-import { useState } from 'react';
-import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 
 export default function AgentManagement() {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showCustomTeamModal, setShowCustomTeamModal] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState('All Teams');
   const [agentInput, setAgentInput] = useState('');
+  const [customTeamName, setCustomTeamName] = useState('');
+  const [customTeams, setCustomTeams] = useState([]);
+  const lastValidTeamRef = useRef('All Teams');
   
   const [agents, setAgents] = useState(agentData);
 
+  // Watch for Custom... selection
+  useEffect(() => {
+    if (selectedTeam === 'Custom...') {
+      setShowCustomTeamModal(true);
+      // Use setTimeout to reset after the modal opens
+      setTimeout(() => {
+        setSelectedTeam(lastValidTeamRef.current);
+      }, 0);
+    } else if (selectedTeam !== 'Custom...') {
+      lastValidTeamRef.current = selectedTeam;
+    }
+  }, [selectedTeam]);
+
   // Agent teams configuration
-  const agentTeams = [
+  const defaultTeams = [
     { name: 'All Teams', agents: [] },
     { name: 'Strategic Team', agents: ['Strategic Advisor', 'Financial Analyst'] },
     { name: 'Operations Team', agents: ['Operations Assistant', 'Task Manager'] },
     { name: 'Engagement Team', agents: ['Engagement Analyst', 'Communication Specialist'] },
     { name: 'Analytics Team', agents: ['Data Analyst', 'Performance Monitor'] }
   ];
+
+  const agentTeams = [...defaultTeams, ...customTeams, { name: 'Custom...', agents: [] }];
+
+  const handleTeamChange = (teamName) => {
+    setSelectedTeam(teamName);
+  };
+
+  const handleCreateCustomTeam = () => {
+    if (customTeamName.trim()) {
+      setCustomTeams([...customTeams, { name: customTeamName, agents: [] }]);
+      setSelectedTeam(customTeamName);
+      setCustomTeamName('');
+      setShowCustomTeamModal(false);
+    }
+  };
 
   const handlePauseAgent = (agent) => {
     setSelectedAgent(agent);
@@ -33,13 +65,14 @@ export default function AgentManagement() {
     setShowConfirmModal(true);
   };
 
-  const handleConfigureAgent = (agent) => {
+  const handleConfigureAgent = (agent, e) => {
+    e.stopPropagation(); // Prevent agent selection when clicking cog
     setSelectedAgent(agent);
     setShowConfigModal(true);
   };
 
   const confirmAgentAction = () => {
-    if (!selectedAgent) {return;}
+    if (!selectedAgent) return;
     
     if (confirmAction === 'pause') {
       setAgents(agents.map(agent => 
@@ -118,14 +151,13 @@ export default function AgentManagement() {
           </div>
         </div>
 
-        {/* Stat 4 - Agent Teams Dropdown */}
+        {/* Stat 4 - Agent Teams Dropdown (NO STATS LABEL) */}
         <div className="panel-system p-4">
-          <div className="relative">
-            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1 text-center">Stats</p>
+          <div className="relative flex items-center justify-center h-full">
             <select
               value={selectedTeam}
-              onChange={(e) => setSelectedTeam(e.target.value)}
-              className="w-full bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] text-sm px-2 py-1 focus:outline-none focus:border-[#FFC96C] appearance-none cursor-pointer"
+              onChange={(e) => handleTeamChange(e.target.value)}
+              className="w-full bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] text-sm px-3 py-2 focus:outline-none focus:border-[#FFC96C] appearance-none cursor-pointer"
             >
               {agentTeams.map((team, index) => (
                 <option key={index} value={team.name}>
@@ -133,7 +165,7 @@ export default function AgentManagement() {
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-8 w-4 h-4 text-[#B3B3B3] pointer-events-none" />
+            <ChevronDown className="absolute right-3 w-4 h-4 text-[#B3B3B3] pointer-events-none" />
           </div>
         </div>
       </div>
@@ -146,11 +178,16 @@ export default function AgentManagement() {
           
           {agents.map((agent) => {
             const StatusIcon = getStatusIcon(agent.status);
+            const isSelected = selectedAgent?.id === agent.id;
             
             return (
               <div
                 key={agent.id}
-                className="panel-system p-4 cursor-pointer hover:bg-[#202020] transition-colors"
+                className={`panel-system p-4 cursor-pointer transition-all ${
+                  isSelected 
+                    ? 'bg-[#FFC96C]/10 border-[#FFC96C] ring-2 ring-[#FFC96C]/50' 
+                    : 'hover:bg-[#202020] border-transparent'
+                }`}
                 onClick={() => setSelectedAgent(agent)}
               >
                 <div className="flex items-start gap-3">
@@ -158,8 +195,15 @@ export default function AgentManagement() {
                     <Bot className="w-5 h-5 text-[#FFC96C]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center justify-between gap-2 mb-1">
                       <h4 className="text-sm font-bold text-[#F2F2F2] truncate">{agent.name}</h4>
+                      <button
+                        onClick={(e) => handleConfigureAgent(agent, e)}
+                        className="text-[#B3B3B3] hover:text-[#FFC96C] transition-colors p-1"
+                        title="Configure Agent"
+                      >
+                        <Cog className="w-4 h-4" />
+                      </button>
                     </div>
                     <p className="text-[#B3B3B3] text-xs mb-2 line-clamp-2">{agent.description}</p>
                     <div className="flex items-center gap-1 text-xs">
@@ -178,14 +222,14 @@ export default function AgentManagement() {
 
         {/* Main Content - Agent Text Box */}
         <div className="col-span-9">
-          <div className="panel-system p-6 h-full min-h-[600px] flex flex-col">
+          <div className="panel-system p-6 flex flex-col" style={{ height: 'calc(100vh - 280px)' }}>
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-center">
               Agent Text Box
             </h3>
             
             {/* Selected Agent Info */}
             {selectedAgent ? (
-              <div className="mb-6 panel-system p-4 bg-[#0C0C0C]">
+              <div className="mb-4 panel-system p-4 bg-[#0C0C0C]">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-lg bg-[#202020] flex items-center justify-center flex-shrink-0">
@@ -199,7 +243,7 @@ export default function AgentManagement() {
                       <div className="grid grid-cols-4 gap-3">
                         <div>
                           <p className="text-[#B3B3B3] text-xs">Tasks</p>
-                          <p className="text-lg font-bold text-[#F2F2F2]">{agent.tasks.toLocaleString()}</p>
+                          <p className="text-lg font-bold text-[#F2F2F2]">{selectedAgent.tasks.toLocaleString()}</p>
                         </div>
                         <div>
                           <p className="text-[#B3B3B3] text-xs">Accuracy</p>
@@ -238,7 +282,7 @@ export default function AgentManagement() {
                       <RefreshCw className="w-4 h-4" />
                     </button>
                     <button 
-                      onClick={() => handleConfigureAgent(selectedAgent)}
+                      onClick={(e) => handleConfigureAgent(selectedAgent, e)}
                       className="btn-system-secondary p-2" 
                       title="Configure Agent"
                     >
@@ -248,14 +292,14 @@ export default function AgentManagement() {
                 </div>
               </div>
             ) : (
-              <div className="mb-6 panel-system p-8 bg-[#0C0C0C] text-center">
+              <div className="mb-4 panel-system p-6 bg-[#0C0C0C] text-center">
                 <Bot className="w-12 h-12 text-[#FFC96C] mx-auto mb-3" />
                 <p className="text-[#B3B3B3]">Select an agent from the left panel to interact</p>
               </div>
             )}
 
-            {/* Conversation Area */}
-            <div className="flex-1 bg-[#0C0C0C] rounded-[2px] p-4 mb-4 overflow-y-auto">
+            {/* Conversation Area - Reduced initial size, grows with content */}
+            <div className="flex-1 bg-[#0C0C0C] rounded-[2px] p-4 mb-4 overflow-y-auto min-h-[120px]">
               <div className="space-y-4">
                 {selectedAgent ? (
                   <>
@@ -269,22 +313,27 @@ export default function AgentManagement() {
                     </div>
                   </>
                 ) : (
-                  <p className="text-[#808080] text-sm text-center py-8">
+                  <p className="text-[#808080] text-sm text-center py-4">
                     No agent selected. Choose an agent from the left panel to start.
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Input Area */}
+            {/* Input Area - Compact */}
             <form onSubmit={handleAgentSubmit} className="flex gap-3">
               <textarea
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
                 placeholder={selectedAgent ? `Message ${selectedAgent.name}...` : "Select an agent to start messaging..."}
                 disabled={!selectedAgent}
-                className="flex-1 px-4 py-3 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
-                rows={3}
+                className="flex-1 px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                rows={2}
+                style={{ minHeight: '60px', maxHeight: '200px' }}
+                onInput={(e) => {
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+                }}
               />
               <button
                 type="submit"
@@ -297,6 +346,46 @@ export default function AgentManagement() {
           </div>
         </div>
       </div>
+
+      {/* Custom Team Modal */}
+      {showCustomTeamModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+          <div className="panel-system p-8 max-w-md w-full">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              Create Custom Team
+            </h3>
+            <p className="text-[#B3B3B3] mb-4 text-sm">
+              Enter a name for your custom agent team.
+            </p>
+            <input
+              type="text"
+              value={customTeamName}
+              onChange={(e) => setCustomTeamName(e.target.value)}
+              placeholder="Team name..."
+              className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors mb-6"
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <button
+                onClick={handleCreateCustomTeam}
+                disabled={!customTeamName.trim()}
+                className="flex-1 btn-system disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Create Team
+              </button>
+              <button
+                onClick={() => {
+                  setShowCustomTeamModal(false);
+                  setCustomTeamName('');
+                }}
+                className="flex-1 btn-system-secondary"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Confirmation Modal */}
       {showConfirmModal && selectedAgent && (
@@ -383,35 +472,34 @@ export default function AgentManagement() {
                       <input
                         type="checkbox"
                         defaultChecked
-                        className="w-4 h-4 rounded border-[#202020] bg-[#0C0C0C] text-[#FFC96C] focus:ring-[#FFC96C]"
+                        className="w-4 h-4 bg-[#0C0C0C] border border-[#202020] rounded text-[#FFC96C] focus:ring-[#FFC96C]"
                       />
-                      <span className="text-[#B3B3B3]">{capability}</span>
+                      <span className="text-[#F2F2F2] text-sm">{capability}</span>
                     </div>
                   ))}
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => {
-                    alert('Configuration saved!');
-                    setShowConfigModal(false);
-                    setSelectedAgent(null);
-                  }}
-                  className="flex-1 btn-system"
-                >
-                  Save Changes
-                </button>
-                <button
-                  onClick={() => {
-                    setShowConfigModal(false);
-                    setSelectedAgent(null);
-                  }}
-                  className="flex-1 btn-system-secondary"
-                >
-                  Cancel
-                </button>
-              </div>
+            <div className="flex gap-3 mt-8">
+              <button
+                onClick={() => {
+                  setShowConfigModal(false);
+                  setSelectedAgent(null);
+                }}
+                className="flex-1 btn-system"
+              >
+                Save Changes
+              </button>
+              <button
+                onClick={() => {
+                  setShowConfigModal(false);
+                  setSelectedAgent(null);
+                }}
+                className="flex-1 btn-system-secondary"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
