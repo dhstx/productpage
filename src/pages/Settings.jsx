@@ -459,7 +459,7 @@ function TeamSection() {
                         : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
                     }`}
                   >
-                    Start Now
+                    Get Started
                   </button>
                 </div>
               ))}
@@ -557,37 +557,23 @@ function BillingSection() {
   return (
     <div className="space-y-6">
       <BackArrow />
-      {/* Current Plan Status */}
-      <div className="panel-system p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight">
-                CURRENT PLAN: {currentTier.name}
-              </h2>
-              {currentTier.highlighted && (
-                <span className="px-2 py-1 bg-[#FFC96C]/10 border border-[#FFC96C] rounded-[2px] text-[#FFC96C] text-xs font-bold uppercase">
-                  MOST POPULAR
-                </span>
-              )}
-            </div>
-            <p className="text-[#B3B3B3] mb-4">{currentTier.description}</p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-bold text-[#F2F2F2]">
-                ${currentTier.price}
-              </span>
-              <span className="text-[#B3B3B3]">/{currentTier.billingPeriod}</span>
-            </div>
-          </div>
-          {canUserUpgrade && (
-            <button
-              onClick={() => setShowUpgradeModal(true)}
-              className="btn-system flex items-center gap-2"
-            >
-              <CreditCard className="w-4 h-4" />
-              Upgrade Plan
-            </button>
+      {/* Current Plan Status - Reduced height */}
+      <div className="panel-system p-4">
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-bold text-[#F2F2F2] uppercase tracking-tight">
+            CURRENT PLAN: {currentTier.name}
+          </h2>
+          {currentTier.highlighted && (
+            <span className="px-2 py-1 bg-[#FFC96C]/10 border border-[#FFC96C] rounded-[2px] text-[#FFC96C] text-xs font-bold uppercase">
+              MOST POPULAR
+            </span>
           )}
+          <div className="flex items-baseline gap-2 ml-auto">
+            <span className="text-2xl font-bold text-[#F2F2F2]">
+              ${currentTier.price}
+            </span>
+            <span className="text-[#B3B3B3] text-sm">/{currentTier.billingPeriod}</span>
+          </div>
         </div>
 
         {/* Current Plan Features */}
@@ -763,7 +749,7 @@ function BillingSection() {
                         : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
                     }`}
                   >
-                    Start Now
+                    Get Started
                   </button>
                 </div>
               ))}

@@ -234,7 +234,11 @@ export default function ROICalculator() {
                   Download Full Report
                 </button>
                 <a
-                  href="/product"
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="btn-primary w-full flex items-center justify-center"
                 >
                   View Pricing Plans

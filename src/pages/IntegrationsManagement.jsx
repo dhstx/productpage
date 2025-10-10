@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import BackArrow from '../components/BackArrow';
 import { Link } from 'react-router-dom';
+import { getCurrentUser } from '../lib/auth';
 import { 
   Check, X, Settings, ExternalLink, Zap, Database, 
   Mail, MessageSquare, Calendar, DollarSign, Users,
@@ -9,6 +10,8 @@ import {
 
 export default function IntegrationsManagement() {
   const [filter, setFilter] = useState('all');
+  const user = getCurrentUser();
+  const isAdmin = user?.role === 'admin';
 
   const integrations = [
     {
@@ -211,19 +214,28 @@ export default function IntegrationsManagement() {
         </div>
       </div>
 
-      {/* User Limits Notice */}
-      <div className="panel-system p-4 border border-[#FFC96C]/30 bg-[#FFC96C]/5">
-        <div className="flex items-start gap-3">
-          <Zap className="w-5 h-5 text-[#FFC96C] flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="text-[#F2F2F2] font-bold text-sm mb-1">User Plan Limits</h3>
-            <p className="text-[#B3B3B3] text-sm">
-              Your current plan allows: <span className="text-[#FFC96C] font-semibold">1 Agent</span>, <span className="text-[#FFC96C] font-semibold">10 Workflows</span>, <span className="text-[#FFC96C] font-semibold">1 Team License</span>, and <span className="text-[#FFC96C] font-semibold">20 Connections</span>. 
-              <Link to="/billing" className="text-[#FFC96C] hover:underline ml-1">Upgrade to unlock more.</Link>
-            </p>
+      {/* User Limits Notice - Only show for non-admin users */}
+      {!isAdmin && (
+        <div className="panel-system p-4 border border-[#FFC96C]/30 bg-[#FFC96C]/5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <Zap className="w-5 h-5 text-[#FFC96C] flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-[#F2F2F2] font-bold text-sm mb-1">User Plan Limits</h3>
+                <p className="text-[#B3B3B3] text-sm">
+                  Your current plan allows: <span className="text-[#FFC96C] font-semibold">1 Agent</span>, <span className="text-[#FFC96C] font-semibold">10 Workflows</span>, <span className="text-[#FFC96C] font-semibold">1 Team License</span>, and <span className="text-[#FFC96C] font-semibold">20 Connections</span>.
+                </p>
+              </div>
+            </div>
+            <Link 
+              to="/settings"
+              className="btn-system text-sm whitespace-nowrap"
+            >
+              Upgrade Plan
+            </Link>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">

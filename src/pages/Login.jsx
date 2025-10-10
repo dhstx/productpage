@@ -18,7 +18,15 @@ export default function Login() {
     if (user) {
       navigate('/dashboard');
     } else {
-      setError('Invalid credentials');
+      // Check if user exists in Supabase (simulated for now)
+      // In production, this would check Supabase database
+      const userExists = false; // Replace with actual Supabase check
+      
+      if (!userExists) {
+        setError('Account not found. Please create an account first.');
+      } else {
+        setError('Invalid credentials. Please check your password.');
+      }
     }
   };
 
@@ -92,6 +100,15 @@ export default function Login() {
               Sign In
             </button>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-[#B3B3B3] text-sm">
+              Don't have an account?{' '}
+              <a href="/signup" className="text-[#FFC96C] hover:underline font-medium">
+                Create Account
+              </a>
+            </p>
+          </div>
 
           <div className="mt-6">
             <div className="relative">

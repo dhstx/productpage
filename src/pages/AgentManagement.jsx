@@ -165,6 +165,29 @@ export default function AgentManagement() {
         </section>
       )}
 
+      {/* User Limits Notice - Only show for non-admin users */}
+      {user?.role !== 'admin' && (
+        <div className="panel-system p-4 border border-[#FFC96C]/30 bg-[#FFC96C]/5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <Zap className="w-5 h-5 text-[#FFC96C] flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-[#F2F2F2] font-bold text-sm mb-1">User Plan Limits</h3>
+                <p className="text-[#B3B3B3] text-sm">
+                  Your current plan allows: <span className="text-[#FFC96C] font-semibold">1 Agent</span>, <span className="text-[#FFC96C] font-semibold">10 Workflows</span>, <span className="text-[#FFC96C] font-semibold">1 Team License</span>, and <span className="text-[#FFC96C] font-semibold">20 Connections</span>.
+                </p>
+              </div>
+            </div>
+            <Link 
+              to="/settings"
+              className="btn-system text-sm whitespace-nowrap"
+            >
+              Upgrade Plan
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Compact Stats Bar - 4 columns with named stats and reduced height */}
       <div className="grid grid-cols-4 gap-4">
         <div className="panel-system p-3">

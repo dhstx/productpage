@@ -57,7 +57,7 @@ export default function FeatureComparison() {
   };
 
   return (
-    <section className="py-24 bg-[#1A1A1A]">
+    <section id="pricing" className="py-24 bg-[#0C0C0C] border-t border-[#202020]">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
@@ -125,18 +125,14 @@ export default function FeatureComparison() {
           </table>
         </div>
 
-        {/* CTA */}
+        {/* CTA - Only Get Started button */}
         <div className="mt-10 text-center">
-          <div className="flex justify-center gap-4 flex-wrap">
-            <a href="/product" className="btn-system">
-              View Pricing Details
-            </a>
-            <a href="/login" className="btn-system-outline">
-              Get Started
-            </a>
-          </div>
+          <a href="/login" className="btn-system">
+            Get Started
+          </a>
         </div>
       </div>
     </section>
   );
 }
+

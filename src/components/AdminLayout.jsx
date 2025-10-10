@@ -39,8 +39,8 @@ export default function AdminLayout({ children }) {
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
-              <Link to="/agents" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
-                PROFESSIONAL PLAN
+              <Link to="/" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
+                DHStx
               </Link>
               <nav className="hidden md:flex items-center gap-1">
                 {navigation.map((item) => {
@@ -78,7 +78,10 @@ export default function AdminLayout({ children }) {
                       {user?.name?.charAt(0) || 'A'}
                     </span>
                   </div>
-                  <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
+                  <div className="flex flex-col items-start">
+                    <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
+                    <span className="text-[#B3B3B3] text-xs">{user?.role === 'admin' ? 'Admin' : 'User'}</span>
+                  </div>
                   <ChevronDown className="w-4 h-4 text-[#B3B3B3]" />
                 </button>
 
