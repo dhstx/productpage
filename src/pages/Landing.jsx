@@ -60,7 +60,7 @@ export default function Landing() {
         {/* Core Modules */}
         <section className="container mx-auto px-6 py-16">
           <FadeInSection>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               CORE MODULES
             </h2>
           </FadeInSection>
@@ -104,11 +104,11 @@ export default function Landing() {
         {/* Mission */}
         <section className="container mx-auto px-6 py-16">
           <FadeInSection>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight">
+            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-center">
               MISSION
             </h2>
-            <div className="panel-system p-8 max-w-4xl">
-              <p className="text-[#F2F2F2] text-lg leading-relaxed">
+            <div className="panel-system p-8 max-w-4xl mx-auto">
+              <p className="text-[#F2F2F2] text-lg leading-relaxed text-center">
                 We empower boards and organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Transform your board from reactive to proactive, from scattered to strategic, from overwhelmed to empowered.
               </p>
             </div>

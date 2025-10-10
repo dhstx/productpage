@@ -95,25 +95,23 @@ export default function AIAgents() {
 
       {/* Additional Info */}
       <FadeInSection delay={0.4}>
-        <div className="mt-12 panel-system p-8 bg-[#1A1A1A] border border-[#FFC96C]/20">
-          <div className="flex items-start gap-4">
-            <div className="text-[#FFC96C] mt-1">
+        <div className="mt-12 panel-system p-8 bg-[#1A1A1A] border border-[#FFC96C]/20 max-w-4xl mx-auto">
+          <div className="text-center">
+            <div className="text-[#FFC96C] mb-4 flex justify-center">
               <Lightbulb className="w-6 h-6" />
             </div>
-            <div>
-              <h4 className="text-[#F2F2F2] font-bold mb-2 uppercase tracking-tight">
-                Continuous Learning
-              </h4>
-              <p className="text-[#B3B3B3] mb-4">
-                Our AI agents continuously learn from your organization's patterns and preferences, 
-                becoming more effective over time. They adapt to your unique workflows and provide 
-                increasingly personalized recommendations as they understand your needs better.
-              </p>
-              <Link to="/agent-management" className="btn-system inline-flex items-center gap-2">
-                <Bot className="w-4 h-4" />
-                View All 12 AI Agents
-              </Link>
-            </div>
+            <h4 className="text-[#F2F2F2] font-bold mb-4 uppercase tracking-tight">
+              Continuous Learning
+            </h4>
+            <p className="text-[#B3B3B3] mb-6">
+              Our AI agents continuously learn from your organization's patterns and preferences, 
+              becoming more effective over time. They adapt to your unique workflows and provide 
+              increasingly personalized recommendations as they understand your needs better.
+            </p>
+            <Link to="/agent-management" className="btn-system inline-flex items-center gap-2">
+              <Bot className="w-4 h-4" />
+              View All 12 AI Agents
+            </Link>
           </div>
         </div>
       </FadeInSection>
