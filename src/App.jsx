@@ -27,12 +27,14 @@ import CookiePolicy from './pages/policies/CookiePolicy';
 import ProtectedRoute from './components/ProtectedRoute';
 import Analytics from './components/Analytics';
 import ThemeToggle from './components/ThemeToggle';
+import ScrollHistoryManager from './components/ScrollHistoryManager';
 
 function App() {
   return (
     <Router>
       <Analytics />
       <ThemeToggle />
+      <ScrollHistoryManager />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />

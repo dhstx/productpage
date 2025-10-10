@@ -3,10 +3,12 @@ import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, Ch
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
+import BackArrow from '../components/BackArrow';
 
 export default function Product() {
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
+      <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">

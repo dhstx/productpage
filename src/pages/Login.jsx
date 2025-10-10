@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn, ArrowLeft } from 'lucide-react';
 import { login } from '../lib/auth';
+import BackArrow from '../components/BackArrow';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -23,6 +24,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center px-6">
+      <BackArrow />
       {/* Back Button */}
       <Link 
         to="/" 

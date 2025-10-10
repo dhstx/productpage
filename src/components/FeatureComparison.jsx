@@ -1,3 +1,4 @@
+import React from 'react';
 import { Check, X } from 'lucide-react';
 
 export default function FeatureComparison() {
@@ -125,11 +126,8 @@ export default function FeatureComparison() {
         </div>
 
         {/* CTA */}
-        <div className="mt-12 text-center">
-          <p className="text-[#B3B3B3] mb-6">
-            All plans include a 14-day free trial and 30-day money-back guarantee
-          </p>
-          <div className="flex justify-center gap-4">
+        <div className="mt-10 text-center">
+          <div className="flex justify-center gap-4 flex-wrap">
             <a href="/product" className="btn-system">
               View Pricing Details
             </a>
@@ -142,6 +140,3 @@ export default function FeatureComparison() {
     </section>
   );
 }
-
-// Add React import at the top
-import React from 'react';

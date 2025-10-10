@@ -146,10 +146,6 @@ export default function ContactForm() {
           >
             {status === 'submitting' ? 'SENDING...' : 'SEND MESSAGE'}
           </AnimatedButton>
-
-          <p className="text-[#B3B3B3] text-sm text-center">
-            We typically respond within 24 hours. For urgent inquiries, call us at (555) 123-4567.
-          </p>
         </form>
       </div>
     </section>

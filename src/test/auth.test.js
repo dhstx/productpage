@@ -10,7 +10,7 @@ describe('Authentication', () => {
   it('should login successfully with correct credentials', () => {
     const result = login('admin', 'admin123');
     expect(result).toBeTruthy();
-    expect(result).toHaveProperty('email', 'admin');
+    expect(result).toHaveProperty('email', 'admin@dhstx.com');
     expect(isAuthenticated()).toBe(true);
   });
 
@@ -30,7 +30,7 @@ describe('Authentication', () => {
     login('admin', 'admin123');
     const user = getCurrentUser();
     expect(user).toHaveProperty('name', 'Administrator');
-    expect(user).toHaveProperty('email', 'admin');
+    expect(user).toHaveProperty('email', 'admin@dhstx.com');
     expect(user).toHaveProperty('role', 'admin');
     expect(user).toHaveProperty('id');
   });
