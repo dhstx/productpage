@@ -12,6 +12,7 @@ import stripeRoutes from './stripe/routes.js';
 import agentRoutes from './agents/routes.js';
 import subscriptionRoutes from './subscriptions/routes.js';
 import userRoutes from './users/routes.js';
+import statusRoutes from './status/routes.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -49,6 +50,7 @@ app.use('/api/stripe', stripeRoutes);
 app.use('/api/agents', agentRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/status', statusRoutes);
 
 // 404 handler
 app.use((req, res) => {

@@ -17,7 +17,7 @@ import UseCaseEducation from './pages/UseCaseEducation';
 import UseCaseNonprofit from './pages/UseCaseNonprofit';
 import Security from './pages/Security';
 import Integrations from './pages/Integrations';
-import Status from './pages/Status';
+import StatusLive from './pages/StatusLive';
 import Changelog from './pages/Changelog';
 import TermsOfService from './pages/policies/TermsOfService';
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
@@ -44,7 +44,7 @@ function App() {
         <Route path="/use-cases/nonprofit" element={<UseCaseNonprofit />} />
         <Route path="/security" element={<Security />} />
         <Route path="/integrations" element={<Integrations />} />
-        <Route path="/status" element={<Status />} />
+        <Route path="/status" element={<StatusLive />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/policies/terms" element={<TermsOfService />} />
         <Route path="/policies/privacy" element={<PrivacyPolicy />} />
