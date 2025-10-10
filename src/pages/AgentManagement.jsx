@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import BackArrow from '../components/BackArrow';
 import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 
@@ -129,7 +130,9 @@ export default function AgentManagement() {
   };
 
   return (
-    <div className="space-y-6">
+    <>
+      <BackArrow />
+      <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           AGENT MANAGEMENT
@@ -499,6 +502,7 @@ export default function AgentManagement() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

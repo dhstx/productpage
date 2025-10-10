@@ -28,6 +28,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Analytics from './components/Analytics';
 import ThemeToggle from './components/ThemeToggle';
 import ScrollHistoryManager from './components/ScrollHistoryManager';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
       <Analytics />
       <ThemeToggle />
       <ScrollHistoryManager />
+      <ScrollToTop />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />

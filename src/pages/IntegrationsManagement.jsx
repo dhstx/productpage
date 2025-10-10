@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import BackArrow from '../components/BackArrow';
 import { Link } from 'react-router-dom';
 import { 
   Check, X, Settings, ExternalLink, Zap, Database, 
@@ -163,6 +164,7 @@ export default function IntegrationsManagement() {
 
   return (
     <div className="space-y-8">
+      <BackArrow />
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           INTEGRATIONS
@@ -272,6 +274,7 @@ function IntegrationCard({ integration }) {
 
   return (
     <div className="panel-system p-6 hover:border-[#FFC96C] transition-colors">
+      <BackArrow />
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div 

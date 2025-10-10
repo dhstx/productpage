@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import BackArrow from '../components/BackArrow';
 import { Shield, Users, FileText, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react';
 
 export default function UseCaseHealthcare() {
@@ -66,6 +67,7 @@ export default function UseCaseHealthcare() {
 
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
+      <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -133,6 +135,7 @@ export default function UseCaseHealthcare() {
                 const Icon = feature.icon;
                 return (
                   <div key={index} className="p-8 bg-[#1A1A1A] rounded-[4px] border border-[#202020]">
+      <BackArrow />
                     <div className="w-12 h-12 rounded-[4px] bg-[#FFC96C]/10 flex items-center justify-center mb-4">
                       <Icon className="w-6 h-6 text-[#FFC96C]" />
                     </div>

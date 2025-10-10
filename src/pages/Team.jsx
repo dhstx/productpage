@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import BackArrow from '../components/BackArrow';
 import { Users, Mail, Shield, Trash2, UserPlus } from 'lucide-react';
 
 export default function Team() {
@@ -56,6 +57,7 @@ export default function Team() {
 
   return (
     <div className="space-y-8">
+      <BackArrow />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">

@@ -1,4 +1,5 @@
 import { CreditCard, Check, Zap, AlertCircle } from 'lucide-react';
+import BackArrow from '../components/BackArrow';
 import { getCurrentUser, canUpgrade } from '../lib/auth';
 import { getAllPricingTiers, getPricingTier } from '../lib/pricing';
 import { useState } from 'react';
@@ -25,6 +26,7 @@ export default function Billing() {
 
   return (
     <div className="space-y-8">
+      <BackArrow />
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           {canUpgrade() ? 'UPGRADE YOUR PLAN' : 'BILLING & SUBSCRIPTION'}
@@ -210,6 +212,7 @@ function PricingCard({ tier, currentTier, onUpgrade }) {
 
   return (
     <div className={`panel-system p-6 flex flex-col ${tier.highlighted ? 'border-2 border-[#FFC96C]' : ''}`}>
+      <BackArrow />
       {tier.highlighted && (
         <div className="mb-4 -mt-2 -mx-2">
           <span className="inline-block px-3 py-1 bg-[#FFC96C] text-[#0C0C0C] text-xs font-bold uppercase rounded-[2px]">
@@ -265,6 +268,7 @@ function UsageStat({ label, current, limit }) {
 
   return (
     <div>
+      <BackArrow />
       <div className="flex items-center justify-between mb-1">
         <span className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</span>
         {isNearLimit && limit !== 'unlimited' && (

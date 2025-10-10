@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import BackArrow from '../components/BackArrow';
 import { Shield, Lock, Eye, FileCheck, Server, Key, AlertCircle, CheckCircle, Download, ExternalLink } from 'lucide-react';
 
 export default function Security() {
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
+      <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">

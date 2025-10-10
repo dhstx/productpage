@@ -1,4 +1,5 @@
 import { ExternalLink, Target, Settings, CheckCircle } from 'lucide-react';
+import BackArrow from '../components/BackArrow';
 import { getMockPurchases } from '../lib/stripe';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ export default function Platforms() {
 
   return (
     <div className="space-y-8">
+      <BackArrow />
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           MY PLATFORMS
@@ -117,6 +119,7 @@ export default function Platforms() {
 function FeatureStat({ label, value }) {
   return (
     <div className="panel-system p-3">
+      <BackArrow />
       <div className="text-2xl font-bold text-[#F2F2F2] mb-1">{value}</div>
       <div className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</div>
     </div>

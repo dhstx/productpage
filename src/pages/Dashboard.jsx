@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import BackArrow from '../components/BackArrow';
 import { ExternalLink, Target, AlertCircle, Calendar, Users, CheckCircle, Zap } from 'lucide-react';
 import { getMockPurchases } from '../lib/stripe';
 import { getCurrentUser, hasFeature } from '../lib/auth';
@@ -16,6 +17,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8">
+      <BackArrow />
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           ACCOUNT DASHBOARD
@@ -176,6 +178,7 @@ export default function Dashboard() {
 function StatCard({ icon, label, value, subValue }) {
   return (
     <div className="panel-system p-4">
+      <BackArrow />
       <div className="flex items-center justify-between mb-2">
         <div className="text-[#FFC96C]">{icon}</div>
         <div className="text-right">

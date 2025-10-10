@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import BackArrow from '../components/BackArrow';
 import { Sparkles, Bug, Zap, Shield, Package } from 'lucide-react';
 
 export default function Changelog() {
@@ -182,6 +183,7 @@ export default function Changelog() {
 
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
+      <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">

@@ -142,10 +142,10 @@ export default function Landing() {
 
 function ModuleCard({ icon, title, description }) {
   return (
-    <div className="panel-system p-6 hover:bg-[#202020] transition-colors duration-200">
+    <div className="panel-system p-6 hover:bg-[#202020] transition-colors duration-200 h-full flex flex-col">
       <div className="text-[#FFC96C] mb-4">{icon}</div>
       <h3 className="text-[#F2F2F2] font-bold mb-2 uppercase tracking-tight">{title}</h3>
-      <p className="text-[#B3B3B3]">{description}</p>
+      <p className="text-[#B3B3B3] flex-grow">{description}</p>
     </div>
   );
 }

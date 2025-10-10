@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import BackArrow from '../components/BackArrow';
 import { CheckCircle, Clock, Activity, Server, Database, Globe, Shield, AlertCircle, RefreshCw } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -117,6 +118,7 @@ export default function StatusLive() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center">
+      <BackArrow />
         <div className="text-center">
           <RefreshCw className="w-12 h-12 text-[#FFC96C] animate-spin mx-auto mb-4" />
           <p className="text-[#F2F2F2] text-xl">Loading system status...</p>
@@ -130,6 +132,7 @@ export default function StatusLive() {
 
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
+      <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -216,6 +219,7 @@ export default function StatusLive() {
                 
                 return (
                   <div key={index} className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 hover:border-[#FFC96C] transition-colors">
+      <BackArrow />
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
                         <div 
