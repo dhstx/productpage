@@ -157,6 +157,10 @@
   .bg-accent {
     @apply bg-[#FFC96C];
   }
+
+  .product-page-main {
+    padding-top: 1in;
+  }
 }
 
 @layer utilities {
