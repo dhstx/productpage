@@ -136,45 +136,6 @@ export default function AIChatInterface() {
   return (
     <section ref={sectionRef} className="min-h-screen flex items-center justify-center px-6 py-20">
       <div className="w-full max-w-4xl">
-        {/* Agent Selector */}
-        <div className="flex justify-center mb-8">
-          <div className="relative">
-            <button
-              onClick={() => setShowAgentMenu(!showAgentMenu)}
-              className="px-6 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#F2F2F2] text-sm font-medium hover:bg-[#1A1A1A] transition-colors flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4 text-[#FFC96C]" />
-              Select Agent
-            </button>
-            
-            {showAgentMenu && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-64 bg-[#161616] border border-[#202020] rounded-[4px] shadow-xl z-10">
-                {agents.map((agent) => (
-                  <button
-                    key={agent.name}
-                    onClick={() => {
-                      setSelectedAgent(agent.name);
-                      setShowAgentMenu(false);
-                    }}
-                    className="w-full px-4 py-3 text-left hover:bg-[#1A1A1A] transition-colors flex items-center gap-3 border-b border-[#202020] last:border-0"
-                  >
-                    <div 
-                      className="w-2 h-2 rounded-full" 
-                      style={{ backgroundColor: agent.color }}
-                    />
-                    <span
-                      className="text-sm"
-                      style={{ color: selectedAgent === agent.name ? agent.color : '#F2F2F2' }}
-                    >
-                      {agent.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* AI Greeting */}
         <div className="text-center mb-12">
           <h2 className="text-5xl md:text-6xl font-bold mb-4 flex justify-center items-center min-h-[4.5rem]">
@@ -192,18 +153,59 @@ export default function AIChatInterface() {
               </span>
             </span>
           </h2>
-          <p className="text-[#B3B3B3] text-xl md:text-2xl">
-            What would you like to do today?
-          </p>
         </div>
 
         <div
           style={{
             opacity: showContent ? 1 : 0,
-            transition: 'opacity 400ms ease-in',
+            transform: showContent ? 'translateY(0)' : 'translateY(40px)',
+            transition: 'opacity 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             pointerEvents: showContent ? 'auto' : 'none'
           }}
         >
+          {/* Agent Selector */}
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <button
+                onClick={() => setShowAgentMenu(!showAgentMenu)}
+                className="px-6 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#F2F2F2] text-sm font-medium hover:bg-[#1A1A1A] transition-colors flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 text-[#FFC96C]" />
+                Select Agent
+              </button>
+              
+              {showAgentMenu && (
+                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-64 bg-[#161616] border border-[#202020] rounded-[4px] shadow-xl z-10">
+                  {agents.map((agent) => (
+                    <button
+                      key={agent.name}
+                      onClick={() => {
+                        setSelectedAgent(agent.name);
+                        setShowAgentMenu(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-[#1A1A1A] transition-colors flex items-center gap-3 border-b border-[#202020] last:border-0"
+                    >
+                      <div 
+                        className="w-2 h-2 rounded-full" 
+                        style={{ backgroundColor: agent.color }}
+                      />
+                      <span
+                        className="text-sm"
+                        style={{ color: selectedAgent === agent.name ? agent.color : '#F2F2F2' }}
+                      >
+                        {agent.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Subtitle */}
+          <p className="text-[#B3B3B3] text-xl md:text-2xl text-center mb-12">
+            What would you like to do today?
+          </p>
           {/* Chat Input */}
           <form onSubmit={handleSubmit} className="relative">
             <div className="panel-system p-6">
