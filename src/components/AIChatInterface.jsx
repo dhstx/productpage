@@ -177,17 +177,19 @@ export default function AIChatInterface() {
 
         {/* AI Greeting */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            <span className="text-[#B3B3B3] whitespace-pre">{displayPrefix}</span>
-            <span
-              className="relative inline-block whitespace-pre"
-              style={{ color: currentAgentColor }}
-            >
-              {displayAgent}
+          <h2 className="text-5xl md:text-6xl font-bold mb-4 flex justify-center items-center min-h-[4.5rem]">
+            <span className="inline-block">
+              <span className="text-[#B3B3B3] whitespace-pre">{displayPrefix}</span>
               <span
-                className="absolute bottom-0 left-0 w-full h-1 opacity-30"
-                style={{ backgroundColor: currentAgentColor, opacity: displayAgent ? 0.3 : 0 }}
-              ></span>
+                className="relative inline-block whitespace-pre"
+                style={{ color: currentAgentColor }}
+              >
+                {displayAgent}
+                <span
+                  className="absolute bottom-0 left-0 w-full h-1 opacity-30"
+                  style={{ backgroundColor: currentAgentColor, opacity: displayAgent ? 0.3 : 0 }}
+                ></span>
+              </span>
             </span>
           </h2>
           <p className="text-[#B3B3B3] text-xl md:text-2xl">
