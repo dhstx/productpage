@@ -26,11 +26,10 @@ export default function AdminLayout({ children }) {
   const shouldUpgrade = canUpgrade();
   
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Platforms', href: '/platforms', icon: Package },
-    { name: 'Team', href: '/team', icon: Users },
     { name: 'Agents', href: '/agents', icon: Bot },
+    { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
+    { name: 'Team', href: '/team', icon: Users },
   ];
 
   return (
@@ -40,8 +39,8 @@ export default function AdminLayout({ children }) {
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
-              <Link to="/dashboard" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
-                ADMIN PORTAL
+              <Link to="/agents" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
+                PROFESSIONAL PLAN
               </Link>
               <nav className="hidden md:flex items-center gap-1">
                 {navigation.map((item) => {

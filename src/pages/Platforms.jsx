@@ -1,32 +1,25 @@
-import { ExternalLink, Target, Settings, CheckCircle } from 'lucide-react';
+import { ExternalLink, Target, CheckCircle, AlertCircle, Calendar, Users } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
 import { getMockPurchases } from '../lib/stripe';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Platforms() {
   const purchases = getMockPurchases();
-  const navigate = useNavigate();
 
   const handleCopyLink = (url) => {
     navigator.clipboard.writeText(url);
     alert('Portal link copied to clipboard!');
   };
 
-  const handleViewAnalytics = () => {
-    alert('Analytics Dashboard\n\nThis would show:\n• User engagement metrics\n• Platform usage statistics\n• Member activity reports\n• Event participation data\n\nComing soon!');
-  };
-
-
-
   return (
     <div className="space-y-8">
       <BackArrow />
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-          MY PLATFORMS
+          PLATFORMS
         </h1>
         <p className="text-[#B3B3B3]">
-          Access and manage your purchased platform instances.
+          Access and manage your platform instances and system status.
         </p>
       </div>
 
@@ -84,26 +77,11 @@ export default function Platforms() {
                   <ExternalLink className="w-4 h-4" />
                   Open Portal
                 </a>
-                <a 
-                  href={purchase.adminUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-system flex items-center gap-2"
-                >
-                  <Settings className="w-4 h-4" />
-                  Admin Panel
-                </a>
                 <button 
                   onClick={() => handleCopyLink(purchase.platformUrl)}
                   className="btn-system"
                 >
                   Copy Portal Link
-                </button>
-                <button 
-                  onClick={handleViewAnalytics}
-                  className="btn-system"
-                >
-                  View Analytics
                 </button>
               </div>
             </div>
@@ -111,7 +89,65 @@ export default function Platforms() {
         ))}
       </section>
 
+      {/* System Status */}
+      <section>
+        <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+          SYSTEM STATUS
+        </h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatCard
+            icon={<Target className="w-5 h-5" />}
+            label="Active Initiatives"
+            value="0"
+            subValue="/ 0"
+          />
+          <StatCard
+            icon={<AlertCircle className="w-5 h-5" />}
+            label="Urgent Actions"
+            value="0"
+            subValue="/ 0"
+          />
+          <StatCard
+            icon={<Calendar className="w-5 h-5" />}
+            label="Upcoming Events"
+            value="0"
+            subValue="/ 0"
+          />
+          <StatCard
+            icon={<Users className="w-5 h-5" />}
+            label="Engaged Members"
+            value="0"
+          />
+        </div>
+      </section>
 
+      {/* Urgent Actions */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-[#FFC96C]" />
+            URGENT ACTIONS
+          </h2>
+        </div>
+        <div className="panel-system p-8 text-center">
+          <CheckCircle className="w-12 h-12 text-[#FFC96C] mx-auto mb-4" />
+          <p className="text-[#B3B3B3]">No urgent actions! Great work.</p>
+        </div>
+      </section>
+
+      {/* Upcoming Events */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[#FFC96C]" />
+            UPCOMING EVENTS
+          </h2>
+        </div>
+        <div className="panel-system p-8 text-center">
+          <Calendar className="w-12 h-12 text-[#B3B3B3] mx-auto mb-4" />
+          <p className="text-[#B3B3B3]">No upcoming events found.</p>
+        </div>
+      </section>
     </div>
   );
 }
@@ -119,9 +155,26 @@ export default function Platforms() {
 function FeatureStat({ label, value }) {
   return (
     <div className="panel-system p-3">
-      <BackArrow />
       <div className="text-2xl font-bold text-[#F2F2F2] mb-1">{value}</div>
       <div className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</div>
     </div>
   );
 }
+
+function StatCard({ icon, label, value, subValue }) {
+  return (
+    <div className="panel-system p-4">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-[#FFC96C]">{icon}</div>
+        <div className="text-right">
+          <div className="text-2xl font-bold text-[#F2F2F2]">
+            {value}
+            {subValue && <span className="text-[#B3B3B3] text-base ml-1">{subValue}</span>}
+          </div>
+        </div>
+      </div>
+      <div className="text-[#B3B3B3] text-sm uppercase tracking-tight">{label}</div>
+    </div>
+  );
+}
+

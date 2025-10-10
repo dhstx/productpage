@@ -12,6 +12,105 @@ export default function IntegrationsManagement() {
 
   const integrations = [
     {
+      id: 'google-calendar',
+      name: 'Google Calendar',
+      description: 'Calendar and scheduling integration',
+      category: 'productivity',
+      icon: Calendar,
+      color: '#4285F4',
+      connected: false,
+      status: 'available',
+      features: ['Event scheduling', 'Meeting reminders', 'Calendar sync']
+    },
+    {
+      id: 'google-oauth',
+      name: 'Google OAuth',
+      description: 'Single sign-on with Google accounts',
+      category: 'auth',
+      icon: Lock,
+      color: '#4285F4',
+      connected: false,
+      status: 'available',
+      features: ['SSO authentication', 'User management', 'Secure login']
+    },
+    {
+      id: 'hubspot',
+      name: 'HubSpot',
+      description: 'Marketing and CRM platform',
+      category: 'crm',
+      icon: BarChart,
+      color: '#FF7A59',
+      connected: false,
+      status: 'available',
+      features: ['Marketing automation', 'Contact management', 'Analytics']
+    },
+    {
+      id: 'make',
+      name: 'Make (Integromat)',
+      description: 'Advanced workflow automation',
+      category: 'automation',
+      icon: Webhook,
+      color: '#6D3BFF',
+      connected: false,
+      status: 'available',
+      features: ['Visual workflow builder', 'Complex scenarios', 'API connections']
+    },
+    {
+      id: 'microsoft-teams',
+      name: 'Microsoft Teams',
+      description: 'Enterprise communication platform',
+      category: 'communication',
+      icon: Users,
+      color: '#505AC9',
+      connected: false,
+      status: 'available',
+      features: ['Team channels', 'Meeting integration', 'File sharing']
+    },
+    {
+      id: 'notion',
+      name: 'Notion',
+      description: 'Workspace and documentation',
+      category: 'productivity',
+      icon: FileText,
+      color: '#000000',
+      connected: false,
+      status: 'available',
+      features: ['Documentation sync', 'Database integration', 'Team wiki']
+    },
+    {
+      id: 'salesforce',
+      name: 'Salesforce',
+      description: 'CRM and sales management',
+      category: 'crm',
+      icon: Cloud,
+      color: '#00A1E0',
+      connected: false,
+      status: 'available',
+      features: ['Contact management', 'Lead tracking', 'Sales pipeline']
+    },
+    {
+      id: 'sendgrid',
+      name: 'SendGrid',
+      description: 'Email delivery and marketing',
+      category: 'communication',
+      icon: Mail,
+      color: '#1A82E2',
+      connected: false,
+      status: 'available',
+      features: ['Transactional emails', 'Email templates', 'Analytics']
+    },
+    {
+      id: 'slack',
+      name: 'Slack',
+      description: 'Team communication and notifications',
+      category: 'communication',
+      icon: MessageSquare,
+      color: '#4A154B',
+      connected: false,
+      status: 'available',
+      features: ['Real-time notifications', 'Channel integration', 'Bot commands']
+    },
+    {
       id: 'stripe',
       name: 'Stripe',
       description: 'Payment processing and subscription management',
@@ -34,72 +133,6 @@ export default function IntegrationsManagement() {
       features: ['PostgreSQL database', 'Real-time subscriptions', 'Row-level security']
     },
     {
-      id: 'google-oauth',
-      name: 'Google OAuth',
-      description: 'Single sign-on with Google accounts',
-      category: 'auth',
-      icon: Lock,
-      color: '#4285F4',
-      connected: false,
-      status: 'available',
-      features: ['SSO authentication', 'User management', 'Secure login']
-    },
-    {
-      id: 'slack',
-      name: 'Slack',
-      description: 'Team communication and notifications',
-      category: 'communication',
-      icon: MessageSquare,
-      color: '#4A154B',
-      connected: false,
-      status: 'available',
-      features: ['Real-time notifications', 'Channel integration', 'Bot commands']
-    },
-    {
-      id: 'microsoft-teams',
-      name: 'Microsoft Teams',
-      description: 'Enterprise communication platform',
-      category: 'communication',
-      icon: Users,
-      color: '#505AC9',
-      connected: false,
-      status: 'available',
-      features: ['Team channels', 'Meeting integration', 'File sharing']
-    },
-    {
-      id: 'google-calendar',
-      name: 'Google Calendar',
-      description: 'Calendar and scheduling integration',
-      category: 'productivity',
-      icon: Calendar,
-      color: '#4285F4',
-      connected: false,
-      status: 'available',
-      features: ['Event scheduling', 'Meeting reminders', 'Calendar sync']
-    },
-    {
-      id: 'salesforce',
-      name: 'Salesforce',
-      description: 'CRM and sales management',
-      category: 'crm',
-      icon: Cloud,
-      color: '#00A1E0',
-      connected: false,
-      status: 'available',
-      features: ['Contact management', 'Lead tracking', 'Sales pipeline']
-    },
-    {
-      id: 'hubspot',
-      name: 'HubSpot',
-      description: 'Marketing and CRM platform',
-      category: 'crm',
-      icon: BarChart,
-      color: '#FF7A59',
-      connected: false,
-      status: 'available',
-      features: ['Marketing automation', 'Contact management', 'Analytics']
-    },
-    {
       id: 'zapier',
       name: 'Zapier',
       description: 'Workflow automation platform',
@@ -109,39 +142,6 @@ export default function IntegrationsManagement() {
       connected: false,
       status: 'available',
       features: ['5000+ app integrations', 'Automated workflows', 'Trigger actions']
-    },
-    {
-      id: 'make',
-      name: 'Make (Integromat)',
-      description: 'Advanced workflow automation',
-      category: 'automation',
-      icon: Webhook,
-      color: '#6D3BFF',
-      connected: false,
-      status: 'available',
-      features: ['Visual workflow builder', 'Complex scenarios', 'API connections']
-    },
-    {
-      id: 'sendgrid',
-      name: 'SendGrid',
-      description: 'Email delivery and marketing',
-      category: 'communication',
-      icon: Mail,
-      color: '#1A82E2',
-      connected: false,
-      status: 'available',
-      features: ['Transactional emails', 'Email templates', 'Analytics']
-    },
-    {
-      id: 'notion',
-      name: 'Notion',
-      description: 'Workspace and documentation',
-      category: 'productivity',
-      icon: FileText,
-      color: '#000000',
-      connected: false,
-      status: 'available',
-      features: ['Documentation sync', 'Database integration', 'Team wiki']
     }
   ];
 
@@ -174,39 +174,53 @@ export default function IntegrationsManagement() {
         </p>
       </div>
 
-      {/* Stats */}
+      {/* Stats - Reduced height by half */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="panel-system p-6">
+        <div className="panel-system p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#B3B3B3] text-sm uppercase tracking-tight mb-1">
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
                 Connected
               </p>
-              <p className="text-3xl font-bold text-[#FFC96C]">{connectedCount}</p>
+              <p className="text-2xl font-bold text-[#FFC96C]">{connectedCount} / 20</p>
             </div>
-            <Check className="w-8 h-8 text-[#10B981]" />
+            <Check className="w-6 h-6 text-[#10B981]" />
           </div>
         </div>
-        <div className="panel-system p-6">
+        <div className="panel-system p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#B3B3B3] text-sm uppercase tracking-tight mb-1">
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
                 Available
               </p>
-              <p className="text-3xl font-bold text-[#F2F2F2]">{integrations.length - connectedCount}</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">{integrations.length - connectedCount}</p>
             </div>
-            <Zap className="w-8 h-8 text-[#FFC96C]" />
+            <Zap className="w-6 h-6 text-[#FFC96C]" />
           </div>
         </div>
-        <div className="panel-system p-6">
+        <div className="panel-system p-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#B3B3B3] text-sm uppercase tracking-tight mb-1">
+              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
                 Total
               </p>
-              <p className="text-3xl font-bold text-[#F2F2F2]">{integrations.length}</p>
+              <p className="text-2xl font-bold text-[#F2F2F2]">{integrations.length}</p>
             </div>
-            <Database className="w-8 h-8 text-[#B3B3B3]" />
+            <Database className="w-6 h-6 text-[#B3B3B3]" />
+          </div>
+        </div>
+      </div>
+
+      {/* User Limits Notice */}
+      <div className="panel-system p-4 border border-[#FFC96C]/30 bg-[#FFC96C]/5">
+        <div className="flex items-start gap-3">
+          <Zap className="w-5 h-5 text-[#FFC96C] flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="text-[#F2F2F2] font-bold text-sm mb-1">User Plan Limits</h3>
+            <p className="text-[#B3B3B3] text-sm">
+              Your current plan allows: <span className="text-[#FFC96C] font-semibold">1 Agent</span>, <span className="text-[#FFC96C] font-semibold">10 Workflows</span>, <span className="text-[#FFC96C] font-semibold">1 Team License</span>, and <span className="text-[#FFC96C] font-semibold">20 Connections</span>. 
+              <Link to="/billing" className="text-[#FFC96C] hover:underline ml-1">Upgrade to unlock more.</Link>
+            </p>
           </div>
         </div>
       </div>
@@ -228,13 +242,9 @@ export default function IntegrationsManagement() {
         ))}
       </div>
 
-      {/* Integrations Grid */}
+      {/* Integrations Grid - Custom Integration First */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredIntegrations.map((integration) => (
-          <IntegrationCard key={integration.id} integration={integration} />
-        ))}
-        
-        {/* Custom Integration Card */}
+        {/* Custom Integration Card - Always First */}
         <div className="panel-system p-6 border-2 border-dashed border-[#FFC96C]/30 hover:border-[#FFC96C] transition-colors">
           <div className="flex flex-col items-center justify-center text-center h-full min-h-[200px]">
             <Webhook className="w-12 h-12 text-[#FFC96C] mb-4" />
@@ -249,6 +259,11 @@ export default function IntegrationsManagement() {
             </button>
           </div>
         </div>
+
+        {/* Regular Integrations - Alphabetically Sorted */}
+        {filteredIntegrations.map((integration) => (
+          <IntegrationCard key={integration.id} integration={integration} />
+        ))}
       </div>
     </div>
   );
@@ -274,7 +289,6 @@ function IntegrationCard({ integration }) {
 
   return (
     <div className="panel-system p-6 hover:border-[#FFC96C] transition-colors">
-      <BackArrow />
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div 
@@ -376,3 +390,4 @@ function IntegrationCard({ integration }) {
     </div>
   );
 }
+

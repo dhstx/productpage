@@ -2,7 +2,7 @@ import { useState } from 'react';
 import BackArrow from '../components/BackArrow';
 import { 
   User, Users, CreditCard, Key, UserPlus, FileText, 
-  Palette, LogOut, Save, Mail, Building, Phone, Download 
+  Palette, LogOut, Save, Mail, Building, Phone, Download, X, Check
 } from 'lucide-react';
 import { logout, getCurrentUser } from '../lib/auth';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { downloadInvoicePDF } from '../lib/stripe';
 export default function Settings() {
   const user = getCurrentUser();
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState('contact');
+  const [activeSection, setActiveSection] = useState('billing');
   const [theme, setTheme] = useState('dark');
 
   const handleLogout = () => {
@@ -22,13 +22,11 @@ export default function Settings() {
   };
 
   const sections = [
-    { id: 'contact', name: 'Contact', icon: User },
-    { id: 'team', name: 'Add Team', icon: Users },
     { id: 'billing', name: 'Billing', icon: CreditCard },
-    { id: 'api', name: 'API Tokens', icon: Key },
     { id: 'invite', name: 'Invite a Friend', icon: UserPlus },
+    { id: 'team', name: 'Add Team', icon: Users },
     { id: 'policy', name: 'Policy', icon: FileText },
-    { id: 'theme', name: 'Theme', icon: Palette },
+    { id: 'contact', name: 'Contact', icon: User },
   ];
 
   return (
@@ -86,13 +84,11 @@ export default function Settings() {
         {/* Content Area */}
         <div className="lg:col-span-3">
       <BackArrow />
-          {activeSection === 'contact' && <ContactSection user={user} />}
-          {activeSection === 'team' && <TeamSection />}
           {activeSection === 'billing' && <BillingSection />}
-          {activeSection === 'api' && <APITokensSection />}
           {activeSection === 'invite' && <InviteSection />}
+          {activeSection === 'team' && <TeamSection />}
           {activeSection === 'policy' && <PolicySection />}
-          {activeSection === 'theme' && <ThemeSection theme={theme} setTheme={setTheme} />}
+          {activeSection === 'contact' && <ContactSection user={user} />}
         </div>
       </div>
     </div>
@@ -178,18 +174,299 @@ function ContactSection({ user }) {
 }
 
 function TeamSection() {
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [teamMembers] = useState([
+    {
+      id: 1,
+      name: 'Admin User',
+      email: 'admin@yourorganization.com',
+      role: 'Owner',
+      status: 'Active',
+      joinedDate: '2024-01-15'
+    },
+    {
+      id: 2,
+      name: 'Sarah Johnson',
+      email: 'sarah@yourorganization.com',
+      role: 'Admin',
+      status: 'Active',
+      joinedDate: '2024-03-20'
+    },
+    {
+      id: 3,
+      name: 'Mike Chen',
+      email: 'mike@yourorganization.com',
+      role: 'Member',
+      status: 'Active',
+      joinedDate: '2024-06-10'
+    },
+    {
+      id: 4,
+      name: 'Emily Rodriguez',
+      email: 'emily@yourorganization.com',
+      role: 'Member',
+      status: 'Pending',
+      joinedDate: '2024-09-25'
+    }
+  ]);
+
+  const handleInvite = (e) => {
+    e.preventDefault();
+    alert('Invitation sent! The team member will receive an email to join.');
+    setShowInviteModal(false);
+  };
+
+  const handleRemove = (member) => {
+    if (confirm(`Remove ${member.name} from the team?`)) {
+      alert(`${member.name} has been removed from the team.`);
+    }
+  };
+
+  const handleChangeRole = (member) => {
+    alert(`Change role for ${member.name}\n\nAvailable roles:\n• Owner - Full access\n• Admin - Manage team and settings\n• Member - View and edit content\n• Viewer - Read-only access`);
+  };
+
   return (
-    <div className="panel-system p-6">
-      <BackArrow />
-      <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-        TEAM MANAGEMENT
-      </h2>
-      <p className="text-[#B3B3B3] mb-6">
-        Invite team members and manage access to your organization.
-      </p>
-      <button className="btn-system">
-        Invite Team Member
-      </button>
+    <div className="space-y-6">
+      <div className="panel-system p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+              TEAM MANAGEMENT
+            </h2>
+            <p className="text-[#B3B3B3]">
+              Invite team members and manage access to your organization.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowInviteModal(true)}
+            className="btn-system flex items-center gap-2"
+          >
+            <UserPlus className="w-4 h-4" />
+            Invite Member
+          </button>
+        </div>
+
+        {/* Team Stats */}
+        <div className="grid md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-[#0C0C0C] p-4 rounded-[2px] border border-[#202020]">
+            <div className="flex items-center gap-3 mb-2">
+              <Users className="w-5 h-5 text-[#FFC96C]" />
+              <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Total Members</span>
+            </div>
+            <div className="text-2xl font-bold text-[#F2F2F2]">4</div>
+          </div>
+          <div className="bg-[#0C0C0C] p-4 rounded-[2px] border border-[#202020]">
+            <div className="flex items-center gap-3 mb-2">
+              <Key className="w-5 h-5 text-[#FFC96C]" />
+              <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Admins</span>
+            </div>
+            <div className="text-2xl font-bold text-[#F2F2F2]">2</div>
+          </div>
+          <div className="bg-[#0C0C0C] p-4 rounded-[2px] border border-[#202020]">
+            <div className="flex items-center gap-3 mb-2">
+              <Mail className="w-5 h-5 text-[#FFC96C]" />
+              <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Pending Invites</span>
+            </div>
+            <div className="text-2xl font-bold text-[#F2F2F2]">1</div>
+          </div>
+          <div className="bg-[#0C0C0C] p-4 rounded-[2px] border border-[#202020]">
+            <div className="flex items-center gap-3 mb-2">
+              <Users className="w-5 h-5 text-[#FFC96C]" />
+              <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Available Seats</span>
+            </div>
+            <div className="text-2xl font-bold text-[#F2F2F2]">46</div>
+          </div>
+        </div>
+
+        {/* Team Members List */}
+        <div>
+          <h3 className="text-lg font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+            TEAM MEMBERS
+          </h3>
+          <div className="bg-[#0C0C0C] rounded-[2px] border border-[#202020] overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-[#161616]">
+                <tr className="border-b border-[#202020]">
+                  <th className="text-left p-4 text-[#B3B3B3] text-sm uppercase tracking-tight font-bold">Member</th>
+                  <th className="text-left p-4 text-[#B3B3B3] text-sm uppercase tracking-tight font-bold">Role</th>
+                  <th className="text-left p-4 text-[#B3B3B3] text-sm uppercase tracking-tight font-bold">Status</th>
+                  <th className="text-left p-4 text-[#B3B3B3] text-sm uppercase tracking-tight font-bold">Joined</th>
+                  <th className="text-right p-4 text-[#B3B3B3] text-sm uppercase tracking-tight font-bold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teamMembers.map((member) => (
+                  <tr key={member.id} className="border-b border-[#202020] hover:bg-[#1A1A1A]">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
+                          <span className="text-[#FFC96C] font-bold">{member.name[0]}</span>
+                        </div>
+                        <div>
+                          <div className="text-[#F2F2F2] font-medium">{member.name}</div>
+                          <div className="text-[#B3B3B3] text-sm">{member.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className="px-3 py-1 rounded-[4px] bg-[#202020] text-[#FFC96C] text-sm font-medium">
+                        {member.role}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${member.status === 'Active' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                        <span className="text-[#B3B3B3] text-sm">{member.status}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 text-[#B3B3B3] text-sm">{member.joinedDate}</td>
+                    <td className="p-4">
+                      <div className="flex items-center justify-end gap-2">
+                        {member.role !== 'Owner' && (
+                          <>
+                            <button
+                              onClick={() => handleChangeRole(member)}
+                              className="px-3 py-1 rounded-[4px] bg-[#202020] text-[#F2F2F2] text-sm hover:bg-[#FFC96C] hover:text-[#0C0C0C] transition-colors"
+                            >
+                              Change Role
+                            </button>
+                            <button
+                              onClick={() => handleRemove(member)}
+                              className="p-2 rounded-[4px] bg-[#202020] text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                            >
+                              <LogOut className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Invite Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="panel-system p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              INVITE TEAM MEMBER
+            </h3>
+            <form onSubmit={handleInvite} className="space-y-4">
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="colleague@company.com"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                />
+              </div>
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Role
+                </label>
+                <select className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]">
+                  <option value="member">Member</option>
+                  <option value="admin">Admin</option>
+                  <option value="viewer">Viewer</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+                  Personal Message (Optional)
+                </label>
+                <textarea
+                  rows="3"
+                  placeholder="Welcome to the team!"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] resize-none"
+                ></textarea>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="submit" className="btn-system flex-1">
+                  Send Invitation
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowInviteModal(false)}
+                  className="px-4 py-2 rounded-[4px] bg-[#202020] text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#161616] border border-[#202020] rounded-[4px] p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-[#F2F2F2] uppercase tracking-tight">
+                UPGRADE YOUR PLAN
+              </h2>
+              <button
+                onClick={() => setShowUpgradeModal(false)}
+                className="text-[#B3B3B3] hover:text-[#F2F2F2] transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {pricingTiers.map((tier) => (
+                <div
+                  key={tier.id}
+                  className={`panel-system p-6 ${
+                    tier.highlighted ? 'border-2 border-[#FFC96C] bg-[#FFC96C]/5' : ''
+                  }`}
+                >
+                  {tier.highlighted && (
+                    <div className="mb-4">
+                      <span className="px-3 py-1 bg-[#FFC96C] text-[#0C0C0C] text-xs font-bold uppercase rounded-[2px]">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+                    {tier.name}
+                  </h3>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-[#F2F2F2]">${tier.price}</span>
+                    <span className="text-[#B3B3B3]">/month</span>
+                  </div>
+                  <div className="space-y-3 mb-6">
+                    {tier.features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-[#FFC96C] flex-shrink-0 mt-0.5" />
+                        <span className="text-[#B3B3B3] text-sm">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleUpgrade(tier.name, tier.id)}
+                    className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
+                      tier.highlighted
+                        ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
+                        : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
+                    }`}
+                  >
+                    Start Now
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -240,12 +517,34 @@ function BillingSection() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const canUserUpgrade = !user || user.subscription === 'free' || user.subscription === 'starter';
 
-  const handleUpgrade = (tierName) => {
+  const pricingTiers = [
+    {
+      id: 'starter',
+      name: 'Starter',
+      price: 19,
+      features: ['3 AI Agents', '50 workflows/month', '100 connections', 'Email support', 'Basic analytics']
+    },
+    {
+      id: 'professional',
+      name: 'Professional',
+      price: 49,
+      highlighted: true,
+      features: ['12 AI Agents', 'Unlimited workflows', 'Unlimited connections', 'Priority support', 'Advanced analytics', 'Custom integrations']
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise',
+      price: 199,
+      features: ['Unlimited AI Agents', 'Unlimited workflows', 'Unlimited connections', 'Dedicated support', 'Custom deployment', 'SLA guarantee']
+    }
+  ];
+
+  const handleUpgrade = (tierName, tierId) => {
     if (tierName === 'Enterprise') {
       alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
     } else {
-      // Trigger Stripe checkout
-      alert(`Upgrading to ${tierName} plan...\n\nThis would redirect to Stripe checkout.`);
+      // Trigger Stripe checkout - in production this would redirect to actual Stripe checkout
+      window.location.href = `/api/create-checkout-session?plan=${tierId}`;
     }
   };
 
@@ -406,6 +705,69 @@ function BillingSection() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#161616] border border-[#202020] rounded-[4px] p-8 max-w-5xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-[#F2F2F2] uppercase tracking-tight">
+                UPGRADE YOUR PLAN
+              </h2>
+              <button
+                onClick={() => setShowUpgradeModal(false)}
+                className="text-[#B3B3B3] hover:text-[#F2F2F2] transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {pricingTiers.map((tier) => (
+                <div
+                  key={tier.id}
+                  className={`panel-system p-6 ${
+                    tier.highlighted ? 'border-2 border-[#FFC96C] bg-[#FFC96C]/5' : ''
+                  }`}
+                >
+                  {tier.highlighted && (
+                    <div className="mb-4">
+                      <span className="px-3 py-1 bg-[#FFC96C] text-[#0C0C0C] text-xs font-bold uppercase rounded-[2px]">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+                    {tier.name}
+                  </h3>
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold text-[#F2F2F2]">${tier.price}</span>
+                    <span className="text-[#B3B3B3]">/month</span>
+                  </div>
+                  <div className="space-y-3 mb-6">
+                    {tier.features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <Check className="w-4 h-4 text-[#FFC96C] flex-shrink-0 mt-0.5" />
+                        <span className="text-[#B3B3B3] text-sm">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => handleUpgrade(tier.name, tier.id)}
+                    className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
+                      tier.highlighted
+                        ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
+                        : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
+                    }`}
+                  >
+                    Start Now
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

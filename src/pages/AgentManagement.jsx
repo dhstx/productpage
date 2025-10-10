@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
 import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
+import { getCurrentUser, hasFeature } from '../lib/auth';
 
 export default function AgentManagement() {
-  const [selectedAgents, setSelectedAgents] = useState([]); // Changed to array for multi-selection
-  const [configAgent, setConfigAgent] = useState(null); // For configuration modal
+  const [selectedAgents, setSelectedAgents] = useState([]);
+  const [configAgent, setConfigAgent] = useState(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showCustomTeamModal, setShowCustomTeamModal] = useState(false);
@@ -17,12 +19,13 @@ export default function AgentManagement() {
   const lastValidTeamRef = useRef('All Teams');
   
   const [agents, setAgents] = useState(agentData);
+  const user = getCurrentUser();
+  const hasPortalAccess = hasFeature('portal');
 
   // Watch for Custom... selection
   useEffect(() => {
     if (selectedTeam === 'Custom...') {
       setShowCustomTeamModal(true);
-      // Use setTimeout to reset after the modal opens
       setTimeout(() => {
         setSelectedTeam(lastValidTeamRef.current);
       }, 0);
@@ -55,7 +58,6 @@ export default function AgentManagement() {
     }
   };
 
-  // Toggle agent selection (multi-select)
   const handleAgentSelect = (agent) => {
     setSelectedAgents(prev => {
       const isSelected = prev.some(a => a.id === agent.id);
@@ -67,7 +69,6 @@ export default function AgentManagement() {
     });
   };
 
-  // Remove specific agent from selection
   const handleRemoveAgent = (agentId) => {
     setSelectedAgents(prev => prev.filter(a => a.id !== agentId));
   };
@@ -85,7 +86,7 @@ export default function AgentManagement() {
   };
 
   const handleConfigureAgent = (agent, e) => {
-    e.stopPropagation(); // Prevent agent selection when clicking cog
+    e.stopPropagation();
     setConfigAgent(agent);
     setShowConfigModal(true);
   };
@@ -124,7 +125,6 @@ export default function AgentManagement() {
     e.preventDefault();
     if (agentInput.trim()) {
       console.log('Agent input:', agentInput);
-      // Handle agent interaction here
       setAgentInput('');
     }
   };
@@ -135,46 +135,65 @@ export default function AgentManagement() {
       <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-          AGENT MANAGEMENT
+          DASHBOARD
         </h1>
         <p className="text-[#B3B3B3]">
           Monitor and configure your AI agents
         </p>
       </div>
 
-      {/* Compact Stats Bar - 4 columns */}
+      {/* Upgrade Notice for Free Users */}
+      {!hasPortalAccess && (
+        <section className="panel-system p-4 border-2 border-[#FFC96C]">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-[4px] bg-[#FFC96C]/10 flex items-center justify-center flex-shrink-0">
+              <Zap className="w-5 h-5 text-[#FFC96C]" />
+            </div>
+            <div className="flex-grow">
+              <h2 className="text-lg font-bold text-[#F2F2F2] mb-1 uppercase tracking-tight">
+                UNLOCK PREMIUM FEATURES
+              </h2>
+              <p className="text-[#B3B3B3] text-sm mb-3">
+                Upgrade to Professional or Enterprise to access your dedicated board portal, advanced analytics, and more.
+              </p>
+              <Link to="/billing" className="btn-system inline-flex items-center gap-2 text-sm px-4 py-2">
+                <Zap className="w-4 h-4" />
+                View Upgrade Options
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Compact Stats Bar - 4 columns with named stats and reduced height */}
       <div className="grid grid-cols-4 gap-4">
-        {/* Stat 1 - Total Agents */}
-        <div className="panel-system p-4">
+        <div className="panel-system p-3">
           <div className="text-center">
-            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Stats</p>
-            <p className="text-2xl font-bold text-[#F2F2F2]">{agents.length}</p>
+            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Total Agents</p>
+            <p className="text-xl font-bold text-[#F2F2F2]">{agents.length}</p>
           </div>
         </div>
 
-        {/* Stat 2 - Active Agents */}
-        <div className="panel-system p-4">
+        <div className="panel-system p-3">
           <div className="text-center">
-            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Stats</p>
-            <p className="text-2xl font-bold text-[#F2F2F2]">
+            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Active Agents</p>
+            <p className="text-xl font-bold text-[#F2F2F2]">
               {agents.filter(a => a.status === 'active').length}
             </p>
           </div>
         </div>
 
-        {/* Stat 3 - Avg Accuracy */}
-        <div className="panel-system p-4">
+        <div className="panel-system p-3">
           <div className="text-center">
-            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Stats</p>
-            <p className="text-2xl font-bold text-[#F2F2F2]">
+            <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Avg Accuracy</p>
+            <p className="text-xl font-bold text-[#F2F2F2]">
               {Math.round(agents.reduce((acc, a) => acc + a.accuracy, 0) / agents.length)}%
             </p>
           </div>
         </div>
 
-        {/* Stat 4 - Agent Teams Dropdown (NO STATS LABEL) */}
-        <div className="panel-system p-4">
-          <div className="relative flex items-center justify-center h-full">
+        <div className="panel-system p-3">
+          <div className="relative flex items-center justify-center">
             <select
               value={selectedTeam}
               onChange={(e) => handleTeamChange(e.target.value)}
@@ -287,7 +306,7 @@ export default function AgentManagement() {
               </div>
             )}
 
-            {/* Conversation Area - Reduced initial size, grows with content */}
+            {/* Conversation Area */}
             <div className="flex-1 bg-[#0C0C0C] rounded-[2px] p-4 mb-4 overflow-y-auto min-h-[120px]">
               <div className="space-y-4">
                 {selectedAgents.length > 0 ? (
@@ -311,7 +330,7 @@ export default function AgentManagement() {
               </div>
             </div>
 
-            {/* Input Area - Compact */}
+            {/* Input Area */}
             <form onSubmit={handleAgentSubmit} className="flex gap-3">
               <textarea
                 value={agentInput}
@@ -385,14 +404,17 @@ export default function AgentManagement() {
       )}
 
       {/* Confirmation Modal */}
-      {showConfirmModal && selectedAgent && (
+      {showConfirmModal && configAgent && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
           <div className="panel-system p-8 max-w-md w-full">
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-              Confirm Action
+              {confirmAction === 'pause' ? 'Pause Agent' : 'Restart Agent'}
             </h3>
             <p className="text-[#B3B3B3] mb-6">
-              Are you sure you want to {confirmAction} <span className="text-[#FFC96C]">{selectedAgent.name}</span>?
+              {confirmAction === 'pause' 
+                ? `Are you sure you want to pause ${configAgent.name}? It will stop processing requests.`
+                : `Are you sure you want to restart ${configAgent.name}? It will resume processing requests.`
+              }
             </p>
             <div className="flex gap-3">
               <button
@@ -404,7 +426,7 @@ export default function AgentManagement() {
               <button
                 onClick={() => {
                   setShowConfirmModal(false);
-                  setSelectedAgent(null);
+                  setConfigAgent(null);
                   setConfirmAction(null);
                 }}
                 className="flex-1 btn-system-secondary"
@@ -416,14 +438,17 @@ export default function AgentManagement() {
         </div>
       )}
 
-      {/* Configuration Modal */}
-      {showConfigModal && selectedAgent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
-          <div className="panel-system p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-              Configure {selectedAgent.name}
+      {/* Configuration Modal with Suggested Prompts */}
+      {showConfigModal && configAgent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto">
+          <div className="panel-system p-8 max-w-2xl w-full my-8">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+              CONFIGURE AGENT
             </h3>
-            
+            <p className="text-[#B3B3B3] mb-6 text-sm">
+              {configAgent.name} • v{configAgent.version}
+            </p>
+
             <div className="space-y-6">
               <div>
                 <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
@@ -431,7 +456,7 @@ export default function AgentManagement() {
                 </label>
                 <input
                   type="text"
-                  defaultValue={selectedAgent.name}
+                  defaultValue={configAgent.name}
                   className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
                 />
               </div>
@@ -441,9 +466,9 @@ export default function AgentManagement() {
                   Description
                 </label>
                 <textarea
-                  defaultValue={selectedAgent.description}
+                  defaultValue={configAgent.description}
                   rows={3}
-                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none"
                 />
               </div>
 
@@ -464,7 +489,7 @@ export default function AgentManagement() {
                   Capabilities
                 </label>
                 <div className="space-y-2">
-                  {selectedAgent.capabilities.map((capability, index) => (
+                  {configAgent.capabilities.map((capability, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -476,13 +501,39 @@ export default function AgentManagement() {
                   ))}
                 </div>
               </div>
+
+              <div>
+                <label className="block text-[#F2F2F2] text-sm font-medium mb-3 uppercase tracking-tight">
+                  Suggested Prompts
+                </label>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="e.g., Analyze quarterly revenue trends"
+                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g., Generate monthly performance report"
+                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g., Summarize customer feedback"
+                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                  />
+                </div>
+                <p className="text-[#808080] text-xs mt-2">
+                  Add suggested prompts to help users interact with this agent effectively.
+                </p>
+              </div>
             </div>
 
             <div className="flex gap-3 mt-8">
               <button
                 onClick={() => {
                   setShowConfigModal(false);
-                  setSelectedAgent(null);
+                  setConfigAgent(null);
                 }}
                 className="flex-1 btn-system"
               >
@@ -491,7 +542,7 @@ export default function AgentManagement() {
               <button
                 onClick={() => {
                   setShowConfigModal(false);
-                  setSelectedAgent(null);
+                  setConfigAgent(null);
                 }}
                 className="flex-1 btn-system-secondary"
               >
