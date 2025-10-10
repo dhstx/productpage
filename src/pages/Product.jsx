@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle } from 'lucide-react';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
-import ScrollGears from '../components/graphics/ScrollGears';
+import SpinningCogs from '../components/SpinningCogs';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
 
@@ -150,10 +150,10 @@ export default function Product() {
           <ROICalculator />
         </FadeInSection>
 
-        {/* Scroll Gears Animation */}
+        {/* Spinning Cogs Animation */}
         <FadeInSection>
           <section className="py-24 border-b border-[#202020]">
-            <ScrollGears color="#FFC96C" />
+            <SpinningCogs />
           </section>
         </FadeInSection>
 

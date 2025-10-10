@@ -1,0 +1,43 @@
+/* styles/cogs.css */
+
+.cogs-wrap {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding-block: 2rem;
+  background: #0F0F0F; /* assumes dark product hero */
+}
+
+.cogs-svg {
+  width: min(1100px, 95vw);
+  height: auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Base animation utilities */
+.spin {
+  animation: spin var(--cog-speed, 24s) linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.spin-reverse {
+  animation: spin var(--cog-speed, 24s) linear infinite reverse;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* Speed presets (tweak to taste) */
+.speed-slow  { --cog-speed: 28s; }
+.speed-med   { --cog-speed: 22s; }
+.speed-fast  { --cog-speed: 18s; }
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spin, .spin-reverse {
+    animation: none;
+  }
+}
