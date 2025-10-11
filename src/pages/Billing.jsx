@@ -9,12 +9,59 @@ export default function Billing() {
   const currentTier = getPricingTier(user?.subscription || 'free');
   const pricingTiers = getAllPricingTiers();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [annual, setAnnual] = useState(false);
 
   const handleUpgrade = (tier) => {
     if (tier.id === 'enterprise') {
       alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
     } else {
-      alert(`Upgrading to ${tier.name} plan...\n\nThis would redirect to Stripe checkout.`);
+      const tierOrder = ['free', 'starter', 'professional', 'enterprise'];
+      const isDowngrade = tierOrder.indexOf(tier.id) < tierOrder.indexOf(currentTier.id);
+      if (isDowngrade) {
+        if (!confirm(`Downgrade from ${currentTier.name} to ${tier.name}?`)) return;
+        try {
+          const stored = localStorage.getItem('dhstx_auth');
+          if (stored) {
+            const u = JSON.parse(stored);
+            const newTier = getPricingTier(tier.id);
+            u.subscription = newTier.id;
+            // Map features from pricing tier if available
+            if (newTier.features) {
+              u.features = {
+                agents: newTier.features.agents,
+                workflows: newTier.features.workflows,
+                connections: newTier.features.connections,
+                analytics: !!newTier.features.analytics,
+                portal: !!newTier.features.portal,
+                prioritySupport: !!newTier.features.prioritySupport,
+                teamLicenses: newTier.features.teamLicenses
+              };
+            }
+            localStorage.setItem('dhstx_auth', JSON.stringify(u));
+          }
+        } catch {}
+        alert('Plan downgraded. Your changes will be reflected now.');
+        window.location.reload();
+        return;
+      }
+
+      const priceId = annual ? tier.stripePriceAnnual : tier.stripePrice;
+      const planId = tier.id + (annual ? '_annual' : '_monthly');
+      if (!priceId) {
+        alert('Checkout is not configured for this billing interval.');
+        return;
+      }
+      fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ priceId, planId })
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.url) window.location.href = data.url;
+          else alert('Failed to start checkout');
+        })
+        .catch(() => alert('Failed to start checkout'));
     }
   };
 
@@ -36,6 +83,19 @@ export default function Billing() {
             ? 'Choose the perfect plan for your organization\'s needs'
             : 'Manage your subscription, payment methods, and billing history'}
         </p>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <span className={`text-sm ${!annual ? 'text-[#F2F2F2]' : 'text-[#808080]'}`}>Monthly</span>
+        <button
+          onClick={() => setAnnual(!annual)}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${annual ? 'bg-[#FFC96C]' : 'bg-[#202020]'}`}
+        >
+          <span
+            className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${annual ? 'translate-x-5' : 'translate-x-1'}`}
+          />
+        </button>
+        <span className={`text-sm ${annual ? 'text-[#F2F2F2]' : 'text-[#808080]'}`}>Annual (2 months free)</span>
       </div>
 
       {/* Current Plan Status */}
@@ -139,7 +199,11 @@ export default function Billing() {
           {pricingTiers.map((tier) => (
             <PricingCard
               key={tier.id}
-              tier={tier}
+              tier={{
+                ...tier,
+                price: annual && tier.priceAnnual ? tier.priceAnnual : tier.price,
+                billingPeriod: annual ? 'year' : 'month'
+              }}
               currentTier={currentTier.id}
               onUpgrade={handleUpgrade}
             />
@@ -207,8 +271,8 @@ export default function Billing() {
 
 function PricingCard({ tier, currentTier, onUpgrade }) {
   const isCurrent = tier.id === currentTier;
-  const isDowngrade = ['free', 'starter', 'professional', 'enterprise'].indexOf(tier.id) < 
-                      ['free', 'starter', 'professional', 'enterprise'].indexOf(currentTier);
+  const tierOrder = ['free', 'starter', 'professional', 'enterprise'];
+  const isDowngrade = tierOrder.indexOf(tier.id) < tierOrder.indexOf(currentTier);
 
   return (
     <div className={`panel-system p-6 flex flex-col ${tier.highlighted ? 'border-2 border-[#FFC96C]' : ''}`}>
@@ -247,7 +311,10 @@ function PricingCard({ tier, currentTier, onUpgrade }) {
           Current Plan
         </button>
       ) : isDowngrade ? (
-        <button disabled className="btn-system w-full opacity-50 cursor-not-allowed">
+        <button
+          onClick={() => onUpgrade(tier)}
+          className="btn-system w-full"
+        >
           Downgrade
         </button>
       ) : (

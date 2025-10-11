@@ -27,9 +27,9 @@ export default function AdminLayout({ children }) {
   
   const navigation = [
     { name: 'Agents', href: '/agents', icon: Bot },
-    { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
-    { name: 'Team', href: '/team', icon: Users },
+    { name: 'Platforms', href: '/platforms', icon: Package },
+    { name: 'Tools', href: '/team', icon: Users },
   ];
 
   return (

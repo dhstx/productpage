@@ -5,11 +5,14 @@ import db from '../utils/database.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Product and price mapping
+// Product and price mapping (env overrides for security)
 const PRICE_IDS = {
-  starter: 'price_1SG8g5B0VqDMH2904j8shzKt',      // $19/month
-  professional: 'price_1SG8gDB0VqDMH290srWjcYkT', // $49/month
-  enterprise: 'price_1SG8gKB0VqDMH290XeuHz84l'    // $199/month
+  starter: process.env.STRIPE_PRICE_STARTER_MONTHLY || 'price_1SG8g5B0VqDMH2904j8shzKt',
+  professional: process.env.STRIPE_PRICE_PROFESSIONAL_MONTHLY || 'price_1SG8gDB0VqDMH290srWjcYkT',
+  enterprise: process.env.STRIPE_PRICE_ENTERPRISE_MONTHLY || 'price_1SG8gKB0VqDMH290XeuHz84l',
+  starter_annual: process.env.STRIPE_PRICE_STARTER_ANNUAL,
+  professional_annual: process.env.STRIPE_PRICE_PROFESSIONAL_ANNUAL,
+  enterprise_annual: process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL
 };
 
 export const createCheckoutSession = asyncHandler(async (req, res) => {
@@ -24,8 +27,10 @@ export const createCheckoutSession = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'Missing priceId or planId' });
   }
 
-  // Validate price ID
-  if (!Object.values(PRICE_IDS).includes(priceId)) {
+  // Validate price ID (allow direct priceId or mapped by planId)
+  const mappedPrice = PRICE_IDS[planId] || PRICE_IDS[planId.replace('_monthly','')] || PRICE_IDS[planId.replace('_annual','_annual')];
+  const valid = Object.values(PRICE_IDS).filter(Boolean).includes(priceId) || !!mappedPrice;
+  if (!valid) {
     return res.status(400).json({ error: 'Invalid price ID' });
   }
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import BackArrow from '../components/BackArrow';
 import { 
   User, Users, CreditCard, Key, UserPlus, FileText, 
-  Palette, LogOut, Save, Mail, Building, Phone, Download, X, Check
+  Palette, LogOut, Save, Mail, Building, Phone, Download, X, Check, Share2, Plus
 } from 'lucide-react';
 import { logout, getCurrentUser } from '../lib/auth';
 import { useNavigate } from 'react-router-dom';
@@ -175,6 +175,8 @@ function ContactSection({ user }) {
 
 function TeamSection() {
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showAddTeamModal, setShowAddTeamModal] = useState(false);
+  const [newTeamName, setNewTeamName] = useState('');
   const [teamMembers] = useState([
     {
       id: 1,
@@ -216,6 +218,14 @@ function TeamSection() {
     setShowInviteModal(false);
   };
 
+  const handleCreateTeam = (e) => {
+    e.preventDefault();
+    if (!newTeamName.trim()) return;
+    alert(`Team "${newTeamName}" created.`);
+    setNewTeamName('');
+    setShowAddTeamModal(false);
+  };
+
   const handleRemove = (member) => {
     if (confirm(`Remove ${member.name} from the team?`)) {
       alert(`${member.name} has been removed from the team.`);
@@ -238,13 +248,22 @@ function TeamSection() {
               Invite team members and manage access to your organization.
             </p>
           </div>
-          <button
-            onClick={() => setShowInviteModal(true)}
-            className="btn-system flex items-center gap-2"
-          >
-            <UserPlus className="w-4 h-4" />
-            Invite Member
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowAddTeamModal(true)}
+              className="btn-system-secondary flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Add Team
+            </button>
+            <button
+              onClick={() => setShowInviteModal(true)}
+              className="btn-system flex items-center gap-2"
+            >
+              <UserPlus className="w-4 h-4" />
+              Invite Member
+            </button>
+          </div>
         </div>
 
         {/* Team Stats */}
@@ -404,6 +423,44 @@ function TeamSection() {
           </div>
         </div>
       )}
+
+  {/* Add Team Modal */}
+  {showAddTeamModal && (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+      <div className="panel-system p-6 max-w-md w-full">
+        <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+          CREATE TEAM
+        </h3>
+        <form onSubmit={handleCreateTeam} className="space-y-4">
+          <div>
+            <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
+              Team Name
+            </label>
+            <input
+              type="text"
+              value={newTeamName}
+              onChange={(e) => setNewTeamName(e.target.value)}
+              placeholder="e.g., Marketing"
+              className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+              required
+            />
+          </div>
+          <div className="flex gap-3 pt-2">
+            <button type="submit" className="btn-system flex-1">
+              Create Team
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowAddTeamModal(false)}
+              className="px-4 py-2 rounded-[4px] bg-[#202020] text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )}
 
       {/* Upgrade Modal */}
       {showUpgradeModal && (
@@ -832,12 +889,32 @@ function APITokensSection() {
 
 function InviteSection() {
   const [email, setEmail] = useState('');
+  const inviteUrl = `${window.location.origin}/signup?ref=friend`;
 
   const handleInvite = (e) => {
     e.preventDefault();
     if (email) {
       alert(`Invitation sent to ${email}!`);
       setEmail('');
+    }
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      alert('Invite link copied to clipboard');
+    } catch {
+      alert('Failed to copy link');
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Join DHStx', url: inviteUrl });
+      } catch {}
+    } else {
+      handleCopy();
     }
   };
 
@@ -850,6 +927,19 @@ function InviteSection() {
       <p className="text-[#B3B3B3] mb-6">
         Share DHStx with colleagues and get rewards when they sign up.
       </p>
+
+      <div className="flex items-center gap-2 mb-4">
+        <input
+          value={inviteUrl}
+          readOnly
+          className="flex-grow px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2]"
+        />
+        <button onClick={handleCopy} className="btn-system-secondary">Copy</button>
+        <button onClick={handleShare} className="btn-system flex items-center gap-2">
+          <Share2 className="w-4 h-4" /> Share
+        </button>
+      </div>
+
       <form onSubmit={handleInvite} className="flex gap-3">
         <input
           type="email"

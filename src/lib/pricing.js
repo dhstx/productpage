@@ -4,6 +4,7 @@ export const PRICING_TIERS = {
     id: 'free',
     name: 'Free',
     price: 0,
+    priceAnnual: 0,
     billingPeriod: 'forever',
     description: 'Perfect for individuals getting started',
     features: {
@@ -35,6 +36,7 @@ export const PRICING_TIERS = {
     id: 'starter',
     name: 'Starter',
     price: 49,
+    priceAnnual: 490, // 2 months free
     billingPeriod: 'month',
     description: 'Small teams getting organized',
     features: {
@@ -62,12 +64,14 @@ export const PRICING_TIERS = {
     ],
     cta: 'Start Free Trial',
     highlighted: false,
-    stripePrice: 'price_starter_monthly'
+    stripePrice: 'price_starter_monthly',
+    stripePriceAnnual: 'price_starter_annual'
   },
   PROFESSIONAL: {
     id: 'professional',
     name: 'Professional',
     price: 149,
+    priceAnnual: 1490, // 2 months free
     billingPeriod: 'month',
     description: 'Growing organizations scaling operations',
     features: {
@@ -98,12 +102,14 @@ export const PRICING_TIERS = {
     ],
     cta: 'Start Free Trial',
     highlighted: true,
-    stripePrice: 'price_professional_monthly'
+    stripePrice: 'price_professional_monthly',
+    stripePriceAnnual: 'price_professional_annual'
   },
   ENTERPRISE: {
     id: 'enterprise',
     name: 'Enterprise',
     price: 499,
+    priceAnnual: 4990, // 2 months free
     billingPeriod: 'month',
     description: 'Large organizations with advanced needs',
     features: {
@@ -136,7 +142,8 @@ export const PRICING_TIERS = {
     ],
     cta: 'Get Started',
     highlighted: false,
-    stripePrice: 'price_enterprise_monthly'
+    stripePrice: 'price_enterprise_monthly',
+    stripePriceAnnual: 'price_enterprise_annual'
   }
 };
 

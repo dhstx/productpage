@@ -22,6 +22,44 @@ export default function AgentManagement() {
   const user = getCurrentUser();
   const hasPortalAccess = hasFeature('portal');
 
+  function getDefaultPrompts(agent) {
+    const domain = agent?.domain || '';
+    const name = agent?.name || 'Agent';
+    if (domain === 'Analytics') {
+      return [
+        `Analyze last month's KPIs for anomalies`,
+        `Generate a weekly performance summary`,
+        `Forecast next quarter trends`
+      ];
+    }
+    if (domain === 'Content & Marketing') {
+      return [
+        `Draft a campaign brief for ${name}`,
+        'Create a 2-week content calendar',
+        'Optimize this blog outline for SEO'
+      ];
+    }
+    if (domain === 'Automation') {
+      return [
+        'Create a workflow to sync CRM leads',
+        'Schedule a nightly data refresh',
+        'Alert me when conversions drop >10%'
+      ];
+    }
+    if (domain === 'Security') {
+      return [
+        'Summarize recent security events',
+        'List top compliance risks this week',
+        'Recommend access control improvements'
+      ];
+    }
+    return [
+      `Help me get started with ${name}`,
+      'What can you do for my workflow?',
+      'Show best practices for using this agent'
+    ];
+  }
+
   // Watch for Custom... selection
   useEffect(() => {
     if (selectedTeam === 'Custom...') {
@@ -63,9 +101,12 @@ export default function AgentManagement() {
       const isSelected = prev.some(a => a.id === agent.id);
       if (isSelected) {
         return prev.filter(a => a.id !== agent.id);
-      } else {
-        return [...prev, agent];
       }
+      // Enforce single agent selection for non-admin users
+      if (user?.role !== 'admin') {
+        return [agent];
+      }
+      return [...prev, agent];
     });
   };
 
@@ -142,28 +183,7 @@ export default function AgentManagement() {
         </p>
       </div>
 
-      {/* Upgrade Notice for Free Users */}
-      {!hasPortalAccess && (
-        <section className="panel-system p-4 border-2 border-[#FFC96C]">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-[4px] bg-[#FFC96C]/10 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-5 h-5 text-[#FFC96C]" />
-            </div>
-            <div className="flex-grow">
-              <h2 className="text-lg font-bold text-[#F2F2F2] mb-1 uppercase tracking-tight">
-                UNLOCK PREMIUM FEATURES
-              </h2>
-              <p className="text-[#B3B3B3] text-sm mb-3">
-                Upgrade to Professional or Enterprise to access your dedicated board portal, advanced analytics, and more.
-              </p>
-              <Link to="/billing" className="btn-system inline-flex items-center gap-2 text-sm px-4 py-2">
-                <Zap className="w-4 h-4" />
-                View Upgrade Options
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Premium banner removed per requirements */}
 
       {/* User Limits Notice - Only show for non-admin users */}
       {user?.role !== 'admin' && (
@@ -463,8 +483,11 @@ export default function AgentManagement() {
 
       {/* Configuration Modal with Suggested Prompts */}
       {showConfigModal && configAgent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto">
-          <div className="panel-system p-8 max-w-2xl w-full my-8">
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto"
+          onClick={() => { setShowConfigModal(false); setConfigAgent(null); }}
+        >
+          <div className="panel-system p-8 max-w-2xl w-full my-8" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
               CONFIGURE AGENT
             </h3>
@@ -495,17 +518,7 @@ export default function AgentManagement() {
                 />
               </div>
 
-              <div>
-                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
-                  Response Time Threshold (seconds)
-                </label>
-                <input
-                  type="number"
-                  defaultValue="2"
-                  step="0.1"
-                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                />
-              </div>
+              {/* Response Time Threshold removed per requirements */}
 
               <div>
                 <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
@@ -530,24 +543,17 @@ export default function AgentManagement() {
                   Suggested Prompts
                 </label>
                 <div className="space-y-2">
-                  <input
-                    type="text"
-                    placeholder="e.g., Analyze quarterly revenue trends"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder="e.g., Generate monthly performance report"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder="e.g., Summarize customer feedback"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
+                  {getDefaultPrompts(configAgent).map((prompt, idx) => (
+                    <input
+                      key={idx}
+                      type="text"
+                      defaultValue={prompt}
+                      className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
+                    />
+                  ))}
                 </div>
                 <p className="text-[#808080] text-xs mt-2">
-                  Add suggested prompts to help users interact with this agent effectively.
+                  These prompts are tailored to this agent's capabilities.
                 </p>
               </div>
             </div>
