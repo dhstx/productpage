@@ -199,7 +199,7 @@ export default function AgentManagement() {
               </div>
             </div>
             <Link 
-              to="/settings"
+              to="/billing"
               className="btn-system text-sm whitespace-nowrap"
             >
               Upgrade Plan

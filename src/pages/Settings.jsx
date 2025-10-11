@@ -2,7 +2,7 @@ import { useState } from 'react';
 import BackArrow from '../components/BackArrow';
 import { 
   User, Users, CreditCard, Key, UserPlus, FileText, 
-  Palette, LogOut, Save, Mail, Building, Phone, Download, X, Check, Share2, Plus
+  LogOut, Save, Mail, Download, X, Check, Share2, Plus
 } from 'lucide-react';
 import { logout, getCurrentUser } from '../lib/auth';
 import { useNavigate } from 'react-router-dom';
@@ -83,7 +83,6 @@ export default function Settings() {
 
         {/* Content Area */}
         <div className="lg:col-span-3">
-      <BackArrow />
           {activeSection === 'billing' && <BillingSection />}
           {activeSection === 'invite' && <InviteSection />}
           {activeSection === 'team' && <TeamSection />}
@@ -109,7 +108,7 @@ function ContactSection({ user }) {
 
   return (
     <div className="panel-system p-6">
-      <BackArrow />
+      
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight">
           CONTACT INFORMATION
@@ -613,7 +612,7 @@ function BillingSection() {
 
   return (
     <div className="space-y-6">
-      <BackArrow />
+      
       {/* Current Plan Status - Reduced height */}
       <div className="panel-system p-4">
         <div className="flex items-center gap-3">
@@ -846,7 +845,7 @@ function APITokensSection() {
 
   return (
     <div className="panel-system p-6">
-      <BackArrow />
+      
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight mb-2">
@@ -920,7 +919,7 @@ function InviteSection() {
 
   return (
     <div className="panel-system p-6">
-      <BackArrow />
+      
       <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
         INVITE A FRIEND
       </h2>
