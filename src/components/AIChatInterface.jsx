@@ -39,7 +39,11 @@ export default function AIChatInterface() {
 
     const greetingPart = 'Hello.';
     const agentPart = ` I am your ${activeAgentRef.current}`;
-    const typingSpeed = 95;
+    const baseTypingSpeed = 95; // slowed by +0.5s (2025-10-12)
+    const slowdownTotalMs = 500;
+    const totalChars = greetingPart.length + agentPart.length;
+    const extraPerChar = Math.ceil(slowdownTotalMs / totalChars);
+    const typingSpeed = baseTypingSpeed + extraPerChar;
     const pauseDuration = 1500;
     let delay = 0;
     let currentOutput = '';
