@@ -1,8 +1,15 @@
 import { useState } from 'react';
+import { getCurrentUser } from '../lib/auth';
+import { Navigate } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
 import { Users, Mail, Shield, Trash2, UserPlus } from 'lucide-react';
 
 export default function Team() {
+  const user = getCurrentUser();
+  const canSeeTeam = user?.subscription === 'professional' || user?.subscription === 'enterprise' || user?.role === 'admin';
+  if (!canSeeTeam) {
+    return <Navigate to="/billing" replace />;
+  }
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [teamMembers] = useState([
     {

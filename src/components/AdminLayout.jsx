@@ -25,11 +25,12 @@ export default function AdminLayout({ children }) {
 
   const shouldUpgrade = canUpgrade();
   
+  const canSeeTeam = user?.subscription === 'professional' || user?.subscription === 'enterprise' || user?.role === 'admin';
   const navigation = [
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
     { name: 'Platforms', href: '/platforms', icon: Package },
-    { name: 'Tools', href: '/team', icon: Users },
+    ...(canSeeTeam ? [{ name: 'Tools', href: '/team', icon: Users }] : []),
   ];
 
   return (

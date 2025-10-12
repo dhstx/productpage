@@ -488,9 +488,20 @@ export default function AgentManagement() {
           onClick={() => { setShowConfigModal(false); setConfigAgent(null); }}
         >
           <div className="panel-system p-8 max-w-2xl w-full my-8" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-              CONFIGURE AGENT
-            </h3>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight">
+                CONFIGURE AGENT
+              </h3>
+              <button
+                aria-label="Close"
+                className="text-[#B3B3B3] hover:text-[#F2F2F2]"
+                onClick={() => { setShowConfigModal(false); setConfigAgent(null); }}
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <p className="text-[#B3B3B3] mb-6 text-sm">
               {configAgent.name} • v{configAgent.version}
             </p>
