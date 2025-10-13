@@ -43,8 +43,8 @@ export default function AIChatInterface() {
 
     const greetingPart = 'Hello.';
     const agentPart = ` I am your ${activeAgentRef.current}`;
-    const typingSpeed = TYPEWRITER_CHAR_MS * 1.25;
-    const pauseDuration = TYPEWRITER_PAUSE_MS * 1.25;
+    const typingSpeed = TYPEWRITER_CHAR_MS;
+    const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
     let currentOutput = '';
 
