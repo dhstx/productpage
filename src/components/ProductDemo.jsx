@@ -13,40 +13,39 @@ export default function ProductDemo() {
   ];
 
   return (
-    <section className="py-24 bg-[#0C0C0C]">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
+    <section className="relative w-full max-w-screen overflow-x-hidden bg-[#0C0C0C] px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-12">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+          <div className="text-center">
+            <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
               SEE THE PLATFORM IN ACTION
             </h2>
-            <p className="text-xl text-[#B3B3B3] max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
               Watch a 5-minute walkthrough of how DHStx transforms company management and strategic planning
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2">
             {/* Video Player */}
-            <div className="relative">
-              <div className="relative aspect-video bg-[#1A1A1A] rounded-[4px] overflow-hidden border border-[#202020]">
+            <div className="relative min-w-0">
+              <div className="relative aspect-video overflow-hidden rounded-[4px] border border-[#202020] bg-[#1A1A1A]">
                 {!isPlaying ? (
                   <>
                     {/* Thumbnail */}
                     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1A1A1A] to-[#0C0C0C]">
                       <div className="text-center">
-                        <div className="w-20 h-20 rounded-full bg-[#FFC96C] flex items-center justify-center mx-auto mb-4 cursor-pointer hover:bg-[#FFD68C] transition-colors"
+                        <div className="mx-auto mb-4 flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-[#FFC96C] transition-colors hover:bg-[#FFD68C]"
                              onClick={() => setIsPlaying(true)}>
-                          <Play className="w-10 h-10 text-[#0C0C0C] ml-1" fill="#0C0C0C" />
+                          <Play className="ml-1 h-10 w-10 text-[#0C0C0C]" fill="#0C0C0C" />
                         </div>
-                        <p className="text-[#F2F2F2] text-lg font-bold uppercase tracking-tight">Watch Demo</p>
-                        <p className="text-[#B3B3B3] text-sm mt-1">5:23 minutes</p>
+                        <p className="text-sm font-semibold uppercase tracking-tight text-[#F2F2F2] sm:text-base">Watch Demo</p>
+                        <p className="mt-1 text-xs text-[#B3B3B3] sm:text-sm">5:23 minutes</p>
                       </div>
                     </div>
-                    
+
                     {/* Demo Preview Image */}
                     <div className="absolute inset-0 opacity-20">
-                      <div className="w-full h-full bg-gradient-to-br from-[#FFC96C]/10 to-transparent"></div>
+                      <div className="h-full w-full bg-gradient-to-br from-[#FFC96C]/10 to-transparent"></div>
                     </div>
                   </>
                 ) : (
@@ -85,15 +84,15 @@ export default function ProductDemo() {
             </div>
 
             {/* Features List */}
-            <div>
-              <h3 className="text-2xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <div className="flex min-w-0 flex-col gap-6">
+              <h3 className="h3 uppercase tracking-tight text-[#F2F2F2]">
                 What You'll Learn
               </h3>
-              <div className="space-y-4 mb-8">
+              <div className="space-y-3">
                 {features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#FFC96C] flex-shrink-0 mt-0.5" />
-                    <span className="text-[#F2F2F2]">{feature}</span>
+                  <div key={index} className="flex items-start gap-3 text-sm text-[#F2F2F2] sm:text-base">
+                    <CheckCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#FFC96C]" />
+                    <span className="text-pretty">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -102,14 +101,14 @@ export default function ProductDemo() {
               <div className="space-y-3">
                 <button
                   onClick={() => setIsPlaying(true)}
-                  className="btn-primary w-full flex items-center justify-center gap-2"
+                  className="btn-system"
                 >
-                  <Play className="w-4 h-4" />
+                  <Play className="h-4 w-4" />
                   Watch Full Demo
                 </button>
                 <a
                   href="/product"
-                  className="btn-system w-full flex items-center justify-center"
+                  className="btn-system"
                 >
                   View Pricing
                 </a>

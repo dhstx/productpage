@@ -46,21 +46,21 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="container mx-auto px-6 py-16">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+    <section className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
+        <div className="text-center">
+          <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
             GET IN TOUCH
           </h2>
-          <p className="text-[#B3B3B3] text-lg">
+          <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
             Have questions? Want to see a demo? We're here to help.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="panel-system p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="panel-system space-y-6 p-6 sm:p-8">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-[#F2F2F2] font-bold mb-2 uppercase tracking-wide text-sm">
+            <label htmlFor="name" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#F2F2F2] sm:text-sm">
               Name *
             </label>
             <input
@@ -70,14 +70,14 @@ export default function ContactForm() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-[#0C0C0C] border border-[#404040] text-[#F2F2F2] px-4 py-3 focus:outline-none focus:border-[#FFC96C] transition-colors"
+              className="w-full min-w-0 rounded-[2px] border border-[#404040] bg-[#0C0C0C] px-4 py-3 text-sm text-[#F2F2F2] transition-colors focus:border-[#FFC96C] focus:outline-none sm:text-base"
               placeholder="Your full name"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-[#F2F2F2] font-bold mb-2 uppercase tracking-wide text-sm">
+            <label htmlFor="email" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#F2F2F2] sm:text-sm">
               Email *
             </label>
             <input
@@ -87,14 +87,14 @@ export default function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full bg-[#0C0C0C] border border-[#404040] text-[#F2F2F2] px-4 py-3 focus:outline-none focus:border-[#FFC96C] transition-colors"
+              className="w-full min-w-0 rounded-[2px] border border-[#404040] bg-[#0C0C0C] px-4 py-3 text-sm text-[#F2F2F2] transition-colors focus:border-[#FFC96C] focus:outline-none sm:text-base"
               placeholder="your.email@company.com"
             />
           </div>
 
           {/* Company */}
           <div>
-            <label htmlFor="company" className="block text-[#F2F2F2] font-bold mb-2 uppercase tracking-wide text-sm">
+            <label htmlFor="company" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#F2F2F2] sm:text-sm">
               Organization
             </label>
             <input
@@ -103,14 +103,14 @@ export default function ContactForm() {
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="w-full bg-[#0C0C0C] border border-[#404040] text-[#F2F2F2] px-4 py-3 focus:outline-none focus:border-[#FFC96C] transition-colors"
+              className="w-full min-w-0 rounded-[2px] border border-[#404040] bg-[#0C0C0C] px-4 py-3 text-sm text-[#F2F2F2] transition-colors focus:border-[#FFC96C] focus:outline-none sm:text-base"
               placeholder="Your organization name (optional)"
             />
           </div>
 
           {/* Message */}
           <div>
-            <label htmlFor="message" className="block text-[#F2F2F2] font-bold mb-2 uppercase tracking-wide text-sm">
+            <label htmlFor="message" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#F2F2F2] sm:text-sm">
               Message *
             </label>
             <textarea
@@ -120,20 +120,20 @@ export default function ContactForm() {
               onChange={handleChange}
               required
               rows={5}
-              className="w-full bg-[#0C0C0C] border border-[#404040] text-[#F2F2F2] px-4 py-3 focus:outline-none focus:border-[#FFC96C] transition-colors resize-none"
+              className="w-full min-w-0 resize-y rounded-[2px] border border-[#404040] bg-[#0C0C0C] px-4 py-3 text-sm text-[#F2F2F2] transition-colors focus:border-[#FFC96C] focus:outline-none sm:text-base"
               placeholder="Tell us about your needs..."
             />
           </div>
 
           {/* Status Messages */}
           {status === 'success' && (
-            <div className="bg-[#1A3A1A] border border-[#4CAF50] text-[#4CAF50] px-4 py-3">
+            <div className="rounded-[2px] border border-[#4CAF50] bg-[#1A3A1A] px-4 py-3 text-sm text-[#4CAF50] sm:text-base">
               ✓ Thank you! We'll get back to you within 24 hours.
             </div>
           )}
 
           {status === 'error' && (
-            <div className="bg-[#3A1A1A] border border-[#F44336] text-[#F44336] px-4 py-3">
+            <div className="rounded-[2px] border border-[#F44336] bg-[#3A1A1A] px-4 py-3 text-sm text-[#F44336] sm:text-base">
               ✗ {errorMessage}
             </div>
           )}
@@ -142,7 +142,7 @@ export default function ContactForm() {
           <AnimatedButton
             type="submit"
             disabled={status === 'submitting'}
-            className="w-full btn-system"
+            className="btn-system"
           >
             {status === 'submitting' ? 'SENDING...' : 'SEND MESSAGE'}
           </AnimatedButton>

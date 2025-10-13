@@ -12,50 +12,51 @@ export default function Platforms() {
   };
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-6 space-y-8">
-      <BackArrow />
-      <div>
-        <h1 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
+      <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 py-6 md:px-8">
+        <BackArrow />
+        <div className="space-y-2">
+          <h1 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] uppercase tracking-tight">
           PLATFORMS
         </h1>
-        <p className="text-[#B3B3B3]">
+          <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">
           Access and manage your platform instances and system status.
         </p>
-      </div>
+        </div>
 
       {/* Platform List */}
       <section className="space-y-6">
         {purchases.map((purchase) => (
-          <div key={purchase.id} className="panel-system p-6">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6 min-w-0">
-              <div className="flex items-start gap-4 min-w-0">
-                <div className="w-12 h-12 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
-                  <Target className="w-6 h-6 text-[#FFC96C]" />
+          <div key={purchase.id} className="panel-system flex flex-col gap-6 p-6">
+            <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div className="flex min-w-0 items-start gap-4">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[4px] bg-[#202020]">
+                  <Target className="h-6 w-6 text-[#FFC96C]" />
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-[#F2F2F2] font-bold text-lg md:text-xl uppercase tracking-tight mb-2 text-pretty">
+                <div className="min-w-0 space-y-2">
+                  <h3 className="h3 text-[#F2F2F2] uppercase tracking-tight text-pretty">
                     Management Portal
                   </h3>
-                  <p className="text-[#B3B3B3] text-sm mb-3">
+                  <p className="text-xs text-[#B3B3B3] text-pretty sm:text-sm">
                     {purchase.productName} • Purchased {purchase.purchaseDate}
                   </p>
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span className="text-[#B3B3B3] text-sm capitalize">{purchase.status}</span>
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <span className="capitalize text-[#B3B3B3]">{purchase.status}</span>
                     </div>
-                    <span className="text-[#B3B3B3] text-sm">•</span>
-                    <span className="text-[#B3B3B3] text-sm">board.yourorganization.com</span>
+                    <span className="text-[#B3B3B3]">•</span>
+                    <span className="break-all text-[#B3B3B3]">board.yourorganization.com</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-[#202020] pt-6 mb-6">
-              <h4 className="text-[#F2F2F2] font-bold mb-4 uppercase tracking-tight text-sm">
+            <div className="border-t border-[#202020] pt-6">
+              <h4 className="text-xs font-semibold uppercase tracking-tight text-[#F2F2F2] sm:text-sm">
                 Platform Features
               </h4>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <FeatureStat label="Active Initiatives" value="0" />
                 <FeatureStat label="Team Members" value="0" />
                 <FeatureStat label="Upcoming Events" value="0" />
@@ -64,20 +65,20 @@ export default function Platforms() {
             </div>
 
             <div className="border-t border-[#202020] pt-6">
-              <h4 className="text-[#F2F2F2] font-bold mb-4 uppercase tracking-tight text-sm">
+              <h4 className="text-xs font-semibold uppercase tracking-tight text-[#F2F2F2] sm:text-sm">
                 Quick Actions
               </h4>
-              <div className="flex flex-wrap gap-3">
-                <a 
+              <div className="mt-4 flex flex-wrap gap-3">
+                <a
                   href={purchase.platformUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-system flex items-center gap-2"
+                  className="btn-system"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Open Portal
                 </a>
-                <button 
+                <button
                   onClick={() => handleCopyLink(purchase.platformUrl)}
                   className="btn-system"
                 >
@@ -94,7 +95,7 @@ export default function Platforms() {
         <h2 className="h2 leading-tight text-balance text-[#F2F2F2] mb-4 uppercase tracking-tight">
           SYSTEM STATUS
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatCard
             icon={<Target className="w-5 h-5" />}
             label="Active Initiatives"
@@ -123,57 +124,58 @@ export default function Platforms() {
 
       {/* Urgent Actions */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h2 className="h2 leading-tight text-balance text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-[#FFC96C]" />
+            <AlertCircle className="h-5 w-5 text-[#FFC96C]" />
             URGENT ACTIONS
           </h2>
         </div>
-        <div className="panel-system p-8 text-center">
-          <CheckCircle className="w-12 h-12 text-[#FFC96C] mx-auto mb-4" />
-          <p className="text-[#B3B3B3]">No urgent actions! Great work.</p>
+        <div className="panel-system flex flex-col items-center gap-4 p-6 text-center sm:p-8">
+          <CheckCircle className="h-12 w-12 text-[#FFC96C]" />
+          <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">No urgent actions! Great work.</p>
         </div>
       </section>
 
       {/* Upcoming Events */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h2 className="h2 leading-tight text-balance text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-[#FFC96C]" />
+            <Calendar className="h-5 w-5 text-[#FFC96C]" />
             UPCOMING EVENTS
           </h2>
         </div>
-        <div className="panel-system p-8 text-center">
-          <Calendar className="w-12 h-12 text-[#B3B3B3] mx-auto mb-4" />
-          <p className="text-[#B3B3B3]">No upcoming events found.</p>
+        <div className="panel-system flex flex-col items-center gap-4 p-6 text-center sm:p-8">
+          <Calendar className="h-12 w-12 text-[#B3B3B3]" />
+          <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">No upcoming events found.</p>
         </div>
       </section>
+      </div>
     </div>
   );
 }
 
 function FeatureStat({ label, value }) {
   return (
-    <div className="panel-system p-3">
-      <div className="text-2xl font-bold text-[#F2F2F2] mb-1">{value}</div>
-      <div className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</div>
+    <div className="panel-system min-w-0 space-y-2 p-3 text-pretty">
+      <div className="text-[clamp(1.25rem,4vw,1.75rem)] font-bold text-[#F2F2F2]">{value}</div>
+      <div className="text-[10px] uppercase tracking-tight text-[#B3B3B3] sm:text-xs">{label}</div>
     </div>
   );
 }
 
 function StatCard({ icon, label, value, subValue }) {
   return (
-    <div className="panel-system p-4">
-      <div className="flex items-center justify-between mb-2">
+    <div className="panel-system flex min-w-0 flex-col gap-3 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-[#FFC96C]">{icon}</div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-[#F2F2F2]">
+          <div className="text-[clamp(1.5rem,4.5vw,2rem)] font-bold text-[#F2F2F2]">
             {value}
-            {subValue && <span className="text-[#B3B3B3] text-base ml-1">{subValue}</span>}
+            {subValue && <span className="ml-1 text-sm text-[#B3B3B3] sm:text-base">{subValue}</span>}
           </div>
         </div>
       </div>
-      <div className="text-[#B3B3B3] text-sm uppercase tracking-tight">{label}</div>
+      <div className="text-xs uppercase tracking-tight text-[#B3B3B3] sm:text-sm">{label}</div>
     </div>
   );
 }
