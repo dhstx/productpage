@@ -44,7 +44,7 @@ export default function EmailCapture() {
 
             {!submitted ? (
               <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <div className="flex-1 relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#B3B3B3]" />
                     <input
@@ -59,7 +59,7 @@ export default function EmailCapture() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-system whitespace-nowrap disabled:opacity-50"
+                    className="btn-system disabled:opacity-50"
                   >
                     {loading ? 'Sending...' : 'Download Free Guide'}
                   </button>

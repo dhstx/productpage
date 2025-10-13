@@ -237,7 +237,7 @@ export default function AgentManagement() {
             </div>
             <Link 
               to="/settings"
-              className="btn-system text-sm whitespace-nowrap"
+              className="btn-system text-sm"
             >
               Upgrade Plan
             </Link>
@@ -246,7 +246,7 @@ export default function AgentManagement() {
       )}
 
       {/* Compact Stats Bar - 4 columns with named stats and reduced height */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="panel-system p-3">
           <div className="text-center">
             <p className="text-[#B3B3B3] text-xs uppercase tracking-wide mb-1">Total Agents</p>

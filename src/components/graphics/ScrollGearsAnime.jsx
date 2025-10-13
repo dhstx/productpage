@@ -42,7 +42,8 @@ export default function ScrollGearsAnime({
 
   return (
     <div ref={rootRef} className={`relative ${className}`}>
-      <div className={`${sticky ? "sticky top-24" : ""} mx-auto max-w-5xl`}>
+      {/* Only stick at md+ to avoid overlap on small screens */}
+      <div className={`${sticky ? "md:sticky md:top-24" : ""} mx-auto max-w-5xl px-4`}>
         <div className="grid grid-cols-3 gap-6 items-center justify-items-center">
           <div ref={gear1Ref}>
             <Gear teeth={12} radius={44} color={color} />
