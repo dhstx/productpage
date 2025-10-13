@@ -138,15 +138,15 @@ export default function AIChatInterface() {
   const displayAgent = typedAgentText;
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-center justify-center px-6 py-20">
-      <div className="w-full max-w-4xl">
+    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6">
+      <div className="mx-auto w-full max-w-4xl">
         {/* AI Greeting */}
-        <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 flex justify-center items-center min-h-[4.5rem]">
-            <span className="inline-block">
-              <span className="text-[#B3B3B3] whitespace-pre">{displayPrefix}</span>
+        <div className="mb-12 text-center">
+          <h2 className="h2 mb-4 flex min-h-[4.5rem] items-center justify-center font-bold">
+            <span className="inline-flex flex-wrap justify-center gap-1 text-balance">
+              <span className="whitespace-pre text-[#B3B3B3]">{displayPrefix}</span>
               <span
-                className="relative inline-block whitespace-pre"
+                className="relative inline-block max-w-full whitespace-pre break-words"
                 style={{ color: currentAgentColor }}
               >
                 {displayAgent}
@@ -168,18 +168,18 @@ export default function AIChatInterface() {
           }}
         >
           {/* Agent Selector */}
-          <div className="flex justify-center mb-8">
-            <div className="relative">
+          <div className="mb-8 flex justify-center">
+            <div className="relative flex w-full max-w-xs flex-col items-center gap-2">
               <button
                 onClick={() => setShowAgentMenu(!showAgentMenu)}
-                className="px-6 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#F2F2F2] text-sm font-medium hover:bg-[#1A1A1A] transition-colors flex items-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-full border border-[#202020] bg-[#161616] px-5 py-2 text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-[#1A1A1A]"
               >
                 <Sparkles className="w-4 h-4 text-[#FFC96C]" />
                 Select Agent
               </button>
-              
+
               {showAgentMenu && (
-                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-64 bg-[#161616] border border-[#202020] rounded-[4px] shadow-xl z-10">
+                <div className="z-10 mt-2 w-full rounded-[4px] border border-[#202020] bg-[#161616] shadow-xl md:absolute md:left-1/2 md:top-full md:w-64 md:-translate-x-1/2">
                   {agents.map((agent) => (
                     <button
                       key={agent.name}
@@ -187,10 +187,10 @@ export default function AIChatInterface() {
                         setSelectedAgent(agent.name);
                         setShowAgentMenu(false);
                       }}
-                      className="w-full px-4 py-3 text-left hover:bg-[#1A1A1A] transition-colors flex items-center gap-3 border-b border-[#202020] last:border-0"
+                      className="flex w-full items-center gap-3 border-b border-[#202020] px-4 py-3 text-left transition-colors hover:bg-[#1A1A1A] last:border-0"
                     >
-                      <div 
-                        className="w-2 h-2 rounded-full" 
+                      <div
+                        className="h-2 w-2 rounded-full"
                         style={{ backgroundColor: agent.color }}
                       />
                       <span
@@ -207,52 +207,52 @@ export default function AIChatInterface() {
           </div>
 
           {/* Subtitle */}
-          <p className="text-[#B3B3B3] text-xl md:text-2xl text-center mb-12">
+          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty">
             What would you like to do today?
           </p>
           {/* Chat Input */}
           <form onSubmit={handleSubmit} className="relative">
-            <div className="panel-system p-6">
-              <div className="flex items-start gap-4">
+            <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
+              <div className="flex flex-wrap items-start gap-3 sm:flex-nowrap">
                 {/* Attachment Button */}
                 <button
                   type="button"
-                  className="mt-2 w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors flex-shrink-0"
+                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A]"
                   onClick={() => alert('File attachment coming soon')}
                 >
                   <Paperclip className="w-5 h-5 text-[#B3B3B3]" />
                 </button>
 
                 {/* Text Input */}
-                <div className="flex-grow">
+                <div className="min-w-0 flex-1">
                   <textarea
                     ref={textareaRef}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe what you need help with..."
-                    className="w-full bg-transparent text-[#F2F2F2] placeholder-[#666666] resize-none outline-none min-h-[24px] max-h-[200px]"
+                    className="max-h-[200px] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
                     rows={1}
                   />
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:flex-nowrap">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
+                    className="flex-1 rounded-full border border-transparent bg-[#202020] px-4 py-2 text-center text-sm font-medium text-[#B3B3B3] transition-colors hover:bg-[#2A2A2A] sm:flex-none"
                   >
                     Chat
                   </button>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-[#202020] rounded-full text-[#B3B3B3] text-sm font-medium hover:bg-[#2A2A2A] transition-colors"
+                    className="flex-1 rounded-full border border-transparent bg-[#202020] px-4 py-2 text-center text-sm font-medium text-[#B3B3B3] transition-colors hover:bg-[#2A2A2A] sm:flex-none"
                   >
                     AGI
                   </button>
                   <button
                     type="button"
-                    className="w-10 h-10 rounded-full bg-[#202020] flex items-center justify-center hover:bg-[#2A2A2A] transition-colors"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A]"
                     onClick={() => alert('Voice input coming soon')}
                   >
                     <Mic className="w-5 h-5 text-[#B3B3B3]" />
@@ -260,7 +260,7 @@ export default function AIChatInterface() {
                   <button
                     type="submit"
                     disabled={!message.trim()}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
                       message.trim()
                         ? 'bg-[#FFC96C] hover:bg-[#FFD700]'
                         : 'bg-[#202020] cursor-not-allowed'
@@ -284,7 +284,7 @@ export default function AIChatInterface() {
               <button
                 key={prompt}
                 onClick={() => setMessage(prompt)}
-                className="px-4 py-2 bg-[#161616] border border-[#202020] rounded-full text-[#B3B3B3] text-sm hover:bg-[#1A1A1A] hover:text-[#F2F2F2] hover:border-[#FFC96C] transition-colors"
+                className="w-full rounded-full border border-[#202020] bg-[#161616] px-4 py-2 text-sm text-[#B3B3B3] transition-colors hover:border-[#FFC96C] hover:bg-[#1A1A1A] hover:text-[#F2F2F2] sm:w-auto"
               >
                 {prompt}
               </button>

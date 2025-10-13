@@ -37,20 +37,21 @@ export default function AnimatedButton({ children, onClick, className = "", vari
     if (onClick) {onClick(e);}
   };
 
-  const baseClass = variant === "primary" 
-    ? "btn-system" 
-    : "px-4 py-2 rounded-[2px] border border-[#202020] bg-[#1A1A1A] text-[#F2F2F2] font-medium transition-colors";
+  const baseClass = variant === "primary"
+    ? "btn-system"
+    : "inline-flex w-full sm:w-auto max-w-full items-center justify-center gap-2 px-4 py-3 rounded-[2px] border border-[#202020] bg-[#1A1A1A] text-[#F2F2F2] font-medium transition-colors";
 
   // If asChild, wrap the children with the animation handlers
   if (asChild) {
     const child = children;
+    const wrapperClass = ["inline-block w-full sm:w-auto", className].filter(Boolean).join(" ");
     return (
       <div
         ref={buttonRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
-        className="inline-block"
+        className={wrapperClass}
       >
         {child}
       </div>

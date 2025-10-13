@@ -11,14 +11,14 @@ import PageTransition from '../components/PageTransition';
 export default function Landing() {
   return (
     <PageTransition>
-    <div className="min-h-screen bg-[#0C0C0C]">
-      <div>
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
+      <div className="relative flex flex-col">
         {/* Header */}
         <header className="border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur-sm">
           {/* mobile-first container; wrap CTAs on small screens to avoid overflow */}
-          <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4 flex justify-between items-center">
-            <div className="text-[#F2F2F2] text-xl font-bold tracking-tight">DHStx</div>
-            <div className="flex flex-wrap gap-3">
+          <div className="mx-auto flex w-full max-w-screen-xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:flex-nowrap md:px-8">
+            <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
+            <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
               <Link to="/product" className="btn-system">
                 Explore Platform
               </Link>
@@ -31,16 +31,16 @@ export default function Landing() {
 
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
-        <section className="mx-auto max-w-screen-xl px-4 md:px-8 pt-24 md:pt-32 pb-24 md:pb-48 min-h-[60vh] md:min-h-screen flex items-center">
+        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-24 pt-24 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
               <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE
               </h1>
-              <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
                 The all-in-one platform for management, strategic planning, and organizational excellence
               </p>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="flex flex-wrap justify-center gap-3">
                 <AnimatedButton asChild>
                   <Link to="/product" className="btn-system">
                     Explore Platform
@@ -60,13 +60,13 @@ export default function Landing() {
         <AIChatInterface />
 
         {/* Core Modules */}
-        <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
+        <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
           <FadeInSection>
             <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               CORE MODULES
             </h2>
           </FadeInSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <FadeInSection delay={0.1}>
               <ModuleCard
                 icon={<Target className="w-6 h-6" />}
@@ -109,8 +109,8 @@ export default function Landing() {
             <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-center">
               MISSION
             </h2>
-            <div className="panel-system p-8 max-w-4xl mx-auto">
-              <p className="text-[#F2F2F2] text-lg leading-relaxed text-center">
+            <div className="panel-system mx-auto max-w-4xl p-6 sm:p-8">
+              <p className="text-center text-[clamp(1rem,3.5vw,1.25rem)] leading-relaxed text-[#F2F2F2] text-pretty">
                 We empower organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Transform your organization from reactive to proactive, from scattered to strategic, from overwhelmed to empowered.
               </p>
             </div>
@@ -144,10 +144,10 @@ export default function Landing() {
 
 function ModuleCard({ icon, title, description }) {
   return (
-    <div className="panel-system p-6 hover:bg-[#202020] transition-colors duration-200 h-full flex flex-col">
-      <div className="text-[#FFC96C] mb-4">{icon}</div>
-      <h3 className="text-[#F2F2F2] font-bold mb-2 uppercase tracking-tight">{title}</h3>
-      <p className="text-[#B3B3B3] flex-grow">{description}</p>
+    <div className="panel-system flex h-full min-w-0 flex-col gap-4 p-6 transition-colors duration-200 hover:bg-[#202020]">
+      <div className="text-[#FFC96C] text-balance">{icon}</div>
+      <h3 className="h3 text-[#F2F2F2] uppercase tracking-tight">{title}</h3>
+      <p className="text-sm text-[#B3B3B3] text-pretty">{description}</p>
     </div>
   );
 }

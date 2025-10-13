@@ -40,49 +40,49 @@ export default function AIAgents() {
   ];
 
   return (
-    <section className="container mx-auto px-6 py-16">
+    <section className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6">
       <FadeInSection>
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+        <div className="mb-12 text-center">
+          <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
             AI-POWERED AGENTS
           </h2>
-          <p className="text-[#B3B3B3] text-lg max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
             Three specialized AI agents work behind the scenes to enhance your organization's effectiveness
           </p>
         </div>
       </FadeInSection>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {agents.map((agent, index) => (
           <FadeInSection key={agent.name} delay={0.1 * (index + 1)}>
-            <div className="panel-system p-8 h-full hover:bg-[#202020] transition-all duration-300 group">
+            <div className="panel-system group flex h-full min-w-0 flex-col gap-6 p-6 transition-all duration-300 hover:bg-[#202020]">
               {/* Icon */}
-              <div className="text-[#FFC96C] mb-6 transform group-hover:scale-110 transition-transform duration-300">
+              <div className="text-[#FFC96C] transition-transform duration-300 group-hover:scale-110">
                 {agent.icon}
               </div>
 
               {/* Name */}
-              <h3 className="text-[#F2F2F2] text-xl font-bold mb-4 uppercase tracking-tight">
+              <h3 className="h3 text-[#F2F2F2] uppercase tracking-tight">
                 {agent.name}
               </h3>
 
               {/* Description */}
-              <p className="text-[#B3B3B3] mb-6 leading-relaxed">
+              <p className="text-sm leading-relaxed text-[#B3B3B3] text-pretty">
                 {agent.description}
               </p>
 
               {/* Capabilities */}
-              <div className="space-y-2">
-                <div className="text-[#F2F2F2] text-sm font-bold uppercase tracking-wide mb-3">
+              <div className="space-y-3 text-pretty">
+                <div className="text-xs font-semibold uppercase tracking-wide text-[#F2F2F2] sm:text-sm">
                   Key Capabilities
                 </div>
                 <ul className="space-y-2">
                   {agent.capabilities.map((capability) => (
                     <li
                       key={capability}
-                      className="text-[#B3B3B3] text-sm flex items-start"
+                      className="flex items-start gap-2 text-xs text-[#B3B3B3] sm:text-sm"
                     >
-                      <span className="text-[#FFC96C] mr-2">▸</span>
+                      <span className="text-[#FFC96C]">▸</span>
                       {capability}
                     </li>
                   ))}
@@ -95,21 +95,21 @@ export default function AIAgents() {
 
       {/* Additional Info */}
       <FadeInSection delay={0.4}>
-        <div className="mt-12 panel-system p-8 bg-[#1A1A1A] border border-[#FFC96C]/20 max-w-4xl mx-auto">
-          <div className="text-center">
-            <div className="text-[#FFC96C] mb-4 flex justify-center">
-              <Lightbulb className="w-6 h-6" />
+        <div className="mx-auto mt-12 max-w-4xl">
+          <div className="panel-system flex flex-col items-center gap-4 border border-[#FFC96C]/20 bg-[#1A1A1A] p-6 text-center sm:p-8">
+            <div className="flex justify-center text-[#FFC96C]">
+              <Lightbulb className="h-6 w-6" />
             </div>
-            <h4 className="text-[#F2F2F2] font-bold mb-4 uppercase tracking-tight">
+            <h4 className="h3 text-[#F2F2F2] uppercase tracking-tight">
               Continuous Learning
             </h4>
-            <p className="text-[#B3B3B3] mb-6">
-              Our AI agents continuously learn from your organization's patterns and preferences, 
-              becoming more effective over time. They adapt to your unique workflows and provide 
+            <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">
+              Our AI agents continuously learn from your organization's patterns and preferences,
+              becoming more effective over time. They adapt to your unique workflows and provide
               increasingly personalized recommendations as they understand your needs better.
             </p>
-            <Link to="/agent-management" className="btn-system inline-flex items-center gap-2">
-              <Bot className="w-4 h-4" />
+            <Link to="/agent-management" className="btn-system">
+              <Bot className="h-4 w-4" />
               View All 12 AI Agents
             </Link>
           </div>
