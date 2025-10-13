@@ -58,81 +58,72 @@ export default function FeatureComparison() {
 
   return (
     <section id="pricing" className="py-24 bg-[#0C0C0C] border-t border-[#202020]">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+      <div className="mx-auto max-w-screen-xl px-4 md:px-8">
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="h2 leading-tight text-balance text-[#F2F2F2] mb-3 uppercase tracking-tight">
             FEATURE COMPARISON
           </h2>
-          <p className="text-[#B3B3B3] text-lg">
+          <p className="text-[#B3B3B3] text-base md:text-lg">
             Choose the plan that fits your organization's needs
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto overflow-x-auto">
-          <table className="w-full border-collapse">
-            {/* Header */}
-            <thead>
-              <tr className="border-b border-[#202020]">
-                <th className="text-left p-4 text-[#F2F2F2] font-medium uppercase tracking-tight">
-                  Features
-                </th>
-                <th className="text-center p-4 min-w-[150px]">
-                  <div className="text-[#F2F2F2] font-bold mb-1">STARTER</div>
-                  <div className="text-[#FFC96C] text-2xl font-bold">$999</div>
-                  <div className="text-[#B3B3B3] text-sm">/month</div>
-                </th>
-                <th className="text-center p-4 min-w-[150px] bg-[#0C0C0C]">
-                  <div className="inline-block px-3 py-1 bg-[#FFC96C] text-[#0C0C0C] text-xs font-bold rounded mb-2">
-                    MOST POPULAR
-                  </div>
-                  <div className="text-[#F2F2F2] font-bold mb-1">PROFESSIONAL</div>
-                  <div className="text-[#FFC96C] text-2xl font-bold">$2,499</div>
-                  <div className="text-[#B3B3B3] text-sm">/month</div>
-                </th>
-                <th className="text-center p-4 min-w-[150px]">
-                  <div className="text-[#F2F2F2] font-bold mb-1">ENTERPRISE</div>
-                  <div className="text-[#FFC96C] text-2xl font-bold">$5,999</div>
-                  <div className="text-[#B3B3B3] text-sm">/month</div>
-                </th>
-              </tr>
-            </thead>
+        {/* Mobile-first stacked pricing cards; avoid horizontal scroll */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+          <PlanCard name="STARTER" price="$999" highlight={false} />
+          <PlanCard name="PROFESSIONAL" price="$2,499" highlight>
+            <div className="inline-block px-2 py-1 bg-[#FFC96C] text-[#0C0C0C] text-[10px] font-bold rounded mb-2">
+              MOST POPULAR
+            </div>
+          </PlanCard>
+          <PlanCard name="ENTERPRISE" price="$5,999" highlight={false} />
+        </div>
 
-            {/* Body */}
-            <tbody>
-              {features.map((category, categoryIndex) => (
-                <React.Fragment key={categoryIndex}>
-                  <tr className="border-t border-[#202020]">
-                    <td colSpan="4" className="p-4 bg-[#0C0C0C]">
-                      <h3 className="text-[#FFC96C] font-bold uppercase tracking-tight text-sm">
-                        {category.category}
-                      </h3>
-                    </td>
-                  </tr>
-                  {category.items.map((item, itemIndex) => (
-                    <tr
-                      key={itemIndex}
-                      className="border-t border-[#202020] hover:bg-[#0C0C0C] transition-colors"
-                    >
-                      <td className="p-4 text-[#F2F2F2]">{item.name}</td>
-                      <td className="p-4 text-center">{renderValue(item.starter)}</td>
-                      <td className="p-4 text-center bg-[#0C0C0C]">{renderValue(item.professional)}</td>
-                      <td className="p-4 text-center">{renderValue(item.enterprise)}</td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+        {/* Features listed as vertical stacks with break-words */}
+        <div className="mt-10 space-y-6">
+          {features.map((category, idx) => (
+            <div key={idx} className="space-y-3">
+              <h3 className="text-[#FFC96C] font-bold uppercase tracking-tight text-xs md:text-sm">
+                {category.category}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {category.items.map((item, jdx) => (
+                  <div key={jdx} className="panel-system p-4 space-y-2 min-w-0 break-words">
+                    <div className="text-[#F2F2F2] text-sm md:text-base">
+                      {item.name}
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div>{renderValue(item.starter)}</div>
+                      <div className="bg-[#0C0C0C]">{renderValue(item.professional)}</div>
+                      <div>{renderValue(item.enterprise)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* CTA - Only Get Started button */}
         <div className="mt-10 text-center">
-          <a href="/login" className="btn-system">
+          <a href="/login" className="btn-system w-full sm:w-auto">
             Get Started
           </a>
         </div>
       </div>
     </section>
+  );
+}
+
+function PlanCard({ name, price, highlight, children }) {
+  return (
+    <div className={`panel-system p-6 flex flex-col items-center text-center ${highlight ? 'ring-1 ring-[#FFC96C]/40' : ''}`}>
+      {children}
+      <div className="text-[#F2F2F2] font-bold mb-1">{name}</div>
+      <div className="text-[#FFC96C] text-2xl font-bold">{price}</div>
+      <div className="text-[#B3B3B3] text-sm">/month</div>
+      <a href="/login" className="btn-system w-full mt-4">Select</a>
+    </div>
   );
 }
 

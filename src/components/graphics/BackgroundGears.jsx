@@ -114,7 +114,7 @@ export default function BackgroundGears({ color = "#FFC96C", opacity = 0.18 }) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 pointer-events-none overflow-hidden"
+      className="absolute md:fixed inset-0 -z-10 pointer-events-none overflow-hidden md:scale-100 scale-75"
       style={{
         zIndex: 0,
         opacity: opacity,

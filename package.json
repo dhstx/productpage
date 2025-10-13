@@ -37,6 +37,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
+    "mobile:test": "vitest run -c --reporter basic --dir src --environment jsdom",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "api": "node api/server.js",

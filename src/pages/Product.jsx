@@ -12,12 +12,12 @@ export default function Product() {
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 text-[#B3B3B3] hover:text-[#FFC96C] transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span className="text-[#F2F2F2] text-xl font-bold tracking-tight">DHStx</span>
           </Link>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-3">
             <Link to="/login" className="btn-system">
               Account Login
             </Link>
@@ -25,20 +25,20 @@ export default function Product() {
         </div>
       </header>
 
-      <main className="product-page-main">
+      <main>
         {/* Platform Overview */}
         <FadeInSection>
-          <section className="container mx-auto px-6 py-16">
+          <section className="mx-auto max-w-screen-xl px-4 md:px-8 pt-24 md:pt-32 pb-12">
             <div className="text-center mb-4">
               <span className="text-[#FFC96C] text-sm uppercase tracking-wider">PLATFORM OVERVIEW</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
+            <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
               COMPLETE BOARD MANAGEMENT SYSTEM
             </h1>
             <p className="text-xl text-[#B3B3B3] mb-12 max-w-3xl mx-auto text-center">
               The all-in-one platform for management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               <Link to="/login" className="btn-system">
                 Request Demo
               </Link>
@@ -48,11 +48,11 @@ export default function Product() {
 
         {/* Core Features */}
         <FadeInSection>
-          <section className="container mx-auto px-6 py-16">
+          <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
             <div className="text-center mb-4">
               <span className="text-[#FFC96C] text-sm uppercase tracking-wider">CORE FEATURES</span>
             </div>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               EVERYTHING YOU NEED
             </h2>
             <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -90,11 +90,11 @@ export default function Product() {
 
         {/* Enterprise Grade */}
         <FadeInSection>
-          <section className="container mx-auto px-6 py-16">
+          <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
             <div className="text-center mb-4">
               <span className="text-[#FFC96C] text-sm uppercase tracking-wider">ENTERPRISE GRADE</span>
             </div>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               BUILT FOR SCALE
             </h2>
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -128,15 +128,15 @@ export default function Product() {
 
         {/* CTA */}
         <FadeInSection>
-          <section className="container mx-auto px-6 py-16">
+          <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
             <div className="panel-system p-12 text-center max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
                 READY TO TRANSFORM YOUR ORGANIZATION?
               </h2>
               <p className="text-[#B3B3B3] mb-8 text-lg">
                 Join organizations that have modernized their operations. Schedule a demo today.
               </p>
-              <div className="flex gap-4 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center">
                 <Link to="/login" className="btn-system">
                   Get Started
                 </Link>
@@ -165,8 +165,8 @@ export default function Product() {
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
-        <div className="container mx-auto px-6 py-8">
-          <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8 pb-safe">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center text-[#B3B3B3] text-sm">
             <p>© 2025 Management Platform. All rights reserved.</p>
             <p>Empowering organizations worldwide</p>
           </div>
