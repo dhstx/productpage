@@ -10,24 +10,18 @@ export default function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    const user = login(email, password);
+
+    const user = await login(email, password);
     if (user) {
       navigate('/dashboard');
-    } else {
-      // Check if user exists in Supabase (simulated for now)
-      // In production, this would check Supabase database
-      const userExists = false; // Replace with actual Supabase check
-      
-      if (!userExists) {
-        setError('Account not found. Please create an account first.');
-      } else {
-        setError('Invalid credentials. Please check your password.');
-      }
+      return;
     }
+
+    // Login failed
+    setError('Invalid credentials or account not found.');
   };
 
   return (

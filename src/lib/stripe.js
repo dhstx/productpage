@@ -1,11 +1,15 @@
 // Stripe configuration and utilities
 import { loadStripe } from '@stripe/stripe-js';
 
-// Initialize Stripe with publishable key
-export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_live_51QJLQfB0VqDMH290oWRNQRRxRCEqhTgPxJRVMQXqjMBKI0UQqJCLEHSCMVGrjN2mLZBRGKFh0Zzq1rkSqnEYFfPb00Wy3xfvWc';
+// Initialize Stripe with publishable key (no hardcoded fallback)
+export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
 
 let stripePromise;
 const getStripe = () => {
+  if (!STRIPE_PUBLISHABLE_KEY) {
+    console.warn('VITE_STRIPE_PUBLISHABLE_KEY is not set. Stripe is disabled.');
+    return null;
+  }
   if (!stripePromise) {
     stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
   }
