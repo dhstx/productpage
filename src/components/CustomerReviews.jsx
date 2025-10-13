@@ -206,7 +206,7 @@ export default function CustomerReviews() {
           </div>
 
           {/* Industry Filter */}
-          <div className="flex items-center gap-4 mb-8 overflow-x-auto pb-4">
+            <div className="flex items-center gap-4 mb-8 overflow-x-auto pb-4">
             <div className="flex items-center gap-2 text-[#B3B3B3] flex-shrink-0">
               <Filter className="w-4 h-4" />
               <span className="text-sm uppercase tracking-tight font-bold">Filter:</span>
@@ -216,7 +216,7 @@ export default function CustomerReviews() {
                 <button
                   key={industry}
                   onClick={() => setSelectedFilter(industry)}
-                  className={`px-4 py-2 rounded-[4px] border text-sm uppercase tracking-tight font-bold transition-colors whitespace-nowrap ${
+                  className={`px-4 py-2 rounded-[4px] border text-sm uppercase tracking-tight font-bold transition-colors ${
                     selectedFilter === industry
                       ? 'bg-[#FFC96C] text-[#0C0C0C] border-[#FFC96C]'
                       : 'bg-[#1A1A1A] text-[#F2F2F2] border-[#202020] hover:border-[#FFC96C]'
@@ -252,7 +252,7 @@ export default function CustomerReviews() {
                       <div className="text-sm text-[#B3B3B3]">{review.company}</div>
                     </div>
                   </div>
-                  <div className="text-xs text-[#B3B3B3] whitespace-nowrap">{review.date}</div>
+                  <div className="text-xs text-[#B3B3B3]">{review.date}</div>
                 </div>
 
                 {/* Rating */}

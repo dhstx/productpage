@@ -90,14 +90,16 @@
 
 /* Typography clamp scales for mobile-first headings */
 :root {
-  --h1: clamp(1.75rem, 6vw, 3rem);
-  --h2: clamp(1.25rem, 4.5vw, 2.25rem);
-  --h3: clamp(1.125rem, 4vw, 1.75rem);
+  /* Adjusted to ensure no overflow on 360–430px devices */
+  --h1: clamp(1.5rem, 6vw, 3rem);
+  --h2: clamp(1.25rem, 5vw, 2.25rem);
+  --h3: clamp(1rem, 4vw, 1.5rem);
 }
 
+/* Ensure headings wrap/shrink gracefully */
 .h1 { font-size: var(--h1); line-height: 1.1; text-wrap: balance; word-break: break-word; }
-.h2 { font-size: var(--h2); line-height: 1.15; text-wrap: pretty; word-break: break-word; }
-.h3 { font-size: var(--h3); line-height: 1.2; text-wrap: pretty; word-break: break-word; }
+.h2 { font-size: var(--h2); line-height: 1.1; text-wrap: balance; word-break: break-word; }
+.h3 { font-size: var(--h3); line-height: 1.1; text-wrap: balance; word-break: break-word; }
 
 @layer base {
   * {
@@ -105,11 +107,13 @@
   }
   
   html, body, #root {
-    @apply min-h-screen w-full;
+    /* Containment defaults */
+    @apply min-h-screen w-full max-w-screen overflow-x-hidden;
   }
 
   #root {
-    @apply overflow-x-hidden;
+    /* Prevent horizontal scroll at app root */
+    @apply overflow-x-hidden min-w-0;
   }
 
   body {
@@ -130,8 +134,8 @@
 @layer components {
   /* DHStx System Buttons */
   .btn-system {
-    /* Make system buttons flexible and wrap-safe on small viewports */
-    @apply inline-flex w-full sm:w-auto max-w-full items-center justify-center gap-2 px-4 py-3 rounded-[2px] border border-[#202020] bg-[#C0C0C0] text-black font-medium transition-all duration-200 text-pretty text-balance;
+    /* Make system buttons wrap-safe, full-width on mobile */
+    @apply inline-flex w-full sm:w-auto max-w-full items-center justify-center gap-2 px-4 py-3 rounded-[2px] border border-[#202020] bg-[#C0C0C0] text-black font-medium transition-all duration-200 text-pretty text-balance break-words overflow-hidden;
   }
   
   .btn-system:hover,
@@ -182,6 +186,16 @@
 }
 
 @layer utilities {
+  /* Global wrap utilities mirroring spec */
+  .overflow-wrap-anywhere { overflow-wrap: anywhere; }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .break-words { word-break: break-word; overflow-wrap: break-word; }
+
+  /* Ensure flex/grid children can shrink to avoid overflow */
+  .min-w-0 { min-width: 0; }
+  .max-w-screen { max-width: 100vw; }
+
   .tracking-tighter {
     letter-spacing: -0.05em;
   }

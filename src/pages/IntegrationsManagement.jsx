@@ -229,7 +229,7 @@ export default function IntegrationsManagement() {
             </div>
             <Link 
               to="/settings"
-              className="btn-system text-sm whitespace-nowrap"
+              className="btn-system text-sm"
             >
               Upgrade Plan
             </Link>
