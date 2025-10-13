@@ -1,14 +1,9 @@
 // Vercel Serverless Function for Stripe Checkout
 // This creates a Stripe Checkout session for subscription payments
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
 
-// Product price IDs - these should match your Stripe Dashboard
-const PRICE_IDS = {
-  starter: process.env.STRIPE_PRICE_STARTER || 'price_starter_monthly',
-  professional: process.env.STRIPE_PRICE_PROFESSIONAL || 'price_professional_monthly',
-  enterprise: process.env.STRIPE_PRICE_ENTERPRISE || 'price_enterprise_monthly'
-};
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '');
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -70,9 +65,9 @@ export default async function handler(req, res) {
       }
     });
 
-    return res.status(200).json({ 
-      id: session.id,
-      url: session.url 
+    return res.status(200).json({
+      sessionId: session.id,
+      url: session.url
     });
 
   } catch (error) {

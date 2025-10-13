@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
 import { getCurrentUser, logout, SUBSCRIPTION_TIERS } from '../lib/auth';
-import { downloadInvoicePDF } from '../lib/stripe';
+import { downloadInvoicePDF, initializeStripeCheckout } from '../lib/stripe';
 
 const SECTION_CONFIG = [
   { id: 'billing', label: 'Billing', icon: CreditCard },
@@ -205,13 +205,18 @@ function BillingSection({ user }) {
     { id: 'inv_2025-08', date: 'Aug 1, 2025', amount: currentPlan.monthlyPrice, status: 'Paid' }
   ];
 
-  const handleUpgrade = (tierId) => {
+  const handleUpgrade = async (tierId) => {
     if (tierId === SUBSCRIPTION_TIERS.ENTERPRISE) {
       window.alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
       return;
     }
 
-    window.location.href = `/api/create-checkout-session?plan=${tierId}&billing=${billingPeriod}`;
+    try {
+      await initializeStripeCheckout(tierId, { email: user?.email });
+    } catch (error) {
+      console.error('Upgrade error:', error);
+      window.alert('Unable to start the upgrade process. Please try again or contact support.');
+    }
   };
 
   const handleDowngrade = (tierId) => {
