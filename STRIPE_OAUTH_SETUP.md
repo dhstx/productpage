@@ -27,17 +27,18 @@ The following products and prices have been created in your Stripe account:
 
    To complete the Stripe integration, you need to create backend API endpoints:
 
-   **POST `/api/create-checkout-session`**
-   ```javascript
-   // Example using Node.js + Express
-   const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-   
-   app.post('/api/create-checkout-session', async (req, res) => {
-     const { priceId, successUrl, cancelUrl, customerEmail } = req.body;
-     
-     try {
-       const session = await stripe.checkout.sessions.create({
-         mode: 'subscription',
+  **POST `/api/stripe/create-checkout-session`**
+  ```javascript
+  // Example using Node.js + Express (ESM)
+  import Stripe from 'stripe';
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+  app.post('/api/stripe/create-checkout-session', async (req, res) => {
+    const { priceId, successUrl, cancelUrl, customerEmail } = req.body;
+
+    try {
+      const session = await stripe.checkout.sessions.create({
+        mode: 'subscription',
          payment_method_types: ['card'],
          line_items: [{
            price: priceId,
@@ -49,21 +50,21 @@ The following products and prices have been created in your Stripe account:
          allow_promotion_codes: true,
        });
        
-       res.json({ id: session.id });
-     } catch (error) {
-       res.status(500).json({ error: error.message });
-     }
-   });
-   ```
+      res.json({ sessionId: session.id, url: session.url });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  ```
 
-   **GET `/api/invoices/:invoiceId/pdf`**
-   ```javascript
-   app.get('/api/invoices/:invoiceId/pdf', async (req, res) => {
-     const { invoiceId } = req.params;
-     
-     try {
-       const invoice = await stripe.invoices.retrieve(invoiceId);
-       
+  **GET `/api/stripe/invoices/:invoiceId/pdf`**
+  ```javascript
+  app.get('/api/stripe/invoices/:invoiceId/pdf', async (req, res) => {
+    const { invoiceId } = req.params;
+
+    try {
+      const invoice = await stripe.invoices.retrieve(invoiceId);
+
        // Generate PDF from invoice data
        const pdf = await generateInvoicePDF(invoice);
        
@@ -71,15 +72,15 @@ The following products and prices have been created in your Stripe account:
        res.setHeader('Content-Disposition', `attachment; filename="invoice-${invoiceId}.pdf"`);
        res.send(pdf);
      } catch (error) {
-       res.status(500).json({ error: error.message });
-     }
-   });
-   ```
+      res.status(500).json({ error: error.message });
+    }
+  });
+  ```
 
-   **GET `/api/customers/:customerId/invoices`**
-   ```javascript
-   app.get('/api/customers/:customerId/invoices', async (req, res) => {
-     const { customerId } = req.params;
+  **GET `/api/stripe/customers/:customerId/invoices`**
+  ```javascript
+  app.get('/api/stripe/customers/:customerId/invoices', async (req, res) => {
+    const { customerId } = req.params;
      
      try {
        const invoices = await stripe.invoices.list({

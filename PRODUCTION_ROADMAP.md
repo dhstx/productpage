@@ -389,7 +389,7 @@ This roadmap outlines everything needed to transform DHStx from a demo platform 
 
 - [ ] **Invoice PDF Generation**
   ```javascript
-  // /api/invoices/[id]/pdf.js
+  // /api/stripe/invoices/[id]/pdf.js
   import PDFDocument from 'pdfkit';
   import Stripe from 'stripe';
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

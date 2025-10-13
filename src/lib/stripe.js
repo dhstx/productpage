@@ -98,11 +98,14 @@ export async function createCheckoutSession(priceId, options = {}) {
       'price_1SG8gKB0VqDMH290XeuHz84l': 'https://buy.stripe.com/test_enterprise_link'
     };
 
+    const token = localStorage.getItem('authToken');
+
     // Create a checkout session via backend API
-    const response = await fetch('/api/create-checkout-session', {
+    const response = await fetch('/api/stripe/create-checkout-session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
       },
       body: JSON.stringify({
         priceId: priceId,
@@ -126,10 +129,15 @@ export async function createCheckoutSession(priceId, options = {}) {
     }
 
     const session = await response.json();
-    
+
+    if (session?.url) {
+      window.location.href = session.url;
+      return;
+    }
+
     // Redirect to Stripe Checkout
     const result = await stripe.redirectToCheckout({
-      sessionId: session.id,
+      sessionId: session.sessionId || session.id,
     });
 
     if (result.error) {
@@ -147,9 +155,10 @@ export async function createCheckoutSession(priceId, options = {}) {
         `Plan: ${product.name}\n` +
         `Price: $${product.price}/month\n\n` +
         `To complete checkout:\n` +
-        `1. Backend API endpoint needed at /api/create-checkout-session\n` +
+        `1. Backend API endpoint needed at /api/stripe/create-checkout-session\n` +
         `2. Or use Stripe Payment Links\n` +
-        `3. Configure webhook handlers for subscription events\n\n` +
+        `3. Configure webhook handlers for subscription events\n` +
+        `4. Ensure authenticated requests include a JWT\n\n` +
         `Price ID: ${priceId}`
       );
     }
@@ -172,16 +181,23 @@ export async function downloadInvoicePDF(invoiceId) {
   try {
     // In production, this would call your backend API which uses Stripe API
     // to retrieve the invoice and generate/return the PDF
-    
-    const response = await fetch(`/api/invoices/${invoiceId}/pdf`, {
+
+    const token = localStorage.getItem('authToken');
+
+    const response = await fetch(`/api/stripe/invoices/${invoiceId}/pdf`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
       },
     });
 
     if (!response.ok) {
       throw new Error('Failed to download invoice');
+    }
+
+    if (response.redirected && response.url) {
+      window.location.href = response.url;
+      return;
     }
 
     // Get the PDF blob
@@ -205,7 +221,7 @@ export async function downloadInvoicePDF(invoiceId) {
       `📄 Invoice Download\n\n` +
       `Invoice ID: ${invoiceId}\n\n` +
       `In production, this would:\n` +
-      `1. Call backend API: GET /api/invoices/${invoiceId}/pdf\n` +
+        `1. Call backend API: GET /api/stripe/invoices/${invoiceId}/pdf\n` +
       `2. Backend retrieves invoice from Stripe API\n` +
       `3. Generate PDF using invoice data\n` +
       `4. Return PDF file for download\n\n` +
@@ -215,14 +231,16 @@ export async function downloadInvoicePDF(invoiceId) {
 }
 
 // Get customer invoices from Stripe
-export async function getCustomerInvoices(customerId) {
-  try {
-    const response = await fetch(`/api/customers/${customerId}/invoices`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-      },
-    });
+  export async function getCustomerInvoices(customerId) {
+    try {
+      const token = localStorage.getItem('authToken');
+
+      const response = await fetch(`/api/stripe/customers/${customerId}/invoices`, {
+        method: 'GET',
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+      });
 
     if (!response.ok) {
       throw new Error('Failed to fetch invoices');
