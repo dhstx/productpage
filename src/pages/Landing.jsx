@@ -15,9 +15,10 @@ export default function Landing() {
       <div>
         {/* Header */}
         <header className="border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          {/* mobile-first container; wrap CTAs on small screens to avoid overflow */}
+          <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4 flex justify-between items-center">
             <div className="text-[#F2F2F2] text-xl font-bold tracking-tight">DHStx</div>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-3">
               <Link to="/product" className="btn-system">
                 Explore Platform
               </Link>
@@ -29,16 +30,17 @@ export default function Landing() {
         </header>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-6 pt-32 pb-48 min-h-screen flex items-center">
+        {/* clamp heading via .h1, keep hero centered within ~4xl */}
+        <section className="mx-auto max-w-screen-xl px-4 md:px-8 pt-24 md:pt-32 pb-24 md:pb-48 min-h-[60vh] md:min-h-screen flex items-center">
           <FadeInSection>
-            <div className="max-w-4xl">
-              <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE
               </h1>
-              <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl">
+              <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
                 The all-in-one platform for management, strategic planning, and organizational excellence
               </p>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-3 justify-center">
                 <AnimatedButton asChild>
                   <Link to="/product" className="btn-system">
                     Explore Platform
@@ -58,13 +60,13 @@ export default function Landing() {
         <AIChatInterface />
 
         {/* Core Modules */}
-        <section className="container mx-auto px-6 py-16">
+        <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
           <FadeInSection>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               CORE MODULES
             </h2>
           </FadeInSection>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <FadeInSection delay={0.1}>
               <ModuleCard
                 icon={<Target className="w-6 h-6" />}
@@ -102,9 +104,9 @@ export default function Landing() {
         </FadeInSection>
 
         {/* Mission */}
-        <section className="container mx-auto px-6 py-16">
+        <section className="mx-auto max-w-screen-xl px-4 md:px-8 py-16">
           <FadeInSection>
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-center">
+            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-center">
               MISSION
             </h2>
             <div className="panel-system p-8 max-w-4xl mx-auto">
@@ -127,8 +129,8 @@ export default function Landing() {
 
         {/* Footer */}
         <footer className="border-t border-[#202020] mt-24 bg-[#0C0C0C]/95 backdrop-blur-sm">
-          <div className="container mx-auto px-6 py-8">
-            <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
+          <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8 pb-safe">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center text-[#B3B3B3] text-sm">
               <p>© 2025 Management Platform. All rights reserved.</p>
               <p>Empowering organizations worldwide</p>
             </div>

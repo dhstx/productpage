@@ -1,10 +1,10 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, X, Users, ChevronDown, Bot, Zap } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
@@ -35,8 +35,8 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen bg-[#0C0C0C]">
       {/* Header */}
-      <header className="border-b border-[#202020] bg-[#0C0C0C] sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+      <header className="border-b border-[#202020] bg-[#0C0C0C] md:sticky top-0 z-50">
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
               <Link to="/" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
@@ -108,61 +108,63 @@ export default function AdminLayout({ children }) {
                 )}
               </div>
 
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden text-[#F2F2F2] p-2"
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+              {/* Mobile Sheet Navigation */}
+              <div className="md:hidden">
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <button className="text-[#F2F2F2] p-2" aria-label="Open navigation">
+                      <Menu className="w-6 h-6" />
+                    </button>
+                  </SheetTrigger>
+                  <SheetContent side="left" className="w-full max-w-[28rem] mx-0 px-0">
+                    <SheetHeader className="sr-only">
+                      <SheetTitle>Navigation</SheetTitle>
+                    </SheetHeader>
+                    <nav className="px-4 py-4 space-y-2">
+                      {navigation.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location.pathname === item.href;
+                        return (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors ${
+                              isActive
+                                ? 'bg-[#1A1A1A] text-[#FFC96C]'
+                                : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
+                            }`}
+                          >
+                            <Icon className="w-5 h-5" />
+                            <span className="uppercase tracking-tight">{item.name}</span>
+                          </Link>
+                        );
+                      })}
+                      <button
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <LogOut className="w-5 h-5" />
+                        <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+                      </button>
+                    </nav>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-[#202020] pt-4">
-              <nav className="space-y-2">
-                {navigation.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.href;
-                  return (
-                    <Link
-                      key={item.name}
-                      to={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors ${
-                        isActive
-                          ? 'bg-[#1A1A1A] text-[#FFC96C]'
-                          : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      <span className="uppercase tracking-tight">{item.name}</span>
-                    </Link>
-                  );
-                })}
-                <button
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                  className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
-                </button>
-              </nav>
-            </div>
-          )}
+          {/* Mobile Menu removed in favor of Sheet */}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-8">
+      <main className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
         {children}
       </main>
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
-        <div className="container mx-auto px-6 py-8">
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
           <div className="text-center text-[#B3B3B3] text-sm">
             <p className="uppercase tracking-tight">System Management</p>
           </div>

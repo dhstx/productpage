@@ -64,7 +64,7 @@ export default function BackArrow() {
       aria-label="Return to previous page"
       onClick={handleActivate}
       onKeyDown={handleKeyDown}
-      className="fixed left-1.5 sm:left-3 md:left-4 top-1/2 -translate-y-1/2 z-50 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#1F1F1F]/70 text-[#8A8A8A] backdrop-blur-sm shadow-lg transition-all duration-200 ease-out hover:-translate-x-1 hover:bg-[#1F1F1F]/85 hover:text-[#F2F2F2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0C0C0C] cursor-pointer animate-pulse"
+      className="md:fixed md:left-4 md:top-1/2 md:-translate-y-1/2 z-50 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#1F1F1F]/70 text-[#8A8A8A] backdrop-blur-sm shadow-lg transition-all duration-200 ease-out md:hover:-translate-x-1 hover:bg-[#1F1F1F]/85 hover:text-[#F2F2F2] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0C0C0C] cursor-pointer animate-pulse"
       style={{ animationDuration: '2.8s' }}
     >
       <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />

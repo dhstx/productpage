@@ -12,10 +12,10 @@ export default function Platforms() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-6 space-y-8">
       <BackArrow />
       <div>
-        <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+        <h1 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
           PLATFORMS
         </h1>
         <p className="text-[#B3B3B3]">
@@ -27,19 +27,19 @@ export default function Platforms() {
       <section className="space-y-6">
         {purchases.map((purchase) => (
           <div key={purchase.id} className="panel-system p-6">
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-start gap-4">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6 min-w-0">
+              <div className="flex items-start gap-4 min-w-0">
                 <div className="w-12 h-12 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
                   <Target className="w-6 h-6 text-[#FFC96C]" />
                 </div>
-                <div>
-                  <h3 className="text-[#F2F2F2] font-bold text-xl uppercase tracking-tight mb-2">
+                <div className="min-w-0">
+                  <h3 className="text-[#F2F2F2] font-bold text-lg md:text-xl uppercase tracking-tight mb-2 text-pretty">
                     Management Portal
                   </h3>
                   <p className="text-[#B3B3B3] text-sm mb-3">
                     {purchase.productName} • Purchased {purchase.purchaseDate}
                   </p>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500"></div>
                       <span className="text-[#B3B3B3] text-sm capitalize">{purchase.status}</span>
@@ -91,10 +91,10 @@ export default function Platforms() {
 
       {/* System Status */}
       <section>
-        <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+        <h2 className="h2 leading-tight text-balance text-[#F2F2F2] mb-4 uppercase tracking-tight">
           SYSTEM STATUS
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             icon={<Target className="w-5 h-5" />}
             label="Active Initiatives"
@@ -124,7 +124,7 @@ export default function Platforms() {
       {/* Urgent Actions */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
+          <h2 className="h2 leading-tight text-balance text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-[#FFC96C]" />
             URGENT ACTIONS
           </h2>
@@ -138,7 +138,7 @@ export default function Platforms() {
       {/* Upcoming Events */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
+          <h2 className="h2 leading-tight text-balance text-[#F2F2F2] uppercase tracking-tight flex items-center gap-2">
             <Calendar className="w-5 h-5 text-[#FFC96C]" />
             UPCOMING EVENTS
           </h2>
