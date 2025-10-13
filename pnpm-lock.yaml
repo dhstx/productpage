@@ -252,8 +252,8 @@ importers:
         specifier: ^16.0.0
         version: 16.1.0
       googleapis:
-        specifier: ^161.0.0
-        version: 161.0.0
+        specifier: ^162.0.0
+        version: 162.0.0
       jsdom:
         specifier: ^27.0.0
         version: 27.0.0(postcss@8.5.6)
@@ -360,6 +360,10 @@ packages:
 
   '@babel/runtime@7.27.1':
     resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.28.4':
+    resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -2358,8 +2362,8 @@ packages:
     resolution: {integrity: sha512-66if47It7y+Sab3HMkwEXx1kCq9qUC9px8ZXoj1CMrmLmUw81GpbnsNlXnlyZyGbGPGcj+tDD9XsZ23m7GLaJQ==}
     engines: {node: '>=18.0.0'}
 
-  googleapis@161.0.0:
-    resolution: {integrity: sha512-JZy2cWMxgUF8E09KHzplI+z+FVG8NWDB/bsf4xevt9Um4bInb0X1qaG9qpDn49DHT5HsU0mOp3EOBGb8+AdE3Q==}
+  googleapis@162.0.0:
+    resolution: {integrity: sha512-dxHgGExRjbRLHxHZuPyiFB2692H9hP4Qg9OI6nhzw5OOFlxl6ufG5GMqraKv6HAFvHltz7Ytx/C1ndcM85USxA==}
     engines: {node: '>=18'}
 
   gopd@1.2.0:
@@ -3586,6 +3590,8 @@ snapshots:
 
   '@babel/runtime@7.27.1': {}
 
+  '@babel/runtime@7.28.4': {}
+
   '@babel/template@7.27.2':
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -4682,7 +4688,7 @@ snapshots:
   '@testing-library/dom@10.4.1':
     dependencies:
       '@babel/code-frame': 7.27.1
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.28.4
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
@@ -5588,7 +5594,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  googleapis@161.0.0:
+  googleapis@162.0.0:
     dependencies:
       google-auth-library: 10.4.0
       googleapis-common: 8.0.0
