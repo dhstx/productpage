@@ -64,6 +64,11 @@ export default function AgentManagement() {
       if (isSelected) {
         return prev.filter(a => a.id !== agent.id);
       } else {
+        // Check if user is non-admin and already has 1 agent selected
+        if (user?.role !== 'admin' && prev.length >= 1) {
+          alert('⚠️ User Plan Limit\n\nYour current plan allows only 1 active agent at a time.\n\nPlease deselect the current agent or upgrade your plan to use multiple agents.');
+          return prev;
+        }
         return [...prev, agent];
       }
     });
@@ -129,6 +134,78 @@ export default function AgentManagement() {
     }
   };
 
+  const getSuggestedPrompts = (agent) => {
+    // Return agent-specific prompts based on agent name/type
+    const promptMap = {
+      'Master Coordinator': [
+        'Coordinate all agents to analyze our quarterly performance',
+        'Route my request to the most appropriate specialist agent',
+        'Show me the status of all active agent tasks'
+      ],
+      'Content Creation Orchestrator': [
+        'Create a comprehensive content strategy for Q4',
+        'Generate a blog post about AI automation trends',
+        'Optimize this content for SEO and engagement'
+      ],
+      'AI Video Generation Specialist': [
+        'Generate a 30-second promotional video using Veo3',
+        'Create viral video content for social media',
+        'Optimize this video for Instagram Reels format'
+      ],
+      'Marketing Automation Hub': [
+        'Set up an automated email campaign for new leads',
+        'Analyze the performance of our recent marketing campaigns',
+        'Create a multi-channel marketing strategy'
+      ],
+      'Strategic Advisor': [
+        'Analyze our competitive positioning in the market',
+        'Provide strategic recommendations for growth',
+        'Evaluate potential partnership opportunities'
+      ],
+      'Financial Analyst': [
+        'Analyze quarterly revenue trends and projections',
+        'Generate a financial performance report',
+        'Identify cost optimization opportunities'
+      ],
+      'Operations Assistant': [
+        'Optimize our workflow processes',
+        'Generate operational efficiency reports',
+        'Identify bottlenecks in current operations'
+      ],
+      'Task Manager': [
+        'Prioritize my tasks for this week',
+        'Create a project timeline with milestones',
+        'Track progress on all active initiatives'
+      ],
+      'Engagement Analyst': [
+        'Analyze member engagement patterns',
+        'Identify strategies to improve participation',
+        'Generate an engagement metrics report'
+      ],
+      'Communication Specialist': [
+        'Draft a professional announcement email',
+        'Create communication templates for the team',
+        'Improve the clarity of this message'
+      ],
+      'Data Analyst': [
+        'Analyze this dataset and provide insights',
+        'Create visualizations for our key metrics',
+        'Identify trends in our performance data'
+      ],
+      'Performance Monitor': [
+        'Monitor system performance and uptime',
+        'Generate a performance optimization report',
+        'Alert me to any performance anomalies'
+      ]
+    };
+
+    return promptMap[agent.name] || [
+      `Help me with ${agent.capabilities[0]?.toLowerCase() || 'my task'}`,
+      `Provide insights on ${agent.capabilities[1]?.toLowerCase() || 'this topic'}`,
+      `Analyze and optimize ${agent.capabilities[2]?.toLowerCase() || 'this process'}`
+    ];
+  };
+
   return (
     <>
       <BackArrow />
@@ -143,27 +220,7 @@ export default function AgentManagement() {
       </div>
 
       {/* Upgrade Notice for Free Users */}
-      {!hasPortalAccess && (
-        <section className="panel-system p-4 border-2 border-[#FFC96C]">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-[4px] bg-[#FFC96C]/10 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-5 h-5 text-[#FFC96C]" />
-            </div>
-            <div className="flex-grow">
-              <h2 className="text-lg font-bold text-[#F2F2F2] mb-1 uppercase tracking-tight">
-                UNLOCK PREMIUM FEATURES
-              </h2>
-              <p className="text-[#B3B3B3] text-sm mb-3">
-                Upgrade to Professional or Enterprise to access your dedicated board portal, advanced analytics, and more.
-              </p>
-              <Link to="/billing" className="btn-system inline-flex items-center gap-2 text-sm px-4 py-2">
-                <Zap className="w-4 h-4" />
-                View Upgrade Options
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+
 
       {/* User Limits Notice - Only show for non-admin users */}
       {user?.role !== 'admin' && (
@@ -463,7 +520,15 @@ export default function AgentManagement() {
 
       {/* Configuration Modal with Suggested Prompts */}
       {showConfigModal && configAgent && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowConfigModal(false);
+              setConfigAgent(null);
+            }
+          }}
+        >
           <div className="panel-system p-8 max-w-2xl w-full my-8">
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
               CONFIGURE AGENT
@@ -497,18 +562,6 @@ export default function AgentManagement() {
 
               <div>
                 <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
-                  Response Time Threshold (seconds)
-                </label>
-                <input
-                  type="number"
-                  defaultValue="2"
-                  step="0.1"
-                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#F2F2F2] text-sm font-medium mb-2 uppercase tracking-tight">
                   Capabilities
                 </label>
                 <div className="space-y-2">
@@ -527,27 +580,17 @@ export default function AgentManagement() {
 
               <div>
                 <label className="block text-[#F2F2F2] text-sm font-medium mb-3 uppercase tracking-tight">
-                  Suggested Prompts
+                  Suggested Prompts for {configAgent.name}
                 </label>
                 <div className="space-y-2">
-                  <input
-                    type="text"
-                    placeholder="e.g., Analyze quarterly revenue trends"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder="e.g., Generate monthly performance report"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder="e.g., Summarize customer feedback"
-                    className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors"
-                  />
+                  {getSuggestedPrompts(configAgent).map((prompt, index) => (
+                    <div key={index} className="panel-system p-3 bg-[#0C0C0C] border border-[#202020]">
+                      <p className="text-[#F2F2F2] text-sm">{prompt}</p>
+                    </div>
+                  ))}
                 </div>
                 <p className="text-[#808080] text-xs mt-2">
-                  Add suggested prompts to help users interact with this agent effectively.
+                  These prompts are optimized for {configAgent.name}'s capabilities.
                 </p>
               </div>
             </div>

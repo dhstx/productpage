@@ -74,14 +74,14 @@ export default function Product() {
                 <FeatureCard
                   icon={<Calendar className="w-6 h-6" />}
                   title="Events & Calendar Management"
-                  description="Plan board meetings, member gatherings, and events with RSVP tracking, attendance management, and automated reminders."
+                  description="Plan meetings, gatherings, and events with RSVP tracking, attendance management, and automated reminders."
                 />
               </FadeInSection>
               <FadeInSection delay={400}>
                 <FeatureCard
                   icon={<Sparkles className="w-6 h-6" />}
                   title="AI-Powered Intelligence"
-                  description="Three specialized AI agents provide board assistance, committee coordination, and analytics insights to enhance decision-making."
+                  description="Three specialized AI agents provide organizational assistance, team coordination, and analytics insights to enhance decision-making."
                 />
               </FadeInSection>
             </div>
@@ -110,7 +110,7 @@ export default function Product() {
                 <CapabilityCard
                   icon={<Zap className="w-8 h-8" />}
                   title="Automation & Workflows"
-                  description="Automated email notifications, task assignments, and progress tracking keep your board aligned and informed."
+                  description="Automated email notifications, task assignments, and progress tracking keep your team aligned and informed."
                   features={['Email Alerts', 'Task Automation', 'Progress Tracking', 'Smart Reminders']}
                 />
               </FadeInSection>
@@ -131,10 +131,10 @@ export default function Product() {
           <section className="container mx-auto px-6 py-16">
             <div className="panel-system p-12 text-center max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-                READY TO TRANSFORM YOUR BOARD?
+                READY TO TRANSFORM YOUR ORGANIZATION?
               </h2>
               <p className="text-[#B3B3B3] mb-8 text-lg">
-                Join organizations that have modernized their board operations. Schedule a demo today.
+                Join organizations that have modernized their operations. Schedule a demo today.
               </p>
               <div className="flex gap-4 justify-center">
                 <Link to="/login" className="btn-system">
@@ -168,7 +168,7 @@ export default function Product() {
         <div className="container mx-auto px-6 py-8">
           <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
             <p>© 2025 Management Platform. All rights reserved.</p>
-            <p>Empowering boards, committees, and organizations worldwide</p>
+            <p>Empowering organizations worldwide</p>
           </div>
         </div>
       </footer>

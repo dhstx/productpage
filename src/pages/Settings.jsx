@@ -212,8 +212,18 @@ function TeamSection() {
 
   const handleInvite = (e) => {
     e.preventDefault();
-    alert('Invitation sent! The team member will receive an email to join.');
-    setShowInviteModal(false);
+    const formData = new FormData(e.target);
+    const email = formData.get('email');
+    const role = formData.get('role');
+    
+    // In production, this would call an API endpoint to send the team invitation
+    // For now, we'll simulate the process
+    const inviteLink = `${window.location.origin}/join-team?token=${btoa(email + Date.now())}`;
+    
+    setTimeout(() => {
+      alert(`✅ Team invitation sent to ${email}!\n\nRole: ${role}\nInvite link: ${inviteLink}\n\nThey will receive an email with instructions to join your team.`);
+      setShowInviteModal(false);
+    }, 500);
   };
 
   const handleRemove = (member) => {
@@ -421,6 +431,31 @@ function TeamSection() {
               </button>
             </div>
 
+            {/* Billing Period Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <button
+                onClick={() => setBillingPeriod('monthly')}
+                className={`px-6 py-2 rounded-[2px] font-medium uppercase tracking-tight transition-colors ${
+                  billingPeriod === 'monthly'
+                    ? 'bg-[#FFC96C] text-[#0C0C0C]'
+                    : 'bg-[#202020] text-[#B3B3B3] hover:text-[#F2F2F2]'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingPeriod('annual')}
+                className={`px-6 py-2 rounded-[2px] font-medium uppercase tracking-tight transition-colors ${
+                  billingPeriod === 'annual'
+                    ? 'bg-[#FFC96C] text-[#0C0C0C]'
+                    : 'bg-[#202020] text-[#B3B3B3] hover:text-[#F2F2F2]'
+                }`}
+              >
+                Annual
+                <span className="ml-2 text-xs">(Save 2 months)</span>
+              </button>
+            </div>
+
             <div className="grid md:grid-cols-3 gap-6">
               {pricingTiers.map((tier) => (
                 <div
@@ -440,8 +475,20 @@ function TeamSection() {
                     {tier.name}
                   </h3>
                   <div className="mb-6">
-                    <span className="text-4xl font-bold text-[#F2F2F2]">${tier.price}</span>
-                    <span className="text-[#B3B3B3]">/month</span>
+                    {billingPeriod === 'monthly' ? (
+                      <>
+                        <span className="text-4xl font-bold text-[#F2F2F2]">${tier.monthlyPrice}</span>
+                        <span className="text-[#B3B3B3]">/month</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-4xl font-bold text-[#F2F2F2]">${tier.annualPrice}</span>
+                        <span className="text-[#B3B3B3]">/year</span>
+                        <div className="text-[#FFC96C] text-sm mt-1">
+                          ${Math.round(tier.annualPrice / 12)}/month
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="space-y-3 mb-6">
                     {tier.features.map((feature, index) => (
@@ -451,16 +498,46 @@ function TeamSection() {
                       </div>
                     ))}
                   </div>
-                  <button
-                    onClick={() => handleUpgrade(tier.name, tier.id)}
-                    className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
-                      tier.highlighted
-                        ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
-                        : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
-                    }`}
-                  >
-                    Get Started
-                  </button>
+                  {(() => {
+                    const currentPlanValue = user?.subscription === 'enterprise' ? 3 : user?.subscription === 'professional' ? 2 : user?.subscription === 'starter' ? 1 : 0;
+                    const tierValue = tier.id === 'enterprise' ? 3 : tier.id === 'professional' ? 2 : tier.id === 'starter' ? 1 : 0;
+                    const isCurrentPlan = user?.subscription === tier.id;
+                    const isUpgrade = tierValue > currentPlanValue;
+                    const isDowngrade = tierValue < currentPlanValue;
+
+                    if (isCurrentPlan) {
+                      return (
+                        <button
+                          disabled
+                          className="w-full py-3 rounded-[2px] font-bold uppercase tracking-tight bg-[#202020] text-[#808080] cursor-not-allowed"
+                        >
+                          Current Plan
+                        </button>
+                      );
+                    } else if (isUpgrade) {
+                      return (
+                        <button
+                          onClick={() => handleUpgrade(tier.name, tier.id)}
+                          className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
+                            tier.highlighted
+                              ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
+                              : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
+                          }`}
+                        >
+                          Upgrade
+                        </button>
+                      );
+                    } else if (isDowngrade) {
+                      return (
+                        <button
+                          onClick={() => handleDowngrade(tier.name, tier.id)}
+                          className="w-full py-3 rounded-[2px] font-bold uppercase tracking-tight bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A] border border-[#FFC96C]/30 transition-colors"
+                        >
+                          Downgrade
+                        </button>
+                      );
+                    }
+                  })()}
                 </div>
               ))}
             </div>
@@ -515,26 +592,30 @@ function BillingSection() {
   };
   
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'annual'
   const canUserUpgrade = !user || user.subscription === 'free' || user.subscription === 'starter';
 
   const pricingTiers = [
     {
       id: 'starter',
       name: 'Starter',
-      price: 19,
+      monthlyPrice: 19,
+      annualPrice: 190, // ~17/month, 2 months free
       features: ['3 AI Agents', '50 workflows/month', '100 connections', 'Email support', 'Basic analytics']
     },
     {
       id: 'professional',
       name: 'Professional',
-      price: 49,
+      monthlyPrice: 49,
+      annualPrice: 490, // ~41/month, 2 months free
       highlighted: true,
       features: ['12 AI Agents', 'Unlimited workflows', 'Unlimited connections', 'Priority support', 'Advanced analytics', 'Custom integrations']
     },
     {
       id: 'enterprise',
       name: 'Enterprise',
-      price: 199,
+      monthlyPrice: 199,
+      annualPrice: 1990, // ~166/month, 2 months free
       features: ['Unlimited AI Agents', 'Unlimited workflows', 'Unlimited connections', 'Dedicated support', 'Custom deployment', 'SLA guarantee']
     }
   ];
@@ -544,7 +625,18 @@ function BillingSection() {
       alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
     } else {
       // Trigger Stripe checkout - in production this would redirect to actual Stripe checkout
-      window.location.href = `/api/create-checkout-session?plan=${tierId}`;
+      window.location.href = `/api/create-checkout-session?plan=${tierId}&billing=${billingPeriod}`;
+    }
+  };
+
+  const handleDowngrade = (tierName, tierId) => {
+    const confirmMessage = `Are you sure you want to downgrade to ${tierName}?\n\nYour current plan benefits will remain active until the end of your billing period.\n\nAfter that, you'll be switched to ${tierName} with reduced features.`;
+    
+    if (confirm(confirmMessage)) {
+      // In production, this would call an API endpoint to schedule the downgrade
+      setTimeout(() => {
+        alert(`✅ Downgrade to ${tierName} scheduled!\n\nYour plan will change at the end of your current billing period.\n\nYou will receive a confirmation email with details.`);
+      }, 500);
     }
   };
 
@@ -711,6 +803,31 @@ function BillingSection() {
               </button>
             </div>
 
+            {/* Billing Period Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <button
+                onClick={() => setBillingPeriod('monthly')}
+                className={`px-6 py-2 rounded-[2px] font-medium uppercase tracking-tight transition-colors ${
+                  billingPeriod === 'monthly'
+                    ? 'bg-[#FFC96C] text-[#0C0C0C]'
+                    : 'bg-[#202020] text-[#B3B3B3] hover:text-[#F2F2F2]'
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingPeriod('annual')}
+                className={`px-6 py-2 rounded-[2px] font-medium uppercase tracking-tight transition-colors ${
+                  billingPeriod === 'annual'
+                    ? 'bg-[#FFC96C] text-[#0C0C0C]'
+                    : 'bg-[#202020] text-[#B3B3B3] hover:text-[#F2F2F2]'
+                }`}
+              >
+                Annual
+                <span className="ml-2 text-xs">(Save 2 months)</span>
+              </button>
+            </div>
+
             <div className="grid md:grid-cols-3 gap-6">
               {pricingTiers.map((tier) => (
                 <div
@@ -730,8 +847,20 @@ function BillingSection() {
                     {tier.name}
                   </h3>
                   <div className="mb-6">
-                    <span className="text-4xl font-bold text-[#F2F2F2]">${tier.price}</span>
-                    <span className="text-[#B3B3B3]">/month</span>
+                    {billingPeriod === 'monthly' ? (
+                      <>
+                        <span className="text-4xl font-bold text-[#F2F2F2]">${tier.monthlyPrice}</span>
+                        <span className="text-[#B3B3B3]">/month</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-4xl font-bold text-[#F2F2F2]">${tier.annualPrice}</span>
+                        <span className="text-[#B3B3B3]">/year</span>
+                        <div className="text-[#FFC96C] text-sm mt-1">
+                          ${Math.round(tier.annualPrice / 12)}/month
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="space-y-3 mb-6">
                     {tier.features.map((feature, index) => (
@@ -741,16 +870,46 @@ function BillingSection() {
                       </div>
                     ))}
                   </div>
-                  <button
-                    onClick={() => handleUpgrade(tier.name, tier.id)}
-                    className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
-                      tier.highlighted
-                        ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
-                        : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
-                    }`}
-                  >
-                    Get Started
-                  </button>
+                  {(() => {
+                    const currentPlanValue = user?.subscription === 'enterprise' ? 3 : user?.subscription === 'professional' ? 2 : user?.subscription === 'starter' ? 1 : 0;
+                    const tierValue = tier.id === 'enterprise' ? 3 : tier.id === 'professional' ? 2 : tier.id === 'starter' ? 1 : 0;
+                    const isCurrentPlan = user?.subscription === tier.id;
+                    const isUpgrade = tierValue > currentPlanValue;
+                    const isDowngrade = tierValue < currentPlanValue;
+
+                    if (isCurrentPlan) {
+                      return (
+                        <button
+                          disabled
+                          className="w-full py-3 rounded-[2px] font-bold uppercase tracking-tight bg-[#202020] text-[#808080] cursor-not-allowed"
+                        >
+                          Current Plan
+                        </button>
+                      );
+                    } else if (isUpgrade) {
+                      return (
+                        <button
+                          onClick={() => handleUpgrade(tier.name, tier.id)}
+                          className={`w-full py-3 rounded-[2px] font-bold uppercase tracking-tight transition-colors ${
+                            tier.highlighted
+                              ? 'bg-[#FFC96C] text-[#0C0C0C] hover:bg-[#FFD700]'
+                              : 'bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A]'
+                          }`}
+                        >
+                          Upgrade
+                        </button>
+                      );
+                    } else if (isDowngrade) {
+                      return (
+                        <button
+                          onClick={() => handleDowngrade(tier.name, tier.id)}
+                          className="w-full py-3 rounded-[2px] font-bold uppercase tracking-tight bg-[#202020] text-[#F2F2F2] hover:bg-[#2A2A2A] border border-[#FFC96C]/30 transition-colors"
+                        >
+                          Downgrade
+                        </button>
+                      );
+                    }
+                  })()}
                 </div>
               ))}
             </div>
@@ -836,8 +995,15 @@ function InviteSection() {
   const handleInvite = (e) => {
     e.preventDefault();
     if (email) {
-      alert(`Invitation sent to ${email}!`);
-      setEmail('');
+      // In production, this would call an API endpoint to send the invitation
+      // For now, we'll simulate the process
+      const inviteLink = `${window.location.origin}/signup?ref=${btoa(email)}`;
+      
+      // Simulate API call
+      setTimeout(() => {
+        alert(`✅ Invitation sent to ${email}!\n\nInvite link: ${inviteLink}\n\nThey will receive an email with instructions to join.`);
+        setEmail('');
+      }, 500);
     }
   };
 

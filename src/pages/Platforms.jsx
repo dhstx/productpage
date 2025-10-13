@@ -59,7 +59,7 @@ export default function Platforms() {
                 <FeatureStat label="Active Initiatives" value="0" />
                 <FeatureStat label="Team Members" value="0" />
                 <FeatureStat label="Upcoming Events" value="0" />
-                <FeatureStat label="Committees" value="0" />
+                <FeatureStat label="Teams" value="0" />
               </div>
             </div>
 

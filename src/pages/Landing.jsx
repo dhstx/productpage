@@ -109,7 +109,7 @@ export default function Landing() {
             </h2>
             <div className="panel-system p-8 max-w-4xl mx-auto">
               <p className="text-[#F2F2F2] text-lg leading-relaxed text-center">
-                We empower boards and organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Transform your board from reactive to proactive, from scattered to strategic, from overwhelmed to empowered.
+                We empower organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Transform your organization from reactive to proactive, from scattered to strategic, from overwhelmed to empowered.
               </p>
             </div>
           </FadeInSection>
@@ -130,7 +130,7 @@ export default function Landing() {
           <div className="container mx-auto px-6 py-8">
             <div className="flex justify-between items-center text-[#B3B3B3] text-sm">
               <p>© 2025 Management Platform. All rights reserved.</p>
-              <p>Empowering boards, committees, and organizations worldwide</p>
+              <p>Empowering organizations worldwide</p>
             </div>
           </div>
         </footer>
