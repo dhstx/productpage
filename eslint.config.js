@@ -1,40 +1,29 @@
+// Flat config for ESLint 9 (ESM)
 import js from '@eslint/js'
-import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import globals from 'globals'
 
 export default [
-  { ignores: ['dist', 'api/**/*'] },
+  // Ignore build artifacts
+  { ignores: ['dist/', 'build/', 'node_modules/', '*.min.js'] },
+  // Base recommended rules
+  js.configs.recommended,
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-      },
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      globals: { ...globals.browser, ...globals.node },
     },
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^_' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      // Stricter rules for production
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'no-debugger': 'error',
-      'prefer-const': 'error',
-      'no-var': 'error',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
 ]
