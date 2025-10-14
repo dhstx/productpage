@@ -55,7 +55,7 @@ export default function Product() {
             <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               EVERYTHING YOU NEED
             </h2>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2">
               <FadeInSection delay={100}>
                 <FeatureCard
                   icon={<Target className="w-6 h-6" />}
@@ -97,7 +97,7 @@ export default function Product() {
             <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               BUILT FOR SCALE
             </h2>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <FadeInSection delay={100}>
                 <CapabilityCard
                   icon={<Shield className="w-8 h-8" />}
