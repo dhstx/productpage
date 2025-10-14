@@ -36,7 +36,7 @@ export default function ScrollGears({
       <div className={`relative ${className}`}>
         {/* Only stick at md+ to avoid overlap on small screens */
         <div className={`${sticky ? "md:sticky md:top-24" : ""} mx-auto max-w-5xl px-4`}>
-          <div className="grid grid-cols-3 gap-6 items-center justify-items-center">
+          <div className="grid grid-cols-3 items-center justify-items-center gap-6">
             <div style={reverseAnimationStyle}>
               <Gear teeth={12} radius={44} color={fill} rotationDeg={0} />
             </div>

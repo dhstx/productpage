@@ -117,7 +117,8 @@ export default function BackgroundGears({ color = "#FFC96C", opacity = 0.18 }) {
       /* Place behind content, avoid clipping, scale up progressively */
       className="absolute md:fixed inset-0 -z-10 pointer-events-none overflow-hidden scale-75 sm:scale-90 md:scale-100"
       style={{
-        zIndex: 0,
+        // Ensure background stays behind foreground content
+        zIndex: -10,
         opacity: opacity,
       }}
       aria-hidden="true"

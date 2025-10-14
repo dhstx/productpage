@@ -31,7 +31,7 @@ export default function Landing() {
 
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
-        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-24 pt-24 md:px-8 md:pb-48 md:pt-32">
+        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-20 pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
               <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
@@ -57,6 +57,7 @@ export default function Landing() {
         </section>
 
         {/* AI Chat Interface */}
+        {/* Ensure chat stays usable on mobile */}
         <AIChatInterface />
 
         {/* Core Modules */}

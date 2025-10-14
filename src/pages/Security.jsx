@@ -4,7 +4,7 @@ import { Shield, Lock, Eye, FileCheck, Server, Key, AlertCircle, CheckCircle, Do
 
 export default function Security() {
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -31,10 +31,10 @@ export default function Security() {
               <Shield className="w-4 h-4 text-[#FFC96C]" />
               <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Security & Compliance</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               ENTERPRISE-GRADE SECURITY
             </h1>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Your data security and privacy are our top priorities. We maintain the highest standards of security, compliance, and transparency.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -55,10 +55,10 @@ export default function Security() {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 COMPLIANCE CERTIFICATIONS
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Certified and audited by leading security organizations
               </p>
             </div>
@@ -133,10 +133,10 @@ export default function Security() {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 SECURITY INFRASTRUCTURE
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Multi-layered security protecting your data at every level
               </p>
             </div>
@@ -275,10 +275,10 @@ export default function Security() {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 DATA PRIVACY & CONTROL
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 You own your data. We never sell or share it with third parties.
               </p>
             </div>
@@ -321,10 +321,10 @@ export default function Security() {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 INCIDENT RESPONSE
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Prepared and transparent in the unlikely event of a security incident
               </p>
             </div>
@@ -376,10 +376,10 @@ export default function Security() {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 SECURITY RESOURCES
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Documentation and reports for your security team
               </p>
             </div>
@@ -437,10 +437,10 @@ export default function Security() {
       <section className="py-24">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               QUESTIONS ABOUT SECURITY?
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Our security team is here to answer your questions and provide additional documentation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

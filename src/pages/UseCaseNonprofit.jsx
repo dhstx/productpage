@@ -4,7 +4,7 @@ import { Heart, Users, DollarSign, Calendar, Target, TrendingUp } from 'lucide-r
 
 export default function UseCaseNonprofit() {
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -31,10 +31,10 @@ export default function UseCaseNonprofit() {
               <Heart className="w-4 h-4 text-[#FFC96C]" />
               <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Nonprofit Organizations</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               MAXIMIZE YOUR IMPACT
             </h1>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Streamline donor management, volunteer coordination, and program delivery so you can focus on your mission
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -53,7 +53,7 @@ export default function UseCaseNonprofit() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight text-balance">
               CHALLENGES FACING NONPROFIT ORGANIZATIONS
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ export default function UseCaseNonprofit() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight text-balance">
               HOW DHSTX HELPS NONPROFIT ORGANIZATIONS
             </h2>
             <div className="grid md:grid-cols-2 gap-12">
@@ -194,13 +194,13 @@ export default function UseCaseNonprofit() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-12">
+            <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 sm:p-12">
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#0C0C0C] rounded-[4px] border border-[#202020] mb-4">
                   <Heart className="w-4 h-4 text-[#4CAF50]" />
                   <span className="text-[#4CAF50] text-sm uppercase tracking-tight font-bold">Success Story</span>
                 </div>
-                <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+                <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                   COMMUNITY FOUNDATION DOUBLES IMPACT
                 </h2>
               </div>
@@ -218,7 +218,7 @@ export default function UseCaseNonprofit() {
                   <div className="text-[#B3B3B3]">Additional Funding</div>
                 </div>
               </div>
-              <blockquote className="text-xl text-[#F2F2F2] italic mb-6 text-center">
+              <blockquote className="text-[clamp(1.125rem,3.5vw,1.25rem)] text-[#F2F2F2] italic mb-6 text-center text-pretty">
                 "DHStx transformed how we operate. Our volunteer coordination improved by 60%, donor communication is streamlined, and we secured $2M in additional grants thanks to better impact reporting. Best investment we've made."
               </blockquote>
               <div className="text-center text-[#B3B3B3]">
@@ -234,7 +234,7 @@ export default function UseCaseNonprofit() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 text-center uppercase tracking-tight text-balance">
               BUILT FOR NONPROFITS
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -266,10 +266,10 @@ export default function UseCaseNonprofit() {
       <section className="py-24">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               READY TO AMPLIFY YOUR MISSION?
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Join hundreds of nonprofits using DHStx to do more with less and maximize their impact
             </p>
             <div className="flex flex-wrap justify-center gap-4">

@@ -138,7 +138,7 @@ export default function AIChatInterface() {
   const displayAgent = typedAgentText;
 
   return (
-    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6">
+    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6">
       <div className="mx-auto w-full max-w-4xl">
         {/* AI Greeting */}
         <div className="mb-12 text-center">
@@ -230,8 +230,15 @@ export default function AIChatInterface() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onFocus={() => sectionRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })}
                     placeholder="Describe what you need help with..."
-                    className="max-h-[200px] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
+                    aria-label="Message input"
+                    enterKeyHint="send"
+                    inputMode="text"
+                    autoCorrect="on"
+                    autoComplete="on"
+                    spellCheck={true}
+                    className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
                     rows={1}
                   />
                 </div>

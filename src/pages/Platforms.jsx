@@ -13,7 +13,7 @@ export default function Platforms() {
 
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
-      <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 py-6 md:px-8">
+      <div className="mx-auto flex w-full max-w-screen-xl min-w-0 flex-col gap-6 px-4 py-6 md:px-8">
         <BackArrow />
         <div className="space-y-2">
           <h1 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] uppercase tracking-tight">
@@ -56,7 +56,7 @@ export default function Platforms() {
               <h4 className="text-xs font-semibold uppercase tracking-tight text-[#F2F2F2] sm:text-sm">
                 Platform Features
               </h4>
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <FeatureStat label="Active Initiatives" value="0" />
                 <FeatureStat label="Team Members" value="0" />
                 <FeatureStat label="Upcoming Events" value="0" />

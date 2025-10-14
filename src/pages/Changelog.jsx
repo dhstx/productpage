@@ -182,7 +182,7 @@ export default function Changelog() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -209,10 +209,10 @@ export default function Changelog() {
               <Package className="w-4 h-4 text-[#FFC96C]" />
               <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Product Updates</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               CHANGELOG
             </h1>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Track new features, improvements, and bug fixes across all releases
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -275,7 +275,7 @@ export default function Changelog() {
                     <div className="flex items-start justify-between mb-6 ml-12">
                       <div>
                         <div className="flex items-center gap-3 mb-2">
-                          <h2 className="text-3xl font-bold text-[#F2F2F2] uppercase tracking-tight">
+                          <h2 className="h2 font-bold text-[#F2F2F2] uppercase tracking-tight text-balance">
                             v{release.version}
                           </h2>
                           <span className={`px-3 py-1 rounded-[4px] border text-xs uppercase font-bold ${getTypeColor(release.type)}`}>
@@ -314,10 +314,10 @@ export default function Changelog() {
       <section id="subscribe" className="py-24 border-t border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               STAY UPDATED
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Get notified about new features and updates
             </p>
             <div className="flex gap-4 max-w-md mx-auto">
