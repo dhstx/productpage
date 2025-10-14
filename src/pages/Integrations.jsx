@@ -105,7 +105,7 @@ export default function Integrations() {
   const categories = ['All', 'Communication', 'Productivity', 'CRM', 'Automation', 'Payments', 'Accounting', 'Video Conferencing', 'Documents', 'Storage', 'Email Marketing'];
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -132,10 +132,10 @@ export default function Integrations() {
               <Plug className="w-4 h-4 text-[#FFC96C]" />
               <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Integrations</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               CONNECT YOUR TOOLS
             </h1>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Seamlessly integrate with the tools your team already uses. No disruption, just enhanced productivity.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -154,7 +154,7 @@ export default function Integrations() {
       {/* Stats */}
       <section className="py-16 border-b border-[#202020]">
         <div className="container mx-auto px-6">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 gap-8 md:grid-cols-4">
             <div className="text-center">
               <div className="text-4xl font-bold text-[#FFC96C] mb-2">50+</div>
               <div className="text-[#B3B3B3]">Native Integrations</div>
@@ -180,15 +180,15 @@ export default function Integrations() {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 POPULAR INTEGRATIONS
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Connect with the tools your team uses every day
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {integrations.filter(int => int.popular).map((integration, index) => (
                 <div key={index} className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 hover:border-[#FFC96C] transition-colors group">
                   <div className="flex items-start justify-between mb-4">
@@ -225,10 +225,10 @@ export default function Integrations() {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 ALL INTEGRATIONS
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Browse our complete integration library
               </p>
             </div>
@@ -249,7 +249,7 @@ export default function Integrations() {
               ))}
             </div>
 
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
               {integrations.map((integration, index) => (
                 <div key={index} className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 hover:border-[#FFC96C] transition-colors text-center group cursor-pointer">
                   <div className="text-5xl mb-3">{integration.logo}</div>
@@ -271,15 +271,15 @@ export default function Integrations() {
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 API & WEBHOOKS
               </h2>
-              <p className="text-xl text-[#B3B3B3]">
+              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Build custom integrations with our powerful API
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {/* REST API */}
               <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-8">
                 <div className="flex items-start gap-4">
@@ -360,7 +360,7 @@ export default function Integrations() {
             </div>
 
             {/* Code Example */}
-            <div className="mt-12 bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-8">
+            <div className="mt-12 bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 sm:p-8 overflow-x-auto">
               <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">Quick Start Example</h3>
               <div className="bg-[#0C0C0C] rounded-[4px] p-6 font-mono text-sm text-[#4CAF50] overflow-x-auto">
                 <pre>{`curl -X GET https://api.dhstx.com/v1/platforms \\
@@ -388,10 +388,10 @@ export default function Integrations() {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
             <div className="text-6xl mb-6">⚡</div>
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               CONNECT TO 5,000+ APPS WITH ZAPIER
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               No coding required. Create powerful automations between DHStx and your favorite apps in minutes.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -411,10 +411,10 @@ export default function Integrations() {
       <section className="py-24">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               NEED A CUSTOM INTEGRATION?
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Our team can help you build custom integrations tailored to your organization's needs.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

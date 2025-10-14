@@ -132,20 +132,20 @@ export default function CustomerReviews() {
               <Star className="w-4 h-4 text-[#FFC96C]" fill="#FFC96C" />
               <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Customer Reviews</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+            <h2 className="h1 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
               TRUSTED BY ORGANIZATIONS WORLDWIDE
             </h2>
-            <p className="text-xl text-[#B3B3B3]">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
               Real feedback from real customers across industries
             </p>
           </div>
 
           {/* Rating Summary */}
-          <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-8 mb-12">
-            <div className="grid md:grid-cols-3 gap-8">
+          <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 sm:p-8 mb-12">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {/* Overall Rating */}
               <div className="text-center">
-                <div className="text-6xl font-bold text-[#FFC96C] mb-2">{averageRating}</div>
+                <div className="text-[clamp(2.25rem,8vw,3.75rem)] font-bold text-[#FFC96C] mb-2">{averageRating}</div>
                 <div className="flex justify-center gap-1 mb-2">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-[#FFC96C]" fill="#FFC96C" />
@@ -205,13 +205,13 @@ export default function CustomerReviews() {
             </div>
           </div>
 
-          {/* Industry Filter */}
-            <div className="flex items-center gap-4 mb-8 overflow-x-auto pb-4">
+          {/* Industry Filter - wrap on mobile to avoid horizontal scroll */}
+            <div className="flex flex-wrap items-center gap-4 mb-8 pb-4">
             <div className="flex items-center gap-2 text-[#B3B3B3] flex-shrink-0">
               <Filter className="w-4 h-4" />
               <span className="text-sm uppercase tracking-tight font-bold">Filter:</span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {industries.map((industry) => (
                 <button
                   key={industry}
@@ -229,7 +229,7 @@ export default function CustomerReviews() {
           </div>
 
           {/* Reviews Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {filteredReviews.map((review) => (
               <div key={review.id} className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-6 hover:border-[#FFC96C] transition-colors">
                 {/* Header */}
