@@ -34,15 +34,15 @@ export default function ScrollGears({
         }
       `}</style>
       {/* Only stick at md+ to avoid overlap on small screens */}
-      <div className={`${sticky ? "md:sticky md:top-24" : ""} mx-auto max-w-5xl px-4`}>
-        <div className="grid grid-cols-3 items-center justify-items-center gap-6">
-          <div style={reverseAnimationStyle}>
+      <div className={`${sticky ? "md:sticky md:top-24" : ""} mx-auto max-w-5xl px-4 md:px-8`}>
+        <div className="grid grid-cols-3 items-center justify-items-center gap-4 sm:gap-6 md:gap-8">
+          <div style={reverseAnimationStyle} className="scale-75 sm:scale-90 md:scale-100">
             <Gear teeth={12} radius={44} color={fill} rotationDeg={0} />
           </div>
-          <div style={animationStyle}>
+          <div style={animationStyle} className="scale-75 sm:scale-90 md:scale-100">
             <Gear teeth={18} radius={58} color={fill} rotationDeg={0} />
           </div>
-          <div style={reverseAnimationStyle}>
+          <div style={reverseAnimationStyle} className="scale-75 sm:scale-90 md:scale-100">
             <Gear teeth={24} radius={72} color={fill} rotationDeg={0} />
           </div>
         </div>

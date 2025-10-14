@@ -137,8 +137,8 @@
 @layer components {
   /* DHStx System Buttons */
   .btn-system {
-    /* Make system buttons wrap-safe, full-width on mobile */
-    @apply inline-flex w-full sm:w-auto max-w-full items-center justify-center gap-2 px-4 py-3 rounded-[2px] border border-[#202020] bg-[#C0C0C0] text-black font-medium transition-all duration-200 text-pretty text-balance break-words overflow-hidden;
+    /* Make system buttons wrap-safe, full-width on mobile, minimum 44px tappable height */
+    @apply inline-flex w-full sm:w-auto max-w-full items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-[2px] border border-[#202020] bg-[#C0C0C0] text-black font-medium transition-all duration-200 text-pretty text-balance break-words overflow-hidden;
   }
   
   .btn-system:hover,
@@ -206,6 +206,19 @@
   /* Safe-area utility for bottom elements (iOS) */
   .pb-safe {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Standardized spacing utilities for mobile consistency */
+  .spacing-xs { margin: 0.5rem; }
+  .spacing-sm { margin: 1rem; }
+  .spacing-md { margin: 1.5rem; }
+  .spacing-lg { margin: 2rem; }
+  .spacing-xl { margin: 3rem; }
+
+  /* Minimum button spacing for mobile tappability */
+  .btn-spacing { margin: 0.5rem; }
+  @media (max-width: 768px) {
+    .btn-spacing { margin: 0.5rem 0; }
   }
 }
 

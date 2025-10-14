@@ -12,23 +12,18 @@ export default function Product() {
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
-        <div className="mx-auto flex w-full max-w-screen-xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:flex-nowrap md:px-8">
+        <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-2 text-[#B3B3B3] transition-colors hover:text-[#FFC96C]">
             <ArrowLeft className="h-5 w-5 flex-shrink-0" />
             <span className="text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</span>
           </Link>
-          <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
-            <Link to="/login" className="btn-system">
-              Account Login
-            </Link>
-          </div>
         </div>
       </header>
 
       <main>
         {/* Platform Overview */}
         <FadeInSection>
-          <section className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 pb-12 pt-24 md:px-8 md:pt-32">
+          <section className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 pb-12 pt-16 sm:pt-20 md:px-8 md:pt-32">
             <div className="mb-2 text-center">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">PLATFORM OVERVIEW</span>
             </div>
@@ -38,7 +33,7 @@ export default function Product() {
             <p className="mx-auto mb-10 max-w-3xl text-center text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
               The all-in-one platform for management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <Link to="/login" className="btn-system">
                 Request Demo
               </Link>
@@ -136,7 +131,7 @@ export default function Product() {
               <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
                 Join organizations that have modernized their operations. Schedule a demo today.
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 <Link to="/login" className="btn-system">
                   Get Started
                 </Link>

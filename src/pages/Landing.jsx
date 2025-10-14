@@ -15,23 +15,15 @@ export default function Landing() {
       <div className="relative flex flex-col">
         {/* Header */}
         <header className="border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur-sm">
-          {/* mobile-first container; wrap CTAs on small screens to avoid overflow */}
-          <div className="mx-auto flex w-full max-w-screen-xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:flex-nowrap md:px-8">
+          {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
+          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-center px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
-            <div className="flex w-full min-w-0 flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
-              <Link to="/product" className="btn-system">
-                Explore Platform
-              </Link>
-              <Link to="/login" className="btn-system">
-                Account Login
-              </Link>
-            </div>
           </div>
         </header>
 
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
-        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-20 pt-20 md:px-8 md:pb-48 md:pt-32">
+        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
               <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
@@ -40,7 +32,7 @@ export default function Landing() {
               <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
                 The all-in-one platform for management, strategic planning, and organizational excellence
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 <AnimatedButton asChild>
                   <Link to="/product" className="btn-system">
                     Explore Platform

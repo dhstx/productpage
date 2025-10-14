@@ -52,24 +52,24 @@ export default function FeatureComparison() {
     } else if (value === false) {
       return <X className="w-5 h-5 text-[#666666] mx-auto" />;
     } else {
-      return <span className="text-[#F2F2F2] text-sm">{value}</span>;
+      return <span className="text-[#F2F2F2] text-xs sm:text-sm text-center block">{value}</span>;
     }
   };
 
   return (
-    <section id="pricing" className="py-24 bg-[#0C0C0C] border-t border-[#202020]">
+    <section id="pricing" className="py-16 md:py-24 bg-[#0C0C0C] border-t border-[#202020]">
       <div className="mx-auto max-w-screen-xl px-4 md:px-8">
-        <div className="text-center mb-10 md:mb-16">
+        <div className="text-center mb-8 md:mb-16">
           <h2 className="h2 leading-tight text-balance text-[#F2F2F2] mb-3 uppercase tracking-tight">
             FEATURE COMPARISON
           </h2>
-          <p className="text-[#B3B3B3] text-base md:text-lg">
+          <p className="text-[#B3B3B3] text-sm sm:text-base md:text-lg">
             Choose the plan that fits your organization's needs
           </p>
         </div>
 
-        {/* Mobile-first stacked pricing cards; avoid horizontal scroll */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        {/* Mobile-first stacked pricing cards with consistent spacing */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
           <PlanCard name="STARTER" price="$999" highlight={false} />
           <PlanCard name="PROFESSIONAL" price="$2,499" highlight>
             <div className="inline-block px-2 py-1 bg-[#FFC96C] text-[#0C0C0C] text-[10px] font-bold rounded mb-2">
@@ -79,23 +79,42 @@ export default function FeatureComparison() {
           <PlanCard name="ENTERPRISE" price="$5,999" highlight={false} />
         </div>
 
-        {/* Features listed as vertical stacks with break-words */}
-        <div className="mt-10 space-y-6">
+        {/* Improved feature comparison table for mobile */}
+        <div className="space-y-6 md:space-y-8">
           {features.map((category, idx) => (
-            <div key={idx} className="space-y-3">
-              <h3 className="text-[#FFC96C] font-bold uppercase tracking-tight text-xs md:text-sm">
+            <div key={idx} className="space-y-4">
+              <h3 className="text-[#FFC96C] font-bold uppercase tracking-tight text-xs sm:text-sm px-2">
                 {category.category}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="space-y-3">
                 {category.items.map((item, jdx) => (
-                  <div key={jdx} className="panel-system p-4 space-y-2 min-w-0 break-words">
-                    <div className="text-[#F2F2F2] text-sm md:text-base">
-                      {item.name}
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <div>{renderValue(item.starter)}</div>
-                      <div className="bg-[#0C0C0C]">{renderValue(item.professional)}</div>
-                      <div>{renderValue(item.enterprise)}</div>
+                  <div key={jdx} className="panel-system p-4 sm:p-5 min-w-0">
+                    <div className="flex flex-col gap-3">
+                      {/* Feature name */}
+                      <div className="text-[#F2F2F2] text-sm sm:text-base font-medium break-words">
+                        {item.name}
+                      </div>
+                      {/* Plan values in aligned grid */}
+                      <div className="grid grid-cols-3 gap-3 sm:gap-4 items-center">
+                        <div className="flex flex-col items-center gap-1 min-h-[44px] justify-center">
+                          <div className="text-[10px] sm:text-xs text-[#B3B3B3] uppercase tracking-wide">Starter</div>
+                          <div className="flex items-center justify-center min-h-[24px]">
+                            {renderValue(item.starter)}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center gap-1 min-h-[44px] justify-center bg-[#0C0C0C] rounded px-2 py-1">
+                          <div className="text-[10px] sm:text-xs text-[#FFC96C] uppercase tracking-wide font-medium">Pro</div>
+                          <div className="flex items-center justify-center min-h-[24px]">
+                            {renderValue(item.professional)}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center gap-1 min-h-[44px] justify-center">
+                          <div className="text-[10px] sm:text-xs text-[#B3B3B3] uppercase tracking-wide">Enterprise</div>
+                          <div className="flex items-center justify-center min-h-[24px]">
+                            {renderValue(item.enterprise)}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -104,9 +123,9 @@ export default function FeatureComparison() {
           ))}
         </div>
 
-        {/* CTA - Only Get Started button */}
-        <div className="mt-10 text-center">
-          <a href="/login" className="btn-system w-full sm:w-auto">
+        {/* CTA - Only Get Started button with proper spacing */}
+        <div className="mt-8 md:mt-12 text-center">
+          <a href="/login" className="btn-system w-full sm:w-auto min-h-[44px]">
             Get Started
           </a>
         </div>
@@ -117,12 +136,12 @@ export default function FeatureComparison() {
 
 function PlanCard({ name, price, highlight, children }) {
   return (
-    <div className={`panel-system p-6 flex flex-col items-center text-center ${highlight ? 'ring-1 ring-[#FFC96C]/40' : ''}`}>
+    <div className={`panel-system p-5 sm:p-6 flex flex-col items-center text-center min-h-[180px] justify-center ${highlight ? 'ring-1 ring-[#FFC96C]/40' : ''}`}>
       {children}
-      <div className="text-[#F2F2F2] font-bold mb-1">{name}</div>
-      <div className="text-[#FFC96C] text-2xl font-bold">{price}</div>
-      <div className="text-[#B3B3B3] text-sm">/month</div>
-      <a href="/login" className="btn-system w-full mt-4">Select</a>
+      <div className="text-[#F2F2F2] font-bold text-sm sm:text-base mb-1">{name}</div>
+      <div className="text-[#FFC96C] text-xl sm:text-2xl font-bold">{price}</div>
+      <div className="text-[#B3B3B3] text-xs sm:text-sm mb-4">/month</div>
+      <a href="/login" className="btn-system w-full min-h-[44px]">Select</a>
     </div>
   );
 }
