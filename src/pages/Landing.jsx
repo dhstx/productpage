@@ -14,9 +14,9 @@ export default function Landing() {
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
         {/* Header */}
-        <header className="border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur-sm">
+        <header className="border-b border-[#202020] bg-[#0C0C0C]">
           {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
-          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-center px-4 py-4 md:px-8">
+          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-start px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
           </div>
         </header>
