@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
 import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
-import { agents as agentData, getAgentStats } from '../lib/agents';
+import { agents as agentData } from '../lib/agents';
 import { getCurrentUser, hasFeature } from '../lib/auth';
 
 export default function AgentManagement() {
@@ -20,7 +20,8 @@ export default function AgentManagement() {
   
   const [agents, setAgents] = useState(agentData);
   const user = getCurrentUser();
-  const hasPortalAccess = hasFeature('portal');
+  // eslint-disable-next-line no-unused-vars
+  const HAS_PORTAL_ACCESS = hasFeature('portal');
 
   // Watch for Custom... selection
   useEffect(() => {
@@ -78,17 +79,8 @@ export default function AgentManagement() {
     setSelectedAgents(prev => prev.filter(a => a.id !== agentId));
   };
 
-  const handlePauseAgent = (agent) => {
-    setConfigAgent(agent);
-    setConfirmAction('pause');
-    setShowConfirmModal(true);
-  };
-
-  const handleRestartAgent = (agent) => {
-    setConfigAgent(agent);
-    setConfirmAction('restart');
-    setShowConfirmModal(true);
-  };
+  // Functions reserved for future backend integration
+  // Intentionally omitted in demo build
 
   const handleConfigureAgent = (agent, e) => {
     e.stopPropagation();
@@ -97,7 +89,9 @@ export default function AgentManagement() {
   };
 
   const confirmAgentAction = () => {
-    if (!configAgent) return;
+    if (!configAgent) {
+      return;
+    }
     
     if (confirmAction === 'pause') {
       setAgents(agents.map(agent => 
@@ -129,7 +123,7 @@ export default function AgentManagement() {
   const handleAgentSubmit = (e) => {
     e.preventDefault();
     if (agentInput.trim()) {
-      console.log('Agent input:', agentInput);
+      // In production this would send the input to the selected agents
       setAgentInput('');
     }
   };
@@ -392,7 +386,7 @@ export default function AgentManagement() {
                 {selectedAgents.length > 0 ? (
                   <>
                     <div className="text-[#B3B3B3] text-sm space-y-3">
-                      {selectedAgents.map((agent, index) => (
+                      {selectedAgents.map((agent) => (
                         <p key={agent.id} className="mb-2">
                           <span className="text-[#FFC96C] font-semibold">{agent.name}:</span> Hello! I'm ready to assist you with {agent.capabilities[0].toLowerCase()}.
                         </p>

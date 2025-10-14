@@ -84,7 +84,7 @@ export default function ScrollHistoryManager() {
       return undefined;
     }
 
-    const previousUrl = window.location.href;
+    const PREVIOUS_URL = window.location.href;
 
     const handleAnchorClick = (event) => {
       if (!event || event.defaultPrevented) {

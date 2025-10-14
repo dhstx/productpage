@@ -23,7 +23,7 @@ export default function AdminLayout({ children }) {
     }
   };
 
-  const shouldUpgrade = canUpgrade();
+  const SHOULD_UPGRADE = canUpgrade();
   
   const navigation = [
     { name: 'Agents', href: '/agents', icon: Bot },

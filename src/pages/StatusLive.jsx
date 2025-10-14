@@ -18,7 +18,9 @@ export default function StatusLive() {
   const fetchSystemStatus = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/status/current`);
-      if (!response.ok) throw new Error('Failed to fetch system status');
+      if (!response.ok) {
+        throw new Error('Failed to fetch system status');
+      }
       const data = await response.json();
       setSystemStatus(data);
       setLastUpdated(new Date());
@@ -33,7 +35,9 @@ export default function StatusLive() {
   const fetchUptimeHistory = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/status/uptime`);
-      if (!response.ok) throw new Error('Failed to fetch uptime history');
+      if (!response.ok) {
+        throw new Error('Failed to fetch uptime history');
+      }
       const data = await response.json();
       setUptimeHistory(data);
     } catch (err) {
@@ -45,7 +49,9 @@ export default function StatusLive() {
   const fetchIncidents = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/status/incidents`);
-      if (!response.ok) throw new Error('Failed to fetch incidents');
+      if (!response.ok) {
+        throw new Error('Failed to fetch incidents');
+      }
       const data = await response.json();
       setIncidents(data);
     } catch (err) {
@@ -69,7 +75,9 @@ export default function StatusLive() {
 
   // Auto-refresh every 30 seconds
   useEffect(() => {
-    if (!autoRefresh) return;
+    if (!autoRefresh) {
+      return;
+    }
 
     const interval = setInterval(() => {
       fetchSystemStatus();
@@ -106,11 +114,17 @@ export default function StatusLive() {
 
   // Format last updated time
   const formatLastUpdated = () => {
-    if (!lastUpdated) return 'Never';
+    if (!lastUpdated) {
+      return 'Never';
+    }
     const seconds = Math.floor((new Date() - lastUpdated) / 1000);
-    if (seconds < 60) return `${seconds} seconds ago`;
+    if (seconds < 60) {
+      return `${seconds} seconds ago`;
+    }
     const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    if (minutes < 60) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    }
     const hours = Math.floor(minutes / 60);
     return `${hours} hour${hours > 1 ? 's' : ''} ago`;
   };

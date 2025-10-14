@@ -66,7 +66,7 @@ export default function Settings() {
               Personal Account
             </p>
             <nav className="space-y-1">
-              {SECTION_CONFIG.map(({ id, label, icon: Icon }) => (
+              {SECTION_CONFIG.map(({ id, label, icon: _Icon }) => (
                 <button
                   key={id}
                   type="button"
@@ -77,7 +77,7 @@ export default function Settings() {
                       : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <_Icon className="w-4 h-4" />
                   <span className="text-sm">{label}</span>
                 </button>
               ))}
@@ -721,11 +721,11 @@ function TeamSection() {
   );
 }
 
-function StatCard({ icon: Icon, label, value }) {
+function StatCard({ icon: _Icon, label, value }) {
   return (
     <div className="bg-[#0C0C0C] p-4 rounded-[2px] border border-[#202020]">
       <div className="flex items-center gap-3 mb-2">
-        <Icon className="w-5 h-5 text-[#FFC96C]" />
+        <_Icon className="w-5 h-5 text-[#FFC96C]" />
         <span className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</span>
       </div>
       <div className="text-2xl font-bold text-[#F2F2F2]">{value}</div>
@@ -861,13 +861,13 @@ function ContactSection({ user }) {
   );
 }
 
-function Field({ label, icon: Icon, value, onChange, placeholder, type = 'text' }) {
+function Field({ label, icon: _Icon, value, onChange, placeholder, type = 'text' }) {
   return (
     <label className="block space-y-2 text-sm">
       <span className="text-[#F2F2F2] font-medium uppercase tracking-tight">{label}</span>
       <div className="relative">
         <span className="absolute inset-y-0 left-3 flex items-center text-[#808080]">
-          <Icon className="w-4 h-4" />
+          <_Icon className="w-4 h-4" />
         </span>
         <input
           type={type}

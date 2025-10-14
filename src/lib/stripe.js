@@ -92,7 +92,8 @@ export async function createCheckoutSession(priceId, options = {}) {
     // and use stripe.redirectToCheckout({ sessionId })
     
     // For demo purposes, show confirmation and redirect to payment link
-    const paymentLinks = {
+    // Known price links for demo; kept for reference only
+    const PAYMENT_LINKS = {
       'price_1SG8g5B0VqDMH2904j8shzKt': 'https://buy.stripe.com/test_starter_link',
       'price_1SG8gDB0VqDMH290srWjcYkT': 'https://buy.stripe.com/test_professional_link',
       'price_1SG8gKB0VqDMH290XeuHz84l': 'https://buy.stripe.com/test_enterprise_link'

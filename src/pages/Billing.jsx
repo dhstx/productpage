@@ -8,6 +8,7 @@ export default function Billing() {
   const user = getCurrentUser();
   const currentTier = getPricingTier(user?.subscription || 'free');
   const pricingTiers = getAllPricingTiers();
+  // eslint-disable-next-line no-unused-vars
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleUpgrade = (tier) => {
