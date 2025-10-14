@@ -31,7 +31,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C] flex items-center justify-center px-6">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C] flex items-center justify-center px-6">
       <BackArrow />
       {/* Back Button */}
       <Link 

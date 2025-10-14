@@ -69,7 +69,7 @@ export default function Status() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -96,10 +96,10 @@ export default function Status() {
               <Activity className="w-4 h-4 text-[#4CAF50]" />
               <span className="text-[#4CAF50] text-sm uppercase tracking-tight font-bold">System Status</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               ALL SYSTEMS OPERATIONAL
             </h1>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Real-time status and uptime monitoring for all DHStx services
             </p>
             <div className="flex items-center justify-center gap-2 text-[#4CAF50]">
@@ -114,7 +114,7 @@ export default function Status() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-balance">
               CURRENT STATUS
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
@@ -157,7 +157,7 @@ export default function Status() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-balance">
               90-DAY UPTIME
             </h2>
             <div className="bg-[#1A1A1A] rounded-[4px] border border-[#202020] p-8">
@@ -189,7 +189,7 @@ export default function Status() {
       <section className="py-24 border-b border-[#202020]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-8 uppercase tracking-tight text-balance">
               INCIDENT HISTORY
             </h2>
             <div className="space-y-6">
@@ -235,10 +235,10 @@ export default function Status() {
       <section className="py-24">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               GET STATUS UPDATES
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Subscribe to receive notifications about incidents and maintenance windows
             </p>
             <div className="flex gap-4 max-w-md mx-auto">

@@ -66,7 +66,7 @@ export default function UseCaseHealthcare() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
@@ -85,10 +85,10 @@ export default function UseCaseHealthcare() {
           <div className="inline-block px-4 py-2 bg-[#1A1A1A] rounded-[4px] border border-[#202020] mb-6">
             <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Healthcare Organizations</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+          <h1 className="h1 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
             GOVERNANCE PLATFORM FOR HEALTHCARE EXCELLENCE
           </h1>
-          <p className="text-xl text-[#B3B3B3] mb-8 max-w-2xl">
+          <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
             Streamline hospital governance, ensure compliance, and empower medical leadership with a platform built for the unique challenges of healthcare administration.
           </p>
           <div className="flex gap-4">
@@ -106,7 +106,7 @@ export default function UseCaseHealthcare() {
       <section className="py-24 bg-[#0C0C0C]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center text-balance">
               Healthcare Governance Challenges
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
@@ -127,7 +127,7 @@ export default function UseCaseHealthcare() {
       <section className="py-24 bg-[#0C0C0C]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center text-balance">
               Built for Healthcare Organizations
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
@@ -155,7 +155,7 @@ export default function UseCaseHealthcare() {
       <section className="py-24 bg-[#1A1A1A]">
         <div className="container mx-auto px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center text-balance">
               Proven Healthcare Results
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -178,7 +178,7 @@ export default function UseCaseHealthcare() {
               <div className="inline-block px-4 py-2 bg-[#FFC96C]/10 rounded-[4px] mb-6">
                 <span className="text-[#FFC96C] text-sm uppercase tracking-tight font-bold">Success Story</span>
               </div>
-              <h2 className="text-3xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+              <h2 className="h2 font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-balance">
                 {caseStudy.organization}
               </h2>
               <p className="text-[#B3B3B3] mb-8">{caseStudy.size}</p>
@@ -218,10 +218,10 @@ export default function UseCaseHealthcare() {
       <section className="py-24 bg-[#1A1A1A]">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+            <h2 className="h2 font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-balance">
               READY TO TRANSFORM YOUR HEALTHCARE GOVERNANCE?
             </h2>
-            <p className="text-xl text-[#B3B3B3] mb-8">
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 text-pretty">
               Join 500+ healthcare organizations that trust DHStx for their governance needs
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
