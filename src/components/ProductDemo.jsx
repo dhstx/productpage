@@ -115,7 +115,6 @@ export default function ProductDemo() {
               </div>
             </div>
           </div>
-        </div>
       </div>
     </section>
   );

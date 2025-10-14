@@ -2,8 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import { Paperclip, Mic, ArrowUp, Sparkles } from 'lucide-react';
 
 // Timing controls for the hero typewriter greeting
-const TYPEWRITER_CHAR_MS = 56;      // ms per character
-const TYPEWRITER_PAUSE_MS = 750;    // pause between "Hello." and agent part
+// Updated: 75% faster typing speed (56ms reduced by 75% = 14ms)
+const TYPEWRITER_CHAR_MS = 14;      // ms per character (75% faster)
+const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part (75% faster)
 
 export default function AIChatInterface() {
   const [message, setMessage] = useState('');
