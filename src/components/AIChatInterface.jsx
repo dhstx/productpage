@@ -3,8 +3,8 @@ import { Paperclip, Mic, ArrowUp, Sparkles } from 'lucide-react';
 
 // Timing controls for the hero typewriter greeting
 // Typing timing controls
-// Slowed to half the previous speed (14ms -> 28ms per character)
-const TYPEWRITER_CHAR_MS = 28;      // ms per character
+// Slowed further by 25% (28ms -> 35ms per character)
+const TYPEWRITER_CHAR_MS = 35;      // ms per character
 const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part
 
 export default function AIChatInterface() {
@@ -140,7 +140,11 @@ export default function AIChatInterface() {
   const displayAgent = typedAgentText;
 
   return (
-    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe mt-8 md:mt-0 sm:px-6">
+    <section
+      ref={sectionRef}
+      className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6"
+      style={{ marginTop: '2in', marginBottom: '2in' }}
+    >
       <div className="mx-auto w-full max-w-4xl">
         {/* AI Greeting */}
         <div className="mb-12 text-center">
