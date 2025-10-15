@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="768" height="768" viewBox="0 0 768 768" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cogwheel">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#FFC96C" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#FFC96C" stop-opacity="0.85"/>
+    </radialGradient>
+  </defs>
+  <rect width="768" height="768" fill="none"/>
+  <g fill="url(#g)" stroke="none">
+    <circle cx="384" cy="384" r="220"/>
+  </g>
+  <g fill="url(#g)">
+    <g transform="translate(384 384)">
+      <g id="teeth">
+        <rect x="-10" y="-350" width="20" height="56" rx="4"/>
+      </g>
+      <use href="#teeth" transform="rotate(22.5)"/>
+      <use href="#teeth" transform="rotate(45)"/>
+      <use href="#teeth" transform="rotate(67.5)"/>
+      <use href="#teeth" transform="rotate(90)"/>
+      <use href="#teeth" transform="rotate(112.5)"/>
+      <use href="#teeth" transform="rotate(135)"/>
+      <use href="#teeth" transform="rotate(157.5)"/>
+      <use href="#teeth" transform="rotate(180)"/>
+      <use href="#teeth" transform="rotate(202.5)"/>
+      <use href="#teeth" transform="rotate(225)"/>
+      <use href="#teeth" transform="rotate(247.5)"/>
+      <use href="#teeth" transform="rotate(270)"/>
+      <use href="#teeth" transform="rotate(292.5)"/>
+      <use href="#teeth" transform="rotate(315)"/>
+      <use href="#teeth" transform="rotate(337.5)"/>
+    </g>
+  </g>
+  <circle cx="384" cy="384" r="90" fill="#0C0C0C"/>
+</svg>

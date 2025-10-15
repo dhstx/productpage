@@ -1,4 +1,4 @@
-import Gear from "./Gear";
+import CogwheelImage from "../../assets/product-cogwheel.svg";
 
 export default function ScrollGears({
   color = "#FFC96C",
@@ -36,14 +36,15 @@ export default function ScrollGears({
       {/* Only stick at md+ to avoid overlap on small screens */}
       <div className={`${sticky ? "md:sticky md:top-24" : ""} mx-auto max-w-5xl px-4 md:px-8`}>
         <div className="grid grid-cols-3 items-center justify-items-center gap-4 sm:gap-6 md:gap-8">
+          {/* Keep sizes equivalent to previous Gear radii: (44, 58, 72) -> approx (108, 136, 164) */}
           <div style={reverseAnimationStyle} className="scale-75 sm:scale-90 md:scale-100">
-            <Gear teeth={12} radius={44} color={fill} rotationDeg={0} />
+            <img src={CogwheelImage} alt="Cogwheel" width={108} height={108} style={{ display: 'block' }} />
           </div>
           <div style={animationStyle} className="scale-75 sm:scale-90 md:scale-100">
-            <Gear teeth={18} radius={58} color={fill} rotationDeg={0} />
+            <img src={CogwheelImage} alt="Cogwheel" width={136} height={136} style={{ display: 'block' }} />
           </div>
           <div style={reverseAnimationStyle} className="scale-75 sm:scale-90 md:scale-100">
-            <Gear teeth={24} radius={72} color={fill} rotationDeg={0} />
+            <img src={CogwheelImage} alt="Cogwheel" width={164} height={164} style={{ display: 'block' }} />
           </div>
         </div>
       </div>
