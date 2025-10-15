@@ -53,3 +53,4 @@ sandbox.txt
 productpage/
 .manus-template-version
 .vercel
+package-lock.json
