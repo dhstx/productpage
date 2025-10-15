@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
-import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog, X } from 'lucide-react';
+import { Bot, Zap, AlertCircle, CheckCircle, ChevronDown, Cog, X } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 import { getCurrentUser, hasFeature } from '../lib/auth';
 
