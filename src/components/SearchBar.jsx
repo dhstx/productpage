@@ -45,7 +45,14 @@ export default function SearchBar({ className = '' }) {
       ...AGENTS.map(x => ({ ...x, type: 'Agent' })),
       ...INTEGRATIONS.map(x => ({ ...x, type: 'Integration' })),
     ];
-    return all.filter(item => item.title.toLowerCase().includes(q)).slice(0, 8);
+    // Basic ranking: startsWith > includes
+    const scored = all.map(item => {
+      const t = item.title.toLowerCase();
+      const score = t.startsWith(q) ? 2 : t.includes(q) ? 1 : 0;
+      return { ...item, score };
+    }).filter(i => i.score > 0);
+    scored.sort((a, b) => b.score - a.score || a.title.localeCompare(b.title));
+    return scored.slice(0, 8);
   }, [query]);
 
   const handleSubmit = (e) => {

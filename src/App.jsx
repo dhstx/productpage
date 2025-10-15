@@ -1,37 +1,38 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 import './App.css';
 
-// Pages
-import Landing from './pages/Landing';
-import Product from './pages/Product';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import Platforms from './pages/Platforms';
-import Team from './pages/Team';
-import Billing from './pages/Billing';
-import Settings from './pages/Settings';
-import AgentManagement from './pages/AgentManagement';
-import IntegrationsManagement from './pages/IntegrationsManagement';
-import UseCaseHealthcare from './pages/UseCaseHealthcare';
-import UseCaseEducation from './pages/UseCaseEducation';
-import UseCaseNonprofit from './pages/UseCaseNonprofit';
-import Security from './pages/Security';
-import Integrations from './pages/Integrations';
-import StatusLive from './pages/StatusLive';
-import Changelog from './pages/Changelog';
-import TermsOfService from './pages/policies/TermsOfService';
-import PrivacyPolicy from './pages/policies/PrivacyPolicy';
-import CookiePolicy from './pages/policies/CookiePolicy';
+// Pages (lazy-loaded for performance)
+const Landing = lazy(() => import('./pages/Landing'));
+const Product = lazy(() => import('./pages/Product'));
+const Login = lazy(() => import('./pages/Login'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Platforms = lazy(() => import('./pages/Platforms'));
+const Team = lazy(() => import('./pages/Team'));
+const Billing = lazy(() => import('./pages/Billing'));
+const Settings = lazy(() => import('./pages/Settings'));
+const AgentManagement = lazy(() => import('./pages/AgentManagement'));
+const IntegrationsManagement = lazy(() => import('./pages/IntegrationsManagement'));
+const UseCaseHealthcare = lazy(() => import('./pages/UseCaseHealthcare'));
+const UseCaseEducation = lazy(() => import('./pages/UseCaseEducation'));
+const UseCaseNonprofit = lazy(() => import('./pages/UseCaseNonprofit'));
+const Security = lazy(() => import('./pages/Security'));
+const Integrations = lazy(() => import('./pages/Integrations'));
+const StatusLive = lazy(() => import('./pages/StatusLive'));
+const Changelog = lazy(() => import('./pages/Changelog'));
+const TermsOfService = lazy(() => import('./pages/policies/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('./pages/policies/PrivacyPolicy'));
+const CookiePolicy = lazy(() => import('./pages/policies/CookiePolicy'));
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicLayout from './components/PublicLayout';
-import Pricing from './pages/Pricing';
-import Contact from './pages/Contact';
-import StrategicPlanning from './pages/features/StrategicPlanning';
-import MemberEngagement from './pages/features/MemberEngagement';
-import EventManagement from './pages/features/EventManagement';
-import AIPoweredInsights from './pages/features/AIPoweredInsights';
+const Pricing = lazy(() => import('./pages/Pricing'));
+const Contact = lazy(() => import('./pages/Contact'));
+const StrategicPlanning = lazy(() => import('./pages/features/StrategicPlanning'));
+const MemberEngagement = lazy(() => import('./pages/features/MemberEngagement'));
+const EventManagement = lazy(() => import('./pages/features/EventManagement'));
+const AIPoweredInsights = lazy(() => import('./pages/features/AIPoweredInsights'));
 import Analytics from './components/Analytics';
 import ScrollHistoryManager from './components/ScrollHistoryManager';
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,7 @@ function App() {
       <Analytics />
       <ScrollHistoryManager />
       <ScrollToTop />
+      <Suspense fallback={<div className="mx-auto max-w-screen-xl px-4 md:px-8 py-12 text-[#B3B3B3]">Loading…</div>}>
       <Routes>
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
@@ -127,6 +129,7 @@ function App() {
         {/* Catch all - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </Router>
   );
 }
