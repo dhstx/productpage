@@ -110,6 +110,7 @@
     /* Containment defaults + solid black background for mobile */
     @apply min-h-screen w-full max-w-screen overflow-x-hidden;
     background-color: #000000 !important;
+    font-size: 18px; /* Base font size for readability */
   }
 
   #root {
@@ -119,13 +120,15 @@
   }
 
   body {
-    @apply text-[#F2F2F2] antialiased;
+    @apply antialiased;
+    color: #e0e0e0; /* improved contrast per requirements */
     background-color: #000000 !important;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-[#F2F2F2] uppercase tracking-tight;
+    @apply font-bold uppercase tracking-tight;
+    color: #F2F2F2;
     font-family: 'Inter', sans-serif;
   }
   

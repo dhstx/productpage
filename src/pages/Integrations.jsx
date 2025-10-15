@@ -1,9 +1,14 @@
 import { Link } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
+import { usePageMeta } from '../lib/seo';
 import BackArrow from '../components/BackArrow';
 import { Plug, Code, Webhook, Zap, ExternalLink, CheckCircle, ArrowRight } from 'lucide-react';
 
 export default function Integrations() {
+  usePageMeta(
+    'Integrations – DHStx',
+    'Connect DHStx with Slack, Salesforce, Google Workspace, Stripe, and more.'
+  );
   const integrations = [
     {
       name: 'Slack',
@@ -108,25 +113,7 @@ export default function Integrations() {
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
-      {/* Header */}
-      <header className="border-b border-[#202020] bg-[#0C0C0C]">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link to="/" className="text-[#F2F2F2] text-xl font-bold uppercase tracking-tight">
-            DHStx
-          </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle inline />
-            <div className="flex gap-4">
-              <Link to="/product" className="btn-system">
-                View Platform
-              </Link>
-              <Link to="/login" className="btn-primary">
-                Account Login
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Page header removed; GlobalNav used */}
 
       {/* Hero */}
       <section className="py-24 border-b border-[#202020]">

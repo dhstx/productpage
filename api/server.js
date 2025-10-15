@@ -13,6 +13,7 @@ import agentRoutes from './agents/routes.js';
 import subscriptionRoutes from './subscriptions/routes.js';
 import userRoutes from './users/routes.js';
 import statusRoutes from './status/routes.js';
+import { generateSitemapXml } from './sitemap/index.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -51,6 +52,19 @@ app.use('/api/agents', agentRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/status', statusRoutes);
+
+// Public SEO routes
+app.get('/sitemap.xml', (req, res) => {
+  try {
+    const xml = generateSitemapXml({
+      baseUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+    });
+    res.set('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (e) {
+    res.status(500).send('');
+  }
+});
 
 // 404 handler
 app.use((req, res) => {

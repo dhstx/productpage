@@ -25,6 +25,13 @@ import CookiePolicy from './pages/policies/CookiePolicy';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicLayout from './components/PublicLayout';
+import Pricing from './pages/Pricing';
+import Contact from './pages/Contact';
+import StrategicPlanning from './pages/features/StrategicPlanning';
+import MemberEngagement from './pages/features/MemberEngagement';
+import EventManagement from './pages/features/EventManagement';
+import AIPoweredInsights from './pages/features/AIPoweredInsights';
 import Analytics from './components/Analytics';
 import ScrollHistoryManager from './components/ScrollHistoryManager';
 import ScrollToTop from './components/ScrollToTop';
@@ -37,18 +44,26 @@ function App() {
       <ScrollToTop />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
-        <Route path="/use-cases/education" element={<UseCaseEducation />} />
-        <Route path="/use-cases/nonprofit" element={<UseCaseNonprofit />} />
-        <Route path="/security" element={<Security />} />
-        <Route path="/integrations" element={<Integrations />} />
-        <Route path="/status" element={<StatusLive />} />
-        <Route path="/changelog" element={<Changelog />} />
-        <Route path="/policies/terms" element={<TermsOfService />} />
-        <Route path="/policies/privacy" element={<PrivacyPolicy />} />
-        <Route path="/policies/cookies" element={<CookiePolicy />} />
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Landing />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/integrations" element={<Integrations />} />
+          <Route path="/security" element={<Security />} />
+          <Route path="/status" element={<StatusLive />} />
+          <Route path="/changelog" element={<Changelog />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/features/strategic-planning" element={<StrategicPlanning />} />
+          <Route path="/features/member-engagement" element={<MemberEngagement />} />
+          <Route path="/features/event-management" element={<EventManagement />} />
+          <Route path="/features/ai-powered-insights" element={<AIPoweredInsights />} />
+          <Route path="/use-cases/healthcare" element={<UseCaseHealthcare />} />
+          <Route path="/use-cases/education" element={<UseCaseEducation />} />
+          <Route path="/use-cases/nonprofit" element={<UseCaseNonprofit />} />
+          <Route path="/policies/terms" element={<TermsOfService />} />
+          <Route path="/policies/privacy" element={<PrivacyPolicy />} />
+          <Route path="/policies/cookies" element={<CookiePolicy />} />
+        </Route>
         <Route path="/login" element={<Login />} />
 
         {/* Protected Routes */}

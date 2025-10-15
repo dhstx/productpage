@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles, User } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
+import { usePageMeta } from '../lib/seo';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
@@ -10,6 +11,10 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
+  usePageMeta(
+    'DHStx – Enterprise Board Management & Strategic Planning',
+    'All-in-one platform for management, strategic planning, and organizational excellence.'
+  );
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
@@ -21,7 +26,7 @@ export default function Landing() {
             <div className="max-w-4xl mx-auto">
               <img
                 src="/syntek-hero.png"
-                alt="Syntek Automations logo"
+                alt="Syntek Automations logo centered in hero"
                 className="mx-auto mb-6 h-auto w-[140px] sm:w-[180px] md:w-[220px]"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
@@ -50,23 +55,7 @@ export default function Landing() {
           </FadeInSection>
         </section>
 
-        {/* Header (moved below hero) */}
-        <header className="border-b border-[#202020] bg-[#0C0C0C]">
-          {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
-          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
-            <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle inline />
-              <Link
-                to="/login"
-                aria-label="Account Login"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
-              >
-                <User className="h-5 w-5" />
-              </Link>
-            </div>
-          </div>
-        </header>
+        {/* Header removed: replaced by GlobalNav */}
 
         {/* AI Chat Interface */}
         {/* Ensure chat stays usable on mobile */}
@@ -81,32 +70,40 @@ export default function Landing() {
           </FadeInSection>
           <div className="grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <FadeInSection delay={0.1}>
-              <ModuleCard
-                icon={<Target className="w-6 h-6" />}
-                title="Strategic Planning"
-                description="Visualize initiatives with effort-impact matrices and track progress in real-time"
-              />
+              <Link to="/features/strategic-planning" className="block">
+                <ModuleCard
+                  icon={<Target className="w-6 h-6" />}
+                  title="Strategic Planning"
+                  description="Visualize initiatives with effort-impact matrices and track progress in real-time"
+                />
+              </Link>
             </FadeInSection>
             <FadeInSection delay={0.2}>
-              <ModuleCard
-                icon={<Users className="w-6 h-6" />}
-                title="Member Engagement"
-                description="Manage comprehensive member records with engagement tracking, participation history, and professional networking capabilities"
-              />
+              <Link to="/features/member-engagement" className="block">
+                <ModuleCard
+                  icon={<Users className="w-6 h-6" />}
+                  title="Member Engagement"
+                  description="Manage comprehensive member records with engagement tracking, participation history, and professional networking capabilities"
+                />
+              </Link>
             </FadeInSection>
             <FadeInSection delay={0.3}>
-              <ModuleCard
-                icon={<Calendar className="w-6 h-6" />}
-                title="Event Management"
-                description="Plan meetings, coordinate events, and manage RSVPs all in one place"
-              />
+              <Link to="/features/event-management" className="block">
+                <ModuleCard
+                  icon={<Calendar className="w-6 h-6" />}
+                  title="Event Management"
+                  description="Plan meetings, coordinate events, and manage RSVPs all in one place"
+                />
+              </Link>
             </FadeInSection>
             <FadeInSection delay={0.4}>
-              <ModuleCard
-                icon={<Sparkles className="w-6 h-6" />}
-                title="AI-Powered Insights"
-                description="Three specialized AI agents provide intelligent assistance and recommendations"
-              />
+              <Link to="/features/ai-powered-insights" className="block">
+                <ModuleCard
+                  icon={<Sparkles className="w-6 h-6" />}
+                  title="AI-Powered Insights"
+                  description="Three specialized AI agents provide intelligent assistance and recommendations"
+                />
+              </Link>
             </FadeInSection>
           </div>
         </section>
@@ -123,8 +120,12 @@ export default function Landing() {
               MISSION
             </h2>
             <div className="panel-system mx-auto max-w-4xl p-6 sm:p-8">
-              <p className="text-center text-[clamp(1rem,3.5vw,1.25rem)] leading-relaxed text-[#F2F2F2] text-pretty">
-                We empower organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Transform your organization from reactive to proactive, from scattered to strategic, from overwhelmed to empowered.
+              <p className="text-center text-[clamp(1rem,3.5vw,1.25rem)] leading-relaxed text-[#e0e0e0] text-pretty">
+                We empower organizations to operate more effectively through intelligent technology, streamlined workflows, and data-driven insights. Learn more about our
+                {' '}<Link to="/features/strategic-planning" className="text-[#FFC96C] hover:underline">Strategic Planning</Link>,
+                {' '}<Link to="/features/member-engagement" className="text-[#FFC96C] hover:underline">Member Engagement</Link>,
+                {' '}<Link to="/features/event-management" className="text-[#FFC96C] hover:underline">Event Management</Link>, and
+                {' '}<Link to="/features/ai-powered-insights" className="text-[#FFC96C] hover:underline">AI‑Powered Insights</Link>.
               </p>
             </div>
           </FadeInSection>
