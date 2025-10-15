@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import BackArrow from '../components/BackArrow';
 import { Sparkles, Bug, Zap, Shield, Package } from 'lucide-react';
 
@@ -190,13 +191,16 @@ export default function Changelog() {
           <Link to="/" className="text-[#F2F2F2] text-xl font-bold uppercase tracking-tight">
             DHStx
           </Link>
-          <div className="flex gap-4">
-            <Link to="/product" className="btn-system">
-              View Platform
-            </Link>
-            <Link to="/login" className="btn-primary">
-              Account Login
-            </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle inline />
+            <div className="flex gap-4">
+              <Link to="/product" className="btn-system">
+                View Platform
+              </Link>
+              <Link to="/login" className="btn-primary">
+                Account Login
+              </Link>
+            </div>
           </div>
         </div>
       </header>
