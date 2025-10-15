@@ -3,6 +3,7 @@ import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, Ch
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from './ui/sheet';
 import ThemeToggle from './ThemeToggle';
+import SearchBar from './SearchBar';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
@@ -68,6 +69,9 @@ export default function AdminLayout({ children }) {
             </div>
 
             <div className="flex items-center gap-4">
+              <div className="hidden md:block">
+                <SearchBar />
+              </div>
               <ThemeToggle inline />
               {/* Settings icon shortcut - desktop removed per requirements */}
               {/* Profile Dropdown */}

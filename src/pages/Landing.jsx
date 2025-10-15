@@ -19,7 +19,7 @@ export default function Landing() {
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
-        {/* Hero Section (placed above header) */}
+        {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-8 pt-8 sm:pb-10 sm:pt-10 md:px-8 md:pb-16 md:pt-16">
           <FadeInSection>
@@ -32,6 +32,8 @@ export default function Landing() {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = '/og-image.svg';
                 }}
+                loading="eager"
+                decoding="async"
               />
               <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE

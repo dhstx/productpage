@@ -359,9 +359,7 @@ export default function AgentManagement() {
         {/* Main Content - Agent Chat Box */}
         <div className="md:col-span-9 col-span-12 md:order-2 order-1">
           <div className="panel-system p-6 flex flex-col mx-auto w-full max-w-2xl md:max-w-none md:mx-0 md:h-[calc(100vh-280px)]">
-            <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-center">
-              Agent Chat Box
-            </h3>
+            {/* Match landing chat layout: no heading, centered content tone */}
             
             {/* Selected Agents - Display as chips with X button */}
             {selectedAgents.length > 0 ? (
@@ -426,7 +424,7 @@ export default function AgentManagement() {
               </div>
             </div>
 
-            {/* Input Area */}
+            {/* Input Area matches landing chat controls */}
             <form onSubmit={handleAgentSubmit} className="flex flex-col gap-3 md:flex-row">
               <textarea
                 value={agentInput}
@@ -451,6 +449,7 @@ export default function AgentManagement() {
                 type="submit"
                 disabled={selectedAgents.length === 0 || !agentInput.trim()}
                 className="btn-system w-full md:w-auto md:px-6 md:self-end disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Send message"
               >
                 Send
               </button>

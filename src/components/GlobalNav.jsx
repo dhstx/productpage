@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { isAuthenticated } from '../lib/auth';
 import ThemeToggle from './ThemeToggle';
 import SearchBar from './SearchBar';
 
 export default function GlobalNav() {
   const [open, setOpen] = useState(false);
+  const authed = isAuthenticated();
 
   const NavLinks = ({ onClick }) => (
     <nav className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
@@ -18,6 +20,8 @@ export default function GlobalNav() {
       <Link onClick={onClick} to="/contact" className="text-[#e0e0e0] hover:text-[#FFC96C] text-sm md:text-[15px] uppercase tracking-tight">Contact</Link>
     </nav>
   );
+
+  if (!authed) return null;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#202020] bg-[#0C0C0C]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0C0C0C]/75">
