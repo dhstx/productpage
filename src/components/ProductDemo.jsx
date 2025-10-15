@@ -49,7 +49,7 @@ export default function ProductDemo() {
                     </div>
                   </>
                 ) : (
-                  /* Video Embed - Replace with actual video URL */
+                  {/* Video Embed - Replace with actual video URL */}
                   <div className="relative w-full h-full">
                     <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]">
                       <div className="text-center p-8">

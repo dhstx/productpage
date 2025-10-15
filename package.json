@@ -26,7 +26,7 @@
     "dhstx"
   ],
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=18.18 <23",
     "pnpm": ">=8.0.0"
   },
   "private": false,
@@ -34,8 +34,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "preview": "vite preview",
+    "typecheck": "echo 'No TypeScript in project'"
     "test": "vitest",
     "mobile:test": "vitest run -c --reporter basic --dir src --environment jsdom",
     "test:ui": "vitest --ui",
@@ -122,6 +123,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "axios": "^1.12.2",
     "eslint": "^9.25.0",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.23",
     "globals": "^16.0.0",
