@@ -6,30 +6,17 @@ import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
+import { usePageMeta } from '../lib/seo';
 
 export default function Product() {
+  usePageMeta(
+    'Product – DHStx Platform Overview',
+    'Explore DHStx core modules, enterprise features, and ROI calculator.'
+  );
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
+      {/* BackArrow retained; header removed due to GlobalNav */}
       <BackArrow />
-      {/* Header */}
-      <header className="border-b border-[#202020] bg-[#0C0C0C]">
-        <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-2 text-[#B3B3B3] transition-colors hover:text-[#FFC96C]">
-            <ArrowLeft className="h-5 w-5 flex-shrink-0" />
-            <span className="text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <ThemeToggle inline />
-            <Link
-              to="/login"
-              aria-label="Account Login"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
-            >
-              <User className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </header>
 
       <main>
         {/* Platform Overview */}
@@ -63,32 +50,40 @@ export default function Product() {
             </h2>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2">
               <FadeInSection delay={100}>
-                <FeatureCard
+                <Link to="/features/strategic-planning" className="block">
+                  <FeatureCard
                   icon={<Target className="w-6 h-6" />}
                   title="Strategic Initiatives Tracker"
                   description="Visualize and prioritize initiatives using effort-impact matrices. Track progress, assign owners, and ensure alignment with organizational goals."
-                />
+                  />
+                </Link>
               </FadeInSection>
               <FadeInSection delay={200}>
-                <FeatureCard
+                <Link to="/features/member-engagement" className="block">
+                  <FeatureCard
                   icon={<Users className="w-6 h-6" />}
                   title="Member Engagement Database"
                   description="Manage comprehensive member records with engagement tracking, participation history, and professional networking capabilities."
-                />
+                  />
+                </Link>
               </FadeInSection>
               <FadeInSection delay={300}>
-                <FeatureCard
+                <Link to="/features/event-management" className="block">
+                  <FeatureCard
                   icon={<Calendar className="w-6 h-6" />}
                   title="Events & Calendar Management"
                   description="Plan meetings, gatherings, and events with RSVP tracking, attendance management, and automated reminders."
-                />
+                  />
+                </Link>
               </FadeInSection>
               <FadeInSection delay={400}>
-                <FeatureCard
+                <Link to="/features/ai-powered-insights" className="block">
+                  <FeatureCard
                   icon={<Sparkles className="w-6 h-6" />}
                   title="AI-Powered Intelligence"
                   description="Three specialized AI agents provide organizational assistance, team coordination, and analytics insights to enhance decision-making."
-                />
+                  />
+                </Link>
               </FadeInSection>
             </div>
           </section>
