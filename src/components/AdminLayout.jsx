@@ -1,7 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from './ui/sheet';
 import ThemeToggle from './ThemeToggle';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
 
@@ -127,28 +127,31 @@ export default function AdminLayout({ children }) {
                         const Icon = item.icon;
                         const isActive = location.pathname === item.href;
                         return (
-                          <Link
-                            key={item.name}
-                            to={item.href}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors ${
-                              isActive
-                                ? 'bg-[#1A1A1A] text-[#FFC96C]'
-                                : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
-                            }`}
-                          >
-                            <Icon className="w-5 h-5" />
-                            <span className="uppercase tracking-tight">{item.name}</span>
-                          </Link>
+                          <SheetClose asChild key={item.name}>
+                            <Link
+                              to={item.href}
+                              className={`flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors ${
+                                isActive
+                                  ? 'bg-[#1A1A1A] text-[#FFC96C]'
+                                  : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
+                              }`}
+                            >
+                              <Icon className="w-5 h-5" />
+                              <span className="uppercase tracking-tight">{item.name}</span>
+                            </Link>
+                          </SheetClose>
                         );
                       })}
-                      <button
-                        onClick={handleLogout}
-                        disabled={isLoggingOut}
-                        className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <LogOut className="w-5 h-5" />
-                        <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
-                      </button>
+                      <SheetClose asChild>
+                        <button
+                          onClick={handleLogout}
+                          disabled={isLoggingOut}
+                          className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <LogOut className="w-5 h-5" />
+                          <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+                        </button>
+                      </SheetClose>
                     </nav>
                   </SheetContent>
                 </Sheet>

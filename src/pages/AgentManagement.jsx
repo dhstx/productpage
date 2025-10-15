@@ -290,12 +290,12 @@ export default function AgentManagement() {
         </div>
       </div>
 
-      {/* Main Layout: Left Panel + Agent Text Box */}
+      {/* Main Layout: Text Box first on mobile, agents below */}
       <div className="grid grid-cols-12 gap-6">
-        {/* Left Panel - Agent List */}
-        <div className="col-span-3 space-y-4">
-          <h3 className="text-lg font-bold text-[#F2F2F2] uppercase tracking-tight">Agent</h3>
-          
+        {/* Left Panel - Agent List (shown below on mobile as a tile grid) */}
+        <div className="md:col-span-3 col-span-12 md:order-1 order-2 md:block grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-0 md:space-y-4">
+          <h3 className="text-lg font-bold text-[#F2F2F2] uppercase tracking-tight md:text-left text-center col-span-full">Agent</h3>
+
           {agents.map((agent) => {
             const StatusIcon = getStatusIcon(agent.status);
             const isSelected = selectedAgents.some(a => a.id === agent.id);
@@ -325,7 +325,7 @@ export default function AgentManagement() {
                         <Cog className="w-4 h-4" />
                       </button>
                     </div>
-                    <p className="text-[#B3B3B3] text-xs mb-2 line-clamp-2">{agent.description}</p>
+                    <p className="text-[#B3B3B3] text-xs mb-2 line-clamp-2 hidden sm:block md:line-clamp-none md:block">{agent.description}</p>
                     <div className="flex items-center gap-1 text-xs">
                       <span className={`flex items-center gap-1 ${getStatusColor(agent.status)}`}>
                         <StatusIcon className="w-3 h-3" />
@@ -341,8 +341,8 @@ export default function AgentManagement() {
         </div>
 
         {/* Main Content - Agent Text Box */}
-        <div className="col-span-9">
-          <div className="panel-system p-6 flex flex-col" style={{ height: 'calc(100vh - 280px)' }}>
+        <div className="md:col-span-9 col-span-12 md:order-2 order-1">
+          <div className="panel-system p-6 flex flex-col mx-auto w-full max-w-2xl md:max-w-none md:mx-0 md:h-[calc(100vh-280px)]">
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-center">
               Agent Text Box
             </h3>
