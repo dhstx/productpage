@@ -14,27 +14,9 @@ export default function Landing() {
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
-        {/* Header */}
-        <header className="border-b border-[#202020] bg-[#0C0C0C]">
-          {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
-          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
-            <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle inline />
-              <Link
-                to="/login"
-                aria-label="Account Login"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
-              >
-                <User className="h-5 w-5" />
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Hero Section */}
+        {/* Hero Section (placed above header) */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
-        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
+        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-8 pt-8 sm:pb-10 sm:pt-10 md:px-8 md:pb-16 md:pt-16">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
               <img
@@ -67,6 +49,24 @@ export default function Landing() {
             </div>
           </FadeInSection>
         </section>
+
+        {/* Header (moved below hero) */}
+        <header className="border-b border-[#202020] bg-[#0C0C0C]">
+          {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
+          <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
+            <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
+            <div className="flex items-center gap-3">
+              <ThemeToggle inline />
+              <Link
+                to="/login"
+                aria-label="Account Login"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
+              >
+                <User className="h-5 w-5" />
+              </Link>
+            </div>
+          </div>
+        </header>
 
         {/* AI Chat Interface */}
         {/* Ensure chat stays usable on mobile */}
