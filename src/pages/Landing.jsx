@@ -33,7 +33,7 @@ export default function Landing() {
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
-              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight">
+              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE
               </h1>
               <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
@@ -131,7 +131,7 @@ export default function Landing() {
         <footer className="border-t border-[#202020] mt-24 bg-[#0C0C0C]/95 backdrop-blur-sm">
           <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8 pb-safe">
             <div className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center text-[#B3B3B3] text-sm">
-              <p>© 2025 Management Platform. All rights reserved.</p>
+              <p>© 2025 Syntek Automations. All rights reserved.</p>
               <p>Empowering organizations worldwide</p>
             </div>
           </div>

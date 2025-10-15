@@ -169,7 +169,7 @@ export default function Product() {
       <footer className="border-t border-[#202020] mt-24">
         <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8 pb-safe">
           <div className="flex flex-col md:flex-row gap-2 md:gap-0 justify-between items-center text-[#B3B3B3] text-sm">
-            <p>© 2025 Management Platform. All rights reserved.</p>
+            <p>© 2025 Syntek Automations. All rights reserved.</p>
             <p>Empowering organizations worldwide</p>
           </div>
         </div>
