@@ -125,9 +125,9 @@ export default function Team() {
           TEAM MEMBERS
         </h2>
         {/* Mobile list (shows all details) */}
-        <div className="panel-system md:hidden divide-y divide-[#202020]">
+        <div className="md:hidden space-y-3">
           {teamMembers.map((member) => (
-            <div key={member.id} className="p-4 space-y-3">
+            <div key={member.id} className="panel-system p-4 space-y-3">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
@@ -171,7 +171,7 @@ export default function Team() {
                 </div>
               )}
             </div>
-          ))}
+          ))
         </div>
 
         {/* Desktop table */}
@@ -188,7 +188,7 @@ export default function Team() {
             </thead>
             <tbody>
               {teamMembers.map((member) => (
-                <tr key={member.id} className="border-b border-[#202020] hover:bg-[#1A1A1A]">
+                <tr key={member.id} className="border-b border-[#202020] hover:bg-[#1A1A1A] odd:bg-[#0F0F0F]">
                   <td className="p-3 md:p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
