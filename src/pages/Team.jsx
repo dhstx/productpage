@@ -125,7 +125,7 @@ export default function Team() {
           TEAM MEMBERS
         </h2>
         {/* Mobile list (shows all details) */}
-        <div className="md:hidden space-y-3">
+        <div className="md:hidden space-y-4">
           {teamMembers.map((member) => (
             <div key={member.id} className="panel-system p-4 space-y-3">
               <div className="flex items-center justify-between gap-3">
