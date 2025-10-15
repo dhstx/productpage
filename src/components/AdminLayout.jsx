@@ -2,6 +2,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import ThemeToggle from './ThemeToggle';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
 
 export default function AdminLayout({ children }) {
@@ -67,6 +68,7 @@ export default function AdminLayout({ children }) {
             </div>
 
             <div className="flex items-center gap-4">
+              <ThemeToggle inline />
               {/* Profile Dropdown */}
               <div className="hidden md:block relative">
                 <button

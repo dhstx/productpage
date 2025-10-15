@@ -26,7 +26,6 @@ import CookiePolicy from './pages/policies/CookiePolicy';
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import Analytics from './components/Analytics';
-import ThemeToggle from './components/ThemeToggle';
 import ScrollHistoryManager from './components/ScrollHistoryManager';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -34,7 +33,6 @@ function App() {
   return (
     <Router>
       <Analytics />
-      <ThemeToggle />
       <ScrollHistoryManager />
       <ScrollToTop />
       <Routes>

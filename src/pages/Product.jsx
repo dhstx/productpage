@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle, User } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
@@ -17,13 +18,16 @@ export default function Product() {
             <ArrowLeft className="h-5 w-5 flex-shrink-0" />
             <span className="text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</span>
           </Link>
-          <Link
-            to="/login"
-            aria-label="Account Login"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
-          >
-            <User className="h-5 w-5" />
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle inline />
+            <Link
+              to="/login"
+              aria-label="Account Login"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
+            >
+              <User className="h-5 w-5" />
+            </Link>
+          </div>
         </div>
       </header>
 

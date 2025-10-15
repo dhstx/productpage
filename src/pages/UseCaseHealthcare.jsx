@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 import BackArrow from '../components/BackArrow';
 import { Shield, Users, FileText, TrendingUp, CheckCircle, ArrowRight } from 'lucide-react';
 
@@ -72,9 +73,12 @@ export default function UseCaseHealthcare() {
       <header className="border-b border-[#202020] bg-[#0C0C0C]">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <Link to="/" className="text-[#F2F2F2] text-xl font-bold tracking-tight">DHStx</Link>
-          <div className="flex gap-4">
-            <Link to="/product" className="btn-system">View Pricing</Link>
-            <Link to="/login" className="btn-system">Account Login</Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle inline />
+            <div className="flex gap-4">
+              <Link to="/product" className="btn-system">View Pricing</Link>
+              <Link to="/login" className="btn-system">Account Login</Link>
+            </div>
           </div>
         </div>
       </header>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Target, Users, Calendar, Sparkles, User } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
@@ -18,13 +19,16 @@ export default function Landing() {
           {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
           <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
-            <Link
-              to="/login"
-              aria-label="Account Login"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
-            >
-              <User className="h-5 w-5" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <ThemeToggle inline />
+              <Link
+                to="/login"
+                aria-label="Account Login"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
+              >
+                <User className="h-5 w-5" />
+              </Link>
+            </div>
           </div>
         </header>
 
