@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
-import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
+import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog, X } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 import { getCurrentUser, hasFeature } from '../lib/auth';
 
@@ -536,8 +536,8 @@ export default function AgentManagement() {
 
       {/* Configuration Modal with Suggested Prompts */}
       {showConfigModal && configAgent && (
-        <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto"
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setShowConfigModal(false);
@@ -545,7 +545,17 @@ export default function AgentManagement() {
             }
           }}
         >
-          <div className="panel-system p-8 max-w-2xl w-full my-8">
+          <div className="panel-system relative w-full my-6 sm:my-8 p-4 sm:p-6 md:p-8 max-w-md sm:max-w-xl md:max-w-2xl max-h-[80vh] sm:max-h-[85vh] overflow-y-auto">
+            <button
+              aria-label="Close configuration"
+              onClick={() => {
+                setShowConfigModal(false);
+                setConfigAgent(null);
+              }}
+              className="absolute right-3 top-3 text-[#B3B3B3] hover:text-[#F2F2F2] focus:outline-none"
+            >
+              <X className="w-6 h-6" />
+            </button>
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
               CONFIGURE AGENT
             </h3>
