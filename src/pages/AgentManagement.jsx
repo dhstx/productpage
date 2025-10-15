@@ -311,28 +311,44 @@ export default function AgentManagement() {
                 onClick={() => handleAgentSelect(agent)}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-[#202020] flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-5 h-5 text-[#FFC96C]" />
+                  {/* Left column: icon with settings stacked below on mobile */}
+                  <div className="flex flex-col items-center gap-1 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-[#202020] flex items-center justify-center">
+                      <Bot className="w-4 h-4 text-[#FFC96C]" />
+                    </div>
+                    <button
+                      onClick={(e) => handleConfigureAgent(agent, e)}
+                      className="text-[#B3B3B3] hover:text-[#FFC96C] transition-colors p-1 rounded md:hidden"
+                      title="Configure Agent"
+                    >
+                      <Cog className="w-4 h-4" />
+                    </button>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <h4 className="text-sm font-bold text-[#F2F2F2] truncate">{agent.name}</h4>
+                    {/* Agent name - allow wrapping on mobile for readability */}
+                    <div className="mb-1 flex items-start gap-2">
+                      <h4 className="text-xs sm:text-sm font-bold text-[#F2F2F2] leading-snug break-words line-clamp-2 md:line-clamp-none">
+                        {agent.name}
+                      </h4>
+                      {/* Desktop settings button to the right */}
                       <button
                         onClick={(e) => handleConfigureAgent(agent, e)}
-                        className="text-[#B3B3B3] hover:text-[#FFC96C] transition-colors p-1"
+                        className="ml-auto hidden md:block text-[#B3B3B3] hover:text-[#FFC96C] transition-colors p-1"
                         title="Configure Agent"
                       >
                         <Cog className="w-4 h-4" />
                       </button>
                     </div>
-                    <p className="text-[#B3B3B3] text-xs mb-2 line-clamp-2 hidden sm:block md:line-clamp-none md:block">{agent.description}</p>
-                    <div className="flex items-center gap-1 text-xs">
+                    <div className="flex items-center gap-2 text-[10px] sm:text-xs mb-1">
                       <span className={`flex items-center gap-1 ${getStatusColor(agent.status)}`}>
                         <StatusIcon className="w-3 h-3" />
                         {agent.status}
                       </span>
                       <span className="text-[#B3B3B3]">• v{agent.version}</span>
                     </div>
+                    <p className="text-[#B3B3B3] text-xs mt-1 hidden sm:block md:mt-2 md:block md:line-clamp-none line-clamp-2">
+                      {agent.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -411,7 +427,7 @@ export default function AgentManagement() {
             </div>
 
             {/* Input Area */}
-            <form onSubmit={handleAgentSubmit} className="flex gap-3">
+            <form onSubmit={handleAgentSubmit} className="flex flex-col gap-3 md:flex-row">
               <textarea
                 value={agentInput}
                 onChange={(e) => setAgentInput(e.target.value)}
@@ -434,7 +450,7 @@ export default function AgentManagement() {
               <button
                 type="submit"
                 disabled={selectedAgents.length === 0 || !agentInput.trim()}
-                className="btn-system px-6 self-end disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-system w-full md:w-auto md:px-6 md:self-end disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send
               </button>

@@ -69,6 +69,14 @@ export default function AdminLayout({ children }) {
 
             <div className="flex items-center gap-4">
               <ThemeToggle inline />
+              {/* Settings icon shortcut */}
+              <Link
+                to="/settings"
+                className="hidden md:inline-flex p-2 rounded-[2px] text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+                aria-label="Open settings"
+              >
+                <Settings className="w-5 h-5" />
+              </Link>
               {/* Profile Dropdown */}
               <div className="hidden md:block relative">
                 <button
@@ -111,7 +119,11 @@ export default function AdminLayout({ children }) {
               </div>
 
               {/* Mobile Sheet Navigation */}
-              <div className="md:hidden">
+              <div className="md:hidden flex items-center gap-1">
+                {/* Mobile settings icon next to hamburger */}
+                <Link to="/settings" aria-label="Open settings" className="text-[#F2F2F2] p-2">
+                  <Settings className="w-6 h-6" />
+                </Link>
                 <Sheet>
                   <SheetTrigger asChild>
                     <button className="text-[#F2F2F2] p-2" aria-label="Open navigation">
