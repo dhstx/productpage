@@ -140,11 +140,11 @@ export default function AIChatInterface() {
   const displayAgent = typedAgentText;
 
   return (
-    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6">
+    <section ref={sectionRef} className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe mt-8 md:mt-0 sm:px-6">
       <div className="mx-auto w-full max-w-4xl">
         {/* AI Greeting */}
         <div className="mb-12 text-center">
-          <h2 className="h2 mb-4 flex min-h-[4.5rem] items-center justify-center font-bold">
+          <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.35rem,6vw,2.35rem)]">
             <span className="inline-flex flex-wrap justify-center gap-1 text-balance">
               <span className="whitespace-pre text-[#B3B3B3]">{displayPrefix}</span>
               <span
