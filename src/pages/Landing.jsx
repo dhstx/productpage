@@ -37,6 +37,15 @@ export default function Landing() {
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto">
+              <img
+                src="/syntek-hero.png"
+                alt="Syntek Automations logo"
+                className="mx-auto mb-6 h-auto w-[140px] sm:w-[180px] md:w-[220px]"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/og-image.svg';
+                }}
+              />
               <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE
               </h1>
