@@ -1,168 +1,119 @@
-// Authentication utilities
-const AUTH_KEY = 'dhstx_auth';
+// Production-ready authentication utilities using backend JWT
 
-// Subscription tiers
+import { getFeatureLimit as getTierFeatureLimit, canAccessFeature } from './pricing';
+
+const AUTH_TOKEN_KEY = 'authToken';
+const AUTH_USER_KEY = 'authUser';
+
+// Expose subscription tier identifiers for UI code
 export const SUBSCRIPTION_TIERS = {
   FREE: 'free',
   STARTER: 'starter',
   PROFESSIONAL: 'professional',
-  ENTERPRISE: 'enterprise'
+  ENTERPRISE: 'enterprise',
 };
 
-// Demo users with different subscription levels
-const DEMO_USERS = {
-  'admin': {
-    password: 'admin123',
-    user: {
-      email: 'admin@dhstx.com',
-      name: 'Administrator',
-      role: 'admin',
-      subscription: SUBSCRIPTION_TIERS.ENTERPRISE,
-      features: {
-        agents: 'unlimited',
-        workflows: 'unlimited',
-        connections: 'unlimited',
-        analytics: true,
-        portal: true,
-        prioritySupport: true,
-        teamLicenses: 'unlimited'
-      }
-    }
-  },
-  'admin@dhstx.com': {
-    password: 'admin123',
-    user: {
-      email: 'admin@dhstx.com',
-      name: 'Administrator',
-      role: 'admin',
-      subscription: SUBSCRIPTION_TIERS.ENTERPRISE,
-      features: {
-        agents: 'unlimited',
-        workflows: 'unlimited',
-        connections: 'unlimited',
-        analytics: true,
-        portal: true,
-        prioritySupport: true,
-        teamLicenses: 'unlimited'
-      }
-    }
-  },
-  'user': {
-    password: 'user123',
-    user: {
-      email: 'user@example.com',
-      name: 'Free User',
-      role: 'user',
-      subscription: SUBSCRIPTION_TIERS.FREE,
-      features: {
-        agents: 1,
-        workflows: 1,
-        connections: 5,
-        analytics: false,
-        portal: false,
-        prioritySupport: false,
-        teamLicenses: 1
-      }
-    }
-  },
-  'user@example.com': {
-    password: 'user123',
-    user: {
-      email: 'user@example.com',
-      name: 'Free User',
-      role: 'user',
-      subscription: SUBSCRIPTION_TIERS.FREE,
-      features: {
-        agents: 1,
-        workflows: 1,
-        connections: 5,
-        analytics: false,
-        portal: false,
-        prioritySupport: false,
-        teamLicenses: 1
-      }
-    }
+export async function login(email, password) {
+  if (!email || !password) return null;
+
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+
+  if (!response.ok) {
+    return null;
   }
-};
 
-export const login = (email, password) => {
-  // Check demo users
-  const demoUser = DEMO_USERS[email];
-  if (demoUser && demoUser.password === password) {
-    const user = {
-      ...demoUser.user,
-      id: Date.now().toString()
-    };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    return user;
+  const data = await response.json();
+  const { token, user } = data || {};
+  if (!token || !user) return null;
+
+  localStorage.setItem(AUTH_TOKEN_KEY, token);
+  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+  return user;
+}
+
+export function logout() {
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_USER_KEY);
+}
+
+export function getToken() {
+  return localStorage.getItem(AUTH_TOKEN_KEY);
+}
+
+export function getCurrentUser() {
+  const stored = localStorage.getItem(AUTH_USER_KEY);
+  if (!stored) return null;
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return null;
   }
-  
-  // Fallback for any other credentials (demo mode)
-  if (email && password) {
-    const user = {
-      email,
-      name: email.split('@')[0],
-      role: 'user',
-      subscription: SUBSCRIPTION_TIERS.FREE,
-      id: Date.now().toString(),
-      features: {
-        agents: 1,
-        workflows: 1,
-        connections: 5,
-        analytics: false,
-        portal: false,
-        prioritySupport: false,
-        teamLicenses: 1
-      }
-    };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    return user;
-  }
-  return null;
-};
+}
 
-export const logout = () => {
-  localStorage.removeItem(AUTH_KEY);
-};
-
-export const getCurrentUser = () => {
-  const stored = localStorage.getItem(AUTH_KEY);
-  if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch {
+export async function refreshCurrentUser() {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const response = await fetch('/api/auth/me', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!response.ok) {
+      if (response.status === 401) logout();
       return null;
     }
+    const payload = await response.json();
+    // Persist only the user object; subscription is used for feature checks
+    if (payload?.user) {
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(payload.user));
+    }
+    return payload?.user || null;
+  } catch {
+    return null;
   }
-  return null;
-};
+}
 
-export const isAuthenticated = () => {
-  return getCurrentUser() !== null;
-};
+export function isAuthenticated() {
+  return Boolean(getToken());
+}
 
-export const hasFeature = (featureName) => {
+// Feature helpers based on pricing tiers; best-effort using cached user
+export function hasFeature(featureName) {
   const user = getCurrentUser();
-  if (!user || !user.features) {
-    return false;
+  if (!user) return false;
+  // If user has an explicit features object (legacy), honor it
+  if (user.features) {
+    const value = user.features[featureName];
+    return value === true || value === 'unlimited';
   }
-  return user.features[featureName] === true || user.features[featureName] === 'unlimited';
-};
+  // Fallback by tier if present on user
+  const tierId = user.subscription?.plan_id || user.subscriptionTier || 'free';
+  return canAccessFeature(tierId, featureName);
+}
 
-export const getFeatureLimit = (featureName) => {
+export function getFeatureLimit(featureName) {
   const user = getCurrentUser();
-  if (!user || !user.features) {
-    return 0;
+  if (!user) return 0;
+  if (user.features) {
+    return user.features[featureName] ?? 0;
   }
-  return user.features[featureName];
-};
+  const tierId = user.subscription?.plan_id || user.subscriptionTier || 'free';
+  return getTierFeatureLimit(tierId, featureName) ?? 0;
+}
 
-export const isSubscriptionTier = (tier) => {
+export function isSubscriptionTier(tier) {
   const user = getCurrentUser();
-  return user && user.subscription === tier;
-};
+  if (!user) return false;
+  const current = user.subscription?.plan_id || user.subscriptionTier || 'free';
+  return current === tier;
+}
 
-export const canUpgrade = () => {
+export function canUpgrade() {
   const user = getCurrentUser();
-  return user && user.subscription !== SUBSCRIPTION_TIERS.ENTERPRISE;
-};
+  if (!user) return true;
+  const current = user.subscription?.plan_id || user.subscriptionTier || 'free';
+  return current !== 'enterprise';
+}
