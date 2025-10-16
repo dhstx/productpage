@@ -15,7 +15,7 @@ export default function Landing() {
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
         {/* Header */}
-        <header className="border-b border-[#202020] bg-[#0C0C0C]">
+        <header className="relative z-50 border-b border-[#202020] bg-[#0C0C0C]">
           {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
           <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
@@ -23,8 +23,9 @@ export default function Landing() {
               <ThemeToggle inline />
               <Link
                 to="/login"
+                role="button"
                 aria-label="Account Login"
-                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
+                className="z-40 w-9 h-9 rounded-full bg-[#1A1A1A] border border-[#202020] hover:bg-[#202020] transition-colors flex items-center justify-center shadow text-[#B3B3B3] hover:text-[#FFC96C]"
               >
                 <User className="h-5 w-5" />
               </Link>
