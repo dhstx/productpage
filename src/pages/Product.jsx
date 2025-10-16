@@ -39,10 +39,10 @@ export default function Product() {
               <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">PLATFORM OVERVIEW</span>
             </div>
             <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
-              COMPLETE BOARD MANAGEMENT SYSTEM
+              COMPLETE MANAGEMENT SYSTEM
             </h1>
             <p className="mx-auto mb-10 max-w-3xl text-center text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
-              The all-in-one platform for management, strategic planning, and organizational excellence. Built for efficiency, powered by intelligence.
+              Syntek is where vision meets precision. Plan, align, and execute with intelligence designed for modern leadership and long-term organizational success.
             </p>
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <Link to="/login" className="btn-system">
