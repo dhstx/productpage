@@ -5,16 +5,59 @@ export default function ThemeToggle({ inline = false, className = '' }) {
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    // Migrate old key if present
+    const legacy = localStorage.getItem('theme');
+    const stored = localStorage.getItem('dhstx-theme');
+
+    let initialTheme = stored || legacy;
+    if (!initialTheme) {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      initialTheme = prefersDark ? 'dark' : 'light';
+      // Persist first-visit preference
+      localStorage.setItem('dhstx-theme', initialTheme);
+    }
+
+    setTheme(initialTheme);
+    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = (event) => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem('dhstx-theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
+
+    // Trigger Strategic Clarity ripple + toast only when entering light mode
+    if (newTheme === 'light') {
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduceMotion) {
+        try {
+          const x = (event && event.clientX) || window.innerWidth - 24; // default near toggle area
+          const y = (event && event.clientY) || window.innerHeight - 24;
+
+          const ripple = document.createElement('div');
+          ripple.className = 'theme-ripple';
+          ripple.style.left = `${x}px`;
+          ripple.style.top = `${y}px`;
+          document.body.appendChild(ripple);
+          ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+        } catch (_) {
+          // no-op if DOM not available
+        }
+      }
+      // Toast message
+      try {
+        const toast = document.createElement('div');
+        toast.className = 'theme-toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.textContent = 'Entering Strategic Clarity Mode.';
+        document.body.appendChild(toast);
+        window.setTimeout(() => toast.remove(), 1700);
+      } catch (_) {
+        // ignore
+      }
+    }
   };
 
   const baseClasses = inline

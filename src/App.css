@@ -222,58 +222,193 @@
   }
 }
 
-/* Light Mode */
+/* Light Mode — Strategic Clarity */
 :root:not(.dark) {
-  --background: #FFFFFF;
-  --foreground: #0C0C0C;
-  --card: #F5F5F5;
-  --card-foreground: #0C0C0C;
-  --popover: #FFFFFF;
-  --popover-foreground: #0C0C0C;
-  --primary: #FFC96C;
-  --primary-foreground: #000000;
-  --secondary: #F5F5F5;
-  --secondary-foreground: #0C0C0C;
-  --muted: #F5F5F5;
-  --muted-foreground: #666666;
-  --accent: #FFC96C;
-  --accent-foreground: #000000;
+  /* Strategic Clarity global tokens */
+  --bg: #F7F7F8;              /* background canvas */
+  --bg-elev: #FFFFFF;         /* elevated surfaces */
+  --text: #141414;            /* primary text */
+  --text-muted: #3A3A3C;      /* secondary text */
+  --brand: #E4B850;           /* gold */
+  --brand-soft: #FFF5D9;      /* soft gold background */
+  --brand-ink: #231A10;       /* dark ink for gold */
+  --link: #0E5CAD;            /* action/link */
+  --border: #D9D9DE;          /* subtle divider */
+  --focus: #3B82F6;           /* accessible focus */
+  --icon: #1C1C1E;            /* icon color */
+  --shadow: 0 6px 24px rgba(20, 14, 6, 0.08);
+
+  /* Map to existing CSS variables used across the system */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-elev);
+  --card-foreground: var(--text);
+  --popover: var(--bg-elev);
+  --popover-foreground: var(--text);
+  --primary: var(--brand);
+  --primary-foreground: #1B140A; /* deep ink for legibility on gold */
+  --secondary: var(--bg-elev);
+  --secondary-foreground: var(--text);
+  --muted: var(--bg-elev);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--brand);
+  --accent-foreground: #1B140A;
   --destructive: #DC2626;
-  --border: #E5E5E5;
-  --input: #E5E5E5;
-  --ring: #FFC96C;
-  --dhstx-black: #FFFFFF;
-  --dhstx-panel: #F5F5F5;
-  --dhstx-border: #E5E5E5;
-  --dhstx-text: #0C0C0C;
-  --dhstx-muted: #666666;
-  --dhstx-accent: #FFC96C;
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--focus);
+
+  /* Back-compat for custom variables */
+  --dhstx-black: var(--bg);
+  --dhstx-panel: var(--bg-elev);
+  --dhstx-border: var(--border);
+  --dhstx-text: var(--text);
+  --dhstx-muted: var(--text-muted);
+  --dhstx-accent: var(--brand);
   --dhstx-silver: #999999;
 }
 
-:root:not(.dark) body {
-  @apply bg-white text-[#0C0C0C];
+/* Ensure light canvas wins over dark base (overrides !important) */
+html:not(.dark),
+html:not(.dark) body,
+html:not(.dark) #root {
+  background-color: var(--bg) !important;
+  color: var(--text);
 }
 
-:root:not(.dark) .btn-system {
-  @apply bg-[#999999] text-white border-[#E5E5E5];
+/* Typography adjustments for breathability in light */
+html:not(.dark) body {
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  font-weight: 400;
+}
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) h6 {
+  color: var(--text);
 }
 
-:root:not(.dark) .btn-system:hover,
-:root:not(.dark) .btn-system:active {
-  @apply bg-[#FFC96C] text-black;
+/* Ensure borders adapt to light tokens */
+html:not(.dark) * {
+  border-color: var(--border);
 }
 
-:root:not(.dark) .panel-system {
-  @apply bg-[#F5F5F5] border-[#E5E5E5];
+/* Links */
+html:not(.dark) a {
+  color: var(--link);
+  text-underline-offset: 2px;
+}
+html:not(.dark) a:hover {
+  text-decoration: underline;
 }
 
-:root:not(.dark) .mini-box {
-  @apply border-[#E5E5E5];
+/* Avoid low-contrast gold-on-white text */
+html:not(.dark) .text-accent {
+  color: var(--brand-ink);
 }
 
-:root:not(.dark) .mini-box:hover {
-  @apply bg-[#F5F5F5];
+/* Buttons - system */
+html:not(.dark) .btn-system {
+  background-color: var(--brand);
+  color: #1B140A; /* not pure black for warmth */
+  border-color: var(--border);
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+html:not(.dark) .btn-system:hover,
+html:not(.dark) .btn-system:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+/* Panels & Cards */
+html:not(.dark) .panel-system {
+  background-color: var(--bg-elev);
+  border-color: var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+/* Mini rows */
+html:not(.dark) .mini-box { border-color: var(--border); }
+html:not(.dark) .mini-box:hover { background-color: var(--bg); }
+
+/* Badges */
+html:not(.dark) .badge, html:not(.dark) [data-variant="badge"] {
+  background-color: var(--brand-soft);
+  color: var(--brand-ink);
+  border: 1px solid color-mix(in oklab, var(--brand) 40%, var(--brand-soft));
+}
+
+/* Icons */
+html:not(.dark) svg.lucide {
+  color: var(--icon);
+  stroke: currentColor;
+  stroke-width: 1.95px; /* 1.9–2px per spec */
+}
+html:not(.dark) [role="img"] svg { stroke-width: 1.95px; }
+
+/* Focus rings */
+html:not(.dark) :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Theme ripple (created dynamically on light-mode entry) */
+.theme-ripple {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 180vmax;
+  height: 180vmax;
+  transform: translate(-50%, -50%) scale(0);
+  background: radial-gradient(circle at center, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 40%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+  z-index: 999998;
+  will-change: transform, opacity;
+  animation: theme-ripple-expand 600ms ease-out forwards;
+  contain: layout paint style;
+}
+
+@keyframes theme-ripple-expand {
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Toast for Strategic Clarity entry */
+.theme-toast {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 999999;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  border: 1px solid color-mix(in oklab, var(--brand) 35%, var(--brand-soft));
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  animation: theme-toast-fade 1600ms ease forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes theme-toast-fade {
+  0% { opacity: 0; transform: translateY(8px); }
+  10% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(0); }
+}
+
+/* Reduced motion: disable ripple and toast animations */
+@media (prefers-reduced-motion: reduce) {
+  .theme-ripple { display: none !important; }
+  .theme-toast { animation: none !important; opacity: 1; }
 }
 
 /* Accessibility - Improved color contrast */
