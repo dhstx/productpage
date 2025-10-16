@@ -32,6 +32,12 @@ export default function Landing() {
           </div>
         </header>
 
+        {/* AI Chat Interface */}
+        {/* Ensure chat stays usable on mobile */}
+        <div style={{ marginTop: '-1in' }}>
+          <AIChatInterface />
+        </div>
+
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
@@ -58,10 +64,6 @@ export default function Landing() {
             </div>
           </FadeInSection>
         </section>
-
-        {/* AI Chat Interface */}
-        {/* Ensure chat stays usable on mobile */}
-        <AIChatInterface />
 
         {/* Core Modules */}
         <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
