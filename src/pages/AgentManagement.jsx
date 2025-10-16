@@ -19,6 +19,9 @@ export default function AgentManagement() {
   const [customTeamName, setCustomTeamName] = useState('');
   const [customTeams, setCustomTeams] = useState([]);
   const lastValidTeamRef = useRef('All Teams');
+  const configTriggerRef = useRef(null);
+  const configModalRef = useRef(null);
+  const previousFocusRef = useRef(null);
   
   const [agents, setAgents] = useState(agentData);
   const user = getCurrentUser();
@@ -94,9 +97,84 @@ export default function AgentManagement() {
 
   const handleConfigureAgent = (agent, e) => {
     e.stopPropagation();
+    configTriggerRef.current = e.currentTarget;
     setConfigAgent(agent);
     setShowConfigModal(true);
   };
+
+  const closeConfigModal = () => {
+    setShowConfigModal(false);
+    setConfigAgent(null);
+    // restore focus to the cog button that opened the modal
+    const toFocus = configTriggerRef.current || previousFocusRef.current;
+    if (toFocus && typeof toFocus.focus === 'function') {
+      setTimeout(() => toFocus.focus(), 0);
+    }
+  };
+
+  // Focus trap and Escape handling for the configuration modal
+  useEffect(() => {
+    if (!showConfigModal) return;
+
+    previousFocusRef.current = document.activeElement;
+
+    const modalEl = configModalRef.current;
+    if (!modalEl) return;
+
+    const focusableSelectors = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+
+    const focusFirstElement = () => {
+      const focusables = modalEl.querySelectorAll(focusableSelectors);
+      if (focusables.length > 0) {
+        /** @type {HTMLElement} */
+        const first = focusables[0];
+        first.focus();
+      } else {
+        modalEl.focus();
+      }
+    };
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeConfigModal();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const focusables = Array.from(modalEl.querySelectorAll(focusableSelectors)).filter(
+          (el) => el.offsetParent !== null || el === document.activeElement
+        );
+        if (focusables.length === 0) {
+          e.preventDefault();
+          modalEl.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        } else if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      }
+    };
+
+    // Focus the first focusable element when opened
+    setTimeout(focusFirstElement, 0);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [showConfigModal]);
 
   const confirmAgentAction = () => {
     if (!configAgent) return;
@@ -557,17 +635,35 @@ export default function AgentManagement() {
 
       {/* Configuration Modal with Suggested Prompts */}
       {showConfigModal && configAgent && (
-        <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 overflow-y-auto"
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:p-6"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              setShowConfigModal(false);
-              setConfigAgent(null);
+              closeConfigModal();
             }
           }}
         >
-          <div className="panel-system p-8 max-w-2xl w-full my-8">
-            <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+          <div
+            ref={configModalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="configure-agent-title"
+            tabIndex={-1}
+            className="panel-system relative w-[90vw] sm:w-full sm:max-w-2xl max-h-[75vh] sm:max-h-none my-8 p-6 sm:p-8 overflow-y-auto"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            <button
+              onClick={closeConfigModal}
+              aria-label="Close settings"
+              className="absolute right-2 top-2 h-11 w-11 rounded-full text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] flex items-center justify-center"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            <h3 id="configure-agent-title" className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
               CONFIGURE AGENT
             </h3>
             <p className="text-[#B3B3B3] mb-6 text-sm">
@@ -621,9 +717,18 @@ export default function AgentManagement() {
                 </label>
                 <div className="space-y-2">
                   {getSuggestedPrompts(configAgent).map((prompt, index) => (
-                    <div key={index} className="panel-system p-3 bg-[#0C0C0C] border border-[#202020]">
-                      <p className="text-[#F2F2F2] text-sm">{prompt}</p>
-                    </div>
+                    <button
+                      key={index}
+                      type="button"
+                      aria-label={`Use prompt: ${prompt}`}
+                      onClick={() => {
+                        setAgentInput(prompt);
+                        closeConfigModal();
+                      }}
+                      className="w-full text-left panel-system p-3 bg-[#0C0C0C] border border-[#202020] hover:border-[#FFC96C] hover:bg-[#1A1A1A]"
+                    >
+                      <span className="text-[#F2F2F2] text-sm">{prompt}</span>
+                    </button>
                   ))}
                 </div>
                 <p className="text-[#808080] text-xs mt-2">
@@ -634,19 +739,13 @@ export default function AgentManagement() {
 
             <div className="flex gap-3 mt-8">
               <button
-                onClick={() => {
-                  setShowConfigModal(false);
-                  setConfigAgent(null);
-                }}
+                onClick={closeConfigModal}
                 className="flex-1 btn-system"
               >
                 Save Changes
               </button>
               <button
-                onClick={() => {
-                  setShowConfigModal(false);
-                  setConfigAgent(null);
-                }}
+                onClick={closeConfigModal}
                 className="flex-1 btn-system-secondary"
               >
                 Cancel
