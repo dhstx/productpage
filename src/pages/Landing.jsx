@@ -35,7 +35,7 @@ export default function Landing() {
 
         {/* AI Chat Interface */}
         {/* Ensure chat stays usable on mobile */}
-        <div style={{ marginTop: '-1.5in' }}>
+        <div style={{ marginTop: '-2in' }}>
           <AIChatInterface />
         </div>
 
