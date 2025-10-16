@@ -72,14 +72,18 @@ export default function Landing() {
           <>
             {/* AI Chat Interface */}
             {/* Ensure chat stays usable on mobile */}
-            <AIChatInterface />
+            <div className="mb-8 sm:mb-10 md:mb-16">
+              <AIChatInterface />
+            </div>
             {heroSection}
           </>
         ) : (
           <>
             {/* AI Chat Interface */}
             {/* Ensure chat stays usable on mobile */}
-            <AIChatInterface />
+            <div className="mb-8 sm:mb-10 md:mb-16">
+              <AIChatInterface />
+            </div>
             {heroSection}
           </>
         )}
