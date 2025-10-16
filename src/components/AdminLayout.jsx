@@ -182,9 +182,7 @@ export default function AdminLayout({ children }) {
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
         <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
-          <div className="text-center text-[#B3B3B3] text-sm">
-            <p className="uppercase tracking-tight">System Management</p>
-          </div>
+          {/* Intentionally left blank: removed System Management text per spec */}
         </div>
       </footer>
     </div>
