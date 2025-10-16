@@ -356,11 +356,11 @@ export default function AgentManagement() {
           })}
         </div>
 
-        {/* Main Content - Agent Text Box */}
+        {/* Main Content - Agent Chat Box */}
         <div className="md:col-span-9 col-span-12 md:order-2 order-1">
           <div className="panel-system p-6 flex flex-col mx-auto w-full max-w-2xl md:max-w-none md:mx-0 md:h-[calc(100vh-280px)]">
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight text-center">
-              Agent Text Box
+              Agent Chat Box
             </h3>
             
             {/* Selected Agents - Display as chips with X button */}
