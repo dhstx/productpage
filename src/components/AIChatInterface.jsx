@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Paperclip, Mic, ArrowUp, Sparkles } from 'lucide-react';
+import { ArrowUp, Sparkles } from 'lucide-react';
+import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
 // Typing timing controls
@@ -9,6 +10,7 @@ const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part
 
 export default function AIChatInterface() {
   const [message, setMessage] = useState('');
+  const [activeMode, setActiveMode] = useState('chat');
   const [selectedAgent, setSelectedAgent] = useState('Strategic Advisor');
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
@@ -371,57 +373,14 @@ export default function AIChatInterface() {
           {/* Chat Input */}
           <form onSubmit={handleSubmit} className="relative">
             <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
-              <div className="flex flex-wrap items-start gap-3 sm:flex-nowrap">
-                {/* Attachment Button */}
-                <button
-                  type="button"
-                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A]"
-                  onClick={() => alert('File attachment coming soon')}
-                >
-                  <Paperclip className="w-5 h-5 text-[#B3B3B3]" />
-                </button>
-
-                {/* Text Input */}
-                <div className="min-w-0 flex-1">
-                  <textarea
-                    ref={textareaRef}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onFocus={() => sectionRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })}
-                    placeholder="Describe what you need help with..."
-                    aria-label="Message input"
-                    enterKeyHint="send"
-                    inputMode="text"
-                    autoCorrect="on"
-                    autoComplete="on"
-                    spellCheck={true}
-                    className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
-                    rows={1}
-                  />
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:flex-nowrap">
-                  <button
-                    type="button"
-                    className="flex-1 rounded-full border border-transparent bg-[#202020] px-4 py-2 text-center text-sm font-medium text-[#B3B3B3] transition-colors hover:bg-[#2A2A2A] sm:flex-none"
-                  >
-                    Chat
-                  </button>
-                  <button
-                    type="button"
-                    className="flex-1 rounded-full border border-transparent bg-[#202020] px-4 py-2 text-center text-sm font-medium text-[#B3B3B3] transition-colors hover:bg-[#2A2A2A] sm:flex-none"
-                  >
-                    AGI
-                  </button>
-                  <button
-                    type="button"
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A]"
-                    onClick={() => alert('Voice input coming soon')}
-                  >
-                    <Mic className="w-5 h-5 text-[#B3B3B3]" />
-                  </button>
+              <ChatTools
+                onAttach={() => alert('File attachment coming soon')}
+                onToggleMode={(mode) => setActiveMode(mode)}
+                activeMode={activeMode}
+                onMicStart={() => alert('Voice input coming soon')}
+                disabled={false}
+                features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
+                rightAppend={(
                   <button
                     type="submit"
                     disabled={!message.trim()}
@@ -433,8 +392,25 @@ export default function AIChatInterface() {
                   >
                     <ArrowUp className={`w-5 h-5 ${message.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
                   </button>
-                </div>
-              </div>
+                )}
+              >
+                <textarea
+                  ref={textareaRef}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  onFocus={() => sectionRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })}
+                  placeholder="Describe what you need help with..."
+                  aria-label="Message input"
+                  enterKeyHint="send"
+                  inputMode="text"
+                  autoCorrect="on"
+                  autoComplete="on"
+                  spellCheck={true}
+                  className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
+                  rows={1}
+                />
+              </ChatTools>
             </div>
           </form>
 
