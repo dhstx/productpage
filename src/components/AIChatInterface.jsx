@@ -153,19 +153,13 @@ export default function AIChatInterface() {
       const titleEl = titleRef.current;
       if (!titleEl) return;
 
-      // Compute the gray color from the prefix span, fall back to system token
-      let helloGray = '#B3B3B3';
-      if (helloPrefixRef.current) {
-        helloGray = getComputedStyle(helloPrefixRef.current).color || helloGray;
-      } else {
-        const rootStyles = getComputedStyle(document.documentElement);
-        helloGray = (rootStyles.getPropertyValue('--dhstx-muted') || helloGray).trim();
-      }
-      titleEl.style.setProperty('--hello-gray', helloGray);
+      // Set final title color to white (overrides previous gray)
+      const targetColor = '#FFFFFF';
+      titleEl.style.setProperty('--hello-gray', targetColor);
 
       if (reduceMotion) {
         // Respect reduced motion: set final state instantly
-        titleEl.style.color = helloGray;
+        titleEl.style.color = targetColor;
         titleEl.style.clipPath = 'inset(0 0 0 0)';
         window.__syntekTitlePlayed = true;
         return;
@@ -215,6 +209,21 @@ export default function AIChatInterface() {
             filter: 'brightness(1.05)',
             offset: 0.93
           },
+          // Added extra quick flicker to increase count by ~50%
+          {
+            color: 'var(--hello-gray)',
+            clipPath: 'inset(0 0 0 0)',
+            textShadow: '0 0 0 rgba(0,0,0,0)',
+            filter: 'none',
+            offset: 0.965
+          },
+          {
+            color: 'var(--hello-gray)',
+            clipPath: 'inset(0 0 0 0)',
+            textShadow: '0 0 12px rgba(255,201,108,0.4)',
+            filter: 'brightness(1.05)',
+            offset: 0.985
+          },
           {
             color: 'var(--hello-gray)',
             clipPath: 'inset(0 0 0 0)',
@@ -250,15 +259,9 @@ export default function AIChatInterface() {
     const titleEl = titleRef.current;
     if (!titleEl) return;
     if (typeof window !== 'undefined' && window.__syntekTitlePlayed) {
-      let helloGray = '#B3B3B3';
-      if (helloPrefixRef.current) {
-        helloGray = getComputedStyle(helloPrefixRef.current).color || helloGray;
-      } else {
-        const rootStyles = getComputedStyle(document.documentElement);
-        helloGray = (rootStyles.getPropertyValue('--dhstx-muted') || helloGray).trim();
-      }
-      titleEl.style.setProperty('--hello-gray', helloGray);
-      titleEl.style.color = helloGray;
+      const targetColor = '#FFFFFF';
+      titleEl.style.setProperty('--hello-gray', targetColor);
+      titleEl.style.color = targetColor;
       titleEl.style.clipPath = 'inset(0 0 0 0)';
       titleEl.style.textShadow = 'none';
       titleEl.style.filter = 'none';
@@ -283,7 +286,7 @@ export default function AIChatInterface() {
           id="syntek-title"
           ref={titleRef}
           className="text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
-          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#000000' }}
+          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#FFFFFF' }}
         >
           SYNTEK AUTOMATIONS
         </h1>
