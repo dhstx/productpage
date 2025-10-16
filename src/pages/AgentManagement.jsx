@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
-import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog } from 'lucide-react';
+import { Bot, Zap, AlertCircle, CheckCircle, ChevronDown, Cog, ArrowUp } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 import { getCurrentUser, hasFeature } from '../lib/auth';
+import ChatTools from '../components/chat/ChatTools';
 
 export default function AgentManagement() {
   const [selectedAgents, setSelectedAgents] = useState([]);
+  const [activeMode, setActiveMode] = useState('chat');
   const [configAgent, setConfigAgent] = useState(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -426,34 +428,53 @@ export default function AgentManagement() {
               </div>
             </div>
 
-            {/* Input Area */}
+            {/* Input Area with shared ChatTools */}
             <form onSubmit={handleAgentSubmit} className="flex flex-col gap-3 md:flex-row">
-              <textarea
-                value={agentInput}
-                onChange={(e) => setAgentInput(e.target.value)}
-                placeholder={
-                  selectedAgents.length === 0 
-                    ? "Select agents to start messaging..." 
-                    : selectedAgents.length === 1 
-                      ? `Message ${selectedAgents[0].name}...` 
-                      : `Message ${selectedAgents.length} agents...`
-                }
-                disabled={selectedAgents.length === 0}
-                className="flex-1 px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
-                rows={2}
-                style={{ minHeight: '60px', maxHeight: '200px' }}
-                onInput={(e) => {
-                  e.target.style.height = 'auto';
-                  e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
-                }}
-              />
-              <button
-                type="submit"
-                disabled={selectedAgents.length === 0 || !agentInput.trim()}
-                className="btn-system w-full md:w-auto md:px-6 md:self-end disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Send
-              </button>
+              <div className="w-full">
+                <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
+                  <ChatTools
+                    onAttach={() => alert('File attachment coming soon')}
+                    onToggleMode={(mode) => setActiveMode(mode)}
+                    activeMode={activeMode}
+                    onMicStart={() => alert('Voice input coming soon')}
+                    disabled={selectedAgents.length === 0}
+                    features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
+                    rightAppend={(
+                      <button
+                        type="submit"
+                        disabled={selectedAgents.length === 0 || !agentInput.trim()}
+                        className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                          selectedAgents.length > 0 && agentInput.trim()
+                            ? 'bg-[#FFC96C] hover:bg-[#FFD700]'
+                            : 'bg-[#202020] cursor-not-allowed'
+                        }`}
+                        aria-label="Send"
+                      >
+                        <ArrowUp className={`w-5 h-5 ${selectedAgents.length > 0 && agentInput.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
+                      </button>
+                    )}
+                  >
+                    <textarea
+                      value={agentInput}
+                      onChange={(e) => setAgentInput(e.target.value)}
+                      placeholder={
+                        selectedAgents.length === 0 
+                          ? "Select agents to start messaging..." 
+                          : selectedAgents.length === 1 
+                            ? `Message ${selectedAgents[0].name}...` 
+                            : `Message ${selectedAgents.length} agents...`
+                      }
+                      disabled={selectedAgents.length === 0}
+                      className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
+                      rows={1}
+                      onInput={(e) => {
+                        e.target.style.height = 'auto';
+                        e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+                      }}
+                    />
+                  </ChatTools>
+                </div>
+              </div>
             </form>
           </div>
         </div>
