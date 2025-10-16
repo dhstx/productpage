@@ -286,7 +286,7 @@ export default function AIChatInterface() {
           id="syntek-title"
           ref={titleRef}
           className="text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
-          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#FFFFFF' }}
+          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#000000', clipPath: 'inset(0 100% 0 0)' }}
         >
           SYNTEK AUTOMATIONS
         </h1>
