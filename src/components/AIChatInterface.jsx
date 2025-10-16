@@ -15,10 +15,14 @@ export default function AIChatInterface() {
   const [showContent, setShowContent] = useState(false);
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
+  const contentRef = useRef(null);
   const timeoutsRef = useRef([]);
   const isAnimatingRef = useRef(false);
   const activeAgentRef = useRef('Strategic Advisor');
   const hasPlayedRef = useRef(false);
+  const titleRef = useRef(null);
+  const notifiedRef = useRef(false);
+  const helloPrefixRef = useRef(null);
 
   const agents = [
     { name: 'Strategic Advisor', color: '#FFC96C' },
@@ -75,6 +79,14 @@ export default function AIChatInterface() {
       hasPlayedRef.current = true;
       setShowContent(true);
       isAnimatingRef.current = false;
+      // Fallback timer in case transitionend isn't supported
+      const fallbackNotify = setTimeout(() => {
+        if (!notifiedRef.current) {
+          notifiedRef.current = true;
+          window.dispatchEvent(new CustomEvent('chatbox-animation-complete', { detail: { source: 'AIChatInterface', via: 'fallbackTimer' } }));
+        }
+      }, 1200);
+      timeoutsRef.current.push(fallbackNotify);
     }, delay + typingSpeed);
 
     timeoutsRef.current.push(completionTimeout);
@@ -133,6 +145,126 @@ export default function AIChatInterface() {
     };
   }, []);
 
+  // One-time entrance animation for the SYNTEK AUTOMATIONS title
+  useEffect(() => {
+    function playSyntekTitleAnimation() {
+      if (typeof window !== 'undefined' && window.__syntekTitlePlayed) return;
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const titleEl = titleRef.current;
+      if (!titleEl) return;
+
+      // Compute the gray color from the prefix span, fall back to system token
+      let helloGray = '#B3B3B3';
+      if (helloPrefixRef.current) {
+        helloGray = getComputedStyle(helloPrefixRef.current).color || helloGray;
+      } else {
+        const rootStyles = getComputedStyle(document.documentElement);
+        helloGray = (rootStyles.getPropertyValue('--dhstx-muted') || helloGray).trim();
+      }
+      titleEl.style.setProperty('--hello-gray', helloGray);
+
+      if (reduceMotion) {
+        // Respect reduced motion: set final state instantly
+        titleEl.style.color = helloGray;
+        titleEl.style.clipPath = 'inset(0 0 0 0)';
+        window.__syntekTitlePlayed = true;
+        return;
+      }
+
+      // Ensure initial state before starting animation
+      titleEl.style.color = '#000000';
+      titleEl.style.clipPath = 'inset(0 100% 0 0)';
+      titleEl.style.filter = 'none';
+
+      const animation = titleEl.animate(
+        [
+          // Neon pre-flicker
+          {
+            color: '#000',
+            clipPath: 'inset(0 100% 0 0)',
+            textShadow: '0 0 0 rgba(255,201,108,0)',
+            filter: 'brightness(0.6)'
+          },
+          {
+            color: '#000',
+            clipPath: 'inset(0 90% 0 0)',
+            textShadow: '0 0 10px rgba(255,201,108,0.6), 0 0 20px rgba(255,201,108,0.35)',
+            filter: 'brightness(1.25)',
+            offset: 0.12
+          },
+          {
+            color: '#000',
+            clipPath: 'inset(0 80% 0 0)',
+            textShadow: '0 0 4px rgba(255,201,108,0.25)',
+            filter: 'brightness(0.9)',
+            offset: 0.22
+          },
+          // Left-to-right reveal with color tween
+          {
+            color: 'var(--hello-gray)',
+            clipPath: 'inset(0 0 0 0)',
+            textShadow: '2px 0 10px rgba(0,0,0,0.35)',
+            filter: 'none',
+            offset: 0.85
+          },
+          // Final short flicker
+          {
+            color: 'var(--hello-gray)',
+            clipPath: 'inset(0 0 0 0)',
+            textShadow: '0 0 12px rgba(255,201,108,0.4)',
+            filter: 'brightness(1.05)',
+            offset: 0.93
+          },
+          {
+            color: 'var(--hello-gray)',
+            clipPath: 'inset(0 0 0 0)',
+            textShadow: '0 0 0 rgba(0,0,0,0)',
+            filter: 'none',
+            offset: 1
+          }
+        ],
+        {
+          duration: 1700,
+          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          fill: 'forwards'
+        }
+      );
+
+      animation.finished.finally(() => {
+        window.__syntekTitlePlayed = true;
+      });
+    }
+
+    function onChatboxComplete() {
+      playSyntekTitleAnimation();
+    }
+
+    window.addEventListener('chatbox-animation-complete', onChatboxComplete);
+    return () => {
+      window.removeEventListener('chatbox-animation-complete', onChatboxComplete);
+    };
+  }, []);
+
+  // If animation already played earlier in the session (route transition), set final state
+  useEffect(() => {
+    const titleEl = titleRef.current;
+    if (!titleEl) return;
+    if (typeof window !== 'undefined' && window.__syntekTitlePlayed) {
+      let helloGray = '#B3B3B3';
+      if (helloPrefixRef.current) {
+        helloGray = getComputedStyle(helloPrefixRef.current).color || helloGray;
+      } else {
+        const rootStyles = getComputedStyle(document.documentElement);
+        helloGray = (rootStyles.getPropertyValue('--dhstx-muted') || helloGray).trim();
+      }
+      titleEl.style.setProperty('--hello-gray', helloGray);
+      titleEl.style.color = helloGray;
+      titleEl.style.clipPath = 'inset(0 0 0 0)';
+      titleEl.style.textShadow = 'none';
+      titleEl.style.filter = 'none';
+    }
+  }, []);
+
   const prefixText = 'Hello. I am your ';
   const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
   const typedAgentText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
@@ -146,11 +278,20 @@ export default function AIChatInterface() {
       style={{ marginTop: '2in', marginBottom: '2in' }}
     >
       <div className="mx-auto w-full max-w-4xl">
+        {/* Title that animates after Chatbox appears */}
+        <h1
+          id="syntek-title"
+          ref={titleRef}
+          className="text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
+          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#000000' }}
+        >
+          SYNTEK AUTOMATIONS
+        </h1>
         {/* AI Greeting */}
         <div className="mb-12 text-center">
           <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.45rem,6.5vw,2.5rem)]">
             <span className="inline-flex flex-wrap justify-center gap-1 text-balance">
-              <span className="whitespace-pre text-[#B3B3B3]">{displayPrefix}</span>
+              <span className="whitespace-pre text-[#B3B3B3]" ref={helloPrefixRef}>{displayPrefix}</span>
               <span
                 className="relative inline-block max-w-full whitespace-pre break-words"
                 style={{ color: currentAgentColor }}
@@ -166,6 +307,14 @@ export default function AIChatInterface() {
         </div>
 
         <div
+          ref={contentRef}
+          onTransitionEnd={(e) => {
+            if (!showContent) return;
+            if (notifiedRef.current) return;
+            if (e.propertyName !== 'opacity' && e.propertyName !== 'transform') return;
+            notifiedRef.current = true;
+            window.dispatchEvent(new CustomEvent('chatbox-animation-complete', { detail: { source: 'AIChatInterface', via: 'transitionEnd' } }));
+          }}
           style={{
             opacity: showContent ? 1 : 0,
             transform: showContent ? 'translateY(0)' : 'translateY(40px)',
