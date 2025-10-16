@@ -174,7 +174,7 @@ export default function AdminLayout({ children }) {
 
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
-        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
+        <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8 text-transparent">
           {/* Intentionally left blank per requirements */}
         </div>
       </footer>
