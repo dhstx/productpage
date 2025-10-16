@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Optimized, color-inheriting gear asset. Uses currentColor for fill/stroke -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <style>
+      .c { fill: currentColor; stroke: currentColor; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <!-- Gear teeth (12) -->
+  <g class="c">
+    <path d="M256 32l28 0 12 56a198 198 0 0 1 48 20l48-34 20 20-34 48a198 198 0 0 1 20 48l56 12 0 28-56 12a198 198 0 0 1-20 48l34 48-20 20-48-34a198 198 0 0 1-48 20l-12 56-28 0-12-56a198 198 0 0 1-48-20l-48 34-20-20 34-48a198 198 0 0 1-20-48L32 284l0-28 56-12a198 198 0 0 1 20-48L74 148l20-20 48 34a198 198 0 0 1 48-20l12-56z"/>
+    <!-- Carve inner circle to create ring -->
+    <circle cx="256" cy="256" r="150" fill="#000" stroke="none"/>
+    <!-- Add inner hub hole -->
+    <circle cx="256" cy="256" r="80" fill="#000" stroke="none"/>
+  </g>
+</svg>
