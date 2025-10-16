@@ -15,49 +15,74 @@ export default function Landing() {
     'DHStx – Enterprise Board Management & Strategic Planning',
     'All-in-one platform for management, strategic planning, and organizational excellence.'
   );
+  // Determine if this is the live (production) deployment
+  // Priority: production domain check; fallback to env flag if provided
+  const isLiveDeployment = (() => {
+    if (typeof window !== 'undefined') {
+      const host = window.location.hostname.toLowerCase();
+      if (host.endsWith('dhstx.co')) return true;
+    }
+    return import.meta.env?.VITE_ENV === 'production';
+  })();
+
+  const heroSection = (
+    <>
+      {/* Hero Section (placed above header) */}
+      {/* clamp heading via .h1, keep hero centered within ~4xl */}
+      <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-8 pt-8 sm:pb-10 sm:pt-10 md:px-8 md:pb-16 md:pt-16">
+        <FadeInSection>
+          <div className="max-w-4xl mx-auto">
+            <img
+              src="/syntek-hero.png"
+              alt="Syntek Automations logo centered in hero"
+              className="mx-auto mb-6 h-auto w-[140px] sm:w-[180px] md:w-[220px]"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = '/og-image.svg';
+              }}
+            />
+            <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
+              TRANSFORM YOUR COMPANY INTO A POWERHOUSE
+            </h1>
+            <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
+              The all-in-one platform for management, strategic planning, and organizational excellence
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+              <AnimatedButton asChild>
+                <Link to="/product" className="btn-system">
+                  Explore Platform
+                </Link>
+              </AnimatedButton>
+              <AnimatedButton asChild variant="secondary">
+                <Link to="/login" className="btn-system">
+                  Account Login
+                </Link>
+              </AnimatedButton>
+            </div>
+          </div>
+        </FadeInSection>
+      </section>
+    </>
+  );
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
-        {/* AI Chat Interface */}
-        {/* Ensure chat stays usable on mobile */}
-        <AIChatInterface />
-
-        {/* Hero Section (placed above header) */}
-        {/* clamp heading via .h1, keep hero centered within ~4xl */}
-        <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-8 pt-8 sm:pb-10 sm:pt-10 md:px-8 md:pb-16 md:pt-16">
-          <FadeInSection>
-            <div className="max-w-4xl mx-auto">
-              <img
-                src="/syntek-hero.png"
-                alt="Syntek Automations logo centered in hero"
-                className="mx-auto mb-6 h-auto w-[140px] sm:w-[180px] md:w-[220px]"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/og-image.svg';
-                }}
-              />
-              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
-                TRANSFORM YOUR COMPANY INTO A POWERHOUSE
-              </h1>
-              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
-                The all-in-one platform for management, strategic planning, and organizational excellence
-              </p>
-              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-                <AnimatedButton asChild>
-                  <Link to="/product" className="btn-system">
-                    Explore Platform
-                  </Link>
-                </AnimatedButton>
-                <AnimatedButton asChild variant="secondary">
-                  <Link to="/login" className="btn-system">
-                    Account Login
-                  </Link>
-                </AnimatedButton>
-              </div>
-            </div>
-          </FadeInSection>
-        </section>
+        {isLiveDeployment ? (
+          <>
+            {/* AI Chat Interface */}
+            {/* Ensure chat stays usable on mobile */}
+            <AIChatInterface />
+            {heroSection}
+          </>
+        ) : (
+          <>
+            {/* AI Chat Interface */}
+            {/* Ensure chat stays usable on mobile */}
+            <AIChatInterface />
+            {heroSection}
+          </>
+        )}
 
         {/* Header removed: replaced by GlobalNav */}
 
