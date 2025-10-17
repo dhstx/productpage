@@ -250,8 +250,9 @@
     animation: spin var(--cog-duration) linear infinite;
     overflow: visible;
     transform-origin: center;
+    transform-box: fill-box;
     will-change: transform;
-    display: inline-block;
+    display: block;
   }
 
   .cog--reverse {
@@ -264,6 +265,9 @@
   .cog--sm { --cog-duration: 16s; width: 96px; height: 96px; }
   .cog--md { --cog-duration: 22s; width: 144px; height: 144px; }
   .cog--lg { --cog-duration: 28s; width: 192px; height: 192px; }
+
+  /* Theme color (peach/amber) for inline SVG contexts */
+  .cog, .cog__svg { color: var(--accent-amber, #F2C06B); }
 
   /* Scale down on compact screens to avoid overflow while keeping spacing */
   @media (max-width: 640px) {
@@ -284,12 +288,20 @@
   }
 
   /* Remove any clipping, masks, or rounding */
-  .cog, .cog__img {
+  .cog, .cog__img, .cog__svg {
     -webkit-mask-image: none !important;
     mask-image: none !important;
     clip-path: none !important;
     background: none !important;
     border-radius: 0 !important;
+  }
+
+  /* Ensure inline SVGs center and never clip if used */
+  .cog__svg {
+    overflow: visible;
+    transform-origin: center;
+    transform-box: fill-box;
+    display: block;
   }
 
   /* Reduced motion */
