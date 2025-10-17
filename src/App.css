@@ -523,36 +523,11 @@ html[data-theme="light"] .stroke-white { stroke: var(--icon) !important; }
   }
 }
 
-/* Toast for Strategic Clarity entry */
-.theme-toast {
-  position: fixed;
-  bottom: 18px;
-  right: 18px;
-  z-index: 999999;
-  background: var(--brand-soft);
-  color: var(--brand-ink);
-  border: 1px solid color-mix(in oklab, var(--brand) 35%, var(--brand-soft));
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-  padding: 10px 12px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  animation: theme-toast-fade 1600ms ease forwards;
-  will-change: opacity, transform;
-}
+/* (Removed) theme toast styles per bleed transition spec */
 
-@keyframes theme-toast-fade {
-  0% { opacity: 0; transform: translateY(8px); }
-  10% { opacity: 1; transform: translateY(0); }
-  85% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(0); }
-}
-
-/* Reduced motion: disable ripple and toast animations */
+/* Reduced motion: disable ripple animation */
 @media (prefers-reduced-motion: reduce) {
   .theme-ripple { display: none !important; }
-  .theme-toast { animation: none !important; opacity: 1; }
 }
 
 /* Accessibility - Improved color contrast */
@@ -569,37 +544,7 @@ html[data-theme="light"] .stroke-white { stroke: var(--icon) !important; }
   }
 }
 
-/* === Theme Phase Wipe ============================================== */
-:root {
-  --theme-wipe-duration: 2000ms;
-}
-
-/* Overlay covers viewport and animates width; background equals TARGET theme base */
-.theme-wipe {
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  width: 0;                /* animated to 100% */
-  pointer-events: none;
-  z-index: 999999;         /* above everything */
-  will-change: width, opacity;
-  opacity: 1;
-}
-
-/* Directional helpers (we set background color via JS to the *target* theme) */
-.theme-wipe.lr { left: 0; right: auto; }    /* left→right (dark→light) */
-.theme-wipe.rl { right: 0; left: auto; }    /* right→left (light→dark) */
-
-@keyframes wipe-grow {
-  0%   { width: 0;   }
-  100% { width: 100%; }
-}
-
-/* Reduced motion: skip the wipe */
-@media (prefers-reduced-motion: reduce) {
-  .theme-wipe { display: none !important; }
-  * { animation: none !important; transition: none !important; }
-}
+/* (Removed) Theme Phase Wipe; replaced by Theme Bleed transition */
 
 /* === Light-mode legibility for form controls & menus =============== */
 html[data-theme="light"] select,
@@ -657,4 +602,54 @@ html[data-theme="light"] .select svg {
 html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [aria-disabled="true"]) {
   color: var(--text-muted) !important;
   opacity: .8;
+}
+
+/* === THEME BLEED TRANSITION ======================================= */
+:root {
+  --theme-bleed-duration: 2000ms;
+}
+
+/* Overlay that sits above everything and gets "eaten" by the new theme */
+.theme-bleed {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: none;
+  /* color set via JS to the PREVIOUS theme's dominant surface */
+  background: #0B0B0B;
+  /* start fully covering; we reveal the new theme by animating clip-path */
+  will-change: clip-path, opacity;
+  opacity: 1;
+}
+
+.theme-bleed.ltr { animation: bleed-ltr var(--theme-bleed-duration) cubic-bezier(.22,.61,.36,1) forwards; }
+.theme-bleed.rtl { animation: bleed-rtl var(--theme-bleed-duration) cubic-bezier(.22,.61,.36,1) forwards; }
+
+/* Organic edge made from a noisy polygon so it looks like "bleeding" */
+@keyframes bleed-ltr {
+  0%   { clip-path: polygon(0 0, 0 0,   0 100%, 0 100%); }
+  10%  { clip-path: polygon(0 0, 12% 1%, 12% 99%, 0 100%); }
+  25%  { clip-path: polygon(0 0, 28% 3%, 28% 97%, 0 100%); }
+  40%  { clip-path: polygon(0 0, 45% 5%, 45% 95%, 0 100%); }
+  55%  { clip-path: polygon(0 0, 60% 7%, 60% 93%, 0 100%); }
+  70%  { clip-path: polygon(0 0, 76% 6%, 76% 94%, 0 100%); }
+  85%  { clip-path: polygon(0 0, 90% 4%, 90% 96%, 0 100%); }
+  100% { clip-path: polygon(0 0,100% 0, 100% 100%, 0 100%); opacity: 0; }
+}
+
+@keyframes bleed-rtl {
+  0%   { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+  10%  { clip-path: polygon(100% 0, 88% 1%, 88% 99%, 100% 100%); }
+  25%  { clip-path: polygon(100% 0, 72% 3%, 72% 97%, 100% 100%); }
+  40%  { clip-path: polygon(100% 0, 55% 5%, 55% 95%, 100% 100%); }
+  55%  { clip-path: polygon(100% 0, 40% 7%, 40% 93%, 100% 100%); }
+  70%  { clip-path: polygon(100% 0, 24% 6%, 24% 94%, 100% 100%); }
+  85%  { clip-path: polygon(100% 0, 10% 4%, 10% 96%, 100% 100%); }
+  100% { clip-path: polygon(0 0,  0 0,   0 100%, 100% 100%); opacity: 0; }
+}
+
+/* Reduced motion users: no animation */
+@media (prefers-reduced-motion: reduce) {
+  .theme-bleed { display: none !important; }
+  * { animation: none !important; transition: none !important; }
 }
