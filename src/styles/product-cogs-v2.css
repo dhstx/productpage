@@ -55,8 +55,27 @@
     transform-origin: center;
     display: block;
     pointer-events: none;
+    overflow: visible;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
   }
   .product-cogs-v2 .gear-img-v2 {
     width: 100%; height: 100%; object-fit: contain; image-rendering: auto;
+  }
+
+  /* Nuke legacy offenders inside the scoped block */
+  .product-cogs-v2 .gear-item-v2,
+  .product-cogs-v2 .gear-item-v2 * {
+    -webkit-mask: none !important; mask: none !important; clip-path: none !important;
+    mix-blend-mode: normal !important; background-blend-mode: normal !important;
+    filter: none !important; opacity: 1 !important; border-radius: 0 !important;
+  }
+  .product-cogs-v2 .gear-item-v2::before,
+  .product-cogs-v2 .gear-item-v2::after { content: none !important; }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    .product-cogs-v2 .gear-item-v2 { animation: none !important; }
   }
 }
