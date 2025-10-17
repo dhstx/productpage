@@ -263,6 +263,11 @@ html[data-theme="light"] {
   --icon: #1C1C1E;            /* icon color */
   --shadow: 0 6px 24px rgba(20, 14, 6, 0.08);
 
+  /* Optional foreground semantic aliases for components */
+  --fg-strong: #111827;   /* primary text on light */
+  --fg-muted: #4B5563;    /* secondary/muted text */
+  --fg-disabled: #9CA3AF; /* disabled text */
+
   /* Map to existing CSS variables used across the system */
   --background: var(--bg);
   --foreground: var(--text);
@@ -499,6 +504,29 @@ html[data-theme="light"] [class*="bg-[#1a1a1a]"] {
 }
 html[data-theme="light"] .fill-white { fill: var(--icon) !important; }
 html[data-theme="light"] .stroke-white { stroke: var(--icon) !important; }
+
+/* === Agent Select — Light-mode legibility ============================ */
+/* Scope only the main hero selector trigger and its children */
+html[data-theme="light"] .agent-select__trigger {
+  color: var(--fg-strong, var(--text));
+}
+html[data-theme="light"] .agent-select__trigger .agent-select__placeholder {
+  color: var(--fg-muted, var(--text-muted));
+}
+html[data-theme="light"] .agent-select__trigger .agent-select__icon {
+  color: var(--fg-muted, #6B7280);
+  opacity: 0.9;
+}
+html[data-theme="light"] .agent-select__trigger:hover {
+  color: var(--fg-strong, var(--text));
+}
+html[data-theme="light"] .agent-select__trigger:focus-visible {
+  outline: 2px solid var(--brand, var(--ring));
+  outline-offset: 2px;
+}
+html[data-theme="light"] .agent-select__trigger[aria-disabled="true"] {
+  color: var(--fg-disabled, #9CA3AF);
+}
 
 /* Theme ripple (created dynamically on light-mode entry) */
 .theme-ripple {
