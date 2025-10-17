@@ -4,6 +4,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
 import ScrollGears from '../components/graphics/ScrollGears';
+import CogsV2 from '../components/product/CogsV2';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
 
@@ -156,10 +157,14 @@ export default function Product() {
           <ROICalculator />
         </FadeInSection>
 
-        {/* Scroll Gears Animation */}
+        {/* Scroll Gears Animation (legacy, preserved) + New isolated V2 cogs */}
         <FadeInSection>
           <section className="w-full max-w-screen overflow-x-hidden border-b border-[#202020] py-24">
-            <ScrollGears color="#FFC96C" />
+            <div className="mx-auto max-w-5xl px-4 md:px-8">
+              {/* Legacy component retained for reference (do not delete yet) */}
+              {/* <ScrollGears color="#FFC96C" /> */}
+              <CogsV2 />
+            </div>
           </section>
         </FadeInSection>
 
