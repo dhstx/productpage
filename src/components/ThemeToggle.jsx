@@ -18,7 +18,9 @@ export default function ThemeToggle({ inline = false, className = '' }) {
     }
 
     setTheme(initialTheme);
+    // Set both class and data attribute for theming systems
     document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+    document.documentElement.setAttribute('data-theme', initialTheme);
   }, []);
 
   const toggleTheme = (event) => {
@@ -26,6 +28,7 @@ export default function ThemeToggle({ inline = false, className = '' }) {
     setTheme(newTheme);
     localStorage.setItem('dhstx-theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    document.documentElement.setAttribute('data-theme', newTheme);
 
     // Trigger Strategic Clarity ripple + toast only when entering light mode
     if (newTheme === 'light') {

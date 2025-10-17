@@ -167,8 +167,8 @@ export default function AIChatInterface() {
         return;
       }
 
-      // Ensure initial state before starting animation
-      titleEl.style.color = '#000000';
+      // Ensure initial state before starting animation (tokenized with dark fallback)
+      titleEl.style.color = 'var(--text, var(--foreground))';
       titleEl.style.clipPath = 'inset(0 100% 0 0)';
       titleEl.style.filter = 'none';
 
@@ -176,20 +176,20 @@ export default function AIChatInterface() {
         [
           // Neon pre-flicker
           {
-            color: '#000',
+            color: 'var(--text, var(--foreground))',
             clipPath: 'inset(0 100% 0 0)',
             textShadow: '0 0 0 rgba(255,201,108,0)',
             filter: 'brightness(0.6)'
           },
           {
-            color: '#000',
+            color: 'var(--text, var(--foreground))',
             clipPath: 'inset(0 90% 0 0)',
             textShadow: '0 0 10px rgba(255,201,108,0.6), 0 0 20px rgba(255,201,108,0.35)',
             filter: 'brightness(1.25)',
             offset: 0.12
           },
           {
-            color: '#000',
+            color: 'var(--text, var(--foreground))',
             clipPath: 'inset(0 80% 0 0)',
             textShadow: '0 0 4px rgba(255,201,108,0.25)',
             filter: 'brightness(0.9)',
@@ -284,11 +284,11 @@ export default function AIChatInterface() {
     >
       <div className="mx-auto w-full max-w-4xl">
         {/* Title that animates after Chatbox appears */}
-        <h1
+      <h1
           id="syntek-title"
           ref={titleRef}
           className="text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
-          style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: '#000000', clipPath: 'inset(0 100% 0 0)' }}
+        style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))', clipPath: 'inset(0 100% 0 0)' }}
         >
           SYNTEK AUTOMATIONS
         </h1>

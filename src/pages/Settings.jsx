@@ -633,6 +633,12 @@ function TeamSection() {
                           type="button"
                           onClick={() => handleChangeRole(member)}
                           className="px-3 py-1 rounded-[4px] bg-[#202020] text-[#F2F2F2] text-xs hover:bg-[#FFC96C] hover:text-[#0C0C0C] transition-colors"
+                          style={{
+                            // Light-mode elevate system surfaces
+                            backgroundColor: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--bg-elev)' : undefined,
+                            color: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--text)' : undefined,
+                            borderColor: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--border)' : undefined
+                          }}
                         >
                           Change role
                         </button>
@@ -640,6 +646,11 @@ function TeamSection() {
                           type="button"
                           onClick={() => handleRemove(member)}
                           className="p-2 rounded-[4px] bg-[#202020] text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                          style={{
+                            backgroundColor: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--bg-elev)' : undefined,
+                            color: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--text)' : undefined,
+                            borderColor: document?.documentElement?.getAttribute?.('data-theme') === 'light' ? 'var(--border)' : undefined
+                          }}
                           aria-label={`Remove ${member.name}`}
                         >
                           <LogOut className="w-4 h-4" />
