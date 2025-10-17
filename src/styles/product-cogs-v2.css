@@ -1,0 +1,62 @@
+/* Put our rules in a topmost layer so they override older layers cleanly */
+@layer gear-reset, gear-base;
+
+/* --------- HARD RESET (scoped) --------- */
+@layer gear-reset {
+  .product-cogs-v2, .product-cogs-v2 * {
+    all: revert-layer;             /* wipe earlier layers inside this scope */
+  }
+  .product-cogs-v2, .product-cogs-v2 * {
+    /* Nuke the usual offenders explicitly (some engines ignore all: for them) */
+    -webkit-mask: none !important;
+    -webkit-mask-image: none !important;
+    mask: none !important;
+    mask-image: none !important;
+    clip-path: none !important;
+    mix-blend-mode: normal !important;
+    background-blend-mode: normal !important;
+    filter: none !important;
+    opacity: 1 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    isolation: isolate !important;
+  }
+  /* Kill rogue pseudo-elements that might overlay black shapes */
+  .product-cogs-v2 *::before,
+  .product-cogs-v2 *::after { content: none !important; }
+}
+
+/* --------- BASE (our intended styles) --------- */
+@layer gear-base {
+  .product-cogs-v2 { width: 100%; margin: 0 auto; padding: 0; }
+
+  .product-cogs-v2 .gear-row-v2 {
+    display: flex;
+    justify-content: space-evenly;   /* equal gaps before/between/after */
+    align-items: center;
+    width: 100%;
+    padding: 2rem 0;
+    gap: 0;
+  }
+  @media (max-width: 768px) {
+    .product-cogs-v2 .gear-row-v2 { padding: 1.5rem 0; }
+  }
+
+  /* sizes + spin timings (keep timings identical) */
+  .product-cogs-v2 .gear-item-v2 { animation: spin var(--gear-duration) linear infinite; }
+  .product-cogs-v2 .gear-sm { --gear-duration: 16s; width: 96px;  height: 96px; }
+  .product-cogs-v2 .gear-md { --gear-duration: 22s; width: 144px; height: 144px; }
+  .product-cogs-v2 .gear-lg { --gear-duration: 28s; width: 192px; height: 192px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .product-cogs-v2 .gear-item-v2,
+  .product-cogs-v2 .gear-img-v2 {
+    transform-origin: center;
+    display: block;
+    pointer-events: none;
+  }
+  .product-cogs-v2 .gear-img-v2 {
+    width: 100%; height: 100%; object-fit: contain; image-rendering: auto;
+  }
+}

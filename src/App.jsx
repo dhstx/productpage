@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import './styles/product-cogs-v2.css';
 
 // Pages
 import Landing from './pages/Landing';
