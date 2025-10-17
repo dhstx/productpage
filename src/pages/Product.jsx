@@ -3,18 +3,10 @@ import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, Ch
 import ThemeToggle from '../components/ThemeToggle';
 import FeatureComparison from '../components/FeatureComparison';
 import ROICalculator from '../components/ROICalculator';
-import CogsV2 from '../components/product/CogsV2.tsx';
-import { useEffect } from 'react';
-import { diagnoseCogs } from '../utils/diagnoseCogs';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
 
 export default function Product() {
-  useEffect(() => {
-    if (import.meta && import.meta.env && import.meta.env.DEV) {
-      try { diagnoseCogs(); } catch {}
-    }
-  }, []);
 
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
@@ -164,15 +156,7 @@ export default function Product() {
           <ROICalculator />
         </FadeInSection>
 
-        {/* Scroll Gears Animation (legacy, preserved) + New isolated V2 cogs */}
-        <FadeInSection>
-          <section className="w-full max-w-screen overflow-x-hidden border-b border-[#202020] py-24">
-            <div className="mx-auto max-w-5xl px-4 md:px-8">
-              {/* Legacy component retained for reference (do not delete yet) */}
-              <CogsV2 />
-            </div>
-          </section>
-        </FadeInSection>
+        {/* Cogs section removed */}
 
         {/* Feature Comparison */}
         <FadeInSection>
