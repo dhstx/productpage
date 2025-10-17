@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cleanupCogs } from "@/utils/cleanupCogs";
 
 function GearImg({ className }: { className?: string }) {
   const [failed, setFailed] = useState(false);
@@ -32,6 +33,19 @@ function GearImg({ className }: { className?: string }) {
 }
 
 export default function CogsV2() {
+  useEffect(() => {
+    const { remaining } = cleanupCogs();
+    if (remaining > 0) {
+      console.warn("[cogs:cleanup] Some legacy nodes persisted; forced hidden.");
+    }
+    // Optional asset sanity check
+    const url = "/assets/gear-modern.png";
+    fetch(url, { method: "HEAD" })
+      .then((r) => {
+        if (!r.ok) console.warn(`[cogs:asset] Missing ${url}`);
+      })
+      .catch(() => console.warn(`[cogs:asset] Unable to reach ${url}`));
+  }, []);
   return (
     <section className="product-cogs-v2" data-cogs="v2" aria-hidden="true">
       <div className="gear-row-v2">
