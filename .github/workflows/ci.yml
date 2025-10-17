@@ -61,17 +61,22 @@ jobs:
           echo "Build size: $BUILD_SIZE"
           echo "BUILD_SIZE=$BUILD_SIZE" >> $GITHUB_ENV
       
-      - name: Comment PR with build info
+      - name: Comment PR with build info (best-effort)
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v8
+        continue-on-error: true
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `✅ Build successful!\n\n**Build Size:** ${process.env.BUILD_SIZE}\n**Node Version:** ${{ matrix.node-version }}`
-            })
+            try {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `✅ Build successful!\n\n**Build Size:** ${process.env.BUILD_SIZE}\n**Node Version:** ${{ matrix.node-version }}`
+              })
+            } catch (e) {
+              core.warning(`Failed to comment PR: ${e?.message || e}`)
+            }
   
   security-scan:
     name: Security Scan
