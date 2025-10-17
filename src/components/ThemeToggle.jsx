@@ -4,7 +4,6 @@ import { Sun, Moon } from 'lucide-react';
 // Theme persistence key must remain unchanged
 const THEME_KEY = 'dhstx-theme';
 const DURATION = 2000;
-const HALF = 1000;
 
 function setThemeDom(nextTheme) {
   document.documentElement.classList.toggle('dark', nextTheme === 'dark');
@@ -20,36 +19,30 @@ function getThemeDom() {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function runThemeWipe(nextTheme) {
-  // Respect reduced motion: instant swap, no notifications
+function bleedTransition(prevTheme, nextTheme) {
+  // Respect reduced motion
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     setThemeDom(nextTheme);
     return;
   }
 
-  // Create overlay; color must match the TARGET theme base so the sweep is visible.
-  const overlay = document.createElement('div');
-  overlay.className = 'theme-wipe ' + (nextTheme === 'light' ? 'lr' : 'rl');
-
-  // Pick a visible base color for the target theme (use existing tokens if available)
+  // Determine direction and overlay tint = PREVIOUS theme dominant color
+  const directionClass = (prevTheme === 'dark' && nextTheme === 'light') ? 'ltr' : 'rtl';
   const styles = getComputedStyle(document.documentElement);
   const lightBase = (styles.getPropertyValue('--bg') || '#F7F7F8').trim() || '#F7F7F8';
-  const darkBase = (styles.getPropertyValue('--bg-dark') || styles.getPropertyValue('--dhstx-black') || '#0B0B0B').trim() || '#0B0B0B';
-  overlay.style.backgroundColor = nextTheme === 'light' ? lightBase : darkBase;
+  const darkBase  = '#0B0B0B'; // safe dark base even if no --bg-dark token
 
-  // Animate width growth for 2s
-  overlay.style.animation = `wipe-grow ${DURATION}ms cubic-bezier(.22,.61,.36,1) forwards`;
+  const overlay = document.createElement('div');
+  overlay.className = `theme-bleed ${directionClass}`;
+  overlay.style.background = (prevTheme === 'dark') ? darkBase : lightBase;
 
+  // Apply the NEW theme underneath immediately
+  setThemeDom(nextTheme);
+
+  // Start bleed animation
   document.body.appendChild(overlay);
-
-  // Flip theme at midpoint so underlying UI is new theme when the wipe passes center
-  const mid = window.setTimeout(() => { setThemeDom(nextTheme); }, HALF);
-
-  // Cleanup at end
-  const end = window.setTimeout(() => {
+  window.setTimeout(() => {
     try { overlay.remove(); } catch {}
-    window.clearTimeout(mid);
-    window.clearTimeout(end);
   }, DURATION);
 }
 
@@ -76,11 +69,11 @@ export default function ThemeToggle({ inline = false, className = '' }) {
   }, []);
 
   const toggleTheme = (event) => {
-    const current = getThemeDom();
-    const nextTheme = current === 'dark' ? 'light' : 'dark';
+    const prev = getThemeDom();
+    const nextTheme = prev === 'dark' ? 'light' : 'dark';
 
-    // Run the wipe; it handles reduced motion and timing
-    runThemeWipe(nextTheme);
+    // Run the bleed overlay; it handles reduced motion and cleanup
+    bleedTransition(prev, nextTheme);
 
     // Update local component state immediately for icon/label correctness
     setTheme(nextTheme);
