@@ -1,14 +1,56 @@
 import { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
+// Theme persistence key must remain unchanged
 const THEME_KEY = 'dhstx-theme';
-const WIPE_DURATION_MS = 2000;
-const WIPE_HALF_MS = 1000;
+const DURATION = 2000;
+const HALF = 1000;
 
 function setThemeDom(nextTheme) {
   document.documentElement.classList.toggle('dark', nextTheme === 'dark');
   document.documentElement.setAttribute('data-theme', nextTheme);
-  localStorage.setItem(THEME_KEY, nextTheme);
+  try { localStorage.setItem(THEME_KEY, nextTheme); } catch {}
+}
+
+function getThemeDom() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved) return saved;
+  } catch {}
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function runThemeWipe(nextTheme) {
+  // Respect reduced motion: instant swap, no notifications
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setThemeDom(nextTheme);
+    return;
+  }
+
+  // Create overlay; color must match the TARGET theme base so the sweep is visible.
+  const overlay = document.createElement('div');
+  overlay.className = 'theme-wipe ' + (nextTheme === 'light' ? 'lr' : 'rl');
+
+  // Pick a visible base color for the target theme (use existing tokens if available)
+  const styles = getComputedStyle(document.documentElement);
+  const lightBase = (styles.getPropertyValue('--bg') || '#F7F7F8').trim() || '#F7F7F8';
+  const darkBase = (styles.getPropertyValue('--bg-dark') || styles.getPropertyValue('--dhstx-black') || '#0B0B0B').trim() || '#0B0B0B';
+  overlay.style.backgroundColor = nextTheme === 'light' ? lightBase : darkBase;
+
+  // Animate width growth for 2s
+  overlay.style.animation = `wipe-grow ${DURATION}ms cubic-bezier(.22,.61,.36,1) forwards`;
+
+  document.body.appendChild(overlay);
+
+  // Flip theme at midpoint so underlying UI is new theme when the wipe passes center
+  const mid = window.setTimeout(() => { setThemeDom(nextTheme); }, HALF);
+
+  // Cleanup at end
+  const end = window.setTimeout(() => {
+    try { overlay.remove(); } catch {}
+    window.clearTimeout(mid);
+    window.clearTimeout(end);
+  }, DURATION);
 }
 
 export default function ThemeToggle({ inline = false, className = '' }) {
@@ -24,7 +66,7 @@ export default function ThemeToggle({ inline = false, className = '' }) {
       const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       initialTheme = prefersDark ? 'dark' : 'light';
       // Persist first-visit preference (no animation)
-      localStorage.setItem(THEME_KEY, initialTheme);
+      try { localStorage.setItem(THEME_KEY, initialTheme); } catch {}
     }
 
     setTheme(initialTheme);
@@ -34,65 +76,27 @@ export default function ThemeToggle({ inline = false, className = '' }) {
   }, []);
 
   const toggleTheme = (event) => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    const current = getThemeDom();
+    const nextTheme = current === 'dark' ? 'light' : 'dark';
 
-    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) {
-      // Instant switch, no animations
-      setTheme(nextTheme);
-      setThemeDom(nextTheme);
-      return;
-    }
+    // Run the wipe; it handles reduced motion and timing
+    runThemeWipe(nextTheme);
 
-    // Create wipe overlay and animate in appropriate direction
-    try {
-      const overlay = document.createElement('div');
-      overlay.className = 'theme-wipe';
-      const direction = nextTheme === 'light' ? 'wipe-left-right' : 'wipe-right-left';
-      overlay.style.animation = `${direction} var(--theme-wipe-duration) forwards`;
-      document.body.appendChild(overlay);
+    // Update local component state immediately for icon/label correctness
+    setTheme(nextTheme);
 
-      // Flip theme at midpoint to complete the illusion
-      window.setTimeout(() => {
-        setTheme(nextTheme);
-        setThemeDom(nextTheme);
-
-        // Preserve existing behavior: ripple + toast when entering light mode
-        if (nextTheme === 'light') {
-          try {
-            const x = (event && event.clientX) || window.innerWidth - 24;
-            const y = (event && event.clientY) || window.innerHeight - 24;
-            const ripple = document.createElement('div');
-            ripple.className = 'theme-ripple';
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            document.body.appendChild(ripple);
-            ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
-          } catch (_) {
-            // ignore errors creating ripple
-          }
-          try {
-            const toast = document.createElement('div');
-            toast.className = 'theme-toast';
-            toast.setAttribute('role', 'status');
-            toast.setAttribute('aria-live', 'polite');
-            toast.textContent = 'Entering Strategic Clarity Mode';
-            document.body.appendChild(toast);
-            window.setTimeout(() => toast.remove(), 1700);
-          } catch (_) {
-            // ignore
-          }
-        }
-      }, WIPE_HALF_MS);
-
-      // Remove overlay after full duration
-      window.setTimeout(() => {
-        try { overlay.remove(); } catch (_) { /* ignore */ }
-      }, WIPE_DURATION_MS);
-    } catch (_) {
-      // Fallback: if overlay creation fails, perform instant switch
-      setTheme(nextTheme);
-      setThemeDom(nextTheme);
+    // Preserve existing ripple when entering light mode (no toasts)
+    if (nextTheme === 'light') {
+      try {
+        const x = (event && event.clientX) || window.innerWidth - 24;
+        const y = (event && event.clientY) || window.innerHeight - 24;
+        const ripple = document.createElement('div');
+        ripple.className = 'theme-ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        document.body.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+      } catch {}
     }
   };
 
@@ -106,6 +110,7 @@ export default function ThemeToggle({ inline = false, className = '' }) {
       className={`${baseClasses} ${className}`}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       type="button"
+      id="themeToggle"
     >
       {theme === 'dark' ? (
         <Sun className={inline ? 'w-4 h-4 text-[#FFC96C]' : 'w-5 h-5 text-[#FFC96C]'} />
