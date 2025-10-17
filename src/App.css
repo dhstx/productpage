@@ -467,6 +467,13 @@ html[data-theme="light"] h6 {
   color: var(--text);
 }
 
+/* Ensure base text elements use high-contrast ink */
+html[data-theme="light"] p,
+html[data-theme="light"] span,
+html[data-theme="light"] li {
+  color: var(--text);
+}
+
 /* Ensure borders adapt to light tokens */
 html[data-theme="light"] * {
   border-color: var(--border);
@@ -498,6 +505,13 @@ html[data-theme="light"] .btn-system:hover,
 html[data-theme="light"] .btn-system:active {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
+}
+
+/* Primary button alias (for any legacy usage) */
+html[data-theme="light"] .btn-primary {
+  background: var(--brand);
+  color: var(--brand-ink);
+  box-shadow: 0 2px 10px rgba(228,184,80,0.25);
 }
 
 /* Panels & Cards */
@@ -536,6 +550,8 @@ html[data-theme="light"] :where(button, [href], input, select, textarea, [tabind
 /* Global light-mode elevated surfaces */
 html[data-theme="light"] header,
 html[data-theme="light"] nav,
+html[data-theme="light"] section,
+html[data-theme="light"] footer,
 html[data-theme="light"] .card,
 html[data-theme="light"] .panel,
 html[data-theme="light"] .surface {
@@ -578,6 +594,27 @@ html[data-theme="light"] .text-neutral-300 { color: var(--text) !important; }
 html[data-theme="light"] .border-neutral-800,
 html[data-theme="light"] .divide-neutral-800 { border-color: var(--border) !important; }
 
+/* Map frequent arbitrary Tailwind hex utilities to light tokens */
+html[data-theme="light"] .bg-\[\#000\],
+html[data-theme="light"] .bg-\[\#000000\],
+html[data-theme="light"] [class*="bg-[#000"] {
+  background-color: var(--band) !important;
+}
+html[data-theme="light"] .bg-\[\#0C0C0C\],
+html[data-theme="light"] [class*="bg-[#0C0C0C]"],
+html[data-theme="light"] .bg-\[\#1A1A1A\],
+html[data-theme="light"] [class*="bg-[#1A1A1A]"] {
+  background-color: var(--bg-elev) !important;
+}
+html[data-theme="light"] [class*="text-[#F2F2F2]"],
+html[data-theme="light"] [class*="text-[#B3B3B3]"] {
+  color: var(--text) !important;
+}
+html[data-theme="light"] [class*="border-[#202020]"],
+html[data-theme="light"] [class*="divide-[#202020]"] {
+  border-color: var(--border) !important;
+}
+
 /* Typography & icons specifics */
 html[data-theme="light"] body { font-size: 16px; line-height: 1.55; letter-spacing: .02em; }
 html[data-theme="light"] h1,
@@ -600,7 +637,7 @@ html[data-theme="light"] .bg-neutral-950,
 html[data-theme="light"] .bg-zinc-950,
 html[data-theme="light"] .bg-\[\#111\],
 html[data-theme="light"] .bg-\[\#111111\],
-html[data-theme="light"] [class*="bg-[#111"],
+html[data-theme="light"] [class*="bg-[#111]"],
 html[data-theme="light"] [class*="bg-[#202020]"] {
   background-color: var(--band) !important;
 }

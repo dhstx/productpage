@@ -54,7 +54,7 @@ export default function ThemeToggle({ inline = false, className = '' }) {
         toast.className = 'theme-toast';
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
-        toast.textContent = 'Entering Strategic Clarity Mode.';
+        toast.textContent = 'Entering Strategic Clarity Mode';
         document.body.appendChild(toast);
         window.setTimeout(() => toast.remove(), 1700);
       } catch (_) {
