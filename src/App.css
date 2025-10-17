@@ -299,22 +299,38 @@
 }
 
 /* Light Mode — Strategic Clarity */
-:root:not(.dark) {
-  /* Strategic Clarity global tokens */
-  --bg: #F7F7F8;              /* background canvas */
-  --bg-elev: #FFFFFF;         /* elevated surfaces */
-  --text: #141414;            /* primary text */
-  --text-muted: #3A3A3C;      /* secondary text */
-  --brand: #E4B850;           /* gold */
-  --brand-soft: #FFF5D9;      /* soft gold background */
-  --brand-ink: #231A10;       /* dark ink for gold */
-  --link: #0E5CAD;            /* action/link */
-  --border: #D9D9DE;          /* subtle divider */
-  --focus: #3B82F6;           /* accessible focus */
-  --icon: #1C1C1E;            /* icon color */
+:root {
+  /* Strategic Clarity tokens */
+  --bg: #F7F7F8;          /* page background */
+  --bg-elev: #FFFFFF;      /* cards/panels */
+  --band: #F2F2F4;         /* light section band */
+  --brand: #E4B850;        /* gold */
+  --brand-soft: #FFF5D9;   /* soft gold chip */
+  --brand-ink: #231A10;    /* dark ink on gold */
+  --text: #141414;         /* primary text */
+  --text-muted: #3A3A3C;   /* secondary text */
+  --link: #0E5CAD;         /* links */
+  --border: #D9D9DE;
+  --icon: #1C1C1E;
+  --shadow: 0 6px 24px rgba(20, 14, 6, 0.08);
+  --focus: #3B82F6;
+}
+/* (Deprecated) Previous light-mode mapping via :not(.dark) kept for backwards-compat. */
+/* Map tokens when explicit light theme is active */
+html[data-theme="light"] {
+  --bg: #F7F7F8;
+  --bg-elev: #FFFFFF;
+  --text: #141414;
+  --text-muted: #3A3A3C;
+  --brand: #E4B850;
+  --brand-soft: #FFF5D9;
+  --brand-ink: #231A10;
+  --link: #0E5CAD;
+  --border: #D9D9DE;
+  --focus: #3B82F6;
+  --icon: #1C1C1E;
   --shadow: 0 6px 24px rgba(20, 14, 6, 0.08);
 
-  /* Map to existing CSS variables used across the system */
   --background: var(--bg);
   --foreground: var(--text);
   --card: var(--bg-elev);
@@ -322,7 +338,7 @@
   --popover: var(--bg-elev);
   --popover-foreground: var(--text);
   --primary: var(--brand);
-  --primary-foreground: #1B140A; /* deep ink for legibility on gold */
+  --primary-foreground: #1B140A;
   --secondary: var(--bg-elev);
   --secondary-foreground: var(--text);
   --muted: var(--bg-elev);
@@ -334,7 +350,6 @@
   --input: var(--border);
   --ring: var(--focus);
 
-  /* Back-compat for custom variables */
   --dhstx-black: var(--bg);
   --dhstx-panel: var(--bg-elev);
   --dhstx-border: var(--border);
@@ -345,62 +360,57 @@
 }
 
 /* Ensure light canvas wins over dark base (overrides !important) */
-html:not(.dark),
-html:not(.dark) body,
-html:not(.dark) #root {
+html[data-theme="light"],
+html[data-theme="light"] body,
+html[data-theme="light"] #root {
   background-color: var(--bg) !important;
   color: var(--text);
 }
 
 /* Typography adjustments for breathability in light */
-html:not(.dark) body {
+html[data-theme="light"] body {
   letter-spacing: 0.02em;
   line-height: 1.55;
   font-weight: 400;
 }
-html:not(.dark) h1,
-html:not(.dark) h2,
-html:not(.dark) h3,
-html:not(.dark) h4,
-html:not(.dark) h5,
-html:not(.dark) h6 {
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6 {
   color: var(--text);
 }
 
 /* Ensure borders adapt to light tokens */
-html:not(.dark) * {
+html[data-theme="light"] * {
   border-color: var(--border);
 }
 
 /* Links */
-html:not(.dark) a {
-  color: var(--link);
-  text-underline-offset: 2px;
-}
-html:not(.dark) a:hover {
-  text-decoration: underline;
-}
+html[data-theme="light"] a { color: var(--link); text-decoration: none; text-underline-offset: 2px; }
+html[data-theme="light"] a:hover { text-decoration: underline; }
 
 /* Avoid low-contrast gold-on-white text */
-html:not(.dark) .text-accent {
+html[data-theme="light"] .text-accent {
   color: var(--brand-ink);
 }
 
 /* Buttons - system */
-html:not(.dark) .btn-system {
+html[data-theme="light"] .btn-system {
   background-color: var(--brand);
   color: #1B140A; /* not pure black for warmth */
   border-color: var(--border);
   transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
 }
-html:not(.dark) .btn-system:hover,
-html:not(.dark) .btn-system:active {
+html[data-theme="light"] .btn-system:hover,
+html[data-theme="light"] .btn-system:active {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
 }
 
 /* Panels & Cards */
-html:not(.dark) .panel-system {
+html[data-theme="light"] .panel-system {
   background-color: var(--bg-elev);
   border-color: var(--border);
   border-radius: 8px;
@@ -408,29 +418,65 @@ html:not(.dark) .panel-system {
 }
 
 /* Mini rows */
-html:not(.dark) .mini-box { border-color: var(--border); }
-html:not(.dark) .mini-box:hover { background-color: var(--bg); }
+html[data-theme="light"] .mini-box { border-color: var(--border); }
+html[data-theme="light"] .mini-box:hover { background-color: var(--bg); }
 
 /* Badges */
-html:not(.dark) .badge, html:not(.dark) [data-variant="badge"] {
+html[data-theme="light"] .badge,
+html[data-theme="light"] [data-variant="badge"] {
   background-color: var(--brand-soft);
   color: var(--brand-ink);
-  border: 1px solid color-mix(in oklab, var(--brand) 40%, var(--brand-soft));
+  border: 1px solid #F2DEB3;
 }
 
 /* Icons */
-html:not(.dark) svg.lucide {
+html[data-theme="light"] svg.lucide {
   color: var(--icon);
   stroke: currentColor;
   stroke-width: 1.95px; /* 1.9–2px per spec */
 }
-html:not(.dark) [role="img"] svg { stroke-width: 1.95px; }
+html[data-theme="light"] [role="img"] svg { stroke-width: 1.95px; }
 
 /* Focus rings */
-html:not(.dark) :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+html[data-theme="light"] :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 8px;
 }
+
+/* Global light-mode surfaces (elevations, bands) */
+html[data-theme="light"] body { background: var(--bg); color: var(--text); }
+html[data-theme="light"] header,
+html[data-theme="light"] nav,
+html[data-theme="light"] .card,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .surface {
+  background: var(--bg-elev);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+html[data-theme="light"] .section--band,
+html[data-theme="light"] .band,
+html[data-theme="light"] .alt-section {
+  background: var(--band);
+}
+
+/* Anti-leak overrides so dark utilities don’t bleed into light mode */
+html[data-theme="light"] .bg-black,
+html[data-theme="light"] .bg-neutral-900,
+html[data-theme="light"] .bg-[#0b0b0b] { background-color: var(--band) !important; }
+html[data-theme="light"] .bg-black\/50,
+html[data-theme="light"] .bg-black\/80 { background-color: var(--band) !important; }
+html[data-theme="light"] .bg-[#1A1A1A],
+html[data-theme="light"] .bg-[#202020] { background-color: var(--bg-elev) !important; }
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-neutral-300,
+html[data-theme="light"] .text-[#F2F2F2] { color: var(--text) !important; }
+html[data-theme="light"] .border-neutral-800,
+html[data-theme="light"] .divide-neutral-800,
+html[data-theme="light"] .border-[#202020] { border-color: var(--border) !important; }
+html[data-theme="light"] .hover\:bg-[#202020]:hover { background-color: var(--band) !important; }
 
 /* Theme ripple (created dynamically on light-mode entry) */
 .theme-ripple {
