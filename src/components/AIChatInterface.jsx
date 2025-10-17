@@ -332,10 +332,12 @@ export default function AIChatInterface() {
             <div className="relative flex w-full max-w-xs flex-col items-center gap-2">
               <button
                 onClick={() => setShowAgentMenu(!showAgentMenu)}
-                className="flex w-full items-center justify-center gap-2 rounded-full border border-[#202020] bg-[#161616] px-5 py-2 text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-[#1A1A1A]"
+                className="agent-select__trigger flex w-full items-center justify-center gap-2 rounded-full border border-[#202020] bg-[#161616] px-5 py-2 text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-[#1A1A1A]"
+                aria-haspopup="listbox"
+                aria-expanded={showAgentMenu}
               >
-                <Sparkles className="w-4 h-4 text-[#FFC96C]" />
-                Select Agent
+                <Sparkles className="agent-select__icon w-4 h-4 text-[#FFC96C]" />
+                <span className="agent-select__placeholder">Select Agent</span>
               </button>
 
               {showAgentMenu && (
