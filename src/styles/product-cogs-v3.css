@@ -1,0 +1,49 @@
+/* Scope only this block so we don't fight sitewide rules */
+.product-cogs-v3, .product-cogs-v3 * {
+  -webkit-mask: none !important;
+  -webkit-mask-image: none !important;
+  mask: none !important;
+  mask-image: none !important;
+  clip-path: none !important;
+  mix-blend-mode: normal !important;
+  background-blend-mode: normal !important;
+  filter: none !important;
+  opacity: 1 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.product-cogs-v3 *::before, .product-cogs-v3 *::after { content: none !important; }
+
+/* Even spacing across viewport sizes */
+.product-cogs-v3 .gear-row-v3 {
+  display: flex;
+  justify-content: space-evenly; /* equal gaps */
+  align-items: center;
+  width: 100%;
+  padding: 2rem 0;
+  gap: 0;
+}
+@media (max-width: 768px){ .product-cogs-v3 .gear-row-v3 { padding: 1.5rem 0; } }
+
+/* Sizes (match your previous tokens) */
+.product-cogs-v3 .gear-sm { width: 96px;  height: 96px; }
+.product-cogs-v3 .gear-md { width: 144px; height: 144px; }
+.product-cogs-v3 .gear-lg { width: 192px; height: 192px; }
+
+/* Media element: centered rotation, no borders, no clipping */
+.product-cogs-v3 .gear-item-v3,
+.product-cogs-v3 .gear-media-v3 {
+  transform-origin: center;
+  overflow: visible;
+  display: block;
+  border: 0; outline: 0;
+}
+.product-cogs-v3 .gear-media-v3 {
+  width: 100%; height: 100%;
+  object-fit: contain; image-rendering: auto; pointer-events: none;
+}
+
+/* Reduced motion respect (anime.js keeps running unless we opt out) */
+@media (prefers-reduced-motion: reduce) {
+  .product-cogs-v3 .gear-item-v3 { transform: none !important; }
+}
