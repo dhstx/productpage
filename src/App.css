@@ -133,11 +133,44 @@
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* Prevent iOS Safari auto-zoom on form controls when focused */
+  /* Mobile-only: stop iOS focus zoom by ensuring computed font-size >= 16px */
   @media (max-width: 768px) {
-    :where(input, textarea, select) {
+    input[type="text"],
+    input[type="search"],
+    input[type="email"],
+    input[type="url"],
+    input[type="tel"],
+    input[type="password"],
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+      font-size: max(16px, 1rem);
+      line-height: 1.4;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Common headless/Radix/shadcn triggers acting like inputs */
+    .input,
+    .textarea,
+    .select-trigger,
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"],
+    [role="textbox"],
+    [role="combobox"],
+    [contenteditable="true"] {
+      font-size: max(16px, 1rem);
+    }
+
+    /* If any component forces <16px, out-rank it */
+    .input,
+    .textarea,
+    .select-trigger,
+    [data-slot="input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"] {
       font-size: 16px !important;
-      line-height: 1.4; /* keep caret alignment consistent */
     }
   }
 
@@ -241,6 +274,17 @@
   .btn-spacing { margin: 0.5rem; }
   @media (max-width: 768px) {
     .btn-spacing { margin: 0.5rem 0; }
+  }
+
+  /* Optional compact visuals: looks ~14px but computes as 16px */
+  @media (max-width: 768px) {
+    .input--compact, .textarea--compact {
+      font-size: 16px;                 /* prevents zoom */
+      transform: scale(0.875);         /* ~14px look */
+      transform-origin: left center;
+      /* counter the scale so the box size doesn’t shrink */
+      padding: calc(12px / 0.875) calc(14px / 0.875);
+    }
   }
 }
 
