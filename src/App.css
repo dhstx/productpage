@@ -299,10 +299,11 @@
 }
 
 /* Light Mode — Strategic Clarity */
-:root:not(.dark) {
+html[data-theme="light"] {
   /* Strategic Clarity global tokens */
   --bg: #F7F7F8;              /* background canvas */
   --bg-elev: #FFFFFF;         /* elevated surfaces */
+  --band: #F2F2F4;            /* light section band */
   --text: #141414;            /* primary text */
   --text-muted: #3A3A3C;      /* secondary text */
   --brand: #E4B850;           /* gold */
@@ -345,62 +346,63 @@
 }
 
 /* Ensure light canvas wins over dark base (overrides !important) */
-html:not(.dark),
-html:not(.dark) body,
-html:not(.dark) #root {
+html[data-theme="light"],
+html[data-theme="light"] body,
+html[data-theme="light"] #root {
   background-color: var(--bg) !important;
   color: var(--text);
 }
 
 /* Typography adjustments for breathability in light */
-html:not(.dark) body {
+html[data-theme="light"] body {
   letter-spacing: 0.02em;
   line-height: 1.55;
   font-weight: 400;
 }
-html:not(.dark) h1,
-html:not(.dark) h2,
-html:not(.dark) h3,
-html:not(.dark) h4,
-html:not(.dark) h5,
-html:not(.dark) h6 {
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3,
+html[data-theme="light"] h4,
+html[data-theme="light"] h5,
+html[data-theme="light"] h6 {
   color: var(--text);
 }
 
 /* Ensure borders adapt to light tokens */
-html:not(.dark) * {
+html[data-theme="light"] * {
   border-color: var(--border);
 }
 
 /* Links */
-html:not(.dark) a {
+html[data-theme="light"] a {
   color: var(--link);
+  text-decoration: none;
   text-underline-offset: 2px;
 }
-html:not(.dark) a:hover {
+html[data-theme="light"] a:hover {
   text-decoration: underline;
 }
 
 /* Avoid low-contrast gold-on-white text */
-html:not(.dark) .text-accent {
+html[data-theme="light"] .text-accent {
   color: var(--brand-ink);
 }
 
 /* Buttons - system */
-html:not(.dark) .btn-system {
+html[data-theme="light"] .btn-system {
   background-color: var(--brand);
   color: #1B140A; /* not pure black for warmth */
   border-color: var(--border);
   transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
 }
-html:not(.dark) .btn-system:hover,
-html:not(.dark) .btn-system:active {
+html[data-theme="light"] .btn-system:hover,
+html[data-theme="light"] .btn-system:active {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
 }
 
 /* Panels & Cards */
-html:not(.dark) .panel-system {
+html[data-theme="light"] .panel-system {
   background-color: var(--bg-elev);
   border-color: var(--border);
   border-radius: 8px;
@@ -408,29 +410,110 @@ html:not(.dark) .panel-system {
 }
 
 /* Mini rows */
-html:not(.dark) .mini-box { border-color: var(--border); }
-html:not(.dark) .mini-box:hover { background-color: var(--bg); }
+html[data-theme="light"] .mini-box { border-color: var(--border); }
+html[data-theme="light"] .mini-box:hover { background-color: var(--bg); }
 
 /* Badges */
-html:not(.dark) .badge, html:not(.dark) [data-variant="badge"] {
+html[data-theme="light"] .badge, html[data-theme="light"] [data-variant="badge"] {
   background-color: var(--brand-soft);
   color: var(--brand-ink);
   border: 1px solid color-mix(in oklab, var(--brand) 40%, var(--brand-soft));
 }
 
 /* Icons */
-html:not(.dark) svg.lucide {
+html[data-theme="light"] svg.lucide {
   color: var(--icon);
   stroke: currentColor;
   stroke-width: 1.95px; /* 1.9–2px per spec */
 }
-html:not(.dark) [role="img"] svg { stroke-width: 1.95px; }
+html[data-theme="light"] [role="img"] svg { stroke-width: 1.95px; }
 
 /* Focus rings */
-html:not(.dark) :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+html[data-theme="light"] :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
+
+/* Global light-mode elevated surfaces */
+html[data-theme="light"] header,
+html[data-theme="light"] nav,
+html[data-theme="light"] .card,
+html[data-theme="light"] .panel,
+html[data-theme="light"] .surface {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Section bands */
+html[data-theme="light"] .section--band,
+html[data-theme="light"] .band,
+html[data-theme="light"] .alt-section {
+  background: var(--band);
+  color: var(--text);
+}
+
+/* Buttons & chips */
+html[data-theme="light"] .btn--primary { background: var(--brand); color: var(--brand-ink); }
+html[data-theme="light"] .badge--gold,
+html[data-theme="light"] .chip--gold {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  border: 1px solid #F2DEB3;
+}
+
+/* Map system background utilities for light */
+html[data-theme="light"] .bg-system { background: var(--bg) !important; }
+html[data-theme="light"] .bg-panel { background: var(--bg-elev) !important; border-color: var(--border) !important; }
+
+/* Anti-leak overrides to neutralize dark utilities in light mode */
+html[data-theme="light"] .bg-black,
+html[data-theme="light"] .bg-neutral-900,
+html[data-theme="light"] .bg-\[\#0b0b0b\],
+html[data-theme="light"] [class*="bg-[#0b0b0b]"] {
+  background-color: var(--band) !important;
+}
+html[data-theme="light"] .text-white,
+html[data-theme="light"] .text-neutral-300 { color: var(--text) !important; }
+html[data-theme="light"] .border-neutral-800,
+html[data-theme="light"] .divide-neutral-800 { border-color: var(--border) !important; }
+
+/* Typography & icons specifics */
+html[data-theme="light"] body { font-size: 16px; line-height: 1.55; letter-spacing: .02em; }
+html[data-theme="light"] h1,
+html[data-theme="light"] h2,
+html[data-theme="light"] h3 { color: #121212; font-weight: 750; }
+html[data-theme="light"] .muted { color: var(--text-muted); }
+html[data-theme="light"] svg,
+html[data-theme="light"] .icon { color: var(--icon); stroke: currentColor; stroke-width: 1.9; fill: none; }
+html[data-theme="light"] :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 8px; }
+
+/* Specific component fixes to avoid dark-on-light conflicts */
+html[data-theme="light"] #syntek-title {
+  color: var(--text) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Broader anti-leak coverage for common dark utility classes */
+html[data-theme="light"] .bg-neutral-950,
+html[data-theme="light"] .bg-zinc-950,
+html[data-theme="light"] .bg-\[\#111\],
+html[data-theme="light"] .bg-\[\#111111\],
+html[data-theme="light"] [class*="bg-[#111"],
+html[data-theme="light"] [class*="bg-[#202020]"] {
+  background-color: var(--band) !important;
+}
+/* Also neutralize frequent app-specific dark hex utilities */
+html[data-theme="light"] .bg-\[\#0c0c0c\],
+html[data-theme="light"] [class*="bg-[#0c0c0c]"],
+html[data-theme="light"] .bg-\[\#1a1a1a\],
+html[data-theme="light"] [class*="bg-[#1a1a1a]"] {
+  background-color: var(--bg-elev) !important;
+}
+html[data-theme="light"] .fill-white { fill: var(--icon) !important; }
+html[data-theme="light"] .stroke-white { stroke: var(--icon) !important; }
 
 /* Theme ripple (created dynamically on light-mode entry) */
 .theme-ripple {
