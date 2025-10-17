@@ -132,6 +132,28 @@
   code, pre, .mono {
     font-family: 'JetBrains Mono', monospace;
   }
+
+  /* Prevent iOS Safari auto-zoom on form controls when focused */
+  @media (max-width: 768px) {
+    :where(input, textarea, select) {
+      font-size: 16px !important;
+      line-height: 1.4; /* keep caret alignment consistent */
+    }
+  }
+
+  /* Also enforce on touch-only devices (e.g., tablets with coarse pointers) */
+  @media (hover: none) and (pointer: coarse) {
+    :where(input, textarea, select) {
+      font-size: 16px !important;
+      line-height: 1.4;
+    }
+  }
+
+  /* Normalize text size adjustments across mobile browsers */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 }
 
 @layer components {
