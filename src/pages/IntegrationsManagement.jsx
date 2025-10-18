@@ -395,9 +395,8 @@ function IntegrationCard({ integration }) {
         ) : (
           <button
             onClick={handleConnect}
-            className="flex-1 btn-system text-sm flex items-center justify-center gap-2"
+            className="flex-1 btn-system text-sm"
           >
-            <Zap className="w-4 h-4" />
             Connect
           </button>
         )}

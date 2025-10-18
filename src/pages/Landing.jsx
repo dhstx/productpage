@@ -11,27 +11,29 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
-  // Viewport trigger for fade-on-view elements
+  // Reusable hero reveal observer applied across devices
   useEffect(() => {
-    const els = document.querySelectorAll('.fade-on-view');
-    if ('IntersectionObserver' in window && els.length) {
-      const io = new IntersectionObserver((entries, obs) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            obs.unobserve(e.target); // animate once
-          }
-        });
-      }, { root: null, threshold: 0.2 });
-      els.forEach(el => io.observe(el));
-      return () => io.disconnect();
-    } else {
-      // Fallback: show immediately
-      els.forEach(el => el.classList.add('is-visible'));
+    const els = document.querySelectorAll('.hero .reveal-up, .hero .reveal-left, .hero .reveal-right');
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((e) => e.classList.add('reveal-show'));
+      return;
     }
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          // Skip elements explicitly opted out (e.g., gated by typewriter completion)
+          if (e.target.hasAttribute('data-no-scroll-reveal')) return;
+          e.target.classList.add('reveal-show');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
-  // One-time fade-in for SYNTEK AUTOMATIONS hero image
+  // One-time fade-in for SYNTEK AUTOMATIONS hero image (50% slower, trigger ~25% visible)
   useEffect(() => {
     const el = document.querySelector('#syntek-automations-hero .fade-once');
     if (!el) return;
@@ -58,7 +60,7 @@ export default function Landing() {
             obs.unobserve(e.target);
           }
         });
-      }, { threshold: 0.2 });
+      }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
       io.observe(el);
       return () => io.disconnect();
     } else {
@@ -91,7 +93,7 @@ export default function Landing() {
 
         {/* AI Chat Interface */}
         {/* Ensure chat stays usable on mobile */}
-        <div style={{ marginTop: '-2in' }}>
+        <div style={{ marginTop: '-2in' }} className="hero">
           <AIChatInterface />
         </div>
 

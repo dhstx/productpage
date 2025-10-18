@@ -4,8 +4,8 @@ import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
 // Typing timing controls
-// Reduce typing speed (increase delay) by 20% for slower effect
-const TYPEWRITER_CHAR_MS = Math.round(35 * 1.2);      // ms per character
+// Reduce typing speed (increase delay) by ~25% for slower effect
+const TYPEWRITER_CHAR_MS = Math.round(35 * 1.25);      // ms per character
 const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part
 
 export default function AIChatInterface() {
@@ -313,6 +313,7 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
+          className={`reveal-up ${showContent ? 'reveal-show' : ''}`}
           onTransitionEnd={(e) => {
             if (!showContent) return;
             if (notifiedRef.current) return;
@@ -320,12 +321,7 @@ export default function AIChatInterface() {
             notifiedRef.current = true;
             window.dispatchEvent(new CustomEvent('chatbox-animation-complete', { detail: { source: 'AIChatInterface', via: 'transitionEnd' } }));
           }}
-          style={{
-            opacity: showContent ? 1 : 0,
-            transform: showContent ? 'translateY(0)' : 'translateY(40px)',
-            transition: 'opacity 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-            pointerEvents: showContent ? 'auto' : 'none'
-          }}
+          style={{ pointerEvents: showContent ? 'auto' : 'none' }}
         >
           {/* Agent Selector */}
           <div className="mb-8 flex justify-center">
