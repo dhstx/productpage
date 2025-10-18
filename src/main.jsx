@@ -1,6 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import '@/scripts/reveal-engine'
+import '@/scripts/hero-orchestrator'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

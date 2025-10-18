@@ -3,10 +3,9 @@ import { ArrowUp, Sparkles } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
-// Typing timing controls
-// Reduce typing speed (increase delay) by ~25% for slower effect
-const TYPEWRITER_CHAR_MS = Math.round(35 * 1.25);      // ms per character
-const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part
+// Increase per-character delay by ~10% and add a 1s pause after "Hello."
+const TYPEWRITER_CHAR_MS = Math.round(35 * 1.375);      // 10% slower than previous (~44ms → ~48ms)
+const TYPEWRITER_PAUSE_MS = 1000;    // explicit 1000ms hold after "Hello."
 
 export default function AIChatInterface() {
   const [message, setMessage] = useState('');
@@ -56,6 +55,14 @@ export default function AIChatInterface() {
       hasPlayedRef.current = true;
       setShowContent(true);
       isAnimatingRef.current = false;
+
+      // Expose typed completion for orchestrator
+      const typedEl = document.querySelector('#hero-typed');
+      if (typedEl) {
+        typedEl.setAttribute('data-typed-complete', '1');
+        typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+      }
+
       if (!notifiedRef.current) {
         notifiedRef.current = true;
         window.dispatchEvent(
@@ -103,6 +110,14 @@ export default function AIChatInterface() {
       hasPlayedRef.current = true;
       setShowContent(true);
       isAnimatingRef.current = false;
+
+      // Expose typed completion for orchestrator
+      const typedEl = document.querySelector('#hero-typed');
+      if (typedEl) {
+        typedEl.setAttribute('data-typed-complete', '1');
+        typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+      }
+
       // Fallback timer in case transitionend isn't supported
       const fallbackNotify = setTimeout(() => {
         if (!notifiedRef.current) {
@@ -322,7 +337,7 @@ export default function AIChatInterface() {
         {/* AI Greeting */}
         <div className="mb-12 text-center">
           <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.45rem,6.5vw,2.5rem)]">
-            <span className="inline-flex flex-wrap justify-center gap-1 text-balance">
+            <span id="hero-typed" className="inline-flex flex-wrap justify-center gap-1 text-balance">
               <span className="whitespace-pre text-[#B3B3B3]" ref={helloPrefixRef}>{displayPrefix}</span>
               <span
                 className="relative inline-block max-w-full whitespace-pre break-words"
@@ -351,7 +366,7 @@ export default function AIChatInterface() {
           style={{ pointerEvents: showContent ? 'auto' : 'none' }}
         >
           {/* Agent Selector */}
-          <div className="mb-8 flex justify-center">
+          <div className="mb-8 flex justify-center cb-reveal">
             <div className="relative flex w-full max-w-xs flex-col items-center gap-2">
               <button
                 onClick={() => setShowAgentMenu(!showAgentMenu)}
@@ -392,11 +407,11 @@ export default function AIChatInterface() {
           </div>
 
           {/* Subtitle */}
-          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty">
+          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty cb-reveal">
             What would you like to do today?
           </p>
           {/* Chat Input */}
-          <form onSubmit={handleSubmit} className="relative">
+          <form onSubmit={handleSubmit} className="relative cb-reveal">
             <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
               <ChatTools
                 onAttach={() => alert('File attachment coming soon')}
@@ -440,7 +455,7 @@ export default function AIChatInterface() {
           </form>
 
           {/* Suggested Prompts */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 cb-reveal">
             {[
               'Analyze board engagement trends',
               'Draft meeting agenda',
