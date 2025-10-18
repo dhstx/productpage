@@ -4,7 +4,7 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
-import UpfadeOnMount from "../UpfadeOnMount"
+import UpfadeOnOpen from "../UpfadeOnOpen"
 
 function Tabs({
   className,
@@ -55,15 +55,43 @@ function TabsContent({
   children,
   ...props
 }) {
+  const contentRef = React.useRef(null);
+  const [trigger, setTrigger] = React.useState(0);
+
+  React.useEffect(() => {
+    const node = contentRef.current;
+    if (!node) return;
+
+    const update = () => {
+      if (node.getAttribute("data-state") === "active") {
+        setTrigger((t) => t + 1);
+      }
+    };
+
+    // run once on mount to catch initial active panel
+    update();
+
+    const mo = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.attributeName === "data-state") {
+          update();
+        }
+      }
+    });
+    mo.observe(node, { attributes: true, attributeFilter: ["data-state"] });
+    return () => mo.disconnect();
+  }, []);
+
   return (
     <TabsPrimitive.Content
+      ref={contentRef}
       data-slot="tabs-content"
       className={cn("flex-1 outline-none", className)}
       {...props}
     >
-      <UpfadeOnMount>
+      <UpfadeOnOpen trigger={trigger}>
         {children}
-      </UpfadeOnMount>
+      </UpfadeOnOpen>
     </TabsPrimitive.Content>
   );
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Microsoft Teams (Mono)">
+  <title>Microsoft Teams (Mono)</title>
+  <!-- All fills white, no background beyond shapes -->
+  <rect x="16" y="40" width="124" height="124" rx="16" fill="#FFFFFF"/>
+  <path d="M58 86h40v14H84v48H70v-48H58z" fill="#0C0C0C"/>
+  <circle cx="194" cy="92" r="22" fill="#FFFFFF"/>
+  <rect x="152" y="120" width="84" height="64" rx="18" fill="#FFFFFF"/>
+  <circle cx="170" cy="76" r="16" fill="#FFFFFF"/>
+  <rect x="130" y="98" width="60" height="42" rx="14" fill="#FFFFFF"/>
+</svg>

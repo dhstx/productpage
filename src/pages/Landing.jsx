@@ -11,24 +11,31 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
-  // Reusable hero reveal observer applied across devices
+  // Reusable hero reveal observer applied across devices and viewports
   useEffect(() => {
-    const els = document.querySelectorAll('.hero .reveal-up, .hero .reveal-left, .hero .reveal-right');
+    const scope = document.querySelector('.hero');
+    if (!scope) return;
+
+    const els = scope.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
     if (!els.length) return;
+
+    const reveal = (node) => node.classList.add('reveal-show');
+
     if (!('IntersectionObserver' in window)) {
-      els.forEach((e) => e.classList.add('reveal-show'));
+      els.forEach(reveal);
       return;
     }
+
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
-          // Skip elements explicitly opted out (e.g., gated by typewriter completion)
           if (e.target.hasAttribute('data-no-scroll-reveal')) return;
-          e.target.classList.add('reveal-show');
+          reveal(e.target);
           obs.unobserve(e.target);
         }
       });
     }, { threshold: 0.18 });
+
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);

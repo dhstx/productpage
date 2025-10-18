@@ -67,8 +67,8 @@ export function getIntegrationIconUrl(nameOrId, variant = 'mono', brandHex) {
   const slug = normalizeToSlug(nameOrId);
   if (slug === 'microsoftteams') {
     return variant === 'brand'
-      ? '/assets/integrations/microsoft-teams-brand.svg'
-      : '/assets/integrations/microsoft-teams-mono.svg';
+      ? '/assets/integrations/microsoft-teams-app.svg'
+      : '/assets/integrations/microsoft-teams-app-mono.svg';
   }
   const colorHex = computeIconColor(brandHex, variant).replace('#', '');
   return `https://cdn.simpleicons.org/${slug}/${colorHex}`;
