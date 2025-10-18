@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../lib/auth';
+import { 
+  getIntegrationIconUrl,
+  getInitials,
+  buildInitialsSvgDataUrl,
+  computeIconColor,
+} from '../lib/integrationIcons';
 import { 
   Check, X, Settings, ExternalLink, Zap, Database, 
   Mail, MessageSquare, Calendar, DollarSign, Users,
@@ -282,8 +288,16 @@ export default function IntegrationsManagement() {
 }
 
 function IntegrationCard({ integration }) {
-  const Icon = integration.icon;
   const [isConfiguring, setIsConfiguring] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState('');
+
+  const variant = (isHovered || integration.connected) ? 'brand' : 'mono';
+
+  useEffect(() => {
+    const url = getIntegrationIconUrl(integration.id || integration.name, variant, integration.color);
+    setImgSrc(url);
+  }, [integration.id, integration.name, integration.color, variant]);
 
   const handleConnect = () => {
     alert(`Connecting to ${integration.name}...`);
@@ -300,14 +314,29 @@ function IntegrationCard({ integration }) {
   };
 
   return (
-    <div className="panel-system p-6 hover:border-[#FFC96C] transition-colors">
+    <div 
+      className="panel-system p-6 hover:border-[#FFC96C] transition-colors"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div 
-            className="w-12 h-12 rounded-[4px] flex items-center justify-center"
+            className="w-12 h-12 rounded-[4px] flex items-center justify-center overflow-hidden"
             style={{ backgroundColor: `${integration.color}20` }}
           >
-            <Icon className="w-6 h-6" style={{ color: integration.color }} />
+            <img 
+              src={imgSrc}
+              alt={`${integration.name} logo`}
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+              onError={() => {
+                const initials = getInitials(integration.name);
+                const color = computeIconColor(integration.color, variant);
+                setImgSrc(buildInitialsSvgDataUrl(initials, 40, color));
+              }}
+            />
           </div>
           <div>
             <h3 className="text-[#F2F2F2] font-bold uppercase tracking-tight">
