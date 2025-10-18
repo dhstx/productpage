@@ -40,7 +40,7 @@ export default function Landing() {
     return () => io.disconnect();
   }, []);
 
-  // One-time fade-in for SYNTEK AUTOMATIONS hero image (50% slower, trigger ~25% visible)
+  // One-time fade-in for SYNTEK AUTOMATIONS hero image (25% slower, trigger ~25% visible)
   useEffect(() => {
     const el = document.querySelector('#syntek-automations-hero .fade-once');
     if (!el) return;
@@ -67,7 +67,7 @@ export default function Landing() {
             obs.unobserve(e.target);
           }
         });
-      }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
+      }, { threshold: 0.25 });
       io.observe(el);
       return () => io.disconnect();
     } else {

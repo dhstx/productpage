@@ -45,6 +45,28 @@ export default function AIChatInterface() {
       return;
     }
 
+    // Respect reduced motion preferences: skip typewriter animation
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
+      hasPlayedRef.current = true;
+      setShowContent(true);
+      isAnimatingRef.current = false;
+      if (!notifiedRef.current) {
+        notifiedRef.current = true;
+        window.dispatchEvent(
+          new CustomEvent('chatbox-animation-complete', {
+            detail: { source: 'AIChatInterface', via: 'reducedMotion' },
+          })
+        );
+      }
+      return;
+    }
+
     isAnimatingRef.current = true;
     setShowContent(false);
     setTypedText('');
@@ -247,6 +269,11 @@ export default function AIChatInterface() {
     }
 
     function onChatboxComplete() {
+      const titleEl = titleRef.current;
+      if (titleEl) {
+        // Trigger CSS fade-in sequence for the title
+        titleEl.classList.add('is-live');
+      }
       playSyntekTitleAnimation();
     }
 
@@ -287,7 +314,7 @@ export default function AIChatInterface() {
       <h1
           id="syntek-title"
           ref={titleRef}
-          className="text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
+          className="syntek-title text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
         style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))', clipPath: 'inset(0 100% 0 0)' }}
         >
           SYNTEK AUTOMATIONS
@@ -313,7 +340,7 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
-          className={`reveal-up ${showContent ? 'reveal-show' : ''}`}
+          className={`reveal-up cb-reveal ${showContent ? 'reveal-show show' : ''}`}
           onTransitionEnd={(e) => {
             if (!showContent) return;
             if (notifiedRef.current) return;
