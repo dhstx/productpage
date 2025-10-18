@@ -693,3 +693,37 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 
 /* Reduced motion users: no animation */
 /* reduced-motion overrides related to theme-bleed removed */
+
+
+/* SYNTEK AUTOMATIONS Hero Image Styles */
+.syntek-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2in;
+  margin-bottom: 2in;
+}
+
+.syntek-hero {
+  width: 1024px;
+  height: auto;         /* keep aspect ratio */
+  max-width: 100%;      /* responsive */
+}
+
+/* Fade-in on view */
+.fade-on-view {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.fade-on-view.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-on-view { transition: none; }
+}
+

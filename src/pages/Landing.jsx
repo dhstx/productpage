@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Target, Users, Calendar, Sparkles, User } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
@@ -10,6 +11,26 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
+  // Viewport trigger for fade-on-view elements
+  useEffect(() => {
+    const els = document.querySelectorAll('.fade-on-view');
+    if ('IntersectionObserver' in window && els.length) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-visible');
+            obs.unobserve(e.target); // animate once
+          }
+        });
+      }, { root: null, threshold: 0.2 });
+      els.forEach(el => io.observe(el));
+      return () => io.disconnect();
+    } else {
+      // Fallback: show immediately
+      els.forEach(el => el.classList.add('is-visible'));
+    }
+  }, []);
+
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
@@ -65,6 +86,19 @@ export default function Landing() {
             </div>
           </FadeInSection>
         </section>
+
+        {/* SYNTEK AUTOMATIONS Hero Image */}
+        <div className="syntek-image-container" id="syntek-automations-hero">
+          <img
+            src="/assets/SYNTEK AUTOMATIONS.svg"
+            alt="SYNTEK AUTOMATIONS"
+            className="syntek-hero fade-on-view"
+            width="1024"
+            height="1024"
+            decoding="async"
+            loading="lazy"
+          />
+        </div>
 
         {/* Core Modules */}
         <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
