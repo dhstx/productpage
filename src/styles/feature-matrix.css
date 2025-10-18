@@ -29,3 +29,77 @@
 .tier-cell .x { color:#6B7280; font-size:18px; }
 .tier-cell .value { color:var(--fg); font-weight:600; font-size:.95rem; }
 .tier-label { margin-top:2px; font-size:.7rem; opacity:.8; }
+
+/* --- Windows 98 style for tier toggle --- */
+.tier-toggle.win98 {
+  display: flex;
+  justify-content: center;            /* center align the group */
+  align-items: center;
+  gap: 0;
+  margin: 0 auto 1.25rem auto;
+  padding: .25rem;
+  width: 100%;
+}
+
+.tier-toggle.win98 .w98-btn {
+  /* Base */
+  position: relative;
+  min-width: 132px;                   /* give breathing room; tweak as needed */
+  padding: 10px 16px;
+  color: #111;
+  font-weight: 600;
+  line-height: 1;
+  background: #dcdcdc;                /* classic 98 gray */
+  border: 2px solid #000;             /* outer border (98 style) */
+
+  /* Bevel: light top/left, dark bottom/right */
+  box-shadow:
+    inset 1px 1px 0 #fff,             /* top-left highlight */
+    inset -1px -1px 0 #808080;        /* bottom-right shadow */
+
+  /* Segmented look */
+  border-right-width: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier-toggle.win98 .w98-btn.is-first { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+.tier-toggle.win98 .w98-btn.is-last  { border-right-width: 2px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+@media (max-width: 520px) {
+  .tier-toggle.win98 .w98-btn { min-width: 100px; padding: 10px 12px; }
+}
+
+/* Hover: slight lighten */
+.tier-toggle.win98 .w98-btn:hover {
+  background: #e6e6e6;
+}
+
+/* Focus: dotted ring (98 vibes) */
+.tier-toggle.win98 .w98-btn:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+/* Active (“pressed in”) – invert bevel and add inner inset */
+.tier-toggle.win98 .w98-btn.is-active {
+  background: #c8c8c8;
+  box-shadow:
+    inset 1px 1px 0 #808080,          /* top-left now darker */
+    inset -1px -1px 0 #fff,           /* bottom-right now light */
+    inset 0 0 0 2px #b4b4b4;          /* inner inset edge */
+}
+
+/* Dark theme compatibility: keep the 98 look readable on dark bg */
+:root[data-theme="dark"] .tier-toggle.win98 .w98-btn {
+  color: #111;
+}
+:root[data-theme="dark"] .tier-toggle.win98 {
+  /* optional faint backdrop if content behind is very dark */
+  backdrop-filter: saturate(120%) blur(2px);
+}
+
+/* Label sizing, optional letterspacing for the era */
+.tier-toggle.win98 .w98-label {
+  letter-spacing: .2px;
+}
