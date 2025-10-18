@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BackArrow from '../components/BackArrow';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../lib/auth';
@@ -7,6 +7,7 @@ import {
   Mail, MessageSquare, Calendar, DollarSign, Users,
   FileText, BarChart, Cloud, Lock, Webhook
 } from 'lucide-react';
+import { getIntegrationSlug, getIntegrationIconUrl, getInitialsFromName } from '../lib/integrationIcons';
 
 export default function IntegrationsManagement() {
   const [filter, setFilter] = useState('all');
@@ -282,8 +283,37 @@ export default function IntegrationsManagement() {
 }
 
 function IntegrationCard({ integration }) {
-  const Icon = integration.icon;
   const [isConfiguring, setIsConfiguring] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [iconLoadFailed, setIconLoadFailed] = useState(false);
+
+  useEffect(() => {
+    // Detect theme from root element (kept in sync by ThemeToggle)
+    const root = document.documentElement;
+    const computeDark = () => root.classList.contains('dark') || root.getAttribute('data-theme') !== 'light';
+    setIsDarkMode(computeDark());
+
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(computeDark());
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  const slug = getIntegrationSlug(integration.id, integration.name);
+  const variant = (!isDarkMode || isHovered || integration.connected) ? 'brand' : 'mono';
+
+  const placeholderDataUri = () => {
+    const initials = getInitialsFromName(integration.name);
+    const color = variant === 'brand' ? (integration.color || '#FFC96C') : '#FFFFFF';
+    const bg = 'transparent';
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"40\" height=\"40\" viewBox=\"0 0 40 40\">\n  <rect width=\"40\" height=\"40\" fill=\"${bg}\"/>\n  <text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" font-family=\"system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif\" font-size=\"14\" font-weight=\"700\" fill=\"${color}\">${initials}</text>\n</svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  };
+
+  const desiredSrc = slug ? getIntegrationIconUrl(slug, variant) : null;
+  const currentSrc = iconLoadFailed || !desiredSrc ? placeholderDataUri() : desiredSrc;
 
   const handleConnect = () => {
     alert(`Connecting to ${integration.name}...`);
@@ -303,11 +333,22 @@ function IntegrationCard({ integration }) {
     <div className="panel-system p-6 hover:border-[#FFC96C] transition-colors">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div 
+          <div
             className="w-12 h-12 rounded-[4px] flex items-center justify-center"
             style={{ backgroundColor: `${integration.color}20` }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
           >
-            <Icon className="w-6 h-6" style={{ color: integration.color }} />
+            <img
+              src={currentSrc}
+              alt={`${integration.name} logo`}
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+              onError={() => setIconLoadFailed(true)}
+              loading="eager"
+              decoding="async"
+            />
           </div>
           <div>
             <h3 className="text-[#F2F2F2] font-bold uppercase tracking-tight">
