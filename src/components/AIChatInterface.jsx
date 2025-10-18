@@ -330,7 +330,7 @@ export default function AIChatInterface() {
           id="syntek-title"
           ref={titleRef}
           className="syntek-title text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
-        style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))', clipPath: 'inset(0 100% 0 0)' }}
+        style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))' }}
         >
           SYNTEK AUTOMATIONS
         </h1>
@@ -355,7 +355,7 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
-          className={`reveal-up cb-reveal ${showContent ? 'reveal-show show' : ''}`}
+          className={`cb-reveal ${showContent ? 'show' : ''}`}
           onTransitionEnd={(e) => {
             if (!showContent) return;
             if (notifiedRef.current) return;
