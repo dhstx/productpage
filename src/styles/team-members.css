@@ -1,0 +1,63 @@
+/* --- mobile cards --- */
+.tm-cards { display: grid; gap: 12px; }
+.tm-card {
+  background: #141416;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.tm-card__head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.tm-avatar {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,197,98,.12);
+  color: #ffc562; display: grid; place-items: center;
+  font-weight: 700;
+}
+
+.tm-ident .tm-name { color: #eaeaea; font-weight: 600; line-height: 1.1; }
+.tm-ident .tm-email { color: #9ca3af; font-size: .85rem; overflow-wrap:anywhere; }
+
+.tm-actions { display: flex; gap: 8px; }
+.btn { border:1px solid rgba(255,255,255,.12); border-radius: 10px; padding:8px 10px; color:#eaeaea; background:transparent; }
+.btn-ghost:hover { background: rgba(255,255,255,.06); }
+.btn-danger { border-color: rgba(255,0,0,.35); color:#ff6b6b; }
+.btn-danger:hover { background: rgba(255,0,0,.12); }
+
+.tm-meta {
+  display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-top: 10px;
+}
+.tm-meta__item {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 8px;
+}
+.tm-meta dt { font-size:.72rem; color:#9ca3af; margin-bottom:4px; }
+.tm-meta dd { margin:0; color:#eaeaea; font-weight:600; }
+
+/* status dot */
+.dot::before { content:""; display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+.dot.active::before { background:#22c55e; }
+.dot.pending::before { background:#fbbf24; }
+.dot.suspended::before { background:#ef4444; }
+
+/* --- desktop table horizontal scroll fallback --- */
+.tm-table-wrap { overflow-x: auto; }
+.tm-table { width: 100%; border-collapse: collapse; }
+.tm-table th, .tm-table td { white-space: nowrap; }
+
+/* sticky first column (member) when horizontally scrolling) */
+@media (max-width: 1024px) {
+  .tm-table td:first-child, .tm-table th:first-child {
+    position: sticky; left: 0; z-index: 1;
+    background: #141416; /* match table bg */
+  }
+}
