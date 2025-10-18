@@ -730,14 +730,48 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 .upfade-on-mount.is-live { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce){ .upfade-on-mount{ transition: none; opacity: 1; transform: none; } }
 
-/* Hero-specific reveal sequences */
-.hero .cb-reveal { opacity: 0; transform: translateY(10px); transition: opacity 500ms ease, transform 500ms ease; }
-.hero .cb-reveal.show { opacity: 1; transform: none; }
+/* SAFE DEFAULTS — visible by default (never rely on JS to show) */
+.hero .chatbox,
+.hero .cb-reveal {
+  /* Keep original display (flex/grid/etc.) — don't override layout */
+  opacity: 1;
+  transform: none;
+}
 
-.syntek-title { opacity: 0; transform: translateY(6px); transition: opacity 700ms ease, transform 700ms ease; }
-.syntek-title.is-live { opacity: 1; transform: none; }
+/* Animation is opt-in via JS: add 'will-animate' then 'show' */
+.hero .cb-reveal.will-animate {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+.hero .cb-reveal.show {
+  opacity: 1;
+  transform: none;
+}
+
+/* Syntek title — default visible unless animating */
+.syntek-title {
+  opacity: 1;
+  transform: none;
+}
+.syntek-title.will-animate {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+.syntek-title.is-live {
+  opacity: 1;
+  transform: none;
+}
 
 @media (prefers-reduced-motion: reduce){
+  .cb-reveal.will-animate,
+  .syntek-title.will-animate {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  /* Keep broader reduced-motion safeguard */
   .reveal-up, .cb-reveal, .syntek-title, .fade-once { transition: none; opacity: 1; transform: none; }
 }
 
