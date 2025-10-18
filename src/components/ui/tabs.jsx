@@ -4,6 +4,7 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
+import UpfadeOnMount from "../UpfadeOnMount"
 
 function Tabs({
   className,
@@ -51,13 +52,19 @@ function TabsTrigger({
 
 function TabsContent({
   className,
+  children,
   ...props
 }) {
   return (
     <TabsPrimitive.Content
       data-slot="tabs-content"
       className={cn("flex-1 outline-none", className)}
-      {...props} />
+      {...props}
+    >
+      <UpfadeOnMount>
+        {children}
+      </UpfadeOnMount>
+    </TabsPrimitive.Content>
   );
 }
 
