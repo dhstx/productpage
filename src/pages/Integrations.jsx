@@ -215,7 +215,7 @@ export default function Integrations() {
                     ))}
                   </ul>
                   <button className="mt-4 w-full btn-system text-sm">
-                    Connect {integration.name}
+                    Connect
                   </button>
                 </div>
               ))}

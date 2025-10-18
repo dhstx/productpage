@@ -7,6 +7,8 @@ import {
   getInitials,
   buildInitialsSvgDataUrl,
   computeIconColor,
+  INTEGRATION_ICON,
+  INTEGRATION_ICON_MONO,
 } from '../lib/integrationIcons';
 import { 
   Check, X, Settings, ExternalLink, Zap, Database, 
@@ -295,6 +297,13 @@ function IntegrationCard({ integration }) {
   const variant = (isHovered || integration.connected) ? 'brand' : 'mono';
 
   useEffect(() => {
+    if ((integration.id || '').toLowerCase() === 'microsoft-teams') {
+      const src = (variant === 'brand')
+        ? INTEGRATION_ICON['microsoft-teams']
+        : INTEGRATION_ICON_MONO['microsoft-teams'];
+      setImgSrc(src);
+      return;
+    }
     const url = getIntegrationIconUrl(integration.id || integration.name, variant, integration.color);
     setImgSrc(url);
   }, [integration.id, integration.name, integration.color, variant]);
@@ -315,7 +324,7 @@ function IntegrationCard({ integration }) {
 
   return (
     <div 
-      className="panel-system p-6 hover:border-[#FFC96C] transition-colors"
+      className={`panel-system p-6 hover:border-[#FFC96C] transition-colors integration-card ${integration.connected ? 'connected' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -330,7 +339,7 @@ function IntegrationCard({ integration }) {
               alt={`${integration.name} logo`}
               width={40}
               height={40}
-              className="w-10 h-10 object-contain"
+              className="integration-card__icon"
               onError={() => {
                 const initials = getInitials(integration.name);
                 const color = computeIconColor(integration.color, variant);
@@ -395,9 +404,8 @@ function IntegrationCard({ integration }) {
         ) : (
           <button
             onClick={handleConnect}
-            className="flex-1 btn-system text-sm flex items-center justify-center gap-2"
+            className="flex-1 btn-system text-sm"
           >
-            <Zap className="w-4 h-4" />
             Connect
           </button>
         )}

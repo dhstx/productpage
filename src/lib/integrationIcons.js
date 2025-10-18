@@ -68,3 +68,12 @@ export function getIntegrationIconUrl(nameOrId, variant = 'mono', brandHex) {
   const colorHex = computeIconColor(brandHex, variant).replace('#', '');
   return `https://cdn.simpleicons.org/${slug}/${colorHex}`;
 }
+
+// Local overrides for specific integrations that require official brand assets
+export const INTEGRATION_ICON = {
+  'microsoft-teams': '/assets/integrations/microsoft-teams-brand.svg',
+};
+
+export const INTEGRATION_ICON_MONO = {
+  'microsoft-teams': '/assets/integrations/microsoft-teams-mono.svg',
+};

@@ -4,9 +4,10 @@ import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
 // Typing timing controls
-// Reduce typing speed (increase delay) by 20% for slower effect
-const TYPEWRITER_CHAR_MS = Math.round(35 * 1.2);      // ms per character
-const TYPEWRITER_PAUSE_MS = 188;    // pause between "Hello." and agent part
+// Typewriter timing
+// Apply a 1.25× slowdown over current timings (25% slower)
+const TYPEWRITER_CHAR_MS = Math.round(35 * 1.2 * 1.25); // ms per character
+const TYPEWRITER_PAUSE_MS = Math.round(188 * 1.25);     // pause between segments
 
 export default function AIChatInterface() {
   const [message, setMessage] = useState('');
@@ -147,6 +148,34 @@ export default function AIChatInterface() {
     };
   }, []);
 
+  // Hero reveal animations (desktop/mobile parity) using IntersectionObserver
+  useEffect(() => {
+    // Guard against duplicate init
+    if (typeof window === 'undefined') return;
+    const els = document.querySelectorAll(
+      '.hero .reveal-up, .hero .reveal-left, .hero .reveal-right'
+    );
+    if (!els.length) return;
+
+    // If IntersectionObserver unsupported, show immediately
+    if (!('IntersectionObserver' in window)) {
+      els.forEach((e) => e.classList.add('reveal-show'));
+      return;
+    }
+
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('reveal-show');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.18 });
+
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   // One-time entrance animation for the SYNTEK AUTOMATIONS title
   useEffect(() => {
     function playSyntekTitleAnimation() {
@@ -279,7 +308,7 @@ export default function AIChatInterface() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6"
+      className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6 hero"
       style={{ marginTop: '2in', marginBottom: '2in' }}
     >
       <div className="mx-auto w-full max-w-4xl">
@@ -326,6 +355,7 @@ export default function AIChatInterface() {
             transition: 'opacity 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             pointerEvents: showContent ? 'auto' : 'none'
           }}
+          className={showContent ? 'reveal-up reveal-show' : 'reveal-up'}
         >
           {/* Agent Selector */}
           <div className="mb-8 flex justify-center">

@@ -711,7 +711,36 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 }
 
 /* One-time fade-in */
-.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 900ms ease, transform 900ms ease; }
+.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 1350ms ease, transform 1350ms ease; }
 .fade-once.is-visible { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){ .fade-once{ transition: none; } }
+
+/* Shared reveal animations for hero chatbox parity */
+.reveal-up   { opacity: 0; transform: translateY(10px); transition: opacity 500ms ease, transform 500ms ease; }
+.reveal-left { opacity: 0; transform: translateX(-10px); transition: opacity 500ms ease, transform 500ms ease; }
+.reveal-right{ opacity: 0; transform: translateX(10px);  transition: opacity 500ms ease, transform 500ms ease; }
+.reveal-show { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce){
+  .reveal-up,.reveal-left,.reveal-right{ transition:none; transform:none; opacity:1; }
+}
+
+/* Up-fade on mount utility for dashboard views */
+.upfade-on-mount{ opacity:0; transform: translateY(8px); transition: opacity 450ms ease, transform 450ms ease; }
+.upfade-on-mount.is-live{ opacity:1; transform: none; }
+@media (prefers-reduced-motion: reduce){ .upfade-on-mount{ transition:none; opacity:1; transform:none; } }
+
+/* Integration card icon visuals */
+.integration-card__icon {
+  width: 40px;
+  height: 40px;
+  display: block;
+  transition: transform 0.2s ease;
+}
+.integration-card:hover .integration-card__icon {
+  transform: translateY(-1px);
+}
+.integration-card.connected .integration-card__icon {
+  filter: none;
+}
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import UpfadeOnMount from '../components/UpfadeOnMount';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
 import { Bot, Zap, AlertCircle, CheckCircle, ChevronDown, Cog, ArrowUp } from 'lucide-react';
@@ -289,6 +290,7 @@ export default function AgentManagement() {
   return (
     <>
       <BackArrow />
+      <UpfadeOnMount>
       <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
@@ -496,7 +498,8 @@ export default function AgentManagement() {
                       <p className="text-xs text-[#808080] mt-4">
                         Type your message below to interact with {selectedAgents.length === 1 ? 'this agent' : `all ${selectedAgents.length} agents`}.
                       </p>
-                    </div>
+      </div>
+      </UpfadeOnMount>
                   </>
                 ) : (
                   <p className="text-[#808080] text-sm text-center py-4">
