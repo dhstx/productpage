@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Microsoft Teams">
+  <title>Microsoft Teams</title>
+  <!-- Tile with T -->
+  <rect x="16" y="40" width="124" height="124" rx="16" fill="#6264A7"/>
+  <path d="M58 86h40v14H84v48H70v-48H58z" fill="#FFFFFF"/>
+  <!-- Primary person (front) -->
+  <circle cx="194" cy="92" r="22" fill="#6264A7"/>
+  <rect x="152" y="120" width="84" height="64" rx="18" fill="#6264A7"/>
+  <!-- Secondary person (behind) -->
+  <circle cx="170" cy="76" r="16" fill="#7F85D9"/>
+  <rect x="130" y="98" width="60" height="42" rx="14" fill="#7F85D9"/>
+</svg>
