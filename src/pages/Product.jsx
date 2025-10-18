@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle, User } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
-import FeatureComparison from '../components/FeatureComparison';
+import FeatureMatrix from '../components/product/FeatureMatrix';
+import "@/styles/feature-matrix.css";
 import ROICalculator from '../components/ROICalculator';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
@@ -158,9 +159,13 @@ export default function Product() {
 
         {/* Cogs section removed */}
 
-        {/* Feature Comparison */}
+        {/* Feature Matrix */}
         <FadeInSection>
-          <FeatureComparison />
+          <section className="py-16 md:py-24 bg-[#0C0C0C] border-t border-[#202020]">
+            <div className="mx-auto max-w-screen-xl px-4 md:px-8">
+              <FeatureMatrix />
+            </div>
+          </section>
         </FadeInSection>
       </main>
 
