@@ -69,14 +69,6 @@ export default function AdminLayout({ children }) {
 
             <div className="flex items-center gap-4">
               <ThemeToggle inline />
-              {/* Settings icon shortcut */}
-              <Link
-                to="/settings"
-                className="hidden md:inline-flex p-2 rounded-[2px] text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
-                aria-label="Open settings"
-              >
-                <Settings className="w-5 h-5" />
-              </Link>
               {/* Profile Dropdown */}
               <div className="hidden md:block relative">
                 <button

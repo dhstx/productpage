@@ -31,6 +31,41 @@ export default function Landing() {
     }
   }, []);
 
+  // One-time fade-in for SYNTEK AUTOMATIONS hero image
+  useEffect(() => {
+    const el = document.querySelector('#syntek-automations-hero .fade-once');
+    if (!el) return;
+
+    const key = el.getAttribute('data-key') || 'syntekFadeV1';
+    const already = sessionStorage.getItem(key) === '1';
+
+    const makeVisible = () => {
+      el.classList.add('is-visible');
+      if (!already) sessionStorage.setItem(key, '1');
+    };
+
+    if (already) {
+      // Show instantly; no animation replay
+      el.classList.add('is-visible');
+      return;
+    }
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            makeVisible();
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      io.observe(el);
+      return () => io.disconnect();
+    } else {
+      makeVisible();
+    }
+  }, []);
+
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
@@ -92,11 +127,12 @@ export default function Landing() {
           <img
             src="/assets/SYNTEK AUTOMATIONS.svg"
             alt="SYNTEK AUTOMATIONS"
-            className="syntek-hero fade-on-view"
+            className="syntek-hero fade-once"
             width="1024"
             height="1024"
             decoding="async"
             loading="lazy"
+            data-key="syntekFadeV1"
           />
         </div>
 

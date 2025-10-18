@@ -710,20 +710,8 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   max-width: 100%;      /* responsive */
 }
 
-/* Fade-in on view */
-.fade-on-view {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 900ms ease, transform 900ms ease;
-}
-
-.fade-on-view.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .fade-on-view { transition: none; }
-}
+/* One-time fade-in */
+.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 900ms ease, transform 900ms ease; }
+.fade-once.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce){ .fade-once{ transition: none; } }
 
