@@ -15,69 +15,7 @@ export default function Landing() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, []);
-  // Reusable hero reveal observer applied across devices and viewports
-  useEffect(() => {
-    const scope = document.querySelector('.hero');
-    if (!scope) return;
-
-    const els = scope.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
-    if (!els.length) return;
-
-    const reveal = (node) => node.classList.add('reveal-show');
-
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(reveal);
-      return;
-    }
-
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          if (e.target.hasAttribute('data-no-scroll-reveal')) return;
-          reveal(e.target);
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.18 });
-
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  // One-time fade-in for SYNTEK AUTOMATIONS hero image (25% slower, trigger ~25% visible)
-  useEffect(() => {
-    const el = document.querySelector('#syntek-automations-hero .fade-once');
-    if (!el) return;
-
-    const key = el.getAttribute('data-key') || 'syntekFadeV1';
-    const already = sessionStorage.getItem(key) === '1';
-
-    const makeVisible = () => {
-      el.classList.add('is-visible');
-      if (!already) sessionStorage.setItem(key, '1');
-    };
-
-    if (already) {
-      // Show instantly; no animation replay
-      el.classList.add('is-visible');
-      return;
-    }
-
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries, obs) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            makeVisible();
-            obs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.25 });
-      io.observe(el);
-      return () => io.disconnect();
-    } else {
-      makeVisible();
-    }
-  }, []);
+  // Reveal logic centralized in global script; remove page-level observers
 
   return (
     <PageTransition>
