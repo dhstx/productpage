@@ -178,7 +178,11 @@ export default function AdminLayout({ children }) {
       {/* Footer */}
       <footer className="border-t border-[#202020] mt-24">
         <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
+<<<<<<< HEAD
           {/* Intentionally left blank: removed System Management text per spec */}
+=======
+          {/* Intentionally left blank per requirements */}
+>>>>>>> 5e1fe28 (Refactor: Update UI elements and component structure)
         </div>
       </footer>
     </div>
