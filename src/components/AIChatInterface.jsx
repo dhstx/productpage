@@ -4,7 +4,8 @@ import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
 // Make typing 50% slower (2× per-char time) and add a 1s pause after "Hello."
-const TYPEWRITER_CHAR_MS = Math.round(35 * 1.375 * 2.0); // doubled per-char delay (~96ms)
+const BASE_STEP_MS = Math.round(35 * 1.375);
+const TYPEWRITER_CHAR_MS = Math.round(BASE_STEP_MS * 2.0); // 50% slower via doubled ms/char
 const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
 
 export default function AIChatInterface() {
