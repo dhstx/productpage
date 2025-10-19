@@ -68,12 +68,16 @@ export default function Team() {
 
   const onChangeRoleById = (id) => {
     const m = teamMembers.find((x) => String(x.id) === String(id));
-    if (m) handleChangeRole(m);
+    if (m) {
+      handleChangeRole(m);
+    }
   };
 
   const onRemoveById = (id) => {
     const m = teamMembers.find((x) => String(x.id) === String(id));
-    if (m) handleRemove(m);
+    if (m) {
+      handleRemove(m);
+    }
   };
 
   return (
