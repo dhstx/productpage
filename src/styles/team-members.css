@@ -1,10 +1,33 @@
+/* Team Members theming tokens */
+:root {
+  --tm-card-bg: #141416;
+  --tm-card-fg-primary: #eaeaea;
+  --tm-card-fg-secondary: #9ca3af;
+  --tm-card-border: rgba(255,255,255,.08);
+  --tm-pill-bg: rgba(255,255,255,.03);
+  --tm-pill-border: rgba(255,255,255,.06);
+  --tm-card-shadow: none;
+}
+
+/* Light-mode overrides */
+html[data-theme="light"] {
+  --tm-card-bg: #ffffff;            /* bg-white */
+  --tm-card-fg-primary: #111827;    /* text-gray-900 */
+  --tm-card-fg-secondary: #4b5563;  /* text-gray-600 */
+  --tm-card-border: #e5e7eb;        /* border-gray-200 */
+  --tm-pill-bg: #f9fafb;            /* gray-50 */
+  --tm-pill-border: #e5e7eb;        /* gray-200 */
+  --tm-card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+}
+
 /* --- mobile cards --- */
 .tm-cards { display: grid; gap: 12px; }
 .tm-card {
-  background: #141416;
-  border: 1px solid rgba(255,255,255,.08);
+  background: var(--tm-card-bg);
+  border: 1px solid var(--tm-card-border);
   border-radius: 12px;
   padding: 12px;
+  box-shadow: var(--tm-card-shadow);
 }
 
 .tm-card__head {
@@ -21,8 +44,8 @@
   font-weight: 700;
 }
 
-.tm-ident .tm-name { color: #eaeaea; font-weight: 600; line-height: 1.1; }
-.tm-ident .tm-email { color: #9ca3af; font-size: .85rem; overflow-wrap:anywhere; }
+.tm-ident .tm-name { color: var(--tm-card-fg-primary); font-weight: 600; line-height: 1.1; }
+.tm-ident .tm-email { color: var(--tm-card-fg-secondary); font-size: .85rem; overflow-wrap:anywhere; }
 
 .tm-actions { display: flex; gap: 8px; }
 .btn { border:1px solid rgba(255,255,255,.12); border-radius: 10px; padding:8px 10px; color:#eaeaea; background:transparent; }
@@ -35,13 +58,13 @@
   margin-top: 10px;
 }
 .tm-meta__item {
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.06);
+  background: var(--tm-pill-bg);
+  border: 1px solid var(--tm-pill-border);
   border-radius: 10px;
   padding: 8px;
 }
-.tm-meta dt { font-size:.72rem; color:#9ca3af; margin-bottom:4px; }
-.tm-meta dd { margin:0; color:#eaeaea; font-weight:600; }
+.tm-meta dt { font-size:.72rem; color: var(--tm-card-fg-secondary); margin-bottom:4px; }
+.tm-meta dd { margin:0; color: var(--tm-card-fg-primary); font-weight:600; }
 
 /* status dot */
 .dot::before { content:""; display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
