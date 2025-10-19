@@ -1,10 +1,18 @@
 /* --- mobile cards --- */
 .tm-cards { display: grid; gap: 12px; }
 .tm-card {
-  background: #141416;
-  border: 1px solid rgba(255,255,255,.08);
+  /* Light (base) */
+  background: #ffffff;
+  border: 1px solid #e5e7eb; /* zinc-200 */
+  color: #111827; /* zinc-900 */
   border-radius: 12px;
   padding: 12px;
+}
+.dark .tm-card {
+  /* Dark override */
+  background: #141416;
+  border-color: rgba(255,255,255,.08);
+  color: #eaeaea;
 }
 
 .tm-card__head {
@@ -16,37 +24,73 @@
 
 .tm-avatar {
   width: 36px; height: 36px; border-radius: 8px;
-  background: rgba(255,197,98,.12);
-  color: #ffc562; display: grid; place-items: center;
+  /* Light (base) */
+  background: #f4f4f5; /* zinc-100 */
+  color: #3f3f46; /* zinc-700 */
+  display: grid; place-items: center;
   font-weight: 700;
 }
+.dark .tm-avatar {
+  /* Dark override keeps brand accent */
+  background: rgba(255,197,98,.12);
+  color: #ffc562;
+}
 
-.tm-ident .tm-name { color: #eaeaea; font-weight: 600; line-height: 1.1; }
-.tm-ident .tm-email { color: #9ca3af; font-size: .85rem; overflow-wrap:anywhere; }
+.tm-ident .tm-name { color: #111827; font-weight: 600; line-height: 1.1; }
+.dark .tm-ident .tm-name { color: #eaeaea; }
+.tm-ident .tm-email { color: #4b5563; font-size: .85rem; overflow-wrap:anywhere; }
+.dark .tm-ident .tm-email { color: #9ca3af; }
 
 .tm-actions { display: flex; gap: 8px; }
-.btn { border:1px solid rgba(255,255,255,.12); border-radius: 10px; padding:8px 10px; color:#eaeaea; background:transparent; }
-.btn-ghost:hover { background: rgba(255,255,255,.06); }
-.btn-danger { border-color: rgba(255,0,0,.35); color:#ff6b6b; }
-.btn-danger:hover { background: rgba(255,0,0,.12); }
+/* Buttons — light base with dark overrides */
+.btn {
+  border: 1px solid #e5e7eb; /* zinc-200 */
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #27272a; /* zinc-800 */
+  background: #ffffff;
+}
+.btn:hover { background: #f9fafb; } /* zinc-50 */
+.dark .btn {
+  border-color: rgba(255,255,255,.12);
+  color: #eaeaea;
+  background: #121212;
+}
+.dark .btn:hover { background: rgba(255,255,255,.06); }
+.btn-danger { color: #3f3f46; border-color: #e5e7eb; }
+.btn-danger:hover { background: #fef2f2; color: #dc2626; } /* red-50 / red-600 */
+.dark .btn-danger { border-color: rgba(255,0,0,.35); color:#eaeaea; background: #121212; }
+.dark .btn-danger:hover { background: rgba(255,0,0,.12); color:#ff6b6b; }
 
 .tm-meta {
   display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
   margin-top: 10px;
 }
 .tm-meta__item {
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.06);
+  /* Light (base) */
+  background: #f9fafb; /* zinc-50 */
+  border: 1px solid #e5e7eb; /* zinc-200 */
   border-radius: 10px;
   padding: 8px;
+  color: #27272a; /* zinc-800 */
 }
-.tm-meta dt { font-size:.72rem; color:#9ca3af; margin-bottom:4px; }
-.tm-meta dd { margin:0; color:#eaeaea; font-weight:600; }
+.dark .tm-meta__item {
+  /* Dark override */
+  background: #262626; /* neutral-800 */
+  border-color: rgba(255,255,255,.06);
+  color: #eaeaea;
+}
+.tm-meta dt { font-size:.72rem; color:#6b7280; margin-bottom:4px; } /* zinc-500 */
+.dark .tm-meta dt { color:#9ca3af; }
+.tm-meta dd { margin:0; color:#1f2937; font-weight:600; } /* zinc-800 */
+.dark .tm-meta dd { color:#eaeaea; }
 
 /* status dot */
 .dot::before { content:""; display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
-.dot.active::before { background:#22c55e; }
+.dot.active::before { background:#16a34a; } /* green-600 on light */
+.dark .dot.active::before { background:#22c55e; } /* green-500 on dark */
 .dot.pending::before { background:#fbbf24; }
+.dark .dot.pending::before { background:#facc15; }
 .dot.suspended::before { background:#ef4444; }
 
 /* --- desktop table horizontal scroll fallback --- */
@@ -58,6 +102,9 @@
 @media (max-width: 1024px) {
   .tm-table td:first-child, .tm-table th:first-child {
     position: sticky; left: 0; z-index: 1;
-    background: #141416; /* match table bg */
+    background: #ffffff; /* light */
+  }
+  .dark .tm-table td:first-child, .dark .tm-table th:first-child {
+    background: #141416; /* dark */
   }
 }
