@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
 import { Target, Users, Calendar, Sparkles, User } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
@@ -11,18 +10,12 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
-  // Start at the very top on mount to avoid mid-page starts
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, []);
-  // Reveal logic centralized in global script; remove page-level observers
-
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
         {/* Header */}
-        <header className="relative z-50 border-b border-[#202020] bg-[#0C0C0C]">
+        <header className="border-b border-[#202020] bg-[#0C0C0C]">
           {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
           <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
@@ -30,9 +23,8 @@ export default function Landing() {
               <ThemeToggle inline />
               <Link
                 to="/login"
-                role="button"
                 aria-label="Account Login"
-                className="z-40 w-9 h-9 rounded-full bg-[#1A1A1A] border border-[#202020] hover:bg-[#202020] transition-colors flex items-center justify-center shadow text-[#B3B3B3] hover:text-[#FFC96C]"
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:text-[#FFC96C]"
               >
                 <User className="h-5 w-5" />
               </Link>
@@ -40,18 +32,21 @@ export default function Landing() {
           </div>
         </header>
 
-        {/* AI Chat Interface */}
-        {/* Ensure chat stays usable on mobile */}
-        <div style={{ marginTop: '-2in' }} className="hero">
-          <AIChatInterface />
-        </div>
-
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
-            <div className="max-w-4xl mx-auto" style={{ marginTop: '-0.5in' }}>
-              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)', marginTop: '1in' }}>
+            <div className="max-w-4xl mx-auto">
+              <img
+                src="/syntek-hero.png"
+                alt="Syntek Automations logo"
+                className="mx-auto mb-6 h-auto w-[140px] sm:w-[180px] md:w-[220px]"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/og-image.svg';
+                }}
+              />
+              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)' }}>
                 TRANSFORM YOUR COMPANY INTO A POWERHOUSE
               </h1>
               <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
@@ -73,19 +68,9 @@ export default function Landing() {
           </FadeInSection>
         </section>
 
-        {/* SYNTEK AUTOMATIONS Hero Image */}
-        <div className="syntek-image-container" id="syntek-automations-hero">
-          <img
-            src="/assets/SYNTEK AUTOMATIONS.svg"
-            alt="SYNTEK AUTOMATIONS"
-            className="syntek-hero fade-once"
-            width="1024"
-            height="1024"
-            decoding="async"
-            loading="lazy"
-            data-key="syntekFadeV1"
-          />
-        </div>
+        {/* AI Chat Interface */}
+        {/* Ensure chat stays usable on mobile */}
+        <AIChatInterface />
 
         {/* Core Modules */}
         <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
