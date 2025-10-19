@@ -11,6 +11,10 @@ import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
 
 export default function Landing() {
+  // Start at the very top on mount to avoid mid-page starts
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
   // Reusable hero reveal observer applied across devices and viewports
   useEffect(() => {
     const scope = document.querySelector('.hero');

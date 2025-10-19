@@ -13,7 +13,7 @@ export default function AIChatInterface() {
   const [selectedAgent, setSelectedAgent] = useState('Strategic Advisor');
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
-  const [showContent, setShowContent] = useState(false);
+  // Chat content reveal is orchestrated globally; local state not needed
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
@@ -22,7 +22,6 @@ export default function AIChatInterface() {
   const activeAgentRef = useRef('Strategic Advisor');
   const hasPlayedRef = useRef(false);
   const titleRef = useRef(null);
-  const notifiedRef = useRef(false);
   const helloPrefixRef = useRef(null);
 
   const agents = [
@@ -53,7 +52,6 @@ export default function AIChatInterface() {
     if (reduceMotion) {
       setTypedText(`Hello. I am your ${activeAgentRef.current}`);
       hasPlayedRef.current = true;
-      setShowContent(true);
       isAnimatingRef.current = false;
 
       // Expose typed completion for orchestrator
@@ -62,20 +60,10 @@ export default function AIChatInterface() {
         typedEl.setAttribute('data-typed-complete', '1');
         typedEl.dispatchEvent(new CustomEvent('typed:complete'));
       }
-
-      if (!notifiedRef.current) {
-        notifiedRef.current = true;
-        window.dispatchEvent(
-          new CustomEvent('chatbox-animation-complete', {
-            detail: { source: 'AIChatInterface', via: 'reducedMotion' },
-          })
-        );
-      }
       return;
     }
 
     isAnimatingRef.current = true;
-    setShowContent(false);
     setTypedText('');
 
     const greetingPart = 'Hello.';
@@ -108,7 +96,6 @@ export default function AIChatInterface() {
     const completionTimeout = setTimeout(() => {
       setTypedText(`Hello. I am your ${activeAgentRef.current}`);
       hasPlayedRef.current = true;
-      setShowContent(true);
       isAnimatingRef.current = false;
 
       // Expose typed completion for orchestrator
@@ -117,15 +104,6 @@ export default function AIChatInterface() {
         typedEl.setAttribute('data-typed-complete', '1');
         typedEl.dispatchEvent(new CustomEvent('typed:complete'));
       }
-
-      // Fallback timer in case transitionend isn't supported
-      const fallbackNotify = setTimeout(() => {
-        if (!notifiedRef.current) {
-          notifiedRef.current = true;
-          window.dispatchEvent(new CustomEvent('chatbox-animation-complete', { detail: { source: 'AIChatInterface', via: 'fallbackTimer' } }));
-        }
-      }, 1200);
-      timeoutsRef.current.push(fallbackNotify);
     }, delay + typingSpeed);
 
     timeoutsRef.current.push(completionTimeout);
@@ -184,133 +162,7 @@ export default function AIChatInterface() {
     };
   }, []);
 
-  // One-time entrance animation for the SYNTEK AUTOMATIONS title
-  useEffect(() => {
-    function playSyntekTitleAnimation() {
-      if (typeof window !== 'undefined' && window.__syntekTitlePlayed) return;
-      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const titleEl = titleRef.current;
-      if (!titleEl) return;
-
-      // Set final title color to white (overrides previous gray)
-      const targetColor = '#FFFFFF';
-      titleEl.style.setProperty('--hello-gray', targetColor);
-
-      if (reduceMotion) {
-        // Respect reduced motion: set final state instantly
-        titleEl.style.color = targetColor;
-        titleEl.style.clipPath = 'inset(0 0 0 0)';
-        window.__syntekTitlePlayed = true;
-        return;
-      }
-
-      // Ensure initial state before starting animation (tokenized with dark fallback)
-      titleEl.style.color = 'var(--text, var(--foreground))';
-      titleEl.style.clipPath = 'inset(0 100% 0 0)';
-      titleEl.style.filter = 'none';
-
-      const animation = titleEl.animate(
-        [
-          // Neon pre-flicker
-          {
-            color: 'var(--text, var(--foreground))',
-            clipPath: 'inset(0 100% 0 0)',
-            textShadow: '0 0 0 rgba(255,201,108,0)',
-            filter: 'brightness(0.6)'
-          },
-          {
-            color: 'var(--text, var(--foreground))',
-            clipPath: 'inset(0 90% 0 0)',
-            textShadow: '0 0 10px rgba(255,201,108,0.6), 0 0 20px rgba(255,201,108,0.35)',
-            filter: 'brightness(1.25)',
-            offset: 0.12
-          },
-          {
-            color: 'var(--text, var(--foreground))',
-            clipPath: 'inset(0 80% 0 0)',
-            textShadow: '0 0 4px rgba(255,201,108,0.25)',
-            filter: 'brightness(0.9)',
-            offset: 0.22
-          },
-          // Left-to-right reveal with color tween
-          {
-            color: 'var(--hello-gray)',
-            clipPath: 'inset(0 0 0 0)',
-            textShadow: '2px 0 10px rgba(0,0,0,0.35)',
-            filter: 'none',
-            offset: 0.85
-          },
-          // Final short flicker
-          {
-            color: 'var(--hello-gray)',
-            clipPath: 'inset(0 0 0 0)',
-            textShadow: '0 0 12px rgba(255,201,108,0.4)',
-            filter: 'brightness(1.05)',
-            offset: 0.93
-          },
-          // Added extra quick flicker to increase count by ~50%
-          {
-            color: 'var(--hello-gray)',
-            clipPath: 'inset(0 0 0 0)',
-            textShadow: '0 0 0 rgba(0,0,0,0)',
-            filter: 'none',
-            offset: 0.965
-          },
-          {
-            color: 'var(--hello-gray)',
-            clipPath: 'inset(0 0 0 0)',
-            textShadow: '0 0 12px rgba(255,201,108,0.4)',
-            filter: 'brightness(1.05)',
-            offset: 0.985
-          },
-          {
-            color: 'var(--hello-gray)',
-            clipPath: 'inset(0 0 0 0)',
-            textShadow: '0 0 0 rgba(0,0,0,0)',
-            filter: 'none',
-            offset: 1
-          }
-        ],
-        {
-          duration: 5950,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-          fill: 'forwards'
-        }
-      );
-
-      animation.finished.finally(() => {
-        window.__syntekTitlePlayed = true;
-      });
-    }
-
-    function onChatboxComplete() {
-      const titleEl = titleRef.current;
-      if (titleEl) {
-        // Trigger CSS fade-in sequence for the title
-        titleEl.classList.add('is-live');
-      }
-      playSyntekTitleAnimation();
-    }
-
-    window.addEventListener('chatbox-animation-complete', onChatboxComplete);
-    return () => {
-      window.removeEventListener('chatbox-animation-complete', onChatboxComplete);
-    };
-  }, []);
-
-  // If animation already played earlier in the session (route transition), set final state
-  useEffect(() => {
-    const titleEl = titleRef.current;
-    if (!titleEl) return;
-    if (typeof window !== 'undefined' && window.__syntekTitlePlayed) {
-      const targetColor = '#FFFFFF';
-      titleEl.style.setProperty('--hello-gray', targetColor);
-      titleEl.style.color = targetColor;
-      titleEl.style.clipPath = 'inset(0 0 0 0)';
-      titleEl.style.textShadow = 'none';
-      titleEl.style.filter = 'none';
-    }
-  }, []);
+  // Title animation is orchestrated globally by hero-orchestrator
 
   const prefixText = 'Hello. I am your ';
   const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
@@ -329,7 +181,7 @@ export default function AIChatInterface() {
       <h1
           id="syntek-title"
           ref={titleRef}
-          className="syntek-title text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
+          className="syntek-title will-animate text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
         style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))' }}
         >
           SYNTEK AUTOMATIONS
@@ -355,18 +207,10 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
-          className={`cb-reveal ${showContent ? 'show' : ''}`}
-          onTransitionEnd={(e) => {
-            if (!showContent) return;
-            if (notifiedRef.current) return;
-            if (e.propertyName !== 'opacity' && e.propertyName !== 'transform') return;
-            notifiedRef.current = true;
-            window.dispatchEvent(new CustomEvent('chatbox-animation-complete', { detail: { source: 'AIChatInterface', via: 'transitionEnd' } }));
-          }}
-          style={{ pointerEvents: showContent ? 'auto' : 'none' }}
+          className="cb-reveal will-animate"
         >
           {/* Agent Selector */}
-          <div className="mb-8 flex justify-center cb-reveal">
+          <div className="mb-8 flex justify-center cb-reveal will-animate">
             <div className="relative flex w-full max-w-xs flex-col items-center gap-2">
               <button
                 onClick={() => setShowAgentMenu(!showAgentMenu)}
@@ -407,11 +251,11 @@ export default function AIChatInterface() {
           </div>
 
           {/* Subtitle */}
-          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty cb-reveal">
+          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty cb-reveal will-animate">
             What would you like to do today?
           </p>
           {/* Chat Input */}
-          <form onSubmit={handleSubmit} className="relative cb-reveal">
+          <form onSubmit={handleSubmit} className="relative cb-reveal will-animate">
             <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
               <ChatTools
                 onAttach={() => alert('File attachment coming soon')}
@@ -455,7 +299,7 @@ export default function AIChatInterface() {
           </form>
 
           {/* Suggested Prompts */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3 cb-reveal">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 cb-reveal will-animate">
             {[
               'Analyze board engagement trends',
               'Draft meeting agenda',

@@ -1,9 +1,18 @@
 (function initHeroOrchestrator(){
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
+  // Ensure no-flash guard is lifted once JS executes
+  try {
+    if (document && document.body && document.body.getAttribute('data-js-ready') !== '1') {
+      document.body.setAttribute('data-js-ready', '1');
+    }
+  } catch {}
 
-  const chatEls = Array.from(hero.querySelectorAll('.cb-reveal')) as HTMLElement[];
-  const titleEl = document.querySelector('.syntek-title') as HTMLElement | null;
+  function run() {
+    const hero = document.querySelector('.hero') as HTMLElement | null;
+    if (!hero || hero.getAttribute('data-orchestrated') === '1') return;
+    hero.setAttribute('data-orchestrated', '1');
+
+    const chatEls = Array.from(hero.querySelectorAll('.cb-reveal')) as HTMLElement[];
+    const titleEl = document.querySelector('.syntek-title') as HTMLElement | null;
 
   function waitForTypewriter() {
     return new Promise<void>((resolve) => {
@@ -17,7 +26,7 @@
 
       typedEl.addEventListener('typed:complete', done as any);
       // Never block forever
-      setTimeout(resolve, 2000);
+      setTimeout(resolve, 3000);
     });
   }
 
@@ -52,12 +61,33 @@
     requestAnimationFrame(() => titleEl.classList.add('is-live'));
   }
 
-  waitForTypewriter()
-    .then(revealChatEls)
-    .then(showTitle)
-    .catch(() => {
-      // Any failure → force visible
-      chatEls.forEach((el) => el.classList.add('show'));
-      if (titleEl) titleEl.classList.add('is-live');
+    waitForTypewriter()
+      .then(revealChatEls)
+      .then(showTitle)
+      .catch(() => {
+        // Any failure → force visible
+        chatEls.forEach((el) => el.classList.add('show'));
+        if (titleEl) titleEl.classList.add('is-live');
+      });
+  }
+
+  const tryRun = () => {
+    if (document.querySelector('.hero')) run();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryRun, { once: true });
+  } else {
+    tryRun();
+  }
+
+  if (!document.querySelector('.hero')) {
+    const mo = new MutationObserver(() => {
+      if (document.querySelector('.hero')) {
+        run();
+        mo.disconnect();
+      }
     });
+    mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+  }
 })();

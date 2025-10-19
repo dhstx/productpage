@@ -741,7 +741,7 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 /* Animation is opt-in via JS: add 'will-animate' then 'show' */
 .hero .cb-reveal.will-animate {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(12px);
   transition: opacity 500ms ease, transform 500ms ease;
 }
 .hero .cb-reveal.show {
@@ -756,8 +756,8 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 }
 .syntek-title.will-animate {
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transform: translateX(12px);
+  transition: opacity 650ms ease, transform 650ms ease;
 }
 .syntek-title.is-live {
   opacity: 1;
@@ -766,10 +766,11 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 
 @media (prefers-reduced-motion: reduce){
   .cb-reveal.will-animate,
-  .syntek-title.will-animate {
-    transition: none;
-    opacity: 1;
-    transform: none;
+  .syntek-title.will-animate,
+  #syntek-automations-hero .fade-once {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
   /* Keep broader reduced-motion safeguard */
   .reveal-up, .cb-reveal, .syntek-title, .fade-once { transition: none; opacity: 1; transform: none; }
