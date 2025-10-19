@@ -710,8 +710,8 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   max-width: 100%;      /* responsive */
 }
 
-/* One-time fade-in */
-.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 1125ms ease, transform 1125ms ease; }
+/* One-time fade-in: 2s total from invisible → visible */
+.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 2000ms ease, transform 2000ms ease; }
 .fade-once.is-visible { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce){ .fade-once{ transition: none; opacity: 1; transform: none; } }
 
@@ -773,6 +773,6 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
     transform: none !important;
   }
   /* Keep broader reduced-motion safeguard */
-  .reveal-up, .cb-reveal, .syntek-title, .fade-once { transition: none; opacity: 1; transform: none; }
+  .reveal-up, .reveal-left, .reveal-right, .cb-reveal, .syntek-title, .fade-once { transition: none; opacity: 1; transform: none; }
 }
 
