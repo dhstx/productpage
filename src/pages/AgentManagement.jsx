@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import BackArrow from '../components/BackArrow';
-import { Bot, Zap, AlertCircle, CheckCircle, ChevronDown, Cog, ArrowUp } from 'lucide-react';
+import { Bot, Brain, Zap, TrendingUp, AlertCircle, CheckCircle, Settings, Play, Pause, RefreshCw, ChevronDown, Users, Cog, X } from 'lucide-react';
 import { agents as agentData, getAgentStats } from '../lib/agents';
 import { getCurrentUser, hasFeature } from '../lib/auth';
-import ChatTools from '../components/chat/ChatTools';
 
 export default function AgentManagement() {
   const [selectedAgents, setSelectedAgents] = useState([]);
-  const [activeMode, setActiveMode] = useState('chat');
   const [configAgent, setConfigAgent] = useState(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -19,9 +17,6 @@ export default function AgentManagement() {
   const [customTeamName, setCustomTeamName] = useState('');
   const [customTeams, setCustomTeams] = useState([]);
   const lastValidTeamRef = useRef('All Teams');
-  const configTriggerRef = useRef(null);
-  const configModalRef = useRef(null);
-  const previousFocusRef = useRef(null);
   
   const [agents, setAgents] = useState(agentData);
   const user = getCurrentUser();
@@ -97,84 +92,9 @@ export default function AgentManagement() {
 
   const handleConfigureAgent = (agent, e) => {
     e.stopPropagation();
-    configTriggerRef.current = e.currentTarget;
     setConfigAgent(agent);
     setShowConfigModal(true);
   };
-
-  const closeConfigModal = () => {
-    setShowConfigModal(false);
-    setConfigAgent(null);
-    // restore focus to the cog button that opened the modal
-    const toFocus = configTriggerRef.current || previousFocusRef.current;
-    if (toFocus && typeof toFocus.focus === 'function') {
-      setTimeout(() => toFocus.focus(), 0);
-    }
-  };
-
-  // Focus trap and Escape handling for the configuration modal
-  useEffect(() => {
-    if (!showConfigModal) return;
-
-    previousFocusRef.current = document.activeElement;
-
-    const modalEl = configModalRef.current;
-    if (!modalEl) return;
-
-    const focusableSelectors = [
-      'a[href]',
-      'button:not([disabled])',
-      'textarea:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])'
-    ].join(',');
-
-    const focusFirstElement = () => {
-      const focusables = modalEl.querySelectorAll(focusableSelectors);
-      if (focusables.length > 0) {
-        /** @type {HTMLElement} */
-        const first = focusables[0];
-        first.focus();
-      } else {
-        modalEl.focus();
-      }
-    };
-
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closeConfigModal();
-        return;
-      }
-      if (e.key === 'Tab') {
-        const focusables = Array.from(modalEl.querySelectorAll(focusableSelectors)).filter(
-          (el) => el.offsetParent !== null || el === document.activeElement
-        );
-        if (focusables.length === 0) {
-          e.preventDefault();
-          modalEl.focus();
-          return;
-        }
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        } else if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      }
-    };
-
-    // Focus the first focusable element when opened
-    setTimeout(focusFirstElement, 0);
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [showConfigModal]);
 
   const confirmAgentAction = () => {
     if (!configAgent) return;
@@ -506,53 +426,34 @@ export default function AgentManagement() {
               </div>
             </div>
 
-            {/* Input Area with shared ChatTools */}
+            {/* Input Area */}
             <form onSubmit={handleAgentSubmit} className="flex flex-col gap-3 md:flex-row">
-              <div className="w-full">
-                <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
-                  <ChatTools
-                    onAttach={() => alert('File attachment coming soon')}
-                    onToggleMode={(mode) => setActiveMode(mode)}
-                    activeMode={activeMode}
-                    onMicStart={() => alert('Voice input coming soon')}
-                    disabled={selectedAgents.length === 0}
-                    features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
-                    rightAppend={(
-                      <button
-                        type="submit"
-                        disabled={selectedAgents.length === 0 || !agentInput.trim()}
-                        className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-                          selectedAgents.length > 0 && agentInput.trim()
-                            ? 'bg-[#FFC96C] hover:bg-[#FFD700]'
-                            : 'bg-[#202020] cursor-not-allowed'
-                        }`}
-                        aria-label="Send"
-                      >
-                        <ArrowUp className={`w-5 h-5 ${selectedAgents.length > 0 && agentInput.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
-                      </button>
-                    )}
-                  >
-                    <textarea
-                      value={agentInput}
-                      onChange={(e) => setAgentInput(e.target.value)}
-                      placeholder={
-                        selectedAgents.length === 0 
-                          ? "Select agents to start messaging..." 
-                          : selectedAgents.length === 1 
-                            ? `Message ${selectedAgents[0].name}...` 
-                            : `Message ${selectedAgents.length} agents...`
-                      }
-                      disabled={selectedAgents.length === 0}
-                      className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
-                      rows={1}
-                      onInput={(e) => {
-                        e.target.style.height = 'auto';
-                        e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
-                      }}
-                    />
-                  </ChatTools>
-                </div>
-              </div>
+              <textarea
+                value={agentInput}
+                onChange={(e) => setAgentInput(e.target.value)}
+                placeholder={
+                  selectedAgents.length === 0 
+                    ? "Select agents to start messaging..." 
+                    : selectedAgents.length === 1 
+                      ? `Message ${selectedAgents[0].name}...` 
+                      : `Message ${selectedAgents.length} agents...`
+                }
+                disabled={selectedAgents.length === 0}
+                className="flex-1 px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[2px] text-[#F2F2F2] placeholder-[#808080] focus:outline-none focus:border-[#FFC96C] transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                rows={2}
+                style={{ minHeight: '60px', maxHeight: '200px' }}
+                onInput={(e) => {
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+                }}
+              />
+              <button
+                type="submit"
+                disabled={selectedAgents.length === 0 || !agentInput.trim()}
+                className="btn-system w-full md:w-auto md:px-6 md:self-end disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Send
+              </button>
             </form>
           </div>
         </div>
@@ -636,34 +537,26 @@ export default function AgentManagement() {
       {/* Configuration Modal with Suggested Prompts */}
       {showConfigModal && configAgent && (
         <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:p-6"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              closeConfigModal();
+              setShowConfigModal(false);
+              setConfigAgent(null);
             }
           }}
         >
-          <div
-            ref={configModalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="configure-agent-title"
-            tabIndex={-1}
-            className="panel-system relative w-[90vw] sm:w-full sm:max-w-2xl max-h-[75vh] sm:max-h-none my-8 p-6 sm:p-8 overflow-y-auto"
-            style={{ WebkitOverflowScrolling: 'touch' }}
-          >
+          <div className="panel-system relative w-full my-6 sm:my-8 p-4 sm:p-6 md:p-8 max-w-md sm:max-w-xl md:max-w-2xl max-h-[80vh] sm:max-h-[85vh] overflow-y-auto">
             <button
-              onClick={closeConfigModal}
-              aria-label="Close settings"
-              className="absolute right-2 top-2 h-11 w-11 rounded-full text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] flex items-center justify-center"
+              aria-label="Close configuration"
+              onClick={() => {
+                setShowConfigModal(false);
+                setConfigAgent(null);
+              }}
+              className="absolute right-3 top-3 text-[#B3B3B3] hover:text-[#F2F2F2] focus:outline-none"
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
+              <X className="w-6 h-6" />
             </button>
-
-            <h3 id="configure-agent-title" className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+            <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
               CONFIGURE AGENT
             </h3>
             <p className="text-[#B3B3B3] mb-6 text-sm">
@@ -717,18 +610,9 @@ export default function AgentManagement() {
                 </label>
                 <div className="space-y-2">
                   {getSuggestedPrompts(configAgent).map((prompt, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      aria-label={`Use prompt: ${prompt}`}
-                      onClick={() => {
-                        setAgentInput(prompt);
-                        closeConfigModal();
-                      }}
-                      className="w-full text-left panel-system p-3 bg-[#0C0C0C] border border-[#202020] hover:border-[#FFC96C] hover:bg-[#1A1A1A]"
-                    >
-                      <span className="text-[#F2F2F2] text-sm">{prompt}</span>
-                    </button>
+                    <div key={index} className="panel-system p-3 bg-[#0C0C0C] border border-[#202020]">
+                      <p className="text-[#F2F2F2] text-sm">{prompt}</p>
+                    </div>
                   ))}
                 </div>
                 <p className="text-[#808080] text-xs mt-2">
@@ -739,13 +623,19 @@ export default function AgentManagement() {
 
             <div className="flex gap-3 mt-8">
               <button
-                onClick={closeConfigModal}
+                onClick={() => {
+                  setShowConfigModal(false);
+                  setConfigAgent(null);
+                }}
                 className="flex-1 btn-system"
               >
                 Save Changes
               </button>
               <button
-                onClick={closeConfigModal}
+                onClick={() => {
+                  setShowConfigModal(false);
+                  setConfigAgent(null);
+                }}
                 className="flex-1 btn-system-secondary"
               >
                 Cancel
