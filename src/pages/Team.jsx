@@ -145,11 +145,127 @@ export default function Team() {
         <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
           TEAM MEMBERS
         </h2>
+<<<<<<< HEAD
         <TeamMembersResponsive
           members={membersForComponent}
           onChangeRole={onChangeRoleById}
           onRemove={onRemoveById}
         />
+=======
+        {/* Mobile list (shows all details) */}
+        <div className="panel-system md:hidden divide-y divide-[#202020]">
+          {teamMembers.map((member) => (
+            <div key={member.id} className="p-4 space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#FFC96C] font-bold">{member.name[0]}</span>
+                  </div>
+                  <div>
+                    <div className="text-[#F2F2F2] font-medium">{member.name}</div>
+                    <div className="text-[#B3B3B3] text-sm">{member.email}</div>
+                  </div>
+                </div>
+                <span className="px-2 py-0.5 rounded-[4px] bg-[#202020] text-[#FFC96C] text-sm font-medium whitespace-nowrap">
+                  {member.role}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${member.status === 'Active' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                  <span className="text-[#B3B3B3] text-sm">{member.status}</span>
+                </div>
+                <div className="text-[#B3B3B3] text-sm">
+                  Joined: <span className="text-[#F2F2F2]">{member.joinedDate}</span>
+                </div>
+              </div>
+
+              {member.role !== 'Owner' && (
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    onClick={() => handleChangeRole(member)}
+                    className="px-3 py-1.5 rounded-[4px] bg-[#202020] text-[#F2F2F2] text-sm hover:bg-[#FFC96C] hover:text-[#0C0C0C] transition-colors"
+                  >
+                    Change Role
+                  </button>
+                  <button
+                    onClick={() => handleRemove(member)}
+                    className="p-2 rounded-[4px] bg-[#202020] text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                    aria-label={`Remove ${member.name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop table */}
+        <div className="panel-system overflow-x-auto hidden md:block">
+          <table className="w-full">
+            <thead className="bg-[#0C0C0C]">
+              <tr className="border-b border-[#202020]">
+                <th className="text-left p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Member</th>
+                <th className="text-left p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold w-[88px] md:w-auto">Role</th>
+                <th className="text-left p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Status</th>
+                <th className="text-left p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold hidden sm:table-cell">Joined</th>
+                <th className="text-right p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teamMembers.map((member) => (
+                <tr key={member.id} className="border-b border-[#202020] hover:bg-[#1A1A1A]">
+                  <td className="p-3 md:p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-[4px] bg-[#202020] flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#FFC96C] font-bold">{member.name[0]}</span>
+                      </div>
+                      <div>
+                        <div className="text-[#F2F2F2] font-medium text-sm md:text-base">{member.name}</div>
+                        <div className="text-[#B3B3B3] text-xs md:text-sm">{member.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="p-3 md:p-4">
+                    <span className="px-2 py-0.5 rounded-[4px] bg-[#202020] text-[#FFC96C] text-xs md:text-sm font-medium whitespace-nowrap">
+                      {member.role}
+                    </span>
+                  </td>
+                  <td className="p-3 md:p-4">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${member.status === 'Active' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                      <span className="text-[#B3B3B3] text-xs md:text-sm">{member.status}</span>
+                    </div>
+                  </td>
+                  <td className="p-3 md:p-4 text-[#B3B3B3] text-xs md:text-sm hidden sm:table-cell">{member.joinedDate}</td>
+                  <td className="p-3 md:p-4">
+                    <div className="flex items-center justify-end gap-2">
+                      {member.role !== 'Owner' && (
+                        <>
+                          <button
+                            onClick={() => handleChangeRole(member)}
+                            className="px-2 py-1 rounded-[4px] bg-[#202020] text-[#F2F2F2] text-xs md:text-sm hover:bg-[#FFC96C] hover:text-[#0C0C0C] transition-colors"
+                          >
+                            Change Role
+                          </button>
+                          <button
+                            onClick={() => handleRemove(member)}
+                            className="p-2 rounded-[4px] bg-[#202020] text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+>>>>>>> 4306702 (Refactor: Improve team page layout and remove desktop settings shortcut)
       </section>
 
       {/* Invite Modal */}

@@ -69,6 +69,10 @@ export default function AdminLayout({ children }) {
 
             <div className="flex items-center gap-4">
               <ThemeToggle inline />
+<<<<<<< HEAD
+=======
+              {/* Settings icon shortcut - desktop removed per requirements */}
+>>>>>>> 4306702 (Refactor: Improve team page layout and remove desktop settings shortcut)
               {/* Profile Dropdown */}
               <div className="hidden md:block relative">
                 <button
