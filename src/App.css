@@ -704,6 +704,12 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   margin-bottom: 2in;
 }
 
+/* Ensure SVG stays visible and sized on small screens */
+@media (max-width: 640px) {
+  .syntek-image-container { margin-top: 1.25in; margin-bottom: 1.25in; }
+  #syntek-svg { max-width: 90vw; height: auto; display: block; }
+}
+
 .syntek-hero {
   width: 1024px;
   height: auto;         /* keep aspect ratio */
