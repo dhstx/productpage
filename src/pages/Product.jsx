@@ -45,7 +45,7 @@ export default function Product() {
             <p className="mx-auto mb-10 max-w-3xl text-center text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
               Syntek is where vision meets precision. Plan, align, and execute with intelligence designed for modern leadership and long-term organizational success.
             </p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4"></div>
+            {/* Removed empty CTA wrapper to avoid rendering an empty block */}
           </section>
         </FadeInSection>
 
