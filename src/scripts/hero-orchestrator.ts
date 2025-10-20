@@ -13,7 +13,8 @@
     if (!hero || hero.getAttribute('data-orchestrated') === '1') return;
     hero.setAttribute('data-orchestrated', '1');
 
-    const chatEls = Array.from(hero.querySelectorAll('#hero-chatbox')) as HTMLElement[];
+    // Reveal the chatbox shell after the typewriter completes
+    const chatEls = Array.from(hero.querySelectorAll('.chatbox-shell')) as HTMLElement[];
     const titleEl = document.getElementById('syntek-heading') as HTMLElement | null;
 
   function waitForTypewriter() {
@@ -36,11 +37,12 @@
     return new Promise<void>((resolve) => {
       if (!chatEls.length) return resolve();
 
-      // Opt-in to animation just-in-time
-      chatEls.forEach((el) => el.classList.add('reveal'));
-      // Force reflow then show
+      // Use site-wide up-fade utility: .fade-once + .is-visible
+      // Ensure class present before toggling visibility
+      chatEls.forEach((el) => el.classList.add('fade-once'));
+      // Force reflow then reveal
       void document.body.offsetHeight;
-      chatEls.forEach((el) => el.classList.add('show'));
+      chatEls.forEach((el) => el.classList.add('is-visible'));
 
       let pending = chatEls.length;
       const done = () => { if (--pending === 0) resolve(); };
@@ -60,13 +62,13 @@
     requestAnimationFrame(() => titleEl.classList.add('show'));
   }
 
-    // Reveal chat first so typing is visible, then wait for completion, then show title
-    revealChatEls()
-      .then(waitForTypewriter)
+    // Wait for typewriter to finish, then reveal chatbox, then show title
+    waitForTypewriter()
+      .then(revealChatEls)
       .then(showTitle)
       .catch(() => {
         // Any failure → force visible
-        chatEls.forEach((el) => el.classList.add('show'));
+        chatEls.forEach((el) => el.classList.add('is-visible'));
         if (titleEl) {
           if (!titleEl.classList.contains('reveal')) titleEl.classList.add('reveal');
           titleEl.classList.add('show');
