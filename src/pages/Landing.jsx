@@ -46,6 +46,20 @@ export default function Landing() {
           <AIChatInterface />
         </div>
 
+        {/* SYNTEK AUTOMATIONS mark above Hero */}
+        <section id="syntek-svg-section" className="syntek-image-container">
+          <img
+            id="syntek-svg"
+            className="syntek-hero fade-once"
+            src="/assets/SYNTEK AUTOMATIONS.svg"
+            alt="Syntek Automations mark"
+            width="1024"
+            height="1024"
+            loading="lazy"
+            decoding="async"
+          />
+        </section>
+
         {/* Hero Section */}
         {/* clamp heading via .h1, keep hero centered within ~4xl */}
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
@@ -71,20 +85,6 @@ export default function Landing() {
               </div>
             </div>
           </FadeInSection>
-        </section>
-
-        {/* SYNTEK AUTOMATIONS mark above Core Modules */}
-        <section id="syntek-svg-section" className="syntek-image-container">
-          <img
-            id="syntek-svg"
-            className="syntek-hero fade-once"
-            src="/assets/SYNTEK AUTOMATIONS.svg"
-            alt="Syntek Automations mark"
-            width="1024"
-            height="1024"
-            loading="lazy"
-            decoding="async"
-          />
         </section>
 
         {/* Core Modules */}
