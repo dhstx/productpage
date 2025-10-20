@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
-// Per-character delay (25% faster than current)
-const TYPEWRITER_CHAR_MS = 72;
+// Per-character delay; 15% faster than previous value
+// NEW = Math.round(OLD * 0.85) = Math.round(72 * 0.85) = 61
+const TYPEWRITER_CHAR_MS = 61;
 const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
 
 export default function AIChatInterface() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
   const [selectedAgent, setSelectedAgent] = useState('Strategic Advisor');
@@ -29,6 +32,40 @@ export default function AIChatInterface() {
     { name: 'Engagement Analyst', color: '#8B5CF6' },
     { name: 'Operations Assistant', color: '#10B981' }
   ];
+
+  // Map of agent name to potential detail route. If a route doesn't exist, we do NOT navigate.
+  const AGENT_ROUTE_MAP = {
+    'Strategic Advisor': '/agents/strategic-advisor',
+    'Engagement Analyst': '/agents/engagement-analyst',
+    'Operations Assistant': '/agents/operations-assistant',
+  };
+
+  const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
+
+  const handleAgentSelect = (name) => {
+    setSelectedAgent(name);
+    setShowAgentMenu(false);
+
+    // Only navigate to a page if it exists in the app; otherwise update query only
+    const targetPath = AGENT_ROUTE_MAP[name] || null;
+    const knownRoutes = new Set(['/','/product','/login','/dashboard','/platforms','/team','/billing','/settings','/agents','/integrations-management','/use-cases/healthcare','/use-cases/education','/use-cases/nonprofit','/security','/integrations','/status','/changelog','/policies/terms','/policies/privacy','/policies/cookies']);
+
+    if (targetPath && knownRoutes.has(targetPath)) {
+      // Intentionally avoid navigation for now to keep users on the hero unless dedicated pages exist
+      // navigate(targetPath); // disabled by design per dead-route guard
+    } else {
+      if (import.meta.env.DEV) {
+        // Development-only warning to surface dead route navigations
+        console.warn(`[AgentSelect] No valid route for "${name}". Staying on hero and updating ?agent=${slugifyAgent(name)}`);
+      }
+      // Update the URL query param without leaving the page
+      try {
+        setSearchParams({ agent: slugifyAgent(name) }, { replace: true });
+      } catch {
+        // Fallback: ignore if router context not ready
+      }
+    }
+  };
 
   const currentAgent = agents.find((agent) => agent.name === selectedAgent);
   const currentAgentColor = currentAgent ? currentAgent.color : '#FFC96C';
@@ -135,9 +172,20 @@ export default function AIChatInterface() {
     activeAgentRef.current = selectedAgent;
     if (hasPlayedRef.current) {
       setTypedText(`Hello. I am your ${selectedAgent}`);
-      setShowContent(true);
     }
   }, [selectedAgent]);
+
+  // Initialize selected agent from query param on first render
+  useEffect(() => {
+    const qp = searchParams.get('agent');
+    if (!qp) return;
+    const pretty = qp.replace(/-/g, ' ');
+    const match = agents.find((a) => a.name.toLowerCase() === pretty);
+    if (match) {
+      setSelectedAgent(match.name);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -207,7 +255,7 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
-          className="cb-reveal will-animate"
+          className="chatbox-shell fade-once"
         >
           {/* Agent Selector */}
           <div className="mb-8 flex justify-center cb-reveal will-animate">
@@ -227,10 +275,7 @@ export default function AIChatInterface() {
                   {agents.map((agent) => (
                     <button
                       key={agent.name}
-                      onClick={() => {
-                        setSelectedAgent(agent.name);
-                        setShowAgentMenu(false);
-                      }}
+                      onClick={() => handleAgentSelect(agent.name)}
                       className="flex w-full items-center gap-3 border-b border-[#202020] px-4 py-3 text-left transition-colors hover:bg-[#1A1A1A] last:border-0"
                     >
                       <div

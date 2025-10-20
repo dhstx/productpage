@@ -716,9 +716,9 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   max-width: 100%;      /* responsive */
 }
 
-/* One-time fade-in utility (simple opacity only) */
-.fade-once { opacity: 0; transition: opacity 900ms ease; }
-.fade-once.is-visible { opacity: 1; }
+/* One-time fade-in utility (opacity + slight up-translate) */
+.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 900ms ease, transform 900ms ease; }
+.fade-once.is-visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce){ .fade-once{ transition: none; opacity: 1; transform: none; } }
 
 /* Reusable reveal animations */
