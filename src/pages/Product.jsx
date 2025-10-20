@@ -46,9 +46,7 @@ export default function Product() {
               Syntek is where vision meets precision. Plan, align, and execute with intelligence designed for modern leadership and long-term organizational success.
             </p>
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-              <Link to="/login" className="btn-system">
-                Request Demo
-              </Link>
+              {/* Request Demo button intentionally removed per spec */}
             </div>
           </section>
         </FadeInSection>

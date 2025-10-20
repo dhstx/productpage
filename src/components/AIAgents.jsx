@@ -108,9 +108,9 @@ export default function AIAgents() {
               becoming more effective over time. They adapt to your unique workflows and provide
               increasingly personalized recommendations as they understand your needs better.
             </p>
-            <Link to="/agent-management" className="btn-system">
+            <Link to="/login" className="btn-system">
               <Bot className="h-4 w-4" />
-              View All 12 AI Agents
+              View All Agents
             </Link>
           </div>
         </div>
