@@ -13,8 +13,9 @@
     if (!hero || hero.getAttribute('data-orchestrated') === '1') return;
     hero.setAttribute('data-orchestrated', '1');
 
-    // Reveal the chatbox shell after the typewriter completes
-    const chatEls = Array.from(hero.querySelectorAll('.chatbox-shell')) as HTMLElement[];
+    // Reveal the chatbox extras after the typewriter completes
+    // Updated selector per UI refactor: .chatbox-extras.fade-once is now the wrapper
+    const chatEls = Array.from(hero.querySelectorAll('.chatbox-extras')) as HTMLElement[];
     const titleEl = document.getElementById('syntek-heading') as HTMLElement | null;
 
   function waitForTypewriter() {

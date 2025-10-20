@@ -4,12 +4,14 @@ import { ArrowUp, Sparkles } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
-// Per-character delay; 15% faster than previous value
-// NEW = Math.round(OLD * 0.85) = Math.round(72 * 0.85) = 61
+// Per-character delay; 15% faster than previous value.
+// NEW = Math.round(OLD * 0.85); with floor at 16ms to avoid 0ms.
+// Example: OLD 72ms -> NEW 61ms (already applied)
 const TYPEWRITER_CHAR_MS = 61;
 const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
 
 export default function AIChatInterface() {
+  const [typingDone, setTypingDone] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
@@ -90,12 +92,22 @@ export default function AIChatInterface() {
       setTypedText(`Hello. I am your ${activeAgentRef.current}`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
+      setTypingDone(true);
 
-      // Expose typed completion for orchestrator
-      const typedEl = document.querySelector('#hero-typed');
-      if (typedEl) {
-        typedEl.setAttribute('data-typed-complete', '1');
-        typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+      // Fire completion events (back-compat + new global event); SSR-safe guards
+      if (typeof document !== 'undefined') {
+        const typedEl = document.querySelector('#hero-typed');
+        if (typedEl) {
+          typedEl.setAttribute('data-typed-complete', '1');
+          typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+        }
+        document.dispatchEvent(
+          new CustomEvent('typewriter:done', { detail: { target: 'hero' } })
+        );
+        if (import.meta.env && import.meta.env.DEV) {
+          // Dev-only visibility check
+          console.log('[hero] typewriter:done (reduced-motion)');
+        }
       }
       return;
     }
@@ -134,12 +146,21 @@ export default function AIChatInterface() {
       setTypedText(`Hello. I am your ${activeAgentRef.current}`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
+      setTypingDone(true);
 
-      // Expose typed completion for orchestrator
-      const typedEl = document.querySelector('#hero-typed');
-      if (typedEl) {
-        typedEl.setAttribute('data-typed-complete', '1');
-        typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+      // Expose typed completion for orchestrator (element + document events)
+      if (typeof document !== 'undefined') {
+        const typedEl = document.querySelector('#hero-typed');
+        if (typedEl) {
+          typedEl.setAttribute('data-typed-complete', '1');
+          typedEl.dispatchEvent(new CustomEvent('typed:complete'));
+        }
+        document.dispatchEvent(
+          new CustomEvent('typewriter:done', { detail: { target: 'hero' } })
+        );
+        if (import.meta.env && import.meta.env.DEV) {
+          console.log('[hero] typewriter:done');
+        }
       }
     }, delay + typingSpeed);
 
@@ -234,8 +255,8 @@ export default function AIChatInterface() {
         >
           SYNTEK AUTOMATIONS
         </h1>
-        {/* AI Greeting */}
-        <div id="hero-chatbox" className="mb-12 text-center reveal">
+        {/* AI Greeting (always visible; not inside any fade wrapper) */}
+        <div id="hero-chatbox" className="mb-12 text-center">
           <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.45rem,6.5vw,2.5rem)]">
             <span id="hero-typed" className="inline-flex flex-wrap justify-center gap-1 text-balance">
               <span className="whitespace-pre text-[#B3B3B3]" ref={helloPrefixRef}>{displayPrefix}</span>
@@ -255,7 +276,7 @@ export default function AIChatInterface() {
 
         <div
           ref={contentRef}
-          className="chatbox-shell fade-once"
+          className={`chatbox-extras fade-once ${typingDone ? 'is-visible' : ''}`}
         >
           {/* Agent Selector */}
           <div className="mb-8 flex justify-center cb-reveal will-animate">
