@@ -65,12 +65,14 @@ export default function Landing() {
         <section className="mx-auto flex w-full max-w-screen-xl flex-col items-center justify-center gap-6 px-4 pb-16 pt-16 sm:pb-20 sm:pt-20 md:px-8 md:pb-48 md:pt-32">
           <FadeInSection>
             <div className="max-w-4xl mx-auto" style={{ marginTop: '-0.5in' }}>
-              <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)', marginTop: '1in' }}>
-                TRANSFORM YOUR COMPANY INTO A POWERHOUSE
-              </h1>
-              <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty">
-                The all-in-one platform for management, strategic planning, and organizational excellence
-              </p>
+              <div className="text-center">
+                <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight" style={{ fontSize: 'clamp(1.6rem, 6.5vw, 3rem)', marginTop: '1in' }}>
+                  TRANSFORM YOUR COMPANY INTO A POWERHOUSE
+                </h1>
+                <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] mb-8 max-w-2xl text-pretty mx-auto">
+                  The all-in-one platform for management, strategic planning, and organizational excellence
+                </p>
+              </div>
               <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 <AnimatedButton asChild>
                   <Link to="/product" className="btn-system">

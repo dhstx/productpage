@@ -53,7 +53,7 @@ export default function ContactForm() {
             GET IN TOUCH
           </h2>
           <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
-            Have questions? Want to see a demo? We're here to help.
+            Have questions? We're here to help.
           </p>
         </div>
 
