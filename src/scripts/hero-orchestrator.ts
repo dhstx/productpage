@@ -1,4 +1,6 @@
 (function initHeroOrchestrator(){
+  // SSR/Non-browser guard: do nothing at import in Node/SSR
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   // Ensure no-flash guard is lifted once JS executes
   try {
     if (document && document.body && document.body.getAttribute('data-js-ready') !== '1') {
@@ -11,8 +13,8 @@
     if (!hero || hero.getAttribute('data-orchestrated') === '1') return;
     hero.setAttribute('data-orchestrated', '1');
 
-    const chatEls = Array.from(hero.querySelectorAll('.cb-reveal')) as HTMLElement[];
-    const titleEl = document.querySelector('.syntek-title') as HTMLElement | null;
+    const chatEls = Array.from(hero.querySelectorAll('#hero-chatbox')) as HTMLElement[];
+    const titleEl = document.getElementById('syntek-heading') as HTMLElement | null;
 
   function waitForTypewriter() {
     return new Promise<void>((resolve) => {
@@ -35,10 +37,8 @@
       if (!chatEls.length) return resolve();
 
       // Opt-in to animation just-in-time
-      chatEls.forEach((el) => {
-        if (!el.classList.contains('will-animate')) el.classList.add('will-animate');
-      });
-      // Force reflow so transition starts when adding 'show'
+      chatEls.forEach((el) => el.classList.add('reveal'));
+      // Force reflow then show
       void document.body.offsetHeight;
       chatEls.forEach((el) => el.classList.add('show'));
 
@@ -56,18 +56,21 @@
 
   function showTitle() {
     if (!titleEl) return;
-    if (!titleEl.classList.contains('will-animate')) titleEl.classList.add('will-animate');
-    // Next frame, trigger final state
-    requestAnimationFrame(() => titleEl.classList.add('is-live'));
+    if (!titleEl.classList.contains('reveal')) titleEl.classList.add('reveal');
+    requestAnimationFrame(() => titleEl.classList.add('show'));
   }
 
-    waitForTypewriter()
-      .then(revealChatEls)
+    // Reveal chat first so typing is visible, then wait for completion, then show title
+    revealChatEls()
+      .then(waitForTypewriter)
       .then(showTitle)
       .catch(() => {
         // Any failure → force visible
         chatEls.forEach((el) => el.classList.add('show'));
-        if (titleEl) titleEl.classList.add('is-live');
+        if (titleEl) {
+          if (!titleEl.classList.contains('reveal')) titleEl.classList.add('reveal');
+          titleEl.classList.add('show');
+        }
       });
   }
 

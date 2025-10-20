@@ -3,9 +3,8 @@ import { ArrowUp, Sparkles } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
-// Make typing 50% slower (2× per-char time) and add a 1s pause after "Hello."
-const BASE_STEP_MS = Math.round(35 * 1.375);
-const TYPEWRITER_CHAR_MS = Math.round(BASE_STEP_MS * 2.0); // 50% slower via doubled ms/char
+// Fixed per-character delay: tuned for ~25% faster than prior
+const TYPEWRITER_CHAR_MS = 95;
 const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
 
 export default function AIChatInterface() {
@@ -180,15 +179,15 @@ export default function AIChatInterface() {
       <div className="mx-auto w-full max-w-4xl">
         {/* Title that animates after Chatbox appears */}
       <h1
-          id="syntek-title"
+          id="syntek-heading"
           ref={titleRef}
-          className="syntek-title will-animate text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
+          className="reveal text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
         style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))' }}
         >
           SYNTEK AUTOMATIONS
         </h1>
         {/* AI Greeting */}
-        <div className="mb-12 text-center">
+        <div id="hero-chatbox" className="mb-12 text-center reveal">
           <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.45rem,6.5vw,2.5rem)]">
             <span id="hero-typed" className="inline-flex flex-wrap justify-center gap-1 text-balance">
               <span className="whitespace-pre text-[#B3B3B3]" ref={helloPrefixRef}>{displayPrefix}</span>
