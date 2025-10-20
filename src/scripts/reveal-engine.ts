@@ -1,4 +1,6 @@
 (function initReveal() {
+  // SSR/Non-browser guard: do nothing at import in Node/SSR
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   const run = () => {
     // Shared reveal classes across the site (desktop + mobile)
     const scopes = [
@@ -29,11 +31,17 @@
       nodes.forEach((n) => io.observe(n));
     });
 
-    // Syntek SVG (once per reload; simple fade-in)
+    // Syntek SVG (run once per session; adds .is-visible)
     const svg = document.getElementById('syntek-svg') as HTMLElement | null;
     if (svg) {
-      const show = () => { svg.classList.add('visible'); };
-      if (!('IntersectionObserver' in window)) { show(); }
+      const key = 'syntekFadeV1';
+      const seen = sessionStorage.getItem(key) === '1';
+      const show = () => {
+        svg.classList.add('is-visible');
+        if (!seen) sessionStorage.setItem(key, '1');
+      };
+      if (seen) { show(); }
+      else if (!('IntersectionObserver' in window)) { show(); }
       else {
         const io = new IntersectionObserver((entries, obs) => {
           entries.forEach((e) => {

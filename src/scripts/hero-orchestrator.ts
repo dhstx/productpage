@@ -1,4 +1,6 @@
 (function initHeroOrchestrator(){
+  // SSR/Non-browser guard: do nothing at import in Node/SSR
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
   // Ensure no-flash guard is lifted once JS executes
   try {
     if (document && document.body && document.body.getAttribute('data-js-ready') !== '1') {

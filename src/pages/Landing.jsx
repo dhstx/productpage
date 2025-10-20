@@ -84,7 +84,6 @@ export default function Landing() {
             height="1024"
             loading="lazy"
             decoding="async"
-            data-key="syntekFadeV1"
           />
         </section>
 

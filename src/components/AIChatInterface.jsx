@@ -3,10 +3,8 @@ import { ArrowUp, Sparkles } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 
 // Timing controls for the hero typewriter greeting
-// Speed up typing by ~25% versus current settings
-const BASE_STEP_MS = Math.round(35 * 1.375);
-const SPEED_UP = 1.25; // 25% faster
-const TYPEWRITER_CHAR_MS = Math.max(1, Math.round((BASE_STEP_MS * 2.0) / SPEED_UP));
+// Fixed per-character delay: tuned for ~25% faster than prior
+const TYPEWRITER_CHAR_MS = 95;
 const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
 
 export default function AIChatInterface() {
