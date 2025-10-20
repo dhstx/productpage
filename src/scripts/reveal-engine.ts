@@ -29,21 +29,17 @@
       nodes.forEach((n) => io.observe(n));
     });
 
-    // Syntek SVG (once per reload; no device gating)
-    const svg = document.querySelector('#syntek-automations-hero .fade-once') as HTMLElement | null;
+    // Syntek SVG (once per reload; simple fade-in)
+    const svg = document.getElementById('syntek-svg') as HTMLElement | null;
     if (svg) {
-      const key = svg.getAttribute('data-key') || 'syntekFadeV1';
-      const seen = sessionStorage.getItem(key) === '1';
-      const show = () => { svg.classList.add('is-visible'); if (!seen) sessionStorage.setItem(key, '1'); };
-
-      if (seen) { show(); }
-      else if (!('IntersectionObserver' in window)) { show(); }
+      const show = () => { svg.classList.add('visible'); };
+      if (!('IntersectionObserver' in window)) { show(); }
       else {
         const io = new IntersectionObserver((entries, obs) => {
           entries.forEach((e) => {
             if (e.isIntersecting) { show(); obs.unobserve(e.target); }
           });
-        }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
+        }, { threshold: 0.2 });
         io.observe(svg);
       }
     }

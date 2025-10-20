@@ -73,19 +73,20 @@ export default function Landing() {
           </FadeInSection>
         </section>
 
-        {/* SYNTEK AUTOMATIONS Hero Image */}
-        <div className="syntek-image-container" id="syntek-automations-hero">
+        {/* SYNTEK AUTOMATIONS mark above Core Modules */}
+        <section id="syntek-svg-section" className="syntek-image-container">
           <img
-            src="/assets/SYNTEK AUTOMATIONS.svg"
-            alt="SYNTEK AUTOMATIONS"
+            id="syntek-svg"
             className="syntek-hero fade-once"
+            src="/assets/SYNTEK AUTOMATIONS.svg"
+            alt="Syntek Automations mark"
             width="1024"
             height="1024"
-            decoding="async"
             loading="lazy"
+            decoding="async"
             data-key="syntekFadeV1"
           />
-        </div>
+        </section>
 
         {/* Core Modules */}
         <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">

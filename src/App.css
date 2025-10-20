@@ -524,7 +524,7 @@ html[data-theme="light"] .icon { color: var(--icon); stroke: currentColor; strok
 html[data-theme="light"] :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 8px; }
 
 /* Specific component fixes to avoid dark-on-light conflicts */
-html[data-theme="light"] #syntek-title {
+html[data-theme="light"] #syntek-heading {
   color: var(--text) !important;
   text-shadow: none !important;
   filter: none !important;
@@ -710,10 +710,10 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   max-width: 100%;      /* responsive */
 }
 
-/* One-time fade-in: 2s total from invisible → visible */
-.fade-once { opacity: 0; transform: translateY(8px); transition: opacity 2000ms ease, transform 2000ms ease; }
-.fade-once.is-visible { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce){ #syntek-automations-hero .fade-once{ transition: none; opacity: 1; transform: none; } }
+/* One-time fade-in utility (simple opacity only) */
+.fade-once { opacity: 0; transition: opacity 900ms ease; }
+.fade-once.is-visible, .fade-once.visible { opacity: 1; }
+@media (prefers-reduced-motion: reduce){ .fade-once{ transition: none; opacity: 1; transform: none; } }
 
 /* Reusable reveal animations */
 .reveal-up   { opacity: 0; transform: translateY(10px); transition: opacity 500ms ease, transform 500ms ease; }
@@ -730,36 +730,22 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
 .upfade-on-mount.is-live { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce){ .upfade-on-mount{ transition: none; opacity: 1; transform: none; } }
 
-/* SAFE DEFAULTS — visible by default (never rely on JS to show) */
-.hero .chatbox,
-.hero .cb-reveal {
-  /* Keep original display (flex/grid/etc.) — don't override layout */
-  opacity: 1;
-  transform: none;
-}
-
-/* Animation is opt-in via JS: add 'will-animate' then 'show' */
-.hero .cb-reveal.will-animate {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 500ms ease, transform 500ms ease;
-}
-.hero .cb-reveal.show {
-  opacity: 1;
-  transform: none;
-}
+/* gentle reveal utility */
+.reveal { opacity: 0; transform: translateY(8px); transition: opacity 600ms ease, transform 600ms ease; }
+.reveal.show { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ .reveal, .fade-once { opacity: 1 !important; transform: none !important; transition: none !important; } }
 
 /* Syntek title — default visible unless animating */
-.syntek-title {
+.syntek-title, #syntek-heading {
   opacity: 1;
   transform: none;
 }
-.syntek-title.will-animate {
+.syntek-title.will-animate, #syntek-heading.reveal {
   opacity: 0;
   transform: translateX(12px);
   transition: opacity 650ms ease, transform 650ms ease;
 }
-.syntek-title.is-live {
+.syntek-title.is-live, #syntek-heading.show {
   opacity: 1;
   transform: none;
 }
