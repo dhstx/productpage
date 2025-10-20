@@ -31,25 +31,39 @@
       nodes.forEach((n) => io.observe(n));
     });
 
-    // Syntek SVG (run once per session; adds .is-visible)
-    const svg = document.getElementById('syntek-svg') as HTMLElement | null;
-    if (svg) {
+    // Syntek SVG (robustly handle React mounting timing; add .is-visible once)
+    const initSyntekSvg = () => {
+      const svgEl = document.getElementById('syntek-svg') as HTMLElement | null;
+      if (!svgEl) return false;
+      if (svgEl.getAttribute('data-reveal-bound') === '1') return true;
+
+      svgEl.setAttribute('data-reveal-bound', '1');
       const key = 'syntekFadeV1';
       const seen = sessionStorage.getItem(key) === '1';
       const show = () => {
-        svg.classList.add('is-visible');
+        svgEl.classList.add('is-visible');
         if (!seen) sessionStorage.setItem(key, '1');
       };
-      if (seen) { show(); }
-      else if (!('IntersectionObserver' in window)) { show(); }
-      else {
+
+      if (seen || !('IntersectionObserver' in window)) {
+        show();
+      } else {
         const io = new IntersectionObserver((entries, obs) => {
           entries.forEach((e) => {
             if (e.isIntersecting) { show(); obs.unobserve(e.target); }
           });
         }, { threshold: 0.2 });
-        io.observe(svg);
+        io.observe(svgEl);
       }
+      return true;
+    };
+
+    // Try now; if not present yet, observe DOM until it appears
+    if (!initSyntekSvg()) {
+      const mo = new MutationObserver(() => {
+        if (initSyntekSvg()) mo.disconnect();
+      });
+      mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
     }
   };
 
