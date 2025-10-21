@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './auth/routes.js';
 import stripeRoutes from './stripe/routes.js';
 import agentRoutes from './agents/routes.js';
+import agentChatRoutes from './agents/chat.js';
 import subscriptionRoutes from './subscriptions/routes.js';
 import userRoutes from './users/routes.js';
 import statusRoutes from './status/routes.js';
@@ -48,6 +49,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/agents', agentRoutes);
+app.use('/api/agents', agentChatRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/status', statusRoutes);
