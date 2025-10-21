@@ -1,71 +1,50 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowUp, Sparkles } from 'lucide-react';
+import { ArrowUp, Sparkles, ChevronDown } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
+import { agents as agentData } from '../lib/agents-enhanced';
 
 // Timing controls for the hero typewriter greeting
-// Per-character delay; 15% faster than previous value.
-// NEW = Math.round(OLD * 0.85); with floor at 16ms to avoid 0ms.
-// Example: OLD 72ms -> NEW 61ms (already applied)
 const TYPEWRITER_CHAR_MS = 61;
-const TYPEWRITER_PAUSE_MS = 1000;    // 1s pause after "Hello."
+const TYPEWRITER_PAUSE_MS = 1000;
 
 export default function AIChatInterface() {
   const [typingDone, setTypingDone] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
-  const [selectedAgent, setSelectedAgent] = useState('Strategic Advisor');
+  const [selectedAgent, setSelectedAgent] = useState('Orchestrator');
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
-  // Chat content reveal is orchestrated globally; local state not needed
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const timeoutsRef = useRef([]);
   const isAnimatingRef = useRef(false);
-  const activeAgentRef = useRef('Strategic Advisor');
+  const activeAgentRef = useRef('Orchestrator');
   const hasPlayedRef = useRef(false);
   const titleRef = useRef(null);
   const helloPrefixRef = useRef(null);
 
-  const agents = [
-    { name: 'Strategic Advisor', color: '#FFC96C' },
-    { name: 'Engagement Analyst', color: '#8B5CF6' },
-    { name: 'Operations Assistant', color: '#10B981' }
-  ];
-
-  // Map of agent name to potential detail route. If a route doesn't exist, we do NOT navigate.
-  const AGENT_ROUTE_MAP = {
-    'Strategic Advisor': '/agents/strategic-advisor',
-    'Engagement Analyst': '/agents/engagement-analyst',
-    'Operations Assistant': '/agents/operations-assistant',
-  };
+  // Get all agents from the enhanced agents library
+  const agents = agentData.map(agent => ({
+    name: agent.name,
+    color: agent.color,
+    icon: agent.icon
+  }));
 
   const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
   const handleAgentSelect = (name) => {
     setSelectedAgent(name);
     setShowAgentMenu(false);
+    activeAgentRef.current = name;
 
-    // Only navigate to a page if it exists in the app; otherwise update query only
-    const targetPath = AGENT_ROUTE_MAP[name] || null;
-    const knownRoutes = new Set(['/','/product','/login','/dashboard','/platforms','/team','/billing','/settings','/agents','/integrations-management','/use-cases/healthcare','/use-cases/education','/use-cases/nonprofit','/security','/integrations','/status','/changelog','/policies/terms','/policies/privacy','/policies/cookies']);
-
-    if (targetPath && knownRoutes.has(targetPath)) {
-      // Intentionally avoid navigation for now to keep users on the hero unless dedicated pages exist
-      // navigate(targetPath); // disabled by design per dead-route guard
-    } else {
-      if (import.meta.env.DEV) {
-        // Development-only warning to surface dead route navigations
-        console.warn(`[AgentSelect] No valid route for "${name}". Staying on hero and updating ?agent=${slugifyAgent(name)}`);
-      }
-      // Update the URL query param without leaving the page
-      try {
-        setSearchParams({ agent: slugifyAgent(name) }, { replace: true });
-      } catch {
-        // Fallback: ignore if router context not ready
-      }
+    // Update URL query param
+    try {
+      setSearchParams({ agent: slugifyAgent(name) }, { replace: true });
+    } catch {
+      // Fallback: ignore if router context not ready
     }
   };
 
@@ -82,7 +61,7 @@ export default function AIChatInterface() {
       return;
     }
 
-    // Respect reduced motion preferences: skip typewriter animation
+    // Respect reduced motion preferences
     const reduceMotion =
       typeof window !== 'undefined' &&
       window.matchMedia &&
@@ -93,296 +72,233 @@ export default function AIChatInterface() {
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
-
-      // Fire completion events (back-compat + new global event); SSR-safe guards
-      if (typeof document !== 'undefined') {
-        const typedEl = document.querySelector('#hero-typed');
-        if (typedEl) {
-          typedEl.setAttribute('data-typed-complete', '1');
-          typedEl.dispatchEvent(new CustomEvent('typed:complete'));
-        }
-        document.dispatchEvent(
-          new CustomEvent('typewriter:done', { detail: { target: 'hero' } })
-        );
-        if (import.meta.env && import.meta.env.DEV) {
-          // Dev-only visibility check
-          console.log('[hero] typewriter:done (reduced-motion)');
-        }
-      }
       return;
     }
 
     isAnimatingRef.current = true;
-    setTypedText('');
+    const fullText = `Hello. I am your ${activeAgentRef.current}`;
+    let currentIndex = 0;
 
-    const greetingPart = 'Hello.';
-    const agentPart = ` I am your ${activeAgentRef.current}`;
-    const typingSpeed = TYPEWRITER_CHAR_MS;
-    const pauseDuration = TYPEWRITER_PAUSE_MS;
-    let delay = 0;
-    let currentOutput = '';
-
-    greetingPart.split('').forEach((character) => {
-      delay += typingSpeed;
-      const timeoutId = setTimeout(() => {
-        currentOutput += character;
-        setTypedText(currentOutput);
-      }, delay);
-      timeoutsRef.current.push(timeoutId);
-    });
-
-    delay += pauseDuration;
-
-    agentPart.split('').forEach((character) => {
-      delay += typingSpeed;
-      const timeoutId = setTimeout(() => {
-        currentOutput += character;
-        setTypedText(currentOutput);
-      }, delay);
-      timeoutsRef.current.push(timeoutId);
-    });
-
-    const completionTimeout = setTimeout(() => {
-      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
-      hasPlayedRef.current = true;
-      isAnimatingRef.current = false;
-      setTypingDone(true);
-
-      // Expose typed completion for orchestrator (element + document events)
-      if (typeof document !== 'undefined') {
-        const typedEl = document.querySelector('#hero-typed');
-        if (typedEl) {
-          typedEl.setAttribute('data-typed-complete', '1');
-          typedEl.dispatchEvent(new CustomEvent('typed:complete'));
-        }
-        document.dispatchEvent(
-          new CustomEvent('typewriter:done', { detail: { target: 'hero' } })
-        );
-        if (import.meta.env && import.meta.env.DEV) {
-          console.log('[hero] typewriter:done');
-        }
+    const typeNextChar = () => {
+      if (currentIndex < fullText.length) {
+        setTypedText(fullText.substring(0, currentIndex + 1));
+        currentIndex++;
+        const timeoutId = setTimeout(typeNextChar, TYPEWRITER_CHAR_MS);
+        timeoutsRef.current.push(timeoutId);
+      } else {
+        const timeoutId = setTimeout(() => {
+          setTypingDone(true);
+          hasPlayedRef.current = true;
+          isAnimatingRef.current = false;
+        }, TYPEWRITER_PAUSE_MS);
+        timeoutsRef.current.push(timeoutId);
       }
-    }, delay + typingSpeed);
+    };
 
-    timeoutsRef.current.push(completionTimeout);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message.trim()) {
-      alert(`Message sent to ${selectedAgent}: ${message}`);
-      setMessage('');
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
+    typeNextChar();
   };
 
   useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    // Check if agent is specified in URL
+    const agentParam = searchParams.get('agent');
+    if (agentParam) {
+      const matchedAgent = agents.find(
+        a => slugifyAgent(a.name) === agentParam
+      );
+      if (matchedAgent) {
+        setSelectedAgent(matchedAgent.name);
+        activeAgentRef.current = matchedAgent.name;
+      }
     }
-  }, [message]);
-
-  useEffect(() => {
-    activeAgentRef.current = selectedAgent;
-    if (hasPlayedRef.current) {
-      setTypedText(`Hello. I am your ${selectedAgent}`);
-    }
-  }, [selectedAgent]);
-
-  // Initialize selected agent from query param on first render
-  useEffect(() => {
-    const qp = searchParams.get('agent');
-    if (!qp) return;
-    const pretty = qp.replace(/-/g, ' ');
-    const match = agents.find((a) => a.name.toLowerCase() === pretty);
-    if (match) {
-      setSelectedAgent(match.name);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startTypingAnimation();
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startTypingAnimation();
+        }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
-    const sectionElement = sectionRef.current;
-    if (sectionElement) {
-      observer.observe(sectionElement);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
 
     return () => {
-      observer.disconnect();
       clearAnimationTimers();
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
     };
   }, []);
 
-  // Title animation is orchestrated globally by hero-orchestrator
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
 
-  const prefixText = 'Hello. I am your ';
-  const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
-  const typedAgentText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
-  const displayPrefix = typedPrefix;
-  const displayAgent = typedAgentText;
+    console.log('Sending message to agent:', selectedAgent);
+    console.log('Message:', message);
+
+    // TODO: Connect to backend API
+    // This will be implemented in Phase 3
+
+    setMessage('');
+  };
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full max-w-screen overflow-x-hidden min-w-0 px-4 py-16 pb-safe sm:px-6"
-      style={{ marginTop: '2in', marginBottom: '2in' }}
+      className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6"
     >
-      <div className="mx-auto w-full max-w-4xl">
-        {/* Title that animates after Chatbox appears */}
-      <h1
-          id="syntek-heading"
-          ref={titleRef}
-          className="reveal text-center font-bold leading-tight uppercase tracking-tight overflow-wrap-anywhere mx-auto mt-12 mb-12"
-        style={{ fontSize: 'clamp(1.85rem, 3.5vw + 1rem, 3.25rem)', color: 'var(--text, var(--foreground))' }}
-        >
-          SYNTEK AUTOMATIONS
-        </h1>
-        {/* AI Greeting (always visible; not inside any fade wrapper) */}
-        <div id="hero-chatbox" className="mb-12 text-center">
-          <h2 className="mb-4 flex min-h-[4.75rem] items-center justify-center font-bold leading-tight text-[clamp(1.45rem,6.5vw,2.5rem)]">
-            <span id="hero-typed" className="inline-flex flex-wrap justify-center gap-1 text-balance">
-              <span className="whitespace-pre text-[#B3B3B3]" ref={helloPrefixRef}>{displayPrefix}</span>
-              <span
-                className="relative inline-block max-w-full whitespace-pre break-words"
-                style={{ color: currentAgentColor }}
-              >
-                {displayAgent}
-                <span
-                  className="absolute bottom-0 left-0 w-full h-1 opacity-30"
-                  style={{ backgroundColor: currentAgentColor, opacity: displayAgent ? 0.3 : 0 }}
-                ></span>
-              </span>
+      <div className="mx-auto max-w-4xl">
+        {/* Hero Greeting */}
+        <div className="mb-8 text-center">
+          <h1
+            ref={titleRef}
+            className="h1 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]"
+          >
+            <span ref={helloPrefixRef} id="hero-typed">
+              {typedText}
             </span>
-          </h2>
+            <span
+              className="ml-2 inline-block h-[1em] w-[2px] animate-blink"
+              style={{
+                backgroundColor: currentAgentColor,
+                opacity: typingDone ? 0 : 1,
+              }}
+            />
+          </h1>
+          <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
+            Select an AI agent and start your conversation
+          </p>
         </div>
 
-        <div
-          ref={contentRef}
-          className={`chatbox-extras fade-once ${typingDone ? 'is-visible' : ''}`}
-        >
-          {/* Agent Selector */}
-          <div className="mb-8 flex justify-center cb-reveal will-animate">
-            <div className="relative flex w-full max-w-xs flex-col items-center gap-2">
-              <button
-                onClick={() => setShowAgentMenu(!showAgentMenu)}
-                className="agent-select__trigger flex w-full items-center justify-center gap-2 rounded-full border border-[#202020] bg-[#161616] px-5 py-2 text-sm font-medium text-[#F2F2F2] transition-colors hover:bg-[#1A1A1A]"
-                aria-haspopup="listbox"
-                aria-expanded={showAgentMenu}
-              >
-                <Sparkles className="agent-select__icon w-4 h-4 text-[#FFC96C]" />
-                <span className="agent-select__placeholder">Select Agent</span>
-              </button>
-
-              {showAgentMenu && (
-                <div className="z-10 mt-2 w-full rounded-[4px] border border-[#202020] bg-[#161616] shadow-xl md:absolute md:left-1/2 md:top-full md:w-64 md:-translate-x-1/2">
-                  {agents.map((agent) => (
-                    <button
-                      key={agent.name}
-                      onClick={() => handleAgentSelect(agent.name)}
-                      className="flex w-full items-center gap-3 border-b border-[#202020] px-4 py-3 text-left transition-colors hover:bg-[#1A1A1A] last:border-0"
-                    >
-                      <div
-                        className="h-2 w-2 rounded-full"
-                        style={{ backgroundColor: agent.color }}
-                      />
-                      <span
-                        className="text-sm"
-                        style={{ color: selectedAgent === agent.name ? agent.color : '#F2F2F2' }}
-                      >
-                        {agent.name}
-                      </span>
-                    </button>
-                  ))}
+        {/* Agent Selector */}
+        <div className="mb-6">
+          <div className="relative">
+            <button
+              onClick={() => setShowAgentMenu(!showAgentMenu)}
+              className="panel-system flex w-full items-center justify-between p-4 transition-all duration-300 hover:bg-[#202020]"
+              style={{ borderColor: `${currentAgentColor}40` }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-full"
+                  style={{ backgroundColor: `${currentAgentColor}20` }}
+                >
+                  <span style={{ color: currentAgentColor }}>
+                    {currentAgent?.icon || '🤖'}
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
+                <div className="text-left">
+                  <div className="text-sm font-semibold text-[#F2F2F2]">
+                    {selectedAgent}
+                  </div>
+                  <div className="text-xs text-[#B3B3B3]">
+                    {agents.find(a => a.name === selectedAgent)?.domain || 'AI Agent'}
+                  </div>
+                </div>
+              </div>
+              <ChevronDown
+                className={`h-5 w-5 text-[#B3B3B3] transition-transform ${
+                  showAgentMenu ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
 
-          {/* Subtitle */}
-          <p className="mx-auto mb-12 max-w-2xl text-center text-[clamp(1rem,4vw,1.5rem)] text-[#B3B3B3] text-pretty cb-reveal will-animate">
-            What would you like to do today?
-          </p>
-          {/* Chat Input */}
-          <form onSubmit={handleSubmit} className="relative cb-reveal will-animate">
-            <div className="panel-system flex flex-col gap-4 p-4 sm:p-6">
-              <ChatTools
-                onAttach={() => alert('File attachment coming soon')}
-                onToggleMode={(mode) => setActiveMode(mode)}
-                activeMode={activeMode}
-                onMicStart={() => alert('Voice input coming soon')}
-                disabled={false}
-                features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
-                rightAppend={(
+            {/* Agent Menu */}
+            {showAgentMenu && (
+              <div className="absolute z-10 mt-2 w-full panel-system max-h-96 overflow-y-auto">
+                {agents.map((agent) => (
                   <button
-                    type="submit"
-                    disabled={!message.trim()}
-                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
-                      message.trim()
-                        ? 'bg-[#FFC96C] hover:bg-[#FFD700]'
-                        : 'bg-[#202020] cursor-not-allowed'
-                    }`}
+                    key={agent.name}
+                    onClick={() => handleAgentSelect(agent.name)}
+                    className="flex w-full items-center gap-3 p-3 transition-colors hover:bg-[#202020]"
                   >
-                    <ArrowUp className={`w-5 h-5 ${message.trim() ? 'text-[#0C0C0C]' : 'text-[#666666]'}`} />
+                    <div
+                      className="flex h-8 w-8 items-center justify-center rounded-full"
+                      style={{ backgroundColor: `${agent.color}20` }}
+                    >
+                      <span style={{ color: agent.color }}>
+                        {agent.icon || '🤖'}
+                      </span>
+                    </div>
+                    <div className="text-left flex-grow">
+                      <div className="text-sm font-semibold text-[#F2F2F2]">
+                        {agent.name}
+                      </div>
+                    </div>
+                    {selectedAgent === agent.name && (
+                      <span className="text-[#FFC96C]">✓</span>
+                    )}
                   </button>
-                )}
-              >
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onFocus={() => sectionRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })}
-                  placeholder="Describe what you need help with..."
-                  aria-label="Message input"
-                  enterKeyHint="send"
-                  inputMode="text"
-                  autoCorrect="on"
-                  autoComplete="on"
-                  spellCheck={true}
-                  className="max-h-[40vh] min-h-[24px] w-full resize-none bg-transparent text-sm text-[#F2F2F2] placeholder-[#666666] outline-none sm:text-base"
-                  rows={1}
-                />
-              </ChatTools>
-            </div>
-          </form>
-
-          {/* Suggested Prompts */}
-          <div className="mt-6 flex flex-wrap justify-center gap-3 cb-reveal will-animate">
-            {[
-              'Analyze board engagement trends',
-              'Draft meeting agenda',
-              'Prioritize initiatives',
-              'Generate progress report'
-            ].map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => setMessage(prompt)}
-                className="w-full rounded-full border border-[#202020] bg-[#161616] px-4 py-2 text-sm text-[#B3B3B3] transition-colors hover:border-[#FFC96C] hover:bg-[#1A1A1A] hover:text-[#F2F2F2] sm:w-auto"
-              >
-                {prompt}
-              </button>
-            ))}
+                ))}
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* Chat Input */}
+        <form onSubmit={handleSubmit} className="relative">
+          <div className="panel-system overflow-hidden">
+            <textarea
+              ref={textareaRef}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder={`Ask ${selectedAgent} anything...`}
+              className="w-full resize-none bg-transparent px-4 py-4 text-[#F2F2F2] placeholder-[#666] focus:outline-none"
+              rows={3}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
+            />
+            <div className="flex items-center justify-between border-t border-[#333] px-4 py-3">
+              <div className="text-xs text-[#666]">
+                Press Enter to send, Shift+Enter for new line
+              </div>
+              <button
+                type="submit"
+                disabled={!message.trim()}
+                className="flex h-8 w-8 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  backgroundColor: message.trim() ? currentAgentColor : '#333',
+                }}
+              >
+                <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
+              </button>
+            </div>
+          </div>
+        </form>
+
+        {/* Suggested Prompts */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {[
+            'Help me develop a strategic plan',
+            'Create a project timeline',
+            'Research market trends',
+            'Write code for my project',
+          ].map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => setMessage(prompt)}
+              className="panel-system p-3 text-left text-sm text-[#B3B3B3] transition-all hover:bg-[#202020] hover:text-[#F2F2F2]"
+            >
+              <Sparkles className="mb-1 inline h-3 w-3" /> {prompt}
+            </button>
+          ))}
+        </div>
+
+        {/* Chat Tools */}
+        <div className="mt-8">
+          <ChatTools activeMode={activeMode} setActiveMode={setActiveMode} />
         </div>
       </div>
     </section>
   );
 }
+
