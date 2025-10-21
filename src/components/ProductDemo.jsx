@@ -104,7 +104,7 @@ export default function ProductDemo() {
                   className="btn-system"
                 >
                   <Play className="h-4 w-4" />
-                  Watch Full Demo
+                  Watch Demo
                 </button>
                 <a
                   href="/product"
