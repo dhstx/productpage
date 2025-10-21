@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, domains, InsertDomain, tests, InsertTest } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -85,4 +85,35 @@ export async function getUser(id: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Domain queries
+export async function createDomain(data: InsertDomain) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(domains).values(data);
+}
+
+export async function getDomain(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(domains).where(eq(domains.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getDomainByName(domainName: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(domains).where(eq(domains.domain, domainName)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateDomain(id: string, data: Partial<InsertDomain>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(domains).set(data).where(eq(domains.id, id));
+}
+
+export async function createTest(data: InsertTest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(tests).values(data);
+}

@@ -1,0 +1,41 @@
+CREATE TABLE `domains` (
+	`id` varchar(64) NOT NULL,
+	`domain` varchar(255) NOT NULL,
+	`createdAt` timestamp DEFAULT (now()),
+	`lastScanAt` timestamp,
+	`hasWorkspace` varchar(10),
+	`hasM365` varchar(10),
+	`espList` text,
+	`spfRecord` text,
+	`spfIncludes` text,
+	`spfTooLong` varchar(10),
+	`spfHasAllTerm` varchar(10),
+	`dkimSelectors` text,
+	`dmarcRecord` text,
+	`dmarcPolicy` varchar(50),
+	`dmarcRua` text,
+	`dmarcRuf` text,
+	`dmarcSpfAlignment` varchar(10),
+	`dmarcDkimAlignment` varchar(10),
+	`bimiRecord` text,
+	`bimiHasVMC` varchar(10),
+	`hasListUnsub` varchar(10),
+	`hasOneClick` varchar(10),
+	`gmailSpamRate` varchar(20),
+	`status` enum('draft','paid','failed') NOT NULL DEFAULT 'draft',
+	`stripeCheckoutSessionId` varchar(255),
+	`stripePaymentIntentId` varchar(255),
+	`previewHtml` text,
+	`pdfPath` varchar(500),
+	CONSTRAINT `domains_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `tests` (
+	`id` varchar(64) NOT NULL,
+	`domainId` varchar(64) NOT NULL,
+	`testType` enum('dns','headers') NOT NULL,
+	`sampleHeaders` text,
+	`result` text,
+	`createdAt` timestamp DEFAULT (now()),
+	CONSTRAINT `tests_id` PRIMARY KEY(`id`)
+);
