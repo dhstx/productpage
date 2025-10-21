@@ -6,6 +6,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 import viteCompression from "vite-plugin-compression";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 
 const plugins = [
@@ -22,6 +23,20 @@ const plugins = [
     algorithm: "brotliCompress",
     ext: ".br",
     threshold: 10240,
+  }),
+  ViteImageOptimizer({
+    png: {
+      quality: 80,
+    },
+    jpeg: {
+      quality: 80,
+    },
+    jpg: {
+      quality: 80,
+    },
+    webp: {
+      quality: 80,
+    },
   }),
 ];
 

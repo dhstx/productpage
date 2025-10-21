@@ -125,6 +125,23 @@ export default function Home() {
                 </p>
               </div>
             </div>
+
+            {/* Sample Report CTA */}
+            <div className="mt-12 text-center">
+              <p className="text-gray-600 mb-4">Not sure what you'll get?</p>
+              <a
+                href="/sample-compliance-report.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                View Sample Report
+              </a>
+              <p className="text-sm text-gray-500 mt-2">See exactly what you'll receive</p>
+            </div>
           </div>
         </div>
       </section>
