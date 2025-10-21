@@ -7,90 +7,146 @@ import {
 
 export function FAQ() {
   return (
-    <div className="space-y-4">
-      <h2 className="text-3xl font-bold text-center">Frequently Asked Questions</h2>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>What is DMARC?</AccordionTrigger>
-          <AccordionContent>
-            DMARC (Domain-based Message Authentication, Reporting, and Conformance) is an email
-            authentication protocol that helps protect your domain from email spoofing and phishing
-            attacks. It works with SPF and DKIM to verify that emails claiming to be from your
-            domain are actually sent by authorized servers. Major inbox providers like Gmail, Yahoo,
-            and Microsoft now require DMARC for bulk senders.
-          </AccordionContent>
-        </AccordionItem>
+    <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Why pay $29? Can't I do this for free?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            You can try, but it's a notoriously frustrating, error-prone process. A single typo in your SPF record or a misaligned DMARC policy can take your entire email system offline.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            You're not paying for the <em>information</em>; you're paying for the <strong>correct, validated answer</strong> in 5 minutes, saving you hours of headache and lost revenue.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-2">
-          <AccordionTrigger>Will this fix my spam issues?</AccordionTrigger>
-          <AccordionContent>
-            InboxPass helps you configure the technical authentication requirements (SPF, DKIM,
-            DMARC) that major inbox providers require. While proper authentication significantly
-            improves deliverability, spam filtering also considers content quality, engagement
-            rates, and sender reputation. Our compliance kit gives you the foundation needed to meet
-            2024-2025 inbox provider requirements.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Do you log in to my DNS or email provider?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            <strong>Never.</strong> Our tool performs 100% public DNS checks. We give <em>you</em> the records to copy and paste. You retain full control of your systems.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-3">
-          <AccordionTrigger>Does this tool touch my DNS?</AccordionTrigger>
-          <AccordionContent>
-            No. InboxPass only reads your existing DNS records to check your current configuration.
-            We provide you with recommended DNS records that you can copy and paste into your DNS
-            provider's control panel. You maintain full control over your DNS settings.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Will this 100% guarantee I never go to spam?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            No. This tool fixes your <strong>technical compliance</strong>, which is the new, mandatory <em>ticket to entry</em>. You still need to send content people want and maintain a clean list.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            But without this compliance, even your <em>best</em> emails are flagged as spam.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-4">
-          <AccordionTrigger>What email providers do you support?</AccordionTrigger>
-          <AccordionContent>
-            We automatically detect and provide setup instructions for Google Workspace, Microsoft
-            365, and popular ESPs including SendGrid, Mailgun, Postmark, Mailchimp, Klaviyo, Amazon
-            SES, and SparkPost. Our compliance kit includes platform-specific steps for enabling
-            DKIM and configuring one-click unsubscribe headers.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>What if I use Klaviyo, Mailchimp, SendGrid, etc.?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            We designed the kit for this. Our scan detects common providers and gives you provider-specific instructions for enabling DKIM and one-click unsubscribe headers right inside their platforms.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-5">
-          <AccordionTrigger>How long does DNS propagation take?</AccordionTrigger>
-          <AccordionContent>
-            After you add the recommended DNS records to your domain, changes typically propagate
-            within 15 minutes to 48 hours, though most updates are visible within an hour. Our
-            compliance kit includes a validation checklist with tools you can use to verify your
-            records are active.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-5">
+        <AccordionTrigger>What is DMARC?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            DMARC (Domain-based Message Authentication, Reporting & Conformance) is an email authentication protocol that tells receiving servers what to do if an email fails SPF or DKIM checks.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            Without DMARC, Gmail and Microsoft now assume your domain is vulnerable to spoofing and will throttle or block your emails.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-6">
-          <AccordionTrigger>What is one-click unsubscribe?</AccordionTrigger>
-          <AccordionContent>
-            One-click unsubscribe (RFC 8058) is a requirement from Gmail and Yahoo for bulk senders.
-            It allows recipients to unsubscribe from your emails with a single click, without having
-            to visit a web page. Our kit provides the exact header format and ESP-specific
-            instructions for implementing this feature.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-6">
+        <AccordionTrigger>Will this fix my spam issues?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            If your spam issues are caused by <strong>missing or misconfigured authentication</strong> (SPF, DKIM, DMARC), then yes—this will fix it.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            However, if you're sending to unengaged lists, using spammy content, or have a poor sender reputation, you'll need to address those separately. This tool ensures you meet the <em>technical requirements</em> that are now mandatory.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-7">
-          <AccordionTrigger>Is my data secure?</AccordionTrigger>
-          <AccordionContent>
-            Yes. We only perform read-only DNS lookups on publicly available records. We do not
-            store email content, passwords, or sensitive data. Payment processing is handled
-            securely through Stripe. Your scan results and compliance report are stored encrypted
-            and are only accessible to you.
-          </AccordionContent>
-        </AccordionItem>
+      <AccordionItem value="item-7">
+        <AccordionTrigger>Does this tool touch my DNS?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            <strong>No.</strong> We only perform read-only DNS lookups. We provide you with the exact records to add, but you (or your IT team) make the changes in your DNS provider (Cloudflare, GoDaddy, Namecheap, etc.).
+          </p>
+        </AccordionContent>
+      </AccordionItem>
 
-        <AccordionItem value="item-8">
-          <AccordionTrigger>Can I scan multiple domains?</AccordionTrigger>
-          <AccordionContent>
-            Yes! You can scan as many domains as you need. Each domain requires a separate $29
-            payment to download its compliance kit. Free scans are limited to 3 per day per IP
-            address to prevent abuse.
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+      <AccordionItem value="item-8">
+        <AccordionTrigger>What email providers do you support?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed mb-3">
+            We provide tailored instructions for the most common email service providers, including:
+          </p>
+          <ul className="list-disc list-inside text-gray-700 space-y-1">
+            <li>Google Workspace (Gmail for Business)</li>
+            <li>Microsoft 365 (Outlook)</li>
+            <li>SendGrid</li>
+            <li>Mailgun</li>
+            <li>Mailchimp</li>
+            <li>Klaviyo</li>
+            <li>Amazon SES</li>
+            <li>Postmark</li>
+          </ul>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            If you use a different provider, the DNS records we generate will still work—you'll just need to follow your provider's documentation for adding them.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-9">
+        <AccordionTrigger>How long does DNS propagation take?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            DNS changes typically propagate within <strong>5-30 minutes</strong>, but can take up to 48 hours in rare cases. Most providers (Cloudflare, Route53) propagate within minutes.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            You can verify your changes using our free scanner after adding the records.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-10">
+        <AccordionTrigger>What is one-click unsubscribe?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            One-click unsubscribe is a <strong>mandatory email header</strong> (not just a footer link) that allows recipients to unsubscribe with a single click, without logging in or visiting a webpage.
+          </p>
+          <p className="text-gray-700 leading-relaxed mt-3">
+            Gmail and Yahoo now <em>require</em> this header for bulk senders. Our compliance kit shows you exactly how to add it to your ESP.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-11">
+        <AccordionTrigger>Is my data secure?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            Yes. We only perform public DNS lookups—the same information anyone can query. We don't store your domain data, and we don't require any login credentials or access to your email systems.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-12">
+        <AccordionTrigger>Can I scan multiple domains?</AccordionTrigger>
+        <AccordionContent>
+          <p className="text-gray-700 leading-relaxed">
+            Yes! Each scan is $29 per domain. If you need to scan multiple domains, simply run the tool once for each domain and you'll receive a separate compliance kit for each.
+          </p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
