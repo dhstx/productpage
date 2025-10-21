@@ -93,19 +93,20 @@ export function DomainScanner() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Input
               placeholder="example.com"
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleScan()}
               disabled={scanMutation.isPending}
-              className="flex-1"
+              className="flex-1 h-12 text-base"
             />
             <Button
               onClick={handleScan}
               disabled={scanMutation.isPending}
               size="lg"
+              className="h-12 min-w-[140px] text-base font-semibold"
             >
               {scanMutation.isPending ? (
                 <>

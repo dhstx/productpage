@@ -5,9 +5,25 @@ import fs from "node:fs";
 import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import viteCompression from "vite-plugin-compression";
 
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime()];
+const plugins = [
+  react(),
+  tailwindcss(),
+  jsxLocPlugin(),
+  vitePluginManusRuntime(),
+  viteCompression({
+    algorithm: "gzip",
+    ext: ".gz",
+    threshold: 10240, // Only compress files larger than 10KB
+  }),
+  viteCompression({
+    algorithm: "brotliCompress",
+    ext: ".br",
+    threshold: 10240,
+  }),
+];
 
 export default defineConfig({
   plugins,
@@ -24,6 +40,17 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "wouter"],
+          trpc: ["@trpc/client", "@trpc/react-query"],
+        },
+      },
+    },
+    minify: "esbuild",
+    cssCodeSplit: true,
+    sourcemap: false,
   },
   server: {
     host: true,

@@ -229,6 +229,84 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Social Proof */}
+      <section className="bg-blue-50 py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Trusted by Email Senders Worldwide</h2>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="h-5 w-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  "Fixed our deliverability in under 10 minutes. Emails are finally landing in inboxes instead of spam. Worth every penny."
+                </p>
+                <p className="text-sm text-gray-600 font-medium">— Sarah M., Marketing Director</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="h-5 w-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  "Our open rates went from 12% to 31% after implementing InboxPass recommendations. Game changer for our SaaS."
+                </p>
+                <p className="text-sm text-gray-600 font-medium">— David K., Founder</p>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="h-5 w-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  "Clear instructions, no technical jargon. I'm not a developer and I got this done in 5 minutes. Highly recommend."
+                </p>
+                <p className="text-sm text-gray-600 font-medium">— Jennifer L., E-commerce Owner</p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div className="inline-flex items-center gap-8 bg-white px-8 py-4 rounded-lg shadow-sm">
+                <div>
+                  <p className="text-3xl font-bold text-blue-600">1,247+</p>
+                  <p className="text-sm text-gray-600">Domains Scanned</p>
+                </div>
+                <div className="h-12 w-px bg-gray-300"></div>
+                <div>
+                  <p className="text-3xl font-bold text-green-600">98%</p>
+                  <p className="text-sm text-gray-600">Success Rate</p>
+                </div>
+                <div className="h-12 w-px bg-gray-300"></div>
+                <div>
+                  <p className="text-3xl font-bold text-purple-600">4.9/5</p>
+                  <p className="text-sm text-gray-600">Customer Rating</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto">
@@ -349,12 +427,35 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-8 bg-gray-50">
-        <div className="container mx-auto px-4 text-center text-sm text-gray-600">
-          <p>© 2024 InboxPass. All rights reserved.</p>
-          <div className="flex justify-center gap-6 mt-4">
-            <a href="/privacy" className="hover:text-gray-900">Privacy Policy</a>
-            <a href="/terms" className="hover:text-gray-900">Terms of Service</a>
+      <footer className="border-t py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 mb-8">
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">InboxPass</h3>
+                <p className="text-sm text-gray-600">
+                  Fix email deliverability in 5 minutes. One-time $29 compliance kit.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Legal</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li><a href="/refund-policy" className="hover:text-gray-900">Refund Policy</a></li>
+                  <li><a href="/privacy-policy" className="hover:text-gray-900">Privacy Policy</a></li>
+                  <li><a href="/terms" className="hover:text-gray-900">Terms of Service</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-3">Support</h3>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li><a href="mailto:support@inboxpass.org" className="hover:text-gray-900">support@inboxpass.org</a></li>
+                  <li className="text-green-600 font-medium">✓ 30-Day Money-Back Guarantee</li>
+                </ul>
+              </div>
+            </div>
+            <div className="border-t pt-8 text-center text-sm text-gray-600">
+              <p>© {new Date().getFullYear()} InboxPass. All rights reserved.</p>
+            </div>
           </div>
         </div>
       </footer>

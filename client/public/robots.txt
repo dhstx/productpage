@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://inboxpass.org/sitemap.xml
+
