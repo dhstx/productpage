@@ -18,24 +18,24 @@ const openai = new OpenAI({
 
 // Agent-to-model mapping
 const MODEL_MAPPING = {
-  // Use Claude 3 Opus for deep reasoning
-  commander: { provider: 'anthropic', model: 'claude-3-opus-20240229' },
-  counselor: { provider: 'anthropic', model: 'claude-3-opus-20240229' },
+  // Use Claude 3 Haiku (only available model with current API key)
+  commander: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  counselor: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
   
   // Use GPT-4 for creative and code generation
   builder: { provider: 'openai', model: 'gpt-4-turbo-preview' },
   muse: { provider: 'openai', model: 'gpt-4-turbo-preview' },
   echo: { provider: 'openai', model: 'gpt-4-turbo-preview' },
   
-  // Use Claude 3.5 Sonnet for everything else (fast and cost-effective)
-  orchestrator: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  conductor: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  scout: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  connector: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  archivist: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  ledger: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  sentinel: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
-  optimizer: { provider: 'anthropic', model: 'claude-3-5-sonnet-20241022' },
+  // Use Claude 3 Haiku for everything else (only available model)
+  orchestrator: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  conductor: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  scout: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  connector: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  archivist: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  ledger: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  sentinel: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
+  optimizer: { provider: 'anthropic', model: 'claude-3-haiku-20240307' },
 };
 
 /**

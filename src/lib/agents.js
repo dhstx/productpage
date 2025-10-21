@@ -457,69 +457,69 @@ export function getAgentStats() {
 
 // Orchestrator routing logic
 export function routeRequest(userMessage, context = {}) {
-  // This is a simplified routing logic - in production, this would use
-  // a more sophisticated intent classification model
+  // Intelligent routing logic with prioritized keyword matching
+  // More specific patterns are checked first to avoid false positives
   
   const message = userMessage.toLowerCase();
   
-  // Strategic/Executive keywords
-  if (message.match(/strategy|strategic|vision|investor|stakeholder|executive|business development/i)) {
+  // Strategic/Executive keywords (high priority)
+  if (message.match(/\b(strategy|strategic|vision|investor|stakeholder|executive|business development|okr|roadmap)\b/i)) {
     return getAgentById('commander');
   }
   
-  // Task/Project management keywords
-  if (message.match(/task|schedule|meeting|deadline|project|timeline|coordinate/i)) {
-    return getAgentById('conductor');
-  }
-  
-  // Research keywords
-  if (message.match(/research|competitive|market|trend|analyze|study|investigate/i)) {
-    return getAgentById('scout');
-  }
-  
-  // Development keywords
-  if (message.match(/develop|code|build|api|infrastructure|deploy|technical/i)) {
-    return getAgentById('builder');
-  }
-  
-  // Design keywords
-  if (message.match(/design|creative|visual|brand|video|graphic|ui|ux/i)) {
-    return getAgentById('muse');
-  }
-  
-  // Marketing keywords
-  if (message.match(/marketing|campaign|social media|email|seo|content|pr/i)) {
-    return getAgentById('echo');
-  }
-  
-  // Customer keywords
-  if (message.match(/customer|client|support|ticket|inquiry|feedback|relationship/i)) {
-    return getAgentById('connector');
-  }
-  
-  // Documentation keywords
-  if (message.match(/document|sop|knowledge|archive|transcribe|meeting notes/i)) {
-    return getAgentById('archivist');
-  }
-  
-  // Financial keywords
-  if (message.match(/financial|budget|invoice|expense|accounting|payment|tax/i)) {
-    return getAgentById('ledger');
-  }
-  
-  // Legal keywords
-  if (message.match(/legal|contract|compliance|policy|intellectual property|trademark/i)) {
+  // Legal keywords (check before general compliance)
+  if (message.match(/\b(legal|contract|agreement|terms|intellectual property|trademark|patent|copyright|lawsuit|dispute)\b/i)) {
     return getAgentById('counselor');
   }
   
-  // Security keywords
-  if (message.match(/security|threat|vulnerability|privacy|incident|access control/i)) {
+  // Security keywords (check before general compliance)
+  if (message.match(/\b(security|threat|vulnerability|breach|hack|penetration|audit security|access control|encryption|firewall)\b/i)) {
     return getAgentById('sentinel');
   }
   
-  // Analytics keywords
-  if (message.match(/analytics|performance|optimize|dashboard|kpi|a\/b test|data/i)) {
+  // Financial keywords (specific patterns)
+  if (message.match(/\b(financial|budget|invoice|expense|accounting|payment|tax|revenue|profit|burn rate|p&l|balance sheet|cash flow)\b/i)) {
+    return getAgentById('ledger');
+  }
+  
+  // Analytics/Optimization keywords (check before general data/research)
+  if (message.match(/\b(analytics|performance|optimize|optimization|dashboard|kpi|metric|a\/b test|conversion|funnel|roi)\b/i)) {
     return getAgentById('optimizer');
+  }
+  
+  // Design/Creative keywords (check before general visual)
+  if (message.match(/\b(design|creative|visual identity|brand|branding|logo|mockup|wireframe|prototype|ui|ux|user interface|user experience|graphic|illustration)\b/i)) {
+    return getAgentById('muse');
+  }
+  
+  // Marketing keywords (check before general content)
+  if (message.match(/\b(marketing|campaign|advertising|promotion|social media|email marketing|seo|sem|content marketing|pr|public relations|lead generation)\b/i)) {
+    return getAgentById('echo');
+  }
+  
+  // Development keywords (check before general task management)
+  if (message.match(/\b(develop|code|coding|programming|write.*function|write.*script|build|api|infrastructure|deploy|deployment|technical|software|application|database|backend|frontend|python|javascript|java|react|node)\b/i)) {
+    return getAgentById('builder');
+  }
+  
+  // Documentation/Archive keywords (specific patterns, check before task management)
+  if (message.match(/\b(document|documentation|sop|standard operating|knowledge base|archive|transcribe|meeting notes|minutes|summarize.*meeting|summarize.*call|record|note taking)\b/i)) {
+    return getAgentById('archivist');
+  }
+  
+  // Task/Project management keywords
+  if (message.match(/\b(task|schedule|scheduling|meeting|deadline|project management|timeline|coordinate|milestone|gantt)\b/i)) {
+    return getAgentById('conductor');
+  }
+  
+  // Customer keywords
+  if (message.match(/\b(customer|client|support|ticket|inquiry|feedback|relationship|onboarding|satisfaction|retention)\b/i)) {
+    return getAgentById('connector');
+  }
+  
+  // Research keywords (broader, checked later)
+  if (message.match(/\b(research|competitive|competitor|market research|industry|trend|analyze|study|investigate|intelligence)\b/i)) {
+    return getAgentById('scout');
   }
   
   // Default to Orchestrator for complex or unclear requests
