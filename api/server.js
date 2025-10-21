@@ -11,6 +11,7 @@ import authRoutes from './auth/routes.js';
 import stripeRoutes from './stripe/routes.js';
 import agentRoutes from './agents/routes.js';
 import agentChatRoutes from './agents/chat.js';
+import testChatRoutes from './agents/test-chat.js';
 import subscriptionRoutes from './subscriptions/routes.js';
 import userRoutes from './users/routes.js';
 import statusRoutes from './status/routes.js';
@@ -20,7 +21,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/logger.js';
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: '.env.backend' });
 
 const app = express();
 const PORT = process.env.API_PORT || 3001;
@@ -45,11 +46,12 @@ app.get('/health', (req, res) => {
   });
 });
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/agents', agentRoutes);
 app.use('/api/agents', agentChatRoutes);
+app.use('/api/test', testChatRoutes); // Test endpoint (no auth)
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/status', statusRoutes);

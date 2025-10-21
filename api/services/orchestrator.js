@@ -5,11 +5,19 @@ import { routeRequest } from '../../src/lib/agents-enhanced.js';
 import { executeAgent } from './agentExecutor.js';
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
+// Lazy initialization of Supabase client
+let supabase = null;
+function getSupabaseClient() {
+  if (!supabase) {
+    const url = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+    if (!url || !key) {
+      throw new Error('Supabase credentials not found in environment variables');
+    }
+    supabase = createClient(url, key);
+  }
+  return supabase;
+}
 
 /**
  * Handle user request through the orchestrator
