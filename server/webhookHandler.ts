@@ -36,10 +36,11 @@ export async function handleStripeWebhook(req: Request, res: Response) {
         return res.status(404).send("Domain not found");
       }
 
-      // Update domain status to paid
+      // Update domain status to paid and track payment timestamp
       await updateDomain(domainId, {
         status: "paid",
         stripePaymentIntentId: session.payment_intent,
+        paidAt: new Date(),
       });
 
       // Generate compliance report in background

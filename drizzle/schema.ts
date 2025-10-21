@@ -59,6 +59,16 @@ export const domains = mysqlTable("domains", {
   stripePaymentIntentId: varchar("stripePaymentIntentId", { length: 255 }),
   previewHtml: text("previewHtml"),
   pdfPath: varchar("pdfPath", { length: 500 }),
+  
+  // Analytics tracking
+  userId: varchar("userId", { length: 64 }), // Track if user was logged in
+  userEmail: varchar("userEmail", { length: 320 }), // Email for conversion tracking
+  ipAddress: varchar("ipAddress", { length: 45 }), // IP for uniqueness
+  userAgent: text("userAgent"), // Browser/device info
+  referrer: text("referrer"), // Traffic source
+  scanCount: varchar("scanCount", { length: 10 }).default("1"), // Number of scans for this domain
+  checkoutInitiatedAt: timestamp("checkoutInitiatedAt"), // When user clicked "Buy"
+  paidAt: timestamp("paidAt"), // When payment completed
 });
 
 export const tests = mysqlTable("tests", {

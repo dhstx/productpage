@@ -1,12 +1,14 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { analyticsRouter } from "./analyticsRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const appRouter = router({
   system: systemRouter,
+  analytics: analyticsRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -27,9 +29,12 @@ export const appRouter = router({
         z.object({
           domain: z.string().min(3),
           sampleHeaders: z.string().optional(),
+          ipAddress: z.string().optional(),
+          userAgent: z.string().optional(),
+          referrer: z.string().optional(),
         })
       )
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
         const { nanoid } = await import("nanoid");
         const { scanDomain } = await import("./dnsScanner");
         const { createDomain, getDomainByName, updateDomain } = await import("./db");
@@ -45,6 +50,11 @@ export const appRouter = router({
           id: domainId,
           domain: input.domain,
           lastScanAt: new Date(),
+          userId: ctx.user?.id,
+          userEmail: ctx.user?.email,
+          ipAddress: input.ipAddress,
+          userAgent: input.userAgent,
+          referrer: input.referrer,
           hasWorkspace: scanResult.providers.workspace ? "true" : "false",
           hasM365: scanResult.providers.m365 ? "true" : "false",
           espList: JSON.stringify(scanResult.providers.esp),
@@ -130,10 +140,11 @@ export const appRouter = router({
           input.couponCode
         );
 
-        // Update domain with checkout session
+        // Update domain with checkout session and track checkout initiation
         const { updateDomain } = await import("./db");
         await updateDomain(input.domainId, {
           stripeCheckoutSessionId: sessionId,
+          checkoutInitiatedAt: new Date(),
         });
 
         return { sessionId, url };

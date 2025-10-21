@@ -52,7 +52,13 @@ export function DomainScanner() {
       return;
     }
     setScanResult(null);
-    scanMutation.mutate({ domain });
+    
+    // Collect analytics data
+    scanMutation.mutate({ 
+      domain,
+      userAgent: navigator.userAgent,
+      referrer: document.referrer || undefined,
+    });
   };
 
   const getStatusIcon = (status: string) => {

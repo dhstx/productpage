@@ -15,6 +15,13 @@
       "when": 1761007172517,
       "tag": "0001_clever_talon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1761067551432,
+      "tag": "0002_watery_satana",
+      "breakpoints": true
     }
   ]
 }
