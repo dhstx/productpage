@@ -100,8 +100,7 @@ Format as clear HTML sections with <h3> for each provider and <ol> for steps.`;
     messages: [
       {
         role: "system",
-        content:
-          "You are an email compliance expert. Return clear HTML instructions.",
+        content: "You are an email deliverability expert. Return well-formatted HTML.",
       },
       { role: "user", content: prompt },
     ],
@@ -129,48 +128,107 @@ export async function generateComplianceReport(
   },
   providerInstructions: string
 ): Promise<string> {
-  const prompt = `You are an email compliance report writer. Generate a comprehensive HTML report for domain "${domain}" with the following sections:
+  
+  const scanData = {
+    spf: scan.spf,
+    dkim: scan.dkim,
+    dmarc: scan.dmarc,
+    bimi: scan.bimi
+  };
+  
+  const prompt = `You are a professional email compliance report writer. Generate a comprehensive, beautifully formatted HTML report for domain "${domain}".
 
-1. Executive Overview
-   - Current compliance status
-   - Key issues found
-   - Recommended actions
+CRITICAL FORMATTING REQUIREMENTS:
+- Use the provided CSS classes: score-grid, score-box (with pass/fail/warning), alert (with success/warning/error/info), step, step-number, dns-record, checklist
+- NO multi-column layouts - use full-width text only
+- Use pre and code tags for all DNS records and code snippets
+- Use dns-record div for DNS records with label and value spans
+- Use step divs with step-number spans for numbered instructions
+- Use checklist class for validation checklists
+- Include specific URLs and tool names (not placeholders)
 
-2. DNS Records to Add
-   - SPF: ${recommendations.spf}
-   - DMARC: ${recommendations.dmarc}
-   - BIMI: ${recommendations.bimi || "Not applicable"}
-   - Copy-paste ready format
+REQUIRED SECTIONS:
 
-3. Provider-Specific Steps
+1. Executive Summary
+Create a 2x2 score-grid with score-box divs showing:
+- SPF Status: ${scan.spf.found ? 'PASS' : 'FAIL'}
+- DKIM Status: ${scan.dkim.length > 0 ? 'PASS' : 'FAIL'}
+- DMARC Status: ${scan.dmarc.found ? 'PASS' : 'FAIL'}
+- BIMI Status: ${scan.bimi.found ? 'PASS' : 'NOT CONFIGURED'}
+
+Add 2-3 paragraph overview of findings and urgency.
+
+2. DNS Records to Implement
+For each record (SPF, DMARC, DKIM if missing), create a dns-record box with label and value divs.
+
+SPF Record: ${recommendations.spf}
+DMARC Record: ${recommendations.dmarc}
+BIMI: ${recommendations.bimi || "Not applicable - requires DMARC p=quarantine or p=reject"}
+
+3. Step-by-Step Setup Guide
+Create numbered step divs for:
+1. Access your DNS provider (Cloudflare, GoDaddy, Namecheap, etc.)
+2. Add SPF record
+3. Add DMARC record  
+4. Configure DKIM with your email provider
+5. Add one-click unsubscribe headers
+6. Test and validate
+
+Include specific URLs:
+- DNS checker: https://mxtoolbox.com/SuperTool.aspx
+- DMARC validator: https://dmarcian.com/dmarc-inspector/
+- SPF checker: https://www.kitterman.com/spf/validate.html
+
+4. Provider-Specific Instructions
 ${providerInstructions}
 
-4. One-Click Unsubscribe Headers
-   - List-Unsubscribe header format
-   - List-Unsubscribe-Post header (RFC 8058)
-   - Sample code for common ESPs
+Add specific links:
+- Google Workspace: https://admin.google.com/ac/apps/gmail/authenticateemail
+- Microsoft 365: https://admin.microsoft.com/Adminportal/Home#/Domains
+- SendGrid: https://app.sendgrid.com/settings/sender_auth
+- Mailgun: https://app.mailgun.com/app/sending/domains
 
-5. Validation Checklist
-   - What to check after DNS propagates
-   - Testing tools to use
-   - Timeline expectations
+5. One-Click Unsubscribe Implementation
+Provide exact header format in code blocks.
+Include code samples for Node.js, Python, PHP, and WordPress.
 
-6. Appendix: Raw Scan Data
-   - SPF: ${JSON.stringify(scan.spf, null, 2)}
-   - DKIM: ${JSON.stringify(scan.dkim, null, 2)}
-   - DMARC: ${JSON.stringify(scan.dmarc, null, 2)}
-   - BIMI: ${JSON.stringify(scan.bimi, null, 2)}
+6. Validation Checklist
+Use checklist class with items like:
+- DNS records added and saved
+- Waited 24-48 hours for propagation
+- Tested with MXToolbox
+- Verified DMARC reports arriving
+
+7. Timeline and Next Steps
+Use alert info box with:
+- DNS propagation: 15 minutes to 48 hours
+- DMARC reporting: 24-48 hours for first reports
+- Full compliance: 7-14 days
+
+8. Troubleshooting Common Issues
+Create alert warning boxes for common problems
+
+9. Appendix: Raw Scan Data
+Technical details:
+${JSON.stringify(scanData, null, 2)}
 
 Warnings: ${recommendations.warnings.join(", ") || "none"}
 
-Format as professional HTML with proper headings, code blocks, and styling. Use semantic HTML5 tags.`;
+OUTPUT REQUIREMENTS:
+- Return ONLY the HTML content (no DOCTYPE, html, head, or body tags)
+- Use semantic HTML5 tags (section, article, h1, h2, h3)
+- All code blocks must use pre and code tags
+- All DNS records must use dns-record divs
+- All steps must use step divs with step-number
+- Include real, working URLs (no placeholders)
+- Make it actionable and professional`;
 
   const response = await invokeLLM({
     messages: [
       {
         role: "system",
         content:
-          "You are a technical writer specializing in email compliance. Return well-formatted HTML.",
+          "You are a technical writer specializing in email compliance. Return well-formatted HTML using the specified CSS classes.",
       },
       { role: "user", content: prompt },
     ],
