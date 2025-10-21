@@ -2,6 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { analyticsRouter } from "./analyticsRouter";
+import { chatRouter } from "./chatRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -9,6 +10,7 @@ import { z } from "zod";
 export const appRouter = router({
   system: systemRouter,
   analytics: analyticsRouter,
+  chat: chatRouter,
 
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trpc } from '@/lib/trpc';
 
 interface Message {
   id: string;
@@ -10,16 +11,37 @@ interface Message {
   timestamp: Date;
 }
 
-const PUBLIC_AGENT_ID = '01K8498K7A7CV34D0BB6JMM18N';
-
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
+
+  const sendMessageMutation = trpc.chat.sendMessage.useMutation({
+    onSuccess: (data) => {
+      if (data.success) {
+        setMessages(prev => [...prev, {
+          id: `assistant-${Date.now()}`,
+          role: 'assistant',
+          content: data.response,
+          timestamp: new Date(),
+        }]);
+        if (data.conversationId) {
+          setConversationId(data.conversationId);
+        }
+      }
+    },
+    onError: (error) => {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, {
+        id: `error-${Date.now()}`,
+        role: 'assistant',
+        content: 'Sorry, I encountered an error. Please try again or email support@inboxpass.org.',
+        timestamp: new Date(),
+      }]);
+    },
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,89 +51,20 @@ export const ChatWidget: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Initialize conversation when chat opens
+  // Initialize with greeting when chat opens
   useEffect(() => {
-    if (isOpen && !conversationId) {
-      initializeConversation();
-    }
-  }, [isOpen]);
-
-  const initializeConversation = async () => {
-    try {
-      const response = await fetch(`https://www.taskade.com/api/agents/${PUBLIC_AGENT_ID}/conversations`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) throw new Error('Failed to create conversation');
-
-      const data = await response.json();
-      setConversationId(data.conversationId);
-
-      // Add greeting message
+    if (isOpen && messages.length === 0) {
       setMessages([{
         id: 'greeting',
         role: 'assistant',
         content: "👋 Hi! I'm your InboxPass Assistant. I can help you fix email deliverability issues and ensure compliance with Gmail and Microsoft's 2025 requirements.\n\n**Quick answers:**\n💰 $29 one-time (no subscription)\n🆓 Free domain scan available\n⏱️ 5-minute setup\n✅ 30-day money-back guarantee\n\nHow can I help you today?",
         timestamp: new Date(),
       }]);
-
-      // Open SSE stream
-      openEventStream(data.conversationId);
-    } catch (error) {
-      console.error('Failed to initialize conversation:', error);
     }
-  };
-
-  const openEventStream = (convId: string) => {
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
-
-    const eventSource = new EventSource(`https://www.taskade.com/api/conversations/${convId}/stream`);
-    
-    eventSource.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        
-        if (data.type === 'message' && data.role === 'assistant') {
-          setMessages(prev => {
-            const lastMessage = prev[prev.length - 1];
-            
-            if (lastMessage?.role === 'assistant' && lastMessage.id === data.messageId) {
-              // Update existing message
-              return prev.map(msg => 
-                msg.id === data.messageId 
-                  ? { ...msg, content: data.content }
-                  : msg
-              );
-            } else {
-              // Add new message
-              return [...prev, {
-                id: data.messageId || `msg-${Date.now()}`,
-                role: 'assistant',
-                content: data.content,
-                timestamp: new Date(),
-              }];
-            }
-          });
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error('Error parsing SSE message:', error);
-      }
-    };
-
-    eventSource.onerror = (error) => {
-      console.error('SSE error:', error);
-      setIsLoading(false);
-    };
-
-    eventSourceRef.current = eventSource;
-  };
+  }, [isOpen]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || !conversationId || isLoading) return;
+    if (!inputValue.trim() || sendMessageMutation.isPending) return;
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -121,29 +74,13 @@ export const ChatWidget: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageContent = inputValue.trim();
     setInputValue('');
-    setIsLoading(true);
 
-    try {
-      const response = await fetch(`https://www.taskade.com/api/conversations/${conversationId}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: userMessage.content }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setIsLoading(false);
-      setMessages(prev => [...prev, {
-        id: `error-${Date.now()}`,
-        role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date(),
-      }]);
-    }
+    sendMessageMutation.mutate({
+      message: messageContent,
+      conversationId,
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -155,7 +92,11 @@ export const ChatWidget: React.FC = () => {
 
   const handleStarterClick = (prompt: string) => {
     setInputValue(prompt);
-    setTimeout(() => handleSendMessage(), 100);
+    setTimeout(() => {
+      if (!sendMessageMutation.isPending) {
+        handleSendMessage();
+      }
+    }, 100);
   };
 
   const starterSuggestions = [
@@ -265,13 +206,15 @@ export const ChatWidget: React.FC = () => {
                       <button
                         key={idx}
                         onClick={() => handleStarterClick(suggestion.prompt)}
+                        disabled={sendMessageMutation.isPending}
                         className={cn(
                           "text-xs px-3 py-2 rounded-lg",
                           "bg-white dark:bg-gray-800",
                           "border border-gray-200 dark:border-gray-700",
                           "hover:border-blue-500 dark:hover:border-blue-500",
                           "transition-all duration-200",
-                          "text-left text-gray-700 dark:text-gray-300"
+                          "text-left text-gray-700 dark:text-gray-300",
+                          "disabled:opacity-50 disabled:cursor-not-allowed"
                         )}
                       >
                         {suggestion.title}
@@ -281,7 +224,7 @@ export const ChatWidget: React.FC = () => {
                 </div>
               )}
 
-              {isLoading && (
+              {sendMessageMutation.isPending && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -305,7 +248,7 @@ export const ChatWidget: React.FC = () => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything..."
-                  disabled={isLoading}
+                  disabled={sendMessageMutation.isPending}
                   className={cn(
                     "flex-1 px-4 py-2.5 rounded-xl",
                     "bg-gray-100 dark:bg-gray-800",
@@ -318,7 +261,7 @@ export const ChatWidget: React.FC = () => {
                 />
                 <button
                   onClick={handleSendMessage}
-                  disabled={!inputValue.trim() || isLoading}
+                  disabled={!inputValue.trim() || sendMessageMutation.isPending}
                   className={cn(
                     "px-4 py-2.5 rounded-xl",
                     "bg-blue-500 hover:bg-blue-600",
