@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trpc } from '@/lib/trpc';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: string;
@@ -192,7 +193,13 @@ export const ChatWidget: React.FC = () => {
                         : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700'
                     )}
                   >
-                    <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+                    <div className="text-sm prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-strong:text-inherit">
+                      {message.role === 'assistant' ? (
+                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                      ) : (
+                        <div className="whitespace-pre-wrap">{message.content}</div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}
