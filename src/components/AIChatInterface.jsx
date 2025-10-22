@@ -3,8 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles, ChevronDown, Bot } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 import { agents as agentData } from '../lib/agents-enhanced';
-import { sendMessage as sendMessageAPI } from '../lib/api/agentClient';
+import { sendMessage as sendMessageAPI, getSession } from '../lib/api/agentClient';
 import MessageBubble from './MessageBubble';
+import ConversationHistory from './ConversationHistory';
 
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
@@ -22,6 +23,7 @@ export default function AIChatInterface() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
@@ -205,6 +207,38 @@ export default function AIChatInterface() {
     }
   };
 
+  const loadSession = async (sessionId) => {
+    try {
+      setIsLoading(true);
+      const sessionData = await getSession(sessionId);
+      
+      // Convert session messages to component format
+      const loadedMessages = sessionData.messages.map(msg => ({
+        id: msg.id,
+        role: msg.role,
+        agent: msg.agent,
+        content: msg.content,
+        timestamp: msg.created_at,
+        metadata: msg.metadata
+      }));
+      
+      setMessages(loadedMessages);
+      setCurrentSessionId(sessionId);
+      setShowHistory(false);
+    } catch (err) {
+      console.error('Error loading session:', err);
+      setError(`Failed to load conversation: ${err.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const startNewConversation = () => {
+    setMessages([]);
+    setCurrentSessionId(null);
+    setError(null);
+  };
+
   return (
     <section
       ref={sectionRef}
@@ -232,6 +266,35 @@ export default function AIChatInterface() {
             Select an AI agent and start your conversation
           </p>
         </div>
+
+        {/* Conversation Controls */}
+        <div className="mb-6 flex gap-3">
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="panel-system px-4 py-2 text-sm font-medium text-[#F2F2F2] hover:bg-[#202020] transition-all"
+          >
+            {showHistory ? 'Hide History' : 'Show History'}
+          </button>
+          
+          {currentSessionId && (
+            <button
+              onClick={startNewConversation}
+              className="panel-system px-4 py-2 text-sm font-medium text-[#FFC96C] hover:bg-[#202020] transition-all"
+            >
+              New Conversation
+            </button>
+          )}
+        </div>
+
+        {/* Conversation History Panel */}
+        {showHistory && (
+          <div className="mb-6">
+            <ConversationHistory 
+              onSelectSession={loadSession}
+              currentSessionId={currentSessionId}
+            />
+          </div>
+        )}
 
         {/* Agent Selector */}
         <div className="mb-6">
