@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowUp, Sparkles, ChevronDown, Bot } from 'lucide-react';
+import { ArrowUp, Sparkles, ChevronDown } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 import { agents as agentData } from '../lib/agents-enhanced';
-import { sendMessage as sendMessageAPI, getSession } from '../lib/api/agentClient';
-import MessageBubble from './MessageBubble';
-import ConversationHistory from './ConversationHistory';
 
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
@@ -19,11 +16,6 @@ export default function AIChatInterface() {
   const [selectedAgent, setSelectedAgent] = useState('Orchestrator');
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [currentSessionId, setCurrentSessionId] = useState(null);
-  const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
@@ -142,101 +134,17 @@ export default function AIChatInterface() {
     };
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!message.trim() || isLoading) return;
+    if (!message.trim()) return;
 
-    const userMessage = message.trim();
+    console.log('Sending message to agent:', selectedAgent);
+    console.log('Message:', message);
+
+    // TODO: Connect to backend API
+    // This will be implemented in Phase 3
+
     setMessage('');
-    setError(null);
-    setIsLoading(true);
-
-    // Add user message to chat
-    const newUserMessage = {
-      id: Date.now(),
-      role: 'user',
-      content: userMessage,
-      timestamp: new Date().toISOString(),
-    };
-    
-    setMessages(prev => [...prev, newUserMessage]);
-
-    try {
-      // Send message to API
-      const response = await sendMessageAPI(
-        userMessage,
-        selectedAgent,
-        currentSessionId
-      );
-
-      // Update session ID if this is a new conversation
-      if (!currentSessionId && response.sessionId) {
-        setCurrentSessionId(response.sessionId);
-      }
-
-      // Add agent response to chat
-      const agentMessage = {
-        id: Date.now() + 1,
-        role: 'agent',
-        agent: response.agent || selectedAgent,
-        content: response.response,
-        timestamp: new Date().toISOString(),
-        metadata: {
-          model: response.model,
-          tokens: response.tokens,
-          executionTime: response.executionTime,
-        },
-      };
-
-      setMessages(prev => [...prev, agentMessage]);
-    } catch (err) {
-      console.error('Error sending message:', err);
-      setError(err.message);
-      
-      // Add error message to chat
-      const errorMessage = {
-        id: Date.now() + 1,
-        role: 'error',
-        content: `Error: ${err.message}`,
-        timestamp: new Date().toISOString(),
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const loadSession = async (sessionId) => {
-    try {
-      setIsLoading(true);
-      const sessionData = await getSession(sessionId);
-      
-      // Convert session messages to component format
-      const loadedMessages = sessionData.messages.map(msg => ({
-        id: msg.id,
-        role: msg.role,
-        agent: msg.agent,
-        content: msg.content,
-        timestamp: msg.created_at,
-        metadata: msg.metadata
-      }));
-      
-      setMessages(loadedMessages);
-      setCurrentSessionId(sessionId);
-      setShowHistory(false);
-    } catch (err) {
-      console.error('Error loading session:', err);
-      setError(`Failed to load conversation: ${err.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const startNewConversation = () => {
-    setMessages([]);
-    setCurrentSessionId(null);
-    setError(null);
   };
 
   return (
@@ -266,35 +174,6 @@ export default function AIChatInterface() {
             Select an AI agent and start your conversation
           </p>
         </div>
-
-        {/* Conversation Controls */}
-        <div className="mb-6 flex gap-3">
-          <button
-            onClick={() => setShowHistory(!showHistory)}
-            className="panel-system px-4 py-2 text-sm font-medium text-[#F2F2F2] hover:bg-[#202020] transition-all"
-          >
-            {showHistory ? 'Hide History' : 'Show History'}
-          </button>
-          
-          {currentSessionId && (
-            <button
-              onClick={startNewConversation}
-              className="panel-system px-4 py-2 text-sm font-medium text-[#FFC96C] hover:bg-[#202020] transition-all"
-            >
-              New Conversation
-            </button>
-          )}
-        </div>
-
-        {/* Conversation History Panel */}
-        {showHistory && (
-          <div className="mb-6">
-            <ConversationHistory 
-              onSelectSession={loadSession}
-              currentSessionId={currentSessionId}
-            />
-          </div>
-        )}
 
         {/* Agent Selector */}
         <div className="mb-6">
@@ -360,30 +239,6 @@ export default function AIChatInterface() {
             )}
           </div>
         </div>
-
-        {/* Messages Display */}
-        {messages.length > 0 && (
-          <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
-            {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
-            ))}
-            
-            {isLoading && (
-              <div className="flex gap-3 justify-start mb-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC96C]/20">
-                  <Bot className="h-4 w-4 text-[#FFC96C] animate-pulse" />
-                </div>
-                <div className="bg-[#202020] text-[#F2F2F2] rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Chat Input */}
         <form onSubmit={handleSubmit} className="relative">
