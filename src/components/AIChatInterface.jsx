@@ -170,22 +170,18 @@ export default function AIChatInterface() {
       );
 
       // Update session ID if this is a new conversation
-      if (!currentSessionId && response.sessionId) {
-        setCurrentSessionId(response.sessionId);
+      if (!currentSessionId && response.data?.sessionId) {
+        setCurrentSessionId(response.data.sessionId);
       }
 
       // Add agent response to chat
       const agentMessage = {
         id: Date.now() + 1,
         role: 'agent',
-        agent: response.agent || selectedAgent,
-        content: response.response,
+        agent: response.data?.agent || selectedAgent,
+        content: response.data?.response || 'No response',
         timestamp: new Date().toISOString(),
-        metadata: {
-          model: response.model,
-          tokens: response.tokens,
-          executionTime: response.executionTime,
-        },
+        metadata: response.data?.metadata || {},
       };
 
       setMessages(prev => [...prev, agentMessage]);

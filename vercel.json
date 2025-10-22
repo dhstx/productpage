@@ -5,6 +5,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/api/agents/chat",
+      "destination": "/api-vercel/chat"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
