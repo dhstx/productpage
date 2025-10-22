@@ -1,294 +1,480 @@
-import { CreditCard, Check, Zap, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CreditCard, Check, Zap, AlertCircle, Download, Plus, TrendingUp } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
-import { getCurrentUser, canUpgrade } from '../lib/auth';
-import { getAllPricingTiers, getPricingTier } from '../lib/pricing';
-import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import PTHealthBar from '../components/PTHealthBar';
+import { 
+  createSubscriptionCheckout, 
+  createTopUpCheckout, 
+  getTopUpPackages,
+  cancelSubscription,
+  updateSubscription,
+  getCustomerPortalUrl 
+} from '../lib/stripe/checkout';
 
 export default function Billing() {
-  const user = getCurrentUser();
-  const currentTier = getPricingTier(user?.subscription || 'free');
-  const pricingTiers = getAllPricingTiers();
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const { user, profile } = useAuth();
+  const [ptData, setPtData] = useState(null);
+  const [subscription, setSubscription] = useState(null);
+  const [billingHistory, setBillingHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(null);
 
-  const handleUpgrade = (tier) => {
-    if (tier.id === 'enterprise') {
-      alert('Please contact our sales team at sales@dhstx.com to discuss Enterprise pricing and features.');
-    } else {
-      alert(`Upgrading to ${tier.name} plan...\n\nThis would redirect to Stripe checkout.`);
+  useEffect(() => {
+    if (user) {
+      fetchBillingData();
     }
-  };
+  }, [user]);
 
-  const handleCancelSubscription = () => {
-    if (confirm('Are you sure you want to cancel your subscription?\n\nYour access will continue until the end of the current billing period.')) {
-      alert('Subscription cancellation scheduled.\n\nYou will receive a confirmation email shortly.');
+  async function fetchBillingData() {
+    try {
+      // Fetch PT usage
+      const ptResponse = await fetch('/api/pt/usage', {
+        headers: {
+          'Authorization': `Bearer ${user.access_token}`,
+        },
+      });
+
+      if (ptResponse.ok) {
+        const ptDataResult = await ptResponse.json();
+        setPtData(ptDataResult);
+      }
+
+      // Fetch subscription
+      const subResponse = await fetch('/api/subscription/current', {
+        headers: {
+          'Authorization': `Bearer ${user.access_token}`,
+        },
+      });
+
+      if (subResponse.ok) {
+        const subData = await subResponse.json();
+        setSubscription(subData);
+      }
+
+      // Fetch billing history
+      const historyResponse = await fetch('/api/billing/history', {
+        headers: {
+          'Authorization': `Bearer ${user.access_token}`,
+        },
+      });
+
+      if (historyResponse.ok) {
+        const historyData = await historyResponse.json();
+        setBillingHistory(historyData.invoices || []);
+      }
+    } catch (error) {
+      console.error('Error fetching billing data:', error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
+
+  async function handleUpgrade(tier) {
+    setActionLoading(`upgrade-${tier}`);
+    try {
+      if (subscription?.stripe_subscription_id) {
+        // Update existing subscription
+        await updateSubscription(subscription.stripe_subscription_id, tier, user.id);
+        alert('Subscription updated successfully!');
+        fetchBillingData();
+      } else {
+        // Create new subscription
+        await createSubscriptionCheckout(tier, 'monthly', user.id);
+      }
+    } catch (error) {
+      console.error('Upgrade error:', error);
+      alert(`Failed to upgrade: ${error.message}`);
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleTopUp(ptAmount, price) {
+    setActionLoading(`topup-${ptAmount}`);
+    try {
+      await createTopUpCheckout(price, ptAmount, user.id);
+    } catch (error) {
+      console.error('Top-up error:', error);
+      alert(`Failed to purchase PT: ${error.message}`);
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleCancelSubscription() {
+    if (!confirm('Are you sure you want to cancel your subscription?\n\nYour access will continue until the end of the current billing period.')) {
+      return;
+    }
+
+    setActionLoading('cancel');
+    try {
+      await cancelSubscription(subscription.stripe_subscription_id, user.id);
+      alert('Subscription cancelled successfully. You will receive a confirmation email.');
+      fetchBillingData();
+    } catch (error) {
+      console.error('Cancel error:', error);
+      alert(`Failed to cancel subscription: ${error.message}`);
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleManagePayment() {
+    setActionLoading('portal');
+    try {
+      const url = await getCustomerPortalUrl(subscription.stripe_customer_id);
+      window.location.href = url;
+    } catch (error) {
+      console.error('Portal error:', error);
+      alert(`Failed to open billing portal: ${error.message}`);
+      setActionLoading(null);
+    }
+  }
+
+  const tiers = [
+    {
+      id: 'entry',
+      name: 'Entry',
+      price: 19,
+      corePT: 300,
+      advancedPT: 'Add-on only',
+      features: ['300 Core PT/month', '5 AI agents', 'Core models', 'Email support (48h)'],
+    },
+    {
+      id: 'pro',
+      name: 'Pro',
+      price: 49,
+      corePT: 1000,
+      advancedPT: '50 PT metered',
+      features: ['1,000 Core PT/month', '50 Advanced PT', '25 AI agents', 'All models', 'API access', 'Email support (24h)'],
+      popular: true,
+    },
+    {
+      id: 'proplus',
+      name: 'Pro Plus',
+      price: 79,
+      corePT: 1600,
+      advancedPT: '100 PT metered',
+      features: ['1,600 Core PT/month', '100 Advanced PT', '50 AI agents', 'Priority access', 'Team workspaces (3)', 'Email + chat support (12h)'],
+    },
+    {
+      id: 'business',
+      name: 'Business',
+      price: 159,
+      corePT: 3500,
+      advancedPT: '200 PT pools',
+      features: ['3,500 Core PT/month', '200 Advanced PT', '100 AI agents', 'Dedicated capacity', 'Unlimited workspaces', 'Priority support (4h SLA)'],
+    },
+  ];
+
+  const topUpPackages = getTopUpPackages();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading billing information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-8">
+    <div className="min-h-screen bg-gray-50">
       <BackArrow />
-      <div>
-        <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-          {canUpgrade() ? 'UPGRADE YOUR PLAN' : 'BILLING & SUBSCRIPTION'}
-        </h1>
-        <p className="text-[#B3B3B3]">
-          {canUpgrade() 
-            ? 'Choose the perfect plan for your organization\'s needs'
-            : 'Manage your subscription, payment methods, and billing history'}
-        </p>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Billing & Subscription
+          </h1>
+          <p className="text-gray-600">
+            Manage your subscription, PT usage, and payment methods
+          </p>
+        </div>
 
-      {/* Current Plan Status */}
-      {user && (
-        <section className="panel-system p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-xl font-bold text-[#F2F2F2] uppercase tracking-tight">
-                  CURRENT PLAN: {currentTier.name}
+        {/* PT Health Bar */}
+        {ptData && (
+          <div className="mb-8">
+            <PTHealthBar
+              corePT={{
+                used: ptData.core.used,
+                total: ptData.core.total,
+                percentage: ptData.core.percentage,
+              }}
+              advancedPT={{
+                used: ptData.advanced.used,
+                total: ptData.advanced.total,
+                percentage: ptData.advanced.percentage,
+              }}
+              tier={ptData.tier}
+            />
+          </div>
+        )}
+
+        {/* Current Plan */}
+        {subscription && (
+          <div className="bg-white rounded-lg shadow mb-8 p-6">
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Current Plan: {subscription.tier_name}
                 </h2>
-                {currentTier.highlighted && (
-                  <span className="px-2 py-1 bg-[#FFC96C]/10 border border-[#FFC96C] rounded-[2px] text-[#FFC96C] text-xs font-bold uppercase">
-                    MOST POPULAR
+                <p className="text-gray-600">{subscription.description}</p>
+                <div className="flex items-baseline gap-2 mt-4">
+                  <span className="text-4xl font-bold text-gray-900">
+                    ${subscription.price}
                   </span>
+                  <span className="text-gray-600">/month</span>
+                </div>
+                {subscription.next_billing_date && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Next billing date: {new Date(subscription.next_billing_date).toLocaleDateString()}
+                  </p>
                 )}
               </div>
-              <p className="text-[#B3B3B3] mb-4">{currentTier.description}</p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-[#F2F2F2]">
-                  ${currentTier.price}
-                </span>
-                <span className="text-[#B3B3B3]">/{currentTier.billingPeriod}</span>
-              </div>
+              {subscription.tier !== 'freemium' && (
+                <button
+                  onClick={handleManagePayment}
+                  disabled={actionLoading === 'portal'}
+                  className="btn-primary"
+                >
+                  {actionLoading === 'portal' ? 'Loading...' : 'Manage Billing'}
+                </button>
+              )}
             </div>
-            {canUpgrade() && (
-              <button
-                onClick={() => setShowUpgradeModal(true)}
-                className="btn-system flex items-center gap-2"
-              >
-                <Zap className="w-4 h-4" />
-                Upgrade Plan
-              </button>
+
+            {/* PT Usage Stats */}
+            {ptData && (
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">PT Usage This Month</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-gray-600">Core PT</span>
+                      <TrendingUp className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {ptData.core.used.toLocaleString()} / {ptData.core.total.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">
+                      {ptData.core.percentage.toFixed(1)}% used
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-gray-600">Advanced PT</span>
+                      <Zap className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {ptData.advanced.used.toLocaleString()} / {ptData.advanced.total.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">
+                      {ptData.advanced.percentage.toFixed(1)}% used
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-gray-600">Resets In</span>
+                      <AlertCircle className="h-4 w-4 text-orange-600" />
+                    </div>
+                    <div className="text-2xl font-bold text-gray-900">
+                      {ptData.days_until_reset || 0} days
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">
+                      {ptData.reset_date ? new Date(ptData.reset_date).toLocaleDateString() : 'N/A'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Cancel Subscription */}
+            {subscription.tier !== 'freemium' && (
+              <div className="border-t border-gray-200 pt-6 mt-6">
+                <button
+                  onClick={handleCancelSubscription}
+                  disabled={actionLoading === 'cancel'}
+                  className="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                  {actionLoading === 'cancel' ? 'Cancelling...' : 'Cancel Subscription'}
+                </button>
+              </div>
             )}
           </div>
+        )}
 
-          {/* Current Plan Features */}
-          <div className="mt-6 pt-6 border-t border-[#202020]">
-            <h3 className="text-sm font-bold text-[#F2F2F2] mb-3 uppercase tracking-tight">
-              YOUR CURRENT FEATURES
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {currentTier.featureList.map((feature, index) => (
-                <div key={index} className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-[#FFC96C] mt-0.5 flex-shrink-0" />
-                  <span className="text-[#B3B3B3] text-sm">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Usage Stats */}
-          <div className="mt-6 pt-6 border-t border-[#202020]">
-            <h3 className="text-sm font-bold text-[#F2F2F2] mb-3 uppercase tracking-tight">
-              CURRENT USAGE
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <UsageStat 
-                label="AI Agents" 
-                current={currentTier.features.agents === 'unlimited' ? '∞' : '3'}
-                limit={currentTier.features.agents}
-              />
-              <UsageStat 
-                label="Workflows" 
-                current={currentTier.features.workflows === 'unlimited' ? '∞' : '12'}
-                limit={currentTier.features.workflows}
-              />
-              <UsageStat 
-                label="Connections" 
-                current={currentTier.features.connections === 'unlimited' ? '∞' : '47'}
-                limit={currentTier.features.connections}
-              />
-              <UsageStat 
-                label="Team Licenses" 
-                current={currentTier.features.teamLicenses === 'unlimited' ? '∞' : '8'}
-                limit={currentTier.features.teamLicenses}
-              />
-            </div>
-          </div>
-
-          {user.subscription !== 'free' && (
-            <div className="mt-6 pt-6 border-t border-[#202020] flex gap-4">
-              <button
-                onClick={handleCancelSubscription}
-                className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
+        {/* PT Top-Up Packages */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Buy Additional PT</h2>
+          <p className="text-gray-600 mb-6">Need more PT this month? Purchase a one-time top-up with volume discounts.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {topUpPackages.map((pkg) => (
+              <div
+                key={pkg.id}
+                className={`bg-white rounded-lg shadow p-6 ${pkg.popular ? 'ring-2 ring-purple-500' : ''}`}
               >
-                Cancel Subscription
-              </button>
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Pricing Tiers */}
-      <section>
-        <h2 className="text-2xl font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
-          {canUpgrade() ? 'CHOOSE YOUR PLAN' : 'ALL AVAILABLE PLANS'}
-        </h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pricingTiers.map((tier) => (
-            <PricingCard
-              key={tier.id}
-              tier={tier}
-              currentTier={currentTier.id}
-              onUpgrade={handleUpgrade}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Payment Method (for paid plans) */}
-      {user && user.subscription !== 'free' && (
-        <section className="panel-system p-6">
-          <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-            PAYMENT METHOD
-          </h2>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-[4px] bg-[#202020] flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-[#FFC96C]" />
-              </div>
-              <div>
-                <p className="text-[#F2F2F2] font-medium">•••• •••• •••• 4242</p>
-                <p className="text-[#B3B3B3] text-sm">Expires 12/2025</p>
-              </div>
-            </div>
-            <button className="btn-system">
-              Update Payment
-            </button>
-          </div>
-        </section>
-      )}
-
-      {/* Billing History (for paid plans) */}
-      {user && user.subscription !== 'free' && (
-        <section className="panel-system p-6">
-          <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
-            BILLING HISTORY
-          </h2>
-          <div className="space-y-3">
-            {[
-              { date: 'Oct 1, 2025', amount: currentTier.price, status: 'Paid' },
-              { date: 'Sep 1, 2025', amount: currentTier.price, status: 'Paid' },
-              { date: 'Aug 1, 2025', amount: currentTier.price, status: 'Paid' }
-            ].map((invoice, index) => (
-              <div key={index} className="flex items-center justify-between py-3 border-b border-[#202020] last:border-0">
-                <div>
-                  <p className="text-[#F2F2F2] font-medium">{invoice.date}</p>
-                  <p className="text-[#B3B3B3] text-sm">Monthly subscription</p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-[#F2F2F2] font-bold">${invoice.amount}</span>
-                  <span className="px-2 py-1 bg-green-900/20 border border-green-900 rounded-[2px] text-green-400 text-xs font-bold">
-                    {invoice.status}
+                {pkg.popular && (
+                  <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded mb-3">
+                    Best Value
                   </span>
-                  <button className="text-[#FFC96C] hover:text-[#FFD700] text-sm font-medium transition-colors">
-                    Download
-                  </button>
+                )}
+                <div className="text-3xl font-bold text-gray-900 mb-2">
+                  {pkg.ptAmount} PT
                 </div>
+                <div className="text-2xl font-bold text-gray-900 mb-1">
+                  ${pkg.price}
+                </div>
+                <div className="text-sm text-gray-600 mb-4">
+                  ${pkg.pricePerPT.toFixed(3)} per PT
+                  {pkg.discount > 0 && (
+                    <span className="text-green-600 ml-1">({pkg.discount}% off)</span>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleTopUp(pkg.ptAmount, pkg.price)}
+                  disabled={actionLoading === `topup-${pkg.ptAmount}`}
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                >
+                  {actionLoading === `topup-${pkg.ptAmount}` ? 'Loading...' : 'Buy Now'}
+                </button>
               </div>
             ))}
           </div>
-        </section>
-      )}
-    </div>
-  );
-}
-
-function PricingCard({ tier, currentTier, onUpgrade }) {
-  const isCurrent = tier.id === currentTier;
-  const isDowngrade = ['free', 'starter', 'professional', 'enterprise'].indexOf(tier.id) < 
-                      ['free', 'starter', 'professional', 'enterprise'].indexOf(currentTier);
-
-  return (
-    <div className={`panel-system p-6 flex flex-col ${tier.highlighted ? 'border-2 border-[#FFC96C]' : ''}`}>
-      <BackArrow />
-      {tier.highlighted && (
-        <div className="mb-4 -mt-2 -mx-2">
-          <span className="inline-block px-3 py-1 bg-[#FFC96C] text-[#0C0C0C] text-xs font-bold uppercase rounded-[2px]">
-            MOST POPULAR
-          </span>
         </div>
-      )}
-      
-      <h3 className="text-xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-        {tier.name}
-      </h3>
-      <p className="text-[#B3B3B3] text-sm mb-4">{tier.description}</p>
-      
-      <div className="mb-6">
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-bold text-[#F2F2F2]">${tier.price}</span>
-          <span className="text-[#B3B3B3]">/{tier.billingPeriod}</span>
+
+        {/* Upgrade Options */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Upgrade Your Plan</h2>
+          <p className="text-gray-600 mb-6">Get more PT, agents, and features with a higher tier.</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {tiers.map((tier) => {
+              const isCurrent = subscription?.tier === tier.id;
+              return (
+                <div
+                  key={tier.id}
+                  className={`bg-white rounded-lg shadow p-6 ${tier.popular ? 'ring-2 ring-purple-500' : ''}`}
+                >
+                  {tier.popular && (
+                    <span className="inline-block px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded mb-3">
+                      Most Popular
+                    </span>
+                  )}
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tier.name}</h3>
+                  <div className="text-3xl font-bold text-gray-900 mb-1">${tier.price}</div>
+                  <div className="text-sm text-gray-600 mb-4">/month</div>
+                  
+                  <div className="mb-4">
+                    <div className="text-sm font-medium text-gray-700 mb-1">
+                      {tier.corePT} Core PT
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {tier.advancedPT}
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2 mb-6">
+                    {tier.features.slice(0, 4).map((feature, index) => (
+                      <li key={index} className="flex items-start text-sm text-gray-700">
+                        <Check className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => handleUpgrade(tier.id)}
+                    disabled={isCurrent || actionLoading === `upgrade-${tier.id}`}
+                    className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+                      isCurrent
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
+                  >
+                    {isCurrent ? 'Current Plan' : actionLoading === `upgrade-${tier.id}` ? 'Loading...' : 'Upgrade'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <ul className="space-y-2 mb-6 flex-grow">
-        {tier.featureList.map((feature, index) => (
-          <li key={index} className="flex items-start gap-2">
-            <Check className="w-4 h-4 text-[#FFC96C] mt-0.5 flex-shrink-0" />
-            <span className="text-[#B3B3B3] text-sm">{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      {isCurrent ? (
-        <button disabled className="btn-system w-full opacity-50 cursor-not-allowed">
-          Current Plan
-        </button>
-      ) : isDowngrade ? (
-        <button disabled className="btn-system w-full opacity-50 cursor-not-allowed">
-          Downgrade
-        </button>
-      ) : (
-        <button
-          onClick={() => onUpgrade(tier)}
-          className="btn-system w-full"
-        >
-          {tier.cta}
-        </button>
-      )}
-    </div>
-  );
-}
-
-function UsageStat({ label, current, limit }) {
-  const percentage = limit === 'unlimited' ? 0 : (parseInt(current) / parseInt(limit)) * 100;
-  const isNearLimit = percentage > 80;
-
-  return (
-    <div>
-      <BackArrow />
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-[#B3B3B3] text-xs uppercase tracking-tight">{label}</span>
-        {isNearLimit && limit !== 'unlimited' && (
-          <AlertCircle className="w-3 h-3 text-yellow-500" />
+        {/* Billing History */}
+        {billingHistory.length > 0 && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Billing History</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Invoice
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {billingHistory.map((invoice) => (
+                    <tr key={invoice.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {new Date(invoice.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {invoice.description}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${invoice.amount.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          invoice.status === 'paid'
+                            ? 'bg-green-100 text-green-800'
+                            : invoice.status === 'pending'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {invoice.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {invoice.invoice_url && (
+                          <a
+                            href={invoice.invoice_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-700 flex items-center"
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            Download
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
-      <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-bold text-[#F2F2F2]">{current}</span>
-        <span className="text-[#B3B3B3] text-sm">
-          / {limit === 'unlimited' ? '∞' : limit}
-        </span>
-      </div>
-      {limit !== 'unlimited' && (
-        <div className="mt-2 h-1 bg-[#202020] rounded-full overflow-hidden">
-          <div 
-            className={`h-full ${isNearLimit ? 'bg-yellow-500' : 'bg-[#FFC96C]'}`}
-            style={{ width: `${Math.min(percentage, 100)}%` }}
-          />
-        </div>
-      )}
     </div>
   );
 }
+
