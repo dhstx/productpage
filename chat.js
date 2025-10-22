@@ -2,30 +2,17 @@
 // Handles user chat requests through the orchestrator
 
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import { requireAuth } from '../middleware/auth.js';
 import { handleUserRequest, getUserSessions, getSession } from '../services/orchestrator.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
-// Rate limiter for chat endpoints
-const chatRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per window
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    success: false,
-    error: "Too many requests, please try again later."
-  }
-});
-
 /**
  * POST /api/agents/chat
  * Send a message to the AI agent system
  */
-router.post('/chat', requireAuth, chatRateLimiter, async (req, res) => {
+router.post('/chat', requireAuth, async (req, res) => {
   try {
     const { message, sessionId, agentId } = req.body;
     const userId = req.user.id;
@@ -73,7 +60,7 @@ router.post('/chat', requireAuth, chatRateLimiter, async (req, res) => {
  * GET /api/agents/sessions
  * Get user's conversation sessions
  */
-router.get('/sessions', requireAuth, chatRateLimiter, async (req, res) => {
+router.get('/sessions', requireAuth, async (req, res) => {
   try {
     const userId = req.user.id;
     const limit = parseInt(req.query.limit) || 20;
@@ -98,7 +85,7 @@ router.get('/sessions', requireAuth, chatRateLimiter, async (req, res) => {
  * GET /api/agents/sessions/:sessionId
  * Get a specific conversation session
  */
-router.get('/sessions/:sessionId', requireAuth, chatRateLimiter, async (req, res) => {
+router.get('/sessions/:sessionId', requireAuth, async (req, res) => {
   try {
     const { sessionId } = req.params;
     const userId = req.user.id;
