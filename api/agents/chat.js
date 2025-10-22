@@ -1,10 +1,11 @@
 // AI Agent Chat API
-// Handles user chat requests through the orchestrator
+// Handles user chat requests through the MULTI-AGENT orchestrator
 
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { optionalAuth } from '../middleware/optionalAuth.js';
-import { handleUserRequest, getUserSessions, getSession } from '../services/orchestrator.js';
+import { requireAuth } from '../middleware/auth.js';
+import { handleUserRequest } from '../services/orchestration.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
@@ -23,12 +24,12 @@ const chatRateLimiter = rateLimit({
 
 /**
  * POST /api/agents/chat
- * Send a message to the AI agent system
+ * Send a message to the AI agent system with multi-agent orchestration
  */
 router.post('/chat', optionalAuth, chatRateLimiter, async (req, res) => {
   try {
     const { message, sessionId, agentId } = req.body;
-    const userId = req.user.id;
+    const userId = req.user?.id || 'guest-' + Date.now();
 
     // Validation
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
@@ -41,23 +42,59 @@ router.post('/chat', optionalAuth, chatRateLimiter, async (req, res) => {
     // Use provided sessionId or create a new one
     const activeSessionId = sessionId || uuidv4();
 
-    // Handle the request through orchestrator
-    const result = await handleUserRequest(
-      message.trim(),
-      userId,
-      activeSessionId,
-      agentId // Optional: specific agent selected by user
-    );
-
-    res.json({
-      success: result.success,
-      data: {
-        sessionId: activeSessionId,
-        agent: result.agent,
-        response: result.response,
-        metadata: result.metadata
+    // Build request object for orchestration
+    const request = {
+      request_id: uuidv4(),
+      user_id: userId,
+      message: message.trim(),
+      context: {
+        user_integrations: [], // TODO: Fetch from database
+        conversation_history: [],
+        user_tier: req.user?.tier || 'free',
+        preferred_agent: agentId // If user selected specific agent
       }
-    });
+    };
+
+    // Handle the request through multi-agent orchestration
+    const result = await handleUserRequest(request);
+
+    // Format response based on result type
+    if (result.type === 'success') {
+      res.json({
+        success: true,
+        data: {
+          sessionId: activeSessionId,
+          agent: result.report.lead_agent,
+          response: result.report.summary,
+          report: result.report,
+          metadata: result.report.metadata
+        }
+      });
+    } else if (result.type === 'clarification_needed') {
+      res.json({
+        success: true,
+        data: {
+          sessionId: activeSessionId,
+          needsClarification: true,
+          question: result.question
+        }
+      });
+    } else if (result.type === 'integrations_required') {
+      res.json({
+        success: true,
+        data: {
+          sessionId: activeSessionId,
+          needsIntegrations: true,
+          missing: result.missing,
+          canProceedPartially: result.can_proceed_partially
+        }
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: result.error || 'Unknown error occurred'
+      });
+    }
 
   } catch (error) {
     console.error('Chat API error:', error);
@@ -75,10 +112,19 @@ router.post('/chat', optionalAuth, chatRateLimiter, async (req, res) => {
  */
 router.get('/sessions', optionalAuth, chatRateLimiter, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required'
+      });
+    }
+
     const limit = parseInt(req.query.limit) || 20;
 
-    const sessions = await getUserSessions(userId, limit);
+    // TODO: Implement session fetching from database
+    const sessions = [];
 
     res.json({
       success: true,
@@ -101,9 +147,17 @@ router.get('/sessions', optionalAuth, chatRateLimiter, async (req, res) => {
 router.get('/sessions/:sessionId', requireAuth, chatRateLimiter, async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
-    const session = await getSession(sessionId);
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Authentication required'
+      });
+    }
+
+    // TODO: Implement session fetching from database
+    const session = null;
 
     // Verify session belongs to user
     if (session && session.user_id !== userId) {
