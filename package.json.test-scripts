@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run --testPathPattern=test/.*.test.js",
+    "test:integration": "vitest run --testPathPattern=test/.*.integration.test.js",
+    "test:ci": "vitest run --coverage --reporter=verbose"
+  }
+}
+
