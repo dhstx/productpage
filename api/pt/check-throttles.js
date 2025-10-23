@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { checkThrottles } from '../services/throttleManager.js';
+import { getThrottleStatusSummary } from '../services/throttleManager.js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     }
 
     // Check all throttles
-    const throttleResult = await checkThrottles(user.id);
+    const throttleResult = await getThrottleStatusSummary(user.id, supabase);
 
     if (throttleResult.throttled) {
       return res.status(200).json({
