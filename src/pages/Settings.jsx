@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
 import { useAuth } from '../contexts/AuthContext';
-import { supabaseAuth } from '../lib/auth/supabaseAuth';
+import supabaseAuth from '../lib/auth/supabaseAuth';
 
 const SECTION_CONFIG = [
   { id: 'profile', label: 'Profile', icon: User },
