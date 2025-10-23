@@ -417,3 +417,44 @@ export function getAuthErrorMessage(error) {
   return errorMap[error] || error || 'An unexpected error occurred. Please try again.';
 }
 
+
+
+// ============================================================================
+// DEFAULT EXPORT (for convenience)
+// ============================================================================
+
+export default {
+  // Authentication
+  signUp,
+  signIn,
+  signOut,
+  
+  // Password Management
+  sendPasswordResetEmail,
+  updatePassword,
+  
+  // Session Management
+  getSession,
+  getCurrentUser,
+  refreshSession,
+  isAuthenticated,
+  onAuthStateChange,
+  
+  // User Profile Management
+  getUserProfile,
+  updateUserProfile,
+  updateUserMetadata,
+  
+  // Remember Me
+  isRememberMeEnabled,
+  setRememberMe,
+  
+  // Email Verification
+  resendVerificationEmail,
+  
+  // Utility Functions
+  getUserTier,
+  hasFeature,
+  getAuthErrorMessage,
+};
+
