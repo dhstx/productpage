@@ -1,26 +1,7 @@
-// Vercel Serverless Function for AI Agent Chat
-import Anthropic from '@anthropic-ai/sdk';
+// Vercel Serverless Function - Proxy to Railway Backend
+// This function forwards all chat requests to the Railway backend API
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-// Agent system prompts
-const AGENT_PROMPTS = {
-  orchestrator: "You are the Orchestrator, a central intelligence hub that analyzes user requests and routes them to the most appropriate specialist agent. You coordinate multi-agent workflows and ensure seamless collaboration.",
-  commander: "You are the Commander, a strategic leadership agent focused on high-level planning, executive decision-making, and organizational strategy.",
-  conductor: "You are the Conductor, an operations management agent that handles task coordination, project management, and workflow optimization.",
-  scout: "You are the Scout, a research and competitive intelligence agent that gathers market insights, analyzes trends, and provides data-driven recommendations.",
-  builder: "You are the Builder, a technical development agent specialized in coding, architecture, and software engineering.",
-  muse: "You are the Muse, a creative design agent focused on visual design, branding, and multimedia content creation.",
-  echo: "You are Echo, a marketing and communications agent that handles campaigns, messaging, and brand voice.",
-  connector: "You are the Connector, a customer relations agent focused on engagement, support, and relationship management.",
-  archivist: "You are the Archivist, a knowledge management agent that organizes information, maintains documentation, and ensures data accessibility.",
-  ledger: "You are the Ledger, a financial operations agent handling budgets, forecasting, and financial analysis.",
-  counselor: "You are the Counselor, a legal and compliance agent providing guidance on regulations, contracts, and risk management.",
-  sentinel: "You are the Sentinel, a security and data protection agent focused on cybersecurity, privacy, and threat detection.",
-  optimizer: "You are the Optimizer, a performance analytics agent that monitors metrics, identifies improvements, and drives efficiency."
-};
+const RAILWAY_API_URL = process.env.RAILWAY_API_URL || 'https://productpage-production.up.railway.app';
 
 export default async function handler(req, res) {
   // Enable CORS
@@ -52,44 +33,45 @@ export default async function handler(req, res) {
       });
     }
 
-    // Default to orchestrator if no agent specified
-    const selectedAgent = agentId || 'orchestrator';
-    const systemPrompt = AGENT_PROMPTS[selectedAgent] || AGENT_PROMPTS.orchestrator;
-
-    // Call Claude API
-    const response = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: message.trim()
-        }
-      ]
+    // Forward request to Railway backend
+    const railwayResponse = await fetch(`${RAILWAY_API_URL}/api/agents/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Forward authorization header if present
+        ...(req.headers.authorization && { 'Authorization': req.headers.authorization }),
+      },
+      body: JSON.stringify({
+        message: message.trim(),
+        agentId: agentId || 'orchestrator',
+        sessionId: sessionId || null,
+      }),
     });
 
-    // Extract response text
-    const responseText = response.content[0]?.text || 'No response generated';
+    // Check if Railway backend responded successfully
+    if (!railwayResponse.ok) {
+      const errorData = await railwayResponse.json().catch(() => ({
+        error: `Railway backend error: ${railwayResponse.status} ${railwayResponse.statusText}`
+      }));
+      
+      console.error('Railway backend error:', errorData);
+      
+      return res.status(railwayResponse.status).json({
+        success: false,
+        error: errorData.error || 'Backend service error',
+        message: errorData.message || 'Failed to process request'
+      });
+    }
 
-    return res.status(200).json({
-      success: true,
-      data: {
-        sessionId: sessionId || `session-${Date.now()}`,
-        agent: selectedAgent,
-        response: responseText,
-        metadata: {
-          model: 'claude-3-haiku-20240307',
-          tokens: response.usage?.total_tokens || 0
-        }
-      }
-    });
+    // Forward the successful response from Railway
+    const data = await railwayResponse.json();
+    return res.status(200).json(data);
 
   } catch (error) {
-    console.error('Chat API error:', error);
+    console.error('Proxy error:', error);
     return res.status(500).json({
       success: false,
-      error: 'An error occurred processing your request',
+      error: 'Proxy service error',
       message: error.message
     });
   }

@@ -3,8 +3,17 @@
   "buildCommand": "pnpm install && pnpm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "functions": {
+    "api-vercel/*.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
-
+    {
+      "source": "/api/:path*",
+      "destination": "https://productpage-production.up.railway.app/api/:path*"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
