@@ -8,6 +8,7 @@ import {
   signIn as supabaseSignIn,
   signUp as supabaseSignUp,
   signOut as supabaseSignOut,
+  signInWithOAuth as supabaseSignInWithOAuth,
   getCurrentUser,
   getSession,
   refreshSession,
@@ -205,6 +206,30 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function signInWithOAuth(provider) {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const { error: authError } = await supabaseSignInWithOAuth(provider);
+
+      if (authError) {
+        setError(authError);
+        return { error: authError };
+      }
+
+      // OAuth redirect will happen automatically
+      // User state will be updated via onAuthStateChange after redirect
+      return { error: null };
+    } catch (error) {
+      console.error('OAuth sign in error:', error);
+      setError(error.message);
+      return { error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const value = {
     user,
     profile,
@@ -214,6 +239,7 @@ export function AuthProvider({ children }) {
     signIn,
     signUp,
     signOut,
+    signInWithOAuth,
     isAuthenticated: !!user,
   };
 

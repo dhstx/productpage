@@ -97,6 +97,29 @@ export async function signIn(email, password, rememberMe = false) {
 }
 
 /**
+ * Sign in with OAuth provider (Google, GitHub, etc.)
+ * @param {string} provider - OAuth provider name ('google', 'github', etc.)
+ * @returns {Promise<{error}>}
+ */
+export async function signInWithOAuth(provider) {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) throw error;
+
+    return { error: null };
+  } catch (error) {
+    console.error(`OAuth sign in error (${provider}):`, error);
+    return { error: error.message };
+  }
+}
+
+/**
  * Sign out the current user
  * @returns {Promise<{error}>}
  */
