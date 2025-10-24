@@ -456,7 +456,7 @@ export function getAgentStats() {
 }
 
 // Orchestrator routing logic
-export function routeRequest(userMessage, context = {}) {
+export function routeRequest(userMessage, _context = {}) {
   // This is a simplified routing logic - in production, this would use
   // a more sophisticated intent classification model
   

@@ -537,7 +537,7 @@ curl -X POST https://dhstx.co/api/agents/chat \
   }'
 
 # Verify PT was deducted
-curl https://dhstx.co/api/usage/status?userId=<subscribed-user-id>
+curl https://dhstx.co/api/pt/usage?userId=<subscribed-user-id>
 ```
 
 ---

@@ -26,11 +26,13 @@ export default async function usageStatusHandler(req, res) {
     }
 
     // Fetch aggregated PT status (materialized view in schema)
-    const { data: status } = await supabase
+    const { data: statusRows } = await supabase
       .from('user_pt_status')
       .select('*')
       .eq('id', userId)
-      .single();
+      .limit(1);
+
+    const status = statusRows?.[0] || null;
 
     // If user has no status yet, return defaults
     const ptStatus = status ? mapStatus(status) : getDefaultUsage().ptStatus;

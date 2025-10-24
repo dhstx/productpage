@@ -191,7 +191,7 @@ curl -X POST https://dhstx.co/api/agents/chat \
   }'
 
 # Test 4: Get usage status
-curl https://dhstx.co/api/usage/status?userId=<user_id>
+curl https://dhstx.co/api/pt/usage?userId=<user_id>
 ```
 
 ### Phase 3: Throttling Tests

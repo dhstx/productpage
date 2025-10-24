@@ -26,7 +26,7 @@
     "dhstx"
   ],
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=20",
     "pnpm": ">=8.0.0"
   },
   "private": false,

@@ -129,7 +129,7 @@ if [ -n "$TEST_USER_ID" ]; then
   echo ""
   echo "=== Test 5: Usage Status Endpoint ==="
   run_test "Get usage status" \
-    "curl -s $API_URL/api/usage/status?userId=$TEST_USER_ID | jq -e '.ptStatus'"
+    "curl -s $API_URL/api/pt/usage?userId=$TEST_USER_ID | jq -e '.ptStatus'"
 fi
 
 # Test 6: Health check
