@@ -8,13 +8,13 @@ import { downloadInvoicePDF, listInvoices } from './invoices.js';
 
 const router = express.Router();
 
-// Checkout routes (require authentication)
-router.post('/create-checkout-session', requireAuth, createCheckoutSession);
-router.post('/create-topup-session', requireAuth, createTopupSession);
-router.get('/checkout-session/:sessionId', requireAuth, getCheckoutSession);
+// Checkout routes (allow public; validation done server-side with userId lookups)
+router.post('/create-checkout-session', createCheckoutSession);
+router.post('/create-topup-session', createTopupSession);
+router.get('/checkout-session/:sessionId', getCheckoutSession);
 
 // Backward-compatibility alias: POST /api/stripe/checkout
-router.post('/checkout', requireAuth, createCheckoutSession);
+router.post('/checkout', createCheckoutSession);
 
 // Webhook route (no auth - verified by Stripe signature)
 router.post('/webhooks', express.raw({ type: 'application/json' }), handleWebhook);
