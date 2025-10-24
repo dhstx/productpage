@@ -109,7 +109,7 @@ export async function executeAgent(agentId, userMessage, context = {}) {
 /**
  * Execute agent using Anthropic Claude
  */
-async function executeWithClaude(agent, systemPrompt, messages, model, context) {
+async function executeWithClaude(agent, systemPrompt, messages, model, _context) {
   try {
     const response = await anthropic.messages.create({
       model: model,
@@ -136,7 +136,7 @@ async function executeWithClaude(agent, systemPrompt, messages, model, context) 
 /**
  * Execute agent using OpenAI GPT-4
  */
-async function executeWithOpenAI(agent, systemPrompt, messages, model, context) {
+async function executeWithOpenAI(agent, systemPrompt, messages, model, _context) {
   try {
     // Convert messages to OpenAI format
     const openaiMessages = [

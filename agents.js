@@ -456,7 +456,7 @@ export function getAgentStats() {
 }
 
 // Orchestrator routing logic
-export function routeRequest(userMessage, context = {}) {
+export function routeRequest(userMessage, _context = {}) {
   // Intelligent routing logic with prioritized keyword matching
   // More specific patterns are checked first to avoid false positives
   

@@ -17,9 +17,10 @@ export default function UsageMonitoringDashboard({ userId }) {
     
     async function fetchUsageData() {
       try {
-        const response = await fetch(`/api/usage/status?userId=${userId}`);
+        const response = await fetch(`/api/pt/usage?userId=${userId}`);
         const data = await response.json();
-        setUsageData(data);
+        const normalized = normalizeUsagePayload(data);
+        setUsageData(normalized);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -91,6 +92,36 @@ export default function UsageMonitoringDashboard({ userId }) {
       <UsageStatisticsPanel usageData={usageData} />
     </div>
   );
+}
+
+function normalizeUsagePayload(payload) {
+  if (!payload) {
+    return null;
+  }
+
+  if (payload.ptStatus) {
+    return payload;
+  }
+
+  const core = payload.core || {};
+  const advanced = payload.advanced || {};
+
+  return {
+    ptStatus: {
+      corePTAllocated: core.total ?? 0,
+      corePTUsed: core.used ?? 0,
+      advancedPTAllocated: advanced.total ?? 0,
+      advancedPTUsed: advanced.used ?? 0,
+      billingCycleEnd: payload.reset_date ?? null,
+      throttleActive: false
+    },
+    throttleStatus: payload.throttleStatus || null,
+    recentUsage: payload.recentUsage || [],
+    statistics: payload.statistics || null,
+    warnings: payload.warnings || [],
+    daysInCycle: payload.days_until_reset ?? 0,
+    daysInMonth: 30
+  };
 }
 
 /**
