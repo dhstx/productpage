@@ -13,6 +13,9 @@ router.post('/create-checkout-session', requireAuth, createCheckoutSession);
 router.post('/create-topup-session', requireAuth, createTopupSession);
 router.get('/checkout-session/:sessionId', requireAuth, getCheckoutSession);
 
+// Backward-compatibility alias: POST /api/stripe/checkout
+router.post('/checkout', requireAuth, createCheckoutSession);
+
 // Webhook route (no auth - verified by Stripe signature)
 router.post('/webhooks', express.raw({ type: 'application/json' }), handleWebhook);
 

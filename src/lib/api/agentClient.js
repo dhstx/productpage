@@ -1,7 +1,7 @@
 // API client for agent communication
 // Updated to connect to Railway backend with support for authenticated and anonymous users
 
-// Use relative URL for Vercel deployment (proxies to Railway via vercel.json rewrites)
+// Use direct chat path (server mounts /api/chat router)
 const API_BASE_URL = '';
 
 // Generate or retrieve anonymous session ID
@@ -30,7 +30,7 @@ export async function sendMessage(message, agentId = null, sessionId = null, use
     // Get or generate session ID for anonymous users
     const effectiveSessionId = sessionId || getAnonymousSessionId();
     
-    const response = await fetch(`${API_BASE_URL}/api/agents/chat`, {
+    const response = await fetch(`${API_BASE_URL}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export async function sendMessage(message, agentId = null, sessionId = null, use
 export async function getSessions(limit = 20) {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/agents/sessions?limit=${limit}`,
+      `${API_BASE_URL}/api/chat/sessions?limit=${limit}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export async function getSessions(limit = 20) {
 export async function getSession(sessionId) {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/agents/sessions/${sessionId}`,
+      `${API_BASE_URL}/api/chat/sessions/${sessionId}`,
       {
         headers: {
           'Content-Type': 'application/json',
