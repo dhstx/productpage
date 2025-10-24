@@ -16,9 +16,10 @@ export default function AIChatInterface() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
-  const [selectedAgent, setSelectedAgent] = useState('Orchestrator');
+  const [selectedAgent, setSelectedAgent] = useState('Commander');
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
+  const [phraseIndex, setPhraseIndex] = useState(0);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,6 +42,10 @@ export default function AIChatInterface() {
     icon: agent.icon
   }));
 
+  // Restrict UI to Commander, Connector, Conductor (UI only)
+  const allowedSet = new Set(['Commander', 'Connector', 'Conductor']);
+  const menuAgents = agents.filter(a => allowedSet.has(a.name));
+
   const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
   const handleAgentSelect = (name) => {
@@ -56,7 +61,21 @@ export default function AIChatInterface() {
     }
   };
 
-  const currentAgent = agents.find((agent) => agent.name === selectedAgent);
+  // Typewriter phrases for the three agents (UI only)
+  const typewriterPhrases = [
+    'Commander · strategic ops',
+    'Connector · data + integrations',
+    'Conductor · orchestration & oversight'
+  ];
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setPhraseIndex((i) => (i + 1) % typewriterPhrases.length);
+    }, 2400);
+    return () => clearInterval(id);
+  }, []);
+
+  const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
   const currentAgentColor = currentAgent ? currentAgent.color : '#FFC96C';
 
   const clearAnimationTimers = () => {
@@ -76,7 +95,7 @@ export default function AIChatInterface() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
+      setTypedText('HELLO. I AM YOUR');
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
@@ -84,7 +103,7 @@ export default function AIChatInterface() {
     }
 
     isAnimatingRef.current = true;
-    const fullText = `Hello. I am your ${activeAgentRef.current}`;
+    const fullText = 'HELLO. I AM YOUR';
     let currentIndex = 0;
 
     const typeNextChar = () => {
@@ -113,11 +132,19 @@ export default function AIChatInterface() {
       const matchedAgent = agents.find(
         a => slugifyAgent(a.name) === agentParam
       );
-      if (matchedAgent) {
+      if (matchedAgent && allowedSet.has(matchedAgent.name)) {
         setSelectedAgent(matchedAgent.name);
         activeAgentRef.current = matchedAgent.name;
+        return;
       }
     }
+    // Fallback ensure selected is allowed
+    if (!allowedSet.has(selectedAgent)) {
+      const fallback = menuAgents[0]?.name || 'Commander';
+      setSelectedAgent(fallback);
+      activeAgentRef.current = fallback;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   useEffect(() => {
@@ -241,26 +268,44 @@ export default function AIChatInterface() {
       className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6"
     >
       <div className="mx-auto max-w-4xl">
-        {/* Hero Greeting */}
-        <div className="mb-8 text-center">
+        {/* Canonical Hero */}
+        <div className="mb-6 text-center">
+          <div className="mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
           <h1
             ref={titleRef}
-            className="h1 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]"
+            className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
             <span ref={helloPrefixRef} id="hero-typed">
               {typedText}
-            </span>
+            </span>{' '}
+            <span className="text-[#FFC96C] underline decoration-[#FFC96C] underline-offset-4">STRATEGIC ADVISOR</span>
             <span
-              className="ml-2 inline-block h-[1em] w-[2px] animate-blink"
+              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
               style={{
                 backgroundColor: currentAgentColor,
                 opacity: typingDone ? 0 : 1,
               }}
             />
           </h1>
-          <p className="text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
-            Select an AI agent and start your conversation
-          </p>
+          {/* Rotating agent phrases */}
+          <div className="text-sm text-[#B3B3B3] h-5 relative">
+            {typewriterPhrases.map((phrase, idx) => {
+              const [agentLabel, rest] = phrase.split(' · ');
+              const active = idx === phraseIndex;
+              return (
+                <div
+                  key={phrase}
+                  className={`transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 absolute left-0 right-0'}`}
+                >
+                  <span className={selectedAgent === agentLabel ? 'font-semibold text-[#FFC96C]' : 'font-semibold text-[#F2F2F2]'}>
+                    {agentLabel}
+                  </span>
+                  <span className="mx-2 text-[#666]">·</span>
+                  <span>{rest}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Conversation Controls */}
@@ -292,64 +337,46 @@ export default function AIChatInterface() {
           </div>
         )}
 
-        {/* Agent Selector */}
-        <div className="mb-6">
-          <div className="relative">
+        {/* Agent Selector (centered pill) */}
+        <div className="mb-6 flex justify-center">
+          <div className="relative w-full sm:w-auto">
             <button
               onClick={() => setShowAgentMenu(!showAgentMenu)}
-              className="panel-system flex w-full items-center justify-between p-4 transition-all duration-300 hover:bg-[#202020]"
-              style={{ borderColor: `${currentAgentColor}40` }}
+              className="flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
+              style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
+              aria-haspopup="listbox"
+              aria-expanded={showAgentMenu}
             >
-              <div className="flex items-center gap-3">
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-full"
+              <span className="inline-flex items-center gap-2">
+                <span
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-full"
                   style={{ backgroundColor: `${currentAgentColor}20` }}
                 >
-                  <span style={{ color: currentAgentColor }}>
-                    {currentAgent?.icon || '🤖'}
-                  </span>
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-semibold text-[#F2F2F2]">
-                    {selectedAgent}
-                  </div>
-                  <div className="text-xs text-[#B3B3B3]">
-                    {agents.find(a => a.name === selectedAgent)?.domain || 'AI Agent'}
-                  </div>
-                </div>
-              </div>
-              <ChevronDown
-                className={`h-5 w-5 text-[#B3B3B3] transition-transform ${
-                  showAgentMenu ? 'rotate-180' : ''
-                }`}
-              />
+                  <span style={{ color: currentAgentColor }}>{currentAgent?.icon || '🤖'}</span>
+                </span>
+                <span>Select Agent</span>
+              </span>
+              <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Agent Menu */}
             {showAgentMenu && (
-              <div className="absolute z-10 mt-2 w-full panel-system max-h-96 overflow-y-auto">
-                {agents.map((agent) => (
+              <div role="listbox" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
+                {menuAgents.map((agent) => (
                   <button
                     key={agent.name}
                     onClick={() => handleAgentSelect(agent.name)}
-                    className="flex w-full items-center gap-3 p-3 transition-colors hover:bg-[#202020]"
+                    className="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020]"
+                    role="option"
+                    aria-selected={selectedAgent === agent.name}
                   >
-                    <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full"
+                    <span
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full"
                       style={{ backgroundColor: `${agent.color}20` }}
                     >
-                      <span style={{ color: agent.color }}>
-                        {agent.icon || '🤖'}
-                      </span>
-                    </div>
-                    <div className="text-left flex-grow">
-                      <div className="text-sm font-semibold text-[#F2F2F2]">
-                        {agent.name}
-                      </div>
-                    </div>
-                    {selectedAgent === agent.name && (
-                      <span className="text-[#FFC96C]">✓</span>
-                    )}
+                      <span style={{ color: agent.color }}>{agent.icon || '🤖'}</span>
+                    </span>
+                    <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
+                    {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
                   </button>
                 ))}
               </div>
@@ -381,48 +408,52 @@ export default function AIChatInterface() {
           </div>
         )}
 
-        {/* Chat Input */}
+        {/* Chat Input - canonical search bar with toggles */}
         <form onSubmit={handleSubmit} className="relative">
-          <div className="panel-system overflow-hidden">
-            <textarea
-              ref={textareaRef}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder={`Ask ${selectedAgent} anything...`}
-              className="w-full resize-none bg-transparent px-4 py-4 text-[#F2F2F2] placeholder-[#666] focus:outline-none"
-              rows={3}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit(e);
-                }
-              }}
-            />
-            <div className="flex items-center justify-between border-t border-[#333] px-4 py-3">
-              <div className="text-xs text-[#666]">
-                Press Enter to send, Shift+Enter for new line
-              </div>
-              <button
-                type="submit"
-                disabled={!message.trim()}
-                className="flex h-8 w-8 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  backgroundColor: message.trim() ? currentAgentColor : '#333',
+          <div className="panel-system overflow-hidden p-2">
+            <ChatTools
+              activeMode={activeMode}
+              onToggleMode={setActiveMode}
+              onAttach={() => {}}
+              features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
+              uploadOnRight
+              rightAppend={(
+                <button
+                  type="submit"
+                  disabled={!message.trim()}
+                  className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: message.trim() ? currentAgentColor : '#333' }}
+                  aria-label="Send message"
+                >
+                  <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
+                </button>
+              )}
+            >
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Describe what you need help with..."
+                className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] placeholder-[#888] focus:outline-none"
+                rows={3}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
                 }}
-              >
-                <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
-              </button>
-            </div>
+              />
+            </ChatTools>
           </div>
         </form>
 
-        {/* Suggested Prompts */}
+        {/* Action Chips */}
         <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[
-            'Help me develop a strategic plan',
-            'Create a project timeline',
-            'Research market trends',
-            'Write code for my project',
+            'Analyze board engagement trends',
+            'Draft meeting agenda',
+            'Prioritize initiatives',
+            'Generate progress report',
           ].map((prompt) => (
             <button
               key={prompt}
@@ -434,10 +465,7 @@ export default function AIChatInterface() {
           ))}
         </div>
 
-        {/* Chat Tools */}
-        <div className="mt-8">
-          <ChatTools activeMode={activeMode} setActiveMode={setActiveMode} />
-        </div>
+        
       </div>
     </section>
   );
