@@ -2,6 +2,7 @@
 import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { createCheckoutSession, getCheckoutSession } from './checkout.js';
+import createTopupSession from './create-topup-session.js';
 import { handleWebhook } from './webhooks.js';
 import { downloadInvoicePDF, listInvoices } from './invoices.js';
 import createTopupSession from './create-topup-session.js';
