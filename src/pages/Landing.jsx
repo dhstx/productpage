@@ -17,12 +17,34 @@ export default function Landing() {
   }, []);
   // Reveal logic centralized in global script; remove page-level observers
 
+  // Measure header height and expose as CSS variable for safe spacing
+  useEffect(() => {
+    const setHeaderHeight = () => {
+      const el = document.getElementById('site-header');
+      if (el) {
+        document.documentElement.style.setProperty('--site-header-height', `${el.offsetHeight}px`);
+      }
+    };
+
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight);
+    window.addEventListener('orientationchange', setHeaderHeight);
+    const target = document.getElementById('site-header');
+    const mo = new MutationObserver(setHeaderHeight);
+    if (target) mo.observe(target, { childList: true, subtree: true, attributes: true });
+    return () => {
+      window.removeEventListener('resize', setHeaderHeight);
+      window.removeEventListener('orientationchange', setHeaderHeight);
+      mo.disconnect();
+    };
+  }, []);
+
   return (
     <PageTransition>
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
         {/* Header */}
-        <header className="relative z-50 border-b border-[#202020] bg-[#0C0C0C]">
+        <header id="site-header" className="fixed top-0 left-0 right-0 z-50 border-b border-[#202020] bg-[#0C0C0C]">
           {/* mobile-first container; removed duplicate CTAs per mobile optimization */}
           <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
             <div className="min-w-0 text-[clamp(1.125rem,4vw,1.5rem)] font-bold tracking-tight text-[#F2F2F2]">DHStx</div>
@@ -41,10 +63,7 @@ export default function Landing() {
         </header>
 
         {/* AI Chat Interface */}
-        {/* Ensure chat stays usable on mobile */}
-        <div style={{ marginTop: '-2in' }} className="hero">
-          <AIChatInterface />
-        </div>
+        <AIChatInterface />
 
         {/* SYNTEK AUTOMATIONS mark above Hero */}
         <section id="syntek-svg-section" className="syntek-image-container">

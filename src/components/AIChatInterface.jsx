@@ -302,7 +302,8 @@ export default function AIChatInterface() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6"
+      className="chat-hero relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6"
+      aria-label="Chat hero"
     >
       <div className="mx-auto max-w-4xl">
         {/* Canonical Hero */}

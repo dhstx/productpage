@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, CheckCircle, User } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import FeatureMatrix from '@/components/product/FeatureMatrix';
@@ -8,12 +9,32 @@ import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
 
 export default function Product() {
-
+  // Measure header height and expose as CSS variable
+  useEffect(() => {
+    const setHeaderHeight = () => {
+      const el = document.getElementById('site-header');
+      if (el) {
+        document.documentElement.style.setProperty('--site-header-height', `${el.offsetHeight}px`);
+      }
+    };
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight);
+    window.addEventListener('orientationchange', setHeaderHeight);
+    const target = document.getElementById('site-header');
+    const mo = new MutationObserver(setHeaderHeight);
+    if (target) mo.observe(target, { childList: true, subtree: true, attributes: true });
+    return () => {
+      window.removeEventListener('resize', setHeaderHeight);
+      window.removeEventListener('orientationchange', setHeaderHeight);
+      mo.disconnect();
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
       {/* Header */}
-      <header className="border-b border-[#202020] bg-[#0C0C0C]">
+      <header id="site-header" className="fixed top-0 left-0 right-0 z-50 border-b border-[#202020] bg-[#0C0C0C]">
         <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-4 md:px-8">
           <Link to="/" className="flex min-w-0 items-center gap-2 text-[#B3B3B3] transition-colors hover:text-[#FFC96C]">
             <ArrowLeft className="h-5 w-5 flex-shrink-0" />
@@ -35,7 +56,7 @@ export default function Product() {
       <main>
         {/* Platform Overview */}
         <FadeInSection>
-          <section className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 pb-12 pt-16 sm:pt-20 md:px-8 md:pt-32">
+          <section className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 pb-12 pt-16 sm:pt-20 md:px-8 md:pt-32 chat-hero" aria-label="Chat hero">
             <div className="mb-2 text-center">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">PLATFORM OVERVIEW</span>
             </div>

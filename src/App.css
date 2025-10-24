@@ -243,6 +243,24 @@
   /* removed fixed inch-based top padding; use responsive utilities in markup */
 }
 
+/* Header height CSS variable fallback for SSR/hydration */
+:root {
+  --site-header-height: 64px;
+}
+
+/* Chat hero spacing under fixed header (safe-area aware) */
+.chat-hero {
+  padding-top: calc(var(--site-header-height, 64px) + 1.5rem + env(safe-area-inset-top));
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 640px) {
+  .chat-hero {
+    padding-top: calc(var(--site-header-height, 64px) + 1rem + env(safe-area-inset-top));
+  }
+}
+
 @layer utilities {
   /* Global wrap utilities mirroring spec */
   .overflow-wrap-anywhere { overflow-wrap: anywhere; }
