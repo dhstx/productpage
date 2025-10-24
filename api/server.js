@@ -1,6 +1,7 @@
 /**
  * DHStx Backend API Server
  * Express.js server for handling authentication, subscriptions, and agent execution
+ * Last updated: 2025-10-23 23:32 UTC - Force redeploy for Stripe routes fix
  */
 
 import express from 'express';
