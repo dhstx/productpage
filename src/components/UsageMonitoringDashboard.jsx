@@ -331,7 +331,7 @@ export function PTCostEstimator({ message, model = 'auto', responseLength = 'med
     // Debounce estimation
     const timer = setTimeout(async () => {
       try {
-        const response = await fetch('/api/agents/chat', {
+        const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

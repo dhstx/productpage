@@ -14,6 +14,7 @@ import authRoutes from './auth/routes.js';
 import stripeRoutes from './stripe/routes.js';
 import agentRoutes from './agents/routes.js';
 import chatRoutes from './routes/chat.js';
+import usageRoutes from './usage/routes.js';
 import dashboardRoutes from './routes/dashboard.js';
 import billingRoutes from './routes/billing.js';
 import ptRoutes from './routes/pt.js';
@@ -75,6 +76,9 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Avoid noisy 404s for browsers requesting favicon
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
@@ -103,6 +107,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/agents', agentRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/usage', usageRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/pt', ptRoutes);

@@ -19,6 +19,8 @@ export default function Billing() {
   const [billingHistory, setBillingHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
+  const [showTopUpModal, setShowTopUpModal] = useState(false);
+  const [selectedTopUp, setSelectedTopUp] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -90,15 +92,20 @@ export default function Billing() {
     }
   }
 
-  async function handleTopUp(ptAmount, price) {
+  async function handleTopUpConfirm() {
+    if (!selectedTopUp) return;
+    const { ptAmount, price } = selectedTopUp;
     setActionLoading(`topup-${ptAmount}`);
     try {
       await createTopUpCheckout(price, ptAmount, user.id);
+      // Redirect happens inside helper
     } catch (error) {
       console.error('Top-up error:', error);
       alert(`Failed to purchase PT: ${error.message}`);
     } finally {
       setActionLoading(null);
+      setShowTopUpModal(false);
+      setSelectedTopUp(null);
     }
   }
 
@@ -337,7 +344,7 @@ export default function Billing() {
                   )}
                 </div>
                 <button
-                  onClick={() => handleTopUp(pkg.ptAmount, pkg.price)}
+                  onClick={() => { setSelectedTopUp(pkg); setShowTopUpModal(true); }}
                   disabled={actionLoading === `topup-${pkg.ptAmount}`}
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
@@ -347,6 +354,50 @@ export default function Billing() {
             ))}
           </div>
         </div>
+
+        {/* Top-Up Confirmation Modal */}
+        {showTopUpModal && selectedTopUp && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+            <div className="w-full max-w-md rounded-xl bg-white shadow-xl">
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Confirm Purchase</h3>
+                <button
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={() => { setShowTopUpModal(false); setSelectedTopUp(null); }}
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="px-6 py-5 space-y-3">
+                <div className="text-sm text-gray-700">You're about to purchase:</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-gray-900 font-medium">{selectedTopUp.ptAmount} Platform Tokens</div>
+                  <div className="text-2xl font-bold text-gray-900">${'{'}selectedTopUp.price{'}'}</div>
+                </div>
+                <div className="text-xs text-gray-500">Rate: ${'{'}selectedTopUp.pricePerPT.toFixed(3){'}'} per PT {selectedTopUp.discount > 0 ? `( ${selectedTopUp.discount}% off )` : ''}</div>
+                <div className="mt-3 rounded bg-blue-50 border border-blue-200 p-3 text-xs text-blue-800">
+                  After you confirm, you'll be redirected to Stripe Checkout to complete your secure payment.
+                </div>
+              </div>
+              <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+                <button
+                  className="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100"
+                  onClick={() => { setShowTopUpModal(false); setSelectedTopUp(null); }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleTopUpConfirm}
+                  disabled={actionLoading === `topup-${selectedTopUp.ptAmount}`}
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {actionLoading === `topup-${selectedTopUp.ptAmount}` ? 'Processing…' : 'Proceed to Checkout'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Upgrade Options */}
         <div className="mb-8">
