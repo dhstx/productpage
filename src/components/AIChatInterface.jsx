@@ -37,9 +37,11 @@ export default function AIChatInterface() {
 
   // Get all agents from the enhanced agents library
   const agents = agentData.map(agent => ({
+    id: agent.id,
     name: agent.name,
     color: agent.color,
-    icon: agent.icon
+    icon: agent.icon,
+    domain: agent.domain
   }));
 
   // Restrict UI to Commander, Connector, Conductor (UI only)
@@ -190,9 +192,10 @@ export default function AIChatInterface() {
 
     try {
       // Send message to API
+      const selectedAgentId = agents.find(a => a.name === selectedAgent)?.id || 'commander';
       const response = await sendMessageAPI(
         userMessage,
-        selectedAgent,
+        selectedAgentId,
         currentSessionId
       );
 

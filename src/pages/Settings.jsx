@@ -15,6 +15,7 @@ import {
   Save,
   Eye,
   EyeOff,
+  CreditCard
 } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
 import { useAuth } from '../contexts/AuthContext';
@@ -23,6 +24,7 @@ import supabaseAuth from '../lib/auth/supabaseAuth';
 const SECTION_CONFIG = [
   { id: 'profile', label: 'Profile', icon: User },
   { id: 'security', label: 'Security', icon: Lock },
+  { id: 'billing', label: 'Billing', icon: CreditCard },
   { id: 'notifications', label: 'Notifications', icon: Bell },
   { id: 'sessions', label: 'Active Sessions', icon: Shield },
   { id: 'data', label: 'Data & Privacy', icon: Download },
@@ -31,7 +33,7 @@ const SECTION_CONFIG = [
 export default function SettingsEnhanced() {
   const { user, profile, logout: authLogout } = useAuth();
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState('profile');
+  const [activeSection, setActiveSection] = useState('billing');
 
   const handleLogout = async () => {
     if (window.confirm('Are you sure you want to log out?')) {
@@ -43,6 +45,7 @@ export default function SettingsEnhanced() {
   const sections = {
     profile: <ProfileSection user={user} profile={profile} />,
     security: <SecuritySection user={user} />,
+    billing: <BillingSection />,
     notifications: <NotificationsSection user={user} />,
     sessions: <SessionsSection user={user} />,
     data: <DataPrivacySection user={user} />,
@@ -56,7 +59,7 @@ export default function SettingsEnhanced() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
-          <p className="text-gray-600">Manage your account preferences and security</p>
+          <p className="text-gray-600">Manage your account, billing, and security</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -98,6 +101,24 @@ export default function SettingsEnhanced() {
           </section>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Billing Section – link into the dedicated billing page for full management
+function BillingSection() {
+  return (
+    <div className="bg-white rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold text-gray-900 mb-4">Billing</h2>
+      <p className="text-gray-600 mb-4">
+        Manage your subscription, payment methods, invoices, and purchase additional Points.
+      </p>
+      <a
+        href="/billing"
+        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Go to Billing
+      </a>
     </div>
   );
 }

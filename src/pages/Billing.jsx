@@ -101,7 +101,7 @@ export default function Billing() {
       // Redirect happens inside helper
     } catch (error) {
       console.error('Top-up error:', error);
-      alert(`Failed to purchase PT: ${error.message}`);
+      alert(`Failed to purchase Points: ${error.message}`);
     } finally {
       setActionLoading(null);
       setShowTopUpModal(false);
@@ -146,15 +146,15 @@ export default function Billing() {
       price: 19,
       corePT: 300,
       advancedPT: 'Add-on only',
-      features: ['300 Core PT/month', '5 AI agents', 'Core models', 'Email support (48h)'],
+      features: ['300 Core Points/month', '5 AI agents', 'Core models', 'Email support (48h)'],
     },
     {
       id: 'pro',
       name: 'Pro',
       price: 49,
       corePT: 1000,
-      advancedPT: '50 PT metered',
-      features: ['1,000 Core PT/month', '50 Advanced PT', '25 AI agents', 'All models', 'API access', 'Email support (24h)'],
+      advancedPT: '50 Points metered',
+      features: ['1,000 Core Points/month', '50 Advanced Points', '25 AI agents', 'All models', 'API access', 'Email support (24h)'],
       popular: true,
     },
     {
@@ -162,16 +162,16 @@ export default function Billing() {
       name: 'Pro Plus',
       price: 79,
       corePT: 1600,
-      advancedPT: '100 PT metered',
-      features: ['1,600 Core PT/month', '100 Advanced PT', '50 AI agents', 'Priority access', 'Team workspaces (3)', 'Email + chat support (12h)'],
+      advancedPT: '100 Points metered',
+      features: ['1,600 Core Points/month', '100 Advanced Points', '50 AI agents', 'Priority access', 'Team workspaces (3)', 'Email + chat support (12h)'],
     },
     {
       id: 'business',
       name: 'Business',
       price: 159,
       corePT: 3500,
-      advancedPT: '200 PT pools',
-      features: ['3,500 Core PT/month', '200 Advanced PT', '100 AI agents', 'Dedicated capacity', 'Unlimited workspaces', 'Priority support (4h SLA)'],
+      advancedPT: '200 Points pools',
+      features: ['3,500 Core Points/month', '200 Advanced Points', '100 AI agents', 'Dedicated capacity', 'Unlimited workspaces', 'Priority support (4h SLA)'],
     },
   ];
 
@@ -198,11 +198,11 @@ export default function Billing() {
             Billing & Subscription
           </h1>
           <p className="text-gray-600">
-            Manage your subscription, PT usage, and payment methods
+            Manage your subscription, Points usage, and payment methods
           </p>
         </div>
 
-        {/* PT Health Bar */}
+        {/* Points Health Bar */}
         {ptData && (
           <div className="mb-8">
             <PTHealthBar
@@ -253,14 +253,14 @@ export default function Billing() {
               )}
             </div>
 
-            {/* PT Usage Stats */}
+            {/* Points Usage Stats */}
             {ptData && (
               <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">PT Usage This Month</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Points Usage This Month</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-600">Core PT</span>
+                      <span className="text-sm text-gray-600">Core Points</span>
                       <TrendingUp className="h-4 w-4 text-blue-600" />
                     </div>
                     <div className="text-2xl font-bold text-gray-900">
@@ -273,7 +273,7 @@ export default function Billing() {
 
                   <div className="bg-gray-50 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-gray-600">Advanced PT</span>
+                      <span className="text-sm text-gray-600">Advanced Points</span>
                       <Zap className="h-4 w-4 text-purple-600" />
                     </div>
                     <div className="text-2xl font-bold text-gray-900">
@@ -315,10 +315,10 @@ export default function Billing() {
           </div>
         )}
 
-        {/* PT Top-Up Packages */}
+        {/* Points Top-Up Packages */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Buy Additional PT</h2>
-          <p className="text-gray-600 mb-6">Need more PT this month? Purchase a one-time top-up with volume discounts.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Buy Additional Points</h2>
+          <p className="text-gray-600 mb-6">Need more Points this month? Purchase a one-time top-up with volume discounts.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {topUpPackages.map((pkg) => (
@@ -332,13 +332,13 @@ export default function Billing() {
                   </span>
                 )}
                 <div className="text-3xl font-bold text-gray-900 mb-2">
-                  {pkg.ptAmount} PT
+                  {pkg.ptAmount} Points
                 </div>
                 <div className="text-2xl font-bold text-gray-900 mb-1">
                   ${pkg.price}
                 </div>
                 <div className="text-sm text-gray-600 mb-4">
-                  ${pkg.pricePerPT.toFixed(3)} per PT
+                  ${pkg.pricePerPT.toFixed(3)} per Point
                   {pkg.discount > 0 && (
                     <span className="text-green-600 ml-1">({pkg.discount}% off)</span>
                   )}
@@ -372,10 +372,10 @@ export default function Billing() {
               <div className="px-6 py-5 space-y-3">
                 <div className="text-sm text-gray-700">You're about to purchase:</div>
                 <div className="flex items-center justify-between">
-                  <div className="text-gray-900 font-medium">{selectedTopUp.ptAmount} Platform Tokens</div>
-                  <div className="text-2xl font-bold text-gray-900">${'{'}selectedTopUp.price{'}'}</div>
+                  <div className="text-gray-900 font-medium">{selectedTopUp.ptAmount} Points</div>
+                  <div className="text-2xl font-bold text-gray-900">${selectedTopUp.price}</div>
                 </div>
-                <div className="text-xs text-gray-500">Rate: ${'{'}selectedTopUp.pricePerPT.toFixed(3){'}'} per PT {selectedTopUp.discount > 0 ? `( ${selectedTopUp.discount}% off )` : ''}</div>
+                <div className="text-xs text-gray-500">Rate: ${selectedTopUp.pricePerPT.toFixed(3)} per Point {selectedTopUp.discount > 0 ? `( ${selectedTopUp.discount}% off )` : ''}</div>
                 <div className="mt-3 rounded bg-blue-50 border border-blue-200 p-3 text-xs text-blue-800">
                   After you confirm, you'll be redirected to Stripe Checkout to complete your secure payment.
                 </div>
@@ -402,7 +402,7 @@ export default function Billing() {
         {/* Upgrade Options */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Upgrade Your Plan</h2>
-          <p className="text-gray-600 mb-6">Get more PT, agents, and features with a higher tier.</p>
+          <p className="text-gray-600 mb-6">Get more Points, agents, and features with a higher tier.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiers.map((tier) => {
@@ -423,10 +423,10 @@ export default function Billing() {
                   
                   <div className="mb-4">
                     <div className="text-sm font-medium text-gray-700 mb-1">
-                      {tier.corePT} Core PT
+                      {tier.corePT} Core Points
                     </div>
                     <div className="text-sm text-gray-600">
-                      {tier.advancedPT}
+                      {tier.advancedPT.replace('PT', 'Points')}
                     </div>
                   </div>
 

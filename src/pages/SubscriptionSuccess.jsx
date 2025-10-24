@@ -95,7 +95,7 @@ export default function SubscriptionSuccess() {
                   Explore your dashboard
                 </h3>
                 <p className="text-gray-600">
-                  Your PT allocation is ready. Start building with our AI agents right away.
+                  Your Points allocation is ready. Start building with our AI agents right away.
                 </p>
               </div>
             </div>

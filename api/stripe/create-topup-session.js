@@ -75,8 +75,8 @@ export default async function handler(req, res) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `${ptAmount} Platform Tokens`,
-              description: `One-time purchase of ${ptAmount} PT`,
+              name: `${ptAmount} Points`,
+              description: `One-time purchase of ${ptAmount} Points`,
             },
             unit_amount: Math.round(amount * 100), // Convert to cents
           },

@@ -1,6 +1,6 @@
 /**
- * PT Health Bar Component
- * Visual indicator of PT usage with color-coded warnings
+ * Points Health Bar Component
+ * Visual indicator of Points usage with color-coded warnings
  */
 
 import React from 'react';
@@ -40,8 +40,8 @@ export default function PTHealthBar({
     statusIcon = '🔴';
   }
   
-  // Format PT type label
-  const ptLabel = ptType === 'core' ? 'Core PT' : 'Advanced PT';
+  // Format label for display
+  const ptLabel = ptType === 'core' ? 'Core Points' : 'Advanced Points';
   
   return (
     <div className={`pt-health-bar ${className}`}>
@@ -56,7 +56,7 @@ export default function PTHealthBar({
           </span>
         </div>
         <div className="text-sm font-semibold text-gray-900">
-          {ptUsed.toLocaleString()} / {ptAllocated.toLocaleString()} PT
+          {ptUsed.toLocaleString()} / {ptAllocated.toLocaleString()} Points
         </div>
       </div>
       
@@ -79,7 +79,7 @@ export default function PTHealthBar({
       {/* Details */}
       <div className="flex items-center justify-between mt-2 text-xs text-gray-600">
         <span>
-          {ptRemaining.toLocaleString()} PT remaining
+          {ptRemaining.toLocaleString()} Points remaining
         </span>
         <span>
           {Math.round(usagePercentage)}% used
@@ -89,10 +89,10 @@ export default function PTHealthBar({
       {/* Projection message */}
       {showProjection && daysInCycle > 0 && (
         <div className="mt-2 text-xs text-gray-500 italic">
-          At current rate: ~{projectedUsage.toLocaleString()} PT by month end
+          At current rate: ~{projectedUsage.toLocaleString()} Points by month end
           {projectedUsage > ptAllocated && (
             <span className="text-red-600 font-medium ml-1">
-              (⚠️ {(projectedUsage - ptAllocated).toLocaleString()} PT over limit)
+              (⚠️ {(projectedUsage - ptAllocated).toLocaleString()} Points over limit)
             </span>
           )}
         </div>
@@ -101,14 +101,14 @@ export default function PTHealthBar({
       {/* Warning messages */}
       {usagePercentage >= 85 && (
         <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
-          <strong>⚠️ Warning:</strong> You've used {Math.round(usagePercentage)}% of your PT. 
+          <strong>⚠️ Warning:</strong> You've used {Math.round(usagePercentage)}% of your Points. 
           Throttle activates at 100%. Consider upgrading or slowing usage.
         </div>
       )}
       
       {usagePercentage >= 50 && usagePercentage < 85 && (
         <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-700">
-          <strong>💡 Tip:</strong> You've used {Math.round(usagePercentage)}% of your PT. 
+          <strong>💡 Tip:</strong> You've used {Math.round(usagePercentage)}% of your Points. 
           Monitor your usage to avoid running out before month end.
         </div>
       )}
@@ -117,8 +117,8 @@ export default function PTHealthBar({
 }
 
 /**
- * Advanced PT Sub-Bar Component
- * Shows Advanced PT usage as percentage of total PT
+ * Advanced Points Sub-Bar Component
+ * Shows Advanced Points usage as percentage of total Points
  */
 export function AdvancedPTSubBar({ 
   advancedPTUsed, 
@@ -160,7 +160,7 @@ export function AdvancedPTSubBar({
           </span>
         </div>
         <div className={`text-xs font-semibold ${statusColor}`}>
-          {advancedPct}% of total PT
+          {advancedPct}% of total Points
         </div>
       </div>
       
@@ -254,7 +254,7 @@ export function PTStatusCard({
       </div>
       
       {/* Core PT Health Bar */}
-      <PTHealthBar
+          <PTHealthBar
         ptUsed={corePTUsed}
         ptAllocated={corePTAllocated}
         ptType="core"
@@ -264,7 +264,7 @@ export function PTStatusCard({
         className="mb-4"
       />
       
-      {/* Advanced PT Health Bar (if allocated) */}
+          {/* Advanced Points Health Bar (if allocated) */}
       {advancedPTAllocated > 0 && (
         <>
           <PTHealthBar
@@ -275,7 +275,7 @@ export function PTStatusCard({
             className="mb-4"
           />
           
-          {/* Advanced PT Sub-Bar */}
+          {/* Advanced Points Sub-Bar */}
           <AdvancedPTSubBar
             advancedPTUsed={advancedPTUsed}
             totalPTUsed={totalPTUsed}
@@ -305,7 +305,7 @@ export function PTStatusCard({
       {(corePTUsed / corePTAllocated) > 0.80 && (
         <div className="mt-4">
           <button className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
-            Upgrade for More PT →
+            Upgrade for More Points →
           </button>
         </div>
       )}
