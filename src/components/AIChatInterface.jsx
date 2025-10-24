@@ -30,7 +30,7 @@ export default function AIChatInterface() {
   const contentRef = useRef(null);
   const timeoutsRef = useRef([]);
   const isAnimatingRef = useRef(false);
-  const activeAgentRef = useRef('Orchestrator');
+  const activeAgentRef = useRef('Commander');
   const hasPlayedRef = useRef(false);
   const titleRef = useRef(null);
   const helloPrefixRef = useRef(null);
@@ -97,34 +97,55 @@ export default function AIChatInterface() {
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      setTypedText('HELLO. I AM YOUR');
+      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
       return;
     }
 
+    // Two-phase typewriter: "Hello." then " I am your {Agent}"
     isAnimatingRef.current = true;
-    const fullText = 'HELLO. I AM YOUR';
-    let currentIndex = 0;
+    setTypedText('');
 
-    const typeNextChar = () => {
-      if (currentIndex < fullText.length) {
-        setTypedText(fullText.substring(0, currentIndex + 1));
-        currentIndex++;
-        const timeoutId = setTimeout(typeNextChar, TYPEWRITER_CHAR_MS);
-        timeoutsRef.current.push(timeoutId);
-      } else {
-        const timeoutId = setTimeout(() => {
-          setTypingDone(true);
-          hasPlayedRef.current = true;
-          isAnimatingRef.current = false;
-        }, TYPEWRITER_PAUSE_MS);
-        timeoutsRef.current.push(timeoutId);
-      }
-    };
+    const greetingPart = 'Hello.';
+    const agentPart = ` I am your ${activeAgentRef.current}`;
+    const typingSpeed = TYPEWRITER_CHAR_MS;
+    const pauseDuration = TYPEWRITER_PAUSE_MS;
+    let delay = 0;
+    let output = '';
 
-    typeNextChar();
+    // Type "Hello."
+    greetingPart.split('').forEach((ch) => {
+      delay += typingSpeed;
+      const id = setTimeout(() => {
+        output += ch;
+        setTypedText(output);
+      }, delay);
+      timeoutsRef.current.push(id);
+    });
+
+    // Pause
+    delay += pauseDuration;
+
+    // Type " I am your {Agent}"
+    agentPart.split('').forEach((ch) => {
+      delay += typingSpeed;
+      const id = setTimeout(() => {
+        output += ch;
+        setTypedText(output);
+      }, delay);
+      timeoutsRef.current.push(id);
+    });
+
+    // Completion
+    const completionId = setTimeout(() => {
+      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
+      hasPlayedRef.current = true;
+      isAnimatingRef.current = false;
+      setTypingDone(true);
+    }, delay + typingSpeed);
+    timeoutsRef.current.push(completionId);
   };
 
   useEffect(() => {
@@ -170,6 +191,19 @@ export default function AIChatInterface() {
       }
     };
   }, []);
+
+  // Keep typed agent label in sync when user changes selection after animation
+  useEffect(() => {
+    activeAgentRef.current = selectedAgent;
+    if (hasPlayedRef.current) {
+      setTypedText(`Hello. I am your ${selectedAgent}`);
+    }
+  }, [selectedAgent]);
+
+  // Derive typed prefix vs. agent portion for colored styling
+  const prefixText = 'Hello. I am your ';
+  const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
+  const typedAgentText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -278,10 +312,15 @@ export default function AIChatInterface() {
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span ref={helloPrefixRef} id="hero-typed">
-              {typedText}
-            </span>{' '}
-            <span className="text-[#FFC96C] underline decoration-[#FFC96C] underline-offset-4">STRATEGIC ADVISOR</span>
+            <span ref={helloPrefixRef} id="hero-typed" className="inline-flex items-baseline gap-1">
+              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
+              <span
+                className="underline underline-offset-4"
+                style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}
+              >
+                {typedAgentText}
+              </span>
+            </span>
             <span
               className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
               style={{
@@ -300,9 +339,7 @@ export default function AIChatInterface() {
                   key={phrase}
                   className={`transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 absolute left-0 right-0'}`}
                 >
-                  <span className={selectedAgent === agentLabel ? 'font-semibold text-[#FFC96C]' : 'font-semibold text-[#F2F2F2]'}>
-                    {agentLabel}
-                  </span>
+                  <span className={'font-semibold'} style={{ color: selectedAgent === agentLabel ? currentAgentColor : '#F2F2F2' }}>{agentLabel}</span>
                   <span className="mx-2 text-[#666]">·</span>
                   <span>{rest}</span>
                 </div>
