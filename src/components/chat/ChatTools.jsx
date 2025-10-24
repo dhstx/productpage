@@ -27,7 +27,8 @@ export default function ChatTools({
   onUpload,
   disabled = false,
   features = { mic: true, upload: true, modes: ['chat', 'agi'] },
-  rightAppend
+  rightAppend,
+  uploadOnRight = false
 }) {
   const availableModes = Array.isArray(features?.modes) && features.modes.length > 0
     ? features.modes
@@ -38,8 +39,8 @@ export default function ChatTools({
 
   return (
     <div className="flex flex-wrap items-start gap-3 sm:flex-nowrap">
-      {/* Attachment Button */}
-      {showUpload && (
+      {/* Attachment Button (left) */}
+      {showUpload && !uploadOnRight && (
         <button
           type="button"
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A] disabled:opacity-50 disabled:cursor-not-allowed"
@@ -61,6 +62,21 @@ export default function ChatTools({
 
       {/* Right controls */}
       <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:flex-nowrap">
+        {/* Move upload button to right if requested */}
+        {showUpload && uploadOnRight && (
+          <button
+            type="button"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#202020] transition-colors hover:bg-[#2A2A2A] disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => {
+              if (disabled) return;
+              onAttach?.();
+            }}
+            aria-label="Attach file"
+            disabled={disabled}
+          >
+            <Paperclip className="w-5 h-5 text-[#B3B3B3]" />
+          </button>
+        )}
         {availableModes.includes('chat') && (
           <button
             type="button"
