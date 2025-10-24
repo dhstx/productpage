@@ -5,7 +5,6 @@ import { createCheckoutSession, getCheckoutSession } from './checkout.js';
 import createTopupSession from './create-topup-session.js';
 import { handleWebhook } from './webhooks.js';
 import { downloadInvoicePDF, listInvoices } from './invoices.js';
-import createTopupSession from './create-topup-session.js';
 
 const router = express.Router();
 
