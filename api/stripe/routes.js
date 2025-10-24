@@ -4,11 +4,13 @@ import { requireAuth } from '../middleware/auth.js';
 import { createCheckoutSession, getCheckoutSession } from './checkout.js';
 import { handleWebhook } from './webhooks.js';
 import { downloadInvoicePDF, listInvoices } from './invoices.js';
+import createTopupSession from './create-topup-session.js';
 
 const router = express.Router();
 
 // Checkout routes (require authentication)
 router.post('/create-checkout-session', requireAuth, createCheckoutSession);
+router.post('/create-topup-session', requireAuth, createTopupSession);
 router.get('/checkout-session/:sessionId', requireAuth, getCheckoutSession);
 
 // Webhook route (no auth - verified by Stripe signature)
