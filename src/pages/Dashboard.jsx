@@ -20,7 +20,7 @@ export default function Dashboard() {
 
   async function fetchDashboardData() {
     try {
-      // Fetch PT usage
+      // Fetch Points usage
       const ptResponse = await fetch('/api/pt/usage', {
         headers: {
           'Authorization': `Bearer ${user.access_token}`,
@@ -29,7 +29,7 @@ export default function Dashboard() {
       });
 
       if (ptResponse.ok) {
-        const ptDataResult = await response.json();
+        const ptDataResult = await ptResponse.json();
         setPtData(ptDataResult);
       }
 
@@ -67,7 +67,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          {/* PT Health Bar */}
+          {/* Points Health Bar */}
           {!loading && ptData && (
             <div className="mb-8">
               <PTHealthBar
@@ -157,7 +157,7 @@ export default function Dashboard() {
               <CreditCard className="h-8 w-8 mb-3 text-gray-700" />
               <h3 className="text-xl font-bold mb-2 text-gray-900">Manage Billing</h3>
               <p className="text-gray-600">
-                View usage, upgrade plan, or add PT
+                View usage, upgrade plan, or add Points
               </p>
             </Link>
 

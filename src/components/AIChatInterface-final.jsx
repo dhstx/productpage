@@ -135,7 +135,7 @@ const AIChatInterface = ({ agents }) => {
     setInputMessage('');
 
     try {
-      const response = await fetch('/api/agents/chat-v3', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,8 +144,8 @@ const AIChatInterface = ({ agents }) => {
         body: JSON.stringify({
           message: inputMessage,
           agent: selectedAgent.id,
-          conversation_id: messages[0]?.conversation_id,
-          user_id: user?.id
+          sessionId: messages[0]?.conversation_id,
+          userId: user?.id
         })
       });
 
@@ -188,8 +188,8 @@ const AIChatInterface = ({ agents }) => {
         content: data.response,
         timestamp: new Date().toISOString(),
         conversation_id: data.conversation_id,
-        pt_consumed: data.pt_consumed,
-        model_used: data.model_used
+        pt_consumed: data?.usage?.ptConsumed || data.pt_consumed,
+        model_used: data.model || data.model_used
       };
 
       setMessages(prev => [...prev, assistantMessage]);

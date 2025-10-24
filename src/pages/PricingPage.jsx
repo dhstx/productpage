@@ -43,7 +43,7 @@ export default function PricingPage() {
       corePT: 100,
       advancedPT: 0,
       features: [
-        '100 Core PT/month',
+        '100 Core Points/month',
         '1 AI agent',
         'Core models only',
         'Session memory only',
@@ -68,7 +68,7 @@ export default function PricingPage() {
       corePT: 300,
       advancedPT: 'Add-on only',
       features: [
-        '300 Core PT/month',
+        '300 Core Points/month',
         '5 AI agents',
         'Core models included',
         'Advanced models (paid add-on)',
@@ -91,10 +91,10 @@ export default function PricingPage() {
       price: { monthly: 49, annual: 490 },
       description: 'For professionals and freelancers',
       corePT: 1000,
-      advancedPT: '50 PT metered',
+      advancedPT: '50 Points metered',
       features: [
-        '1,000 Core PT/month',
-        '50 Advanced PT (metered)',
+        '1,000 Core Points/month',
+        '50 Advanced Points (metered)',
         '25 AI agents',
         'All models available',
         '90-day project memory',
@@ -116,10 +116,10 @@ export default function PricingPage() {
       price: { monthly: 79, annual: 790 },
       description: 'For power users and small teams',
       corePT: 1600,
-      advancedPT: '100 PT metered',
+      advancedPT: '100 Points metered',
       features: [
-        '1,600 Core PT/month',
-        '100 Advanced PT (metered)',
+        '1,600 Core Points/month',
+        '100 Advanced Points (metered)',
         '50 AI agents',
         'All models + priority access',
         '180-day project memory',
@@ -142,10 +142,10 @@ export default function PricingPage() {
       price: { monthly: 159, annual: 1590 },
       description: 'For teams and growing businesses',
       corePT: 3500,
-      advancedPT: '200 PT seat pools',
+      advancedPT: '200 Points seat pools',
       features: [
-        '3,500 Core PT/month',
-        '200 Advanced PT (seat pools)',
+        '3,500 Core Points/month',
+        '200 Advanced Points (seat pools)',
         '100 AI agents',
         'All models + dedicated capacity',
         'Unlimited project memory',
@@ -244,15 +244,15 @@ export default function PricingPage() {
                 )}
               </div>
 
-              <div className="mb-6">
-                <div className="text-sm font-semibold text-gray-700 mb-2">PT Allocation:</div>
+          <div className="mb-6">
+            <div className="text-sm font-semibold text-gray-700 mb-2">Points Allocation:</div>
                 <div className="text-sm text-gray-600">
                   <div className="flex items-center justify-between mb-1">
-                    <span>Core PT:</span>
+                <span>Core Points:</span>
                     <span className="font-medium">{tier.corePT.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Advanced PT:</span>
+                <span>Advanced Points:</span>
                     <span className="font-medium">{tier.advancedPT}</span>
                   </div>
                 </div>
@@ -299,7 +299,7 @@ export default function PricingPage() {
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white mb-16">
           <h2 className="text-3xl font-bold mb-4">Need more? Go Enterprise</h2>
           <p className="text-xl mb-6 opacity-90">
-            Custom PT allocations, dedicated support, SLAs, white-label options, and more.
+            Custom Points allocations, dedicated support, SLAs, white-label options, and more.
           </p>
           <Link
             to="/contact"
