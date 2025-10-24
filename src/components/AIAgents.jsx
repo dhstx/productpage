@@ -163,8 +163,12 @@ export default function AIAgents() {
     },
   ];
 
+  // UI-only filter: render a focused subset without mutating source data
+  const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
+  const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
+
   return (
-    <section className="relative w-full max-w-screen overflow-x-hidden px-4 py-16 sm:px-6">
+    <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
       <FadeInSection>
         <div className="mb-12 text-center">
           <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
@@ -176,10 +180,17 @@ export default function AIAgents() {
         </div>
       </FadeInSection>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {agents.map((agent, index) => (
+      <div
+        className="mt-8 grid gap-6 justify-center"
+        style={{
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          maxWidth: '980px',
+          margin: '2.5rem auto 0',
+        }}
+      >
+        {visibleAgents.map((agent, index) => (
           <FadeInSection key={agent.name} delay={0.05 * (index + 1)}>
-            <div className="panel-system group flex h-full min-w-0 flex-col gap-4 p-6 transition-all duration-300 hover:bg-[#202020]">
+            <div className="panel-system group flex h-full min-w-0 flex-col gap-4 p-6 transition-all duration-300 hover:bg-[#202020] min-h-[260px]">
               {/* Icon */}
               <div 
                 className="transition-transform duration-300 group-hover:scale-110"
