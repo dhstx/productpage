@@ -59,44 +59,38 @@ export default function AuthCallback() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-600">Verifying your email...</p>
-        </div>
+      <div className="screen-center" role="status" aria-live="polite">
+        <svg className="spinner-gold" viewBox="0 0 50 50" aria-hidden="true">
+          <circle cx="25" cy="25" r="20" />
+        </svg>
+        <span className="sr-only">Logging in…</span>
       </div>
     );
   }
 
   if (status === 'error') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--bg)' }}>
+        <div className="card-surface p-8 text-center" role="alertdialog" aria-labelledby="auth-error-title">
           <div className="mb-4">
             <svg
-              className="mx-auto h-16 w-16 text-red-500"
+              className="mx-auto h-16 w-16"
+              style={{ color: '#ef4444' }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 id="auth-error-title" className="text-2xl font-bold mb-2" style={{ color: 'var(--text)' }}>
             Verification Failed
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="mb-6" style={{ color: 'var(--muted)' }}>
             {error || 'Unable to verify your email. The link may have expired.'}
           </p>
-          <button
-            onClick={() => navigate('/login')}
-            className="inline-block bg-blue-600 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-          >
+          <button onClick={() => navigate('/login')} className="btn-gold py-2 px-6 rounded-lg font-medium">
             Go to sign in
           </button>
         </div>
@@ -105,33 +99,11 @@ export default function AuthCallback() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-        <div className="mb-4">
-          <svg
-            className="mx-auto h-16 w-16 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Email Verified!
-        </h2>
-        <p className="text-gray-600 mb-4">
-          Your email has been successfully verified.
-        </p>
-        <p className="text-sm text-gray-500">
-          Redirecting to dashboard...
-        </p>
-      </div>
+    <div className="screen-center" role="status" aria-live="polite">
+      <svg className="spinner-gold" viewBox="0 0 50 50" aria-hidden="true">
+        <circle cx="25" cy="25" r="20" />
+      </svg>
+      <span className="sr-only">Logging in…</span>
     </div>
   );
 }

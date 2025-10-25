@@ -56,3 +56,57 @@ html:not([data-theme="light"]) body {
   color: #111;
 }
 .btn-gold:hover { filter: brightness(0.96); }
+
+/* Input styling aligned to theme tokens */
+.input-themed {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: color-mix(in oklab, var(--card-bg) 85%, #000 15%);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+.input-themed::placeholder { color: color-mix(in oklab, var(--muted) 80%, #fff 20%); }
+.input-themed:focus {
+  outline: 2px solid color-mix(in oklab, var(--accent-gold) 55%, #fff 45%);
+  outline-offset: 2px;
+  border-color: var(--accent-gold);
+}
+
+.label-muted { color: color-mix(in oklab, var(--muted) 95%, #fff 5%); font-size: 0.875rem; }
+
+.checkbox-themed {
+  width: 1rem; height: 1rem; border-radius: 4px;
+  border: 1px solid var(--card-border);
+  background: var(--panel-bg);
+  accent-color: var(--accent-gold);
+}
+
+.link-accent { color: var(--accent-gold); }
+.link-accent:hover { filter: brightness(1.1); }
+
+/* Full-screen, theme-aware gold spinner */
+.screen-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.spinner-gold { width: 56px; height: 56px; }
+.spinner-gold circle {
+  stroke: var(--accent-gold);
+  stroke-width: 6;
+  stroke-linecap: round;
+  fill: none;
+  transform-origin: 50% 50%;
+  animation: spin-rotate 900ms linear infinite;
+}
+
+@keyframes spin-rotate { to { transform: rotate(360deg); } }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spinner-gold circle { animation: none; }
+}
