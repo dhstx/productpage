@@ -89,7 +89,7 @@ export default function AgentManagement() {
           )}
 
           {/* Chat Interface */}
-          <div className="bg-[#0F0F0F] rounded-lg border border-[#1A1A1A] p-6">
+          <div className="card-surface p-6">
             <AIChatInterface onPTUpdate={fetchPTUsage} />
           </div>
         </div>
