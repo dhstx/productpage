@@ -72,6 +72,11 @@ export default function AIChatInterface() {
   ];
 
   useEffect(() => {
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // no rotation under reduced motion
     const id = setInterval(() => {
       setPhraseIndex((i) => (i + 1) % typewriterPhrases.length);
     }, 2400);
@@ -201,22 +206,15 @@ export default function AIChatInterface() {
     }
   }, [selectedAgent]);
 
-  // A) Robust +25% font-size increase for hero heading and subheading
+  // B) Reduce typewriter subheading font-size by 20% multiplicatively
   useEffect(() => {
     const root = sectionRef.current || document.querySelector('.chat-hero');
     if (!root) return;
-    const elH1 = root.querySelector('h1');
-    const elH2 = root.querySelector('.subhead');
-    if (elH1) {
-      const fs = parseFloat(getComputedStyle(elH1).fontSize || '0');
+    const elSub = root.querySelector('.subhead');
+    if (elSub) {
+      const fs = parseFloat(getComputedStyle(elSub).fontSize || '0');
       if (!Number.isNaN(fs) && fs > 0) {
-        elH1.style.fontSize = `${Math.round(fs * 1.25)}px`;
-      }
-    }
-    if (elH2) {
-      const fs2 = parseFloat(getComputedStyle(elH2).fontSize || '0');
-      if (!Number.isNaN(fs2) && fs2 > 0) {
-        elH2.style.fontSize = `${Math.round(fs2 * 1.25)}px`;
+        elSub.style.fontSize = `${Math.round(fs * 0.8)}px`;
       }
     }
   }, []);
@@ -380,7 +378,7 @@ export default function AIChatInterface() {
         </div>
 
         {/* Conversation Controls moved: history as attached pill near input */}
-        {currentSessionId && (
+        {typingDone && currentSessionId && (
           <div className="mb-6">
             <button
               onClick={startNewConversation}
@@ -392,7 +390,7 @@ export default function AIChatInterface() {
         )}
 
         {/* Conversation History Panel */}
-        {showHistory && (
+        {typingDone && showHistory && (
           <div className="mb-6">
             <ConversationHistory 
               onSelectSession={loadSession}
@@ -402,6 +400,7 @@ export default function AIChatInterface() {
         )}
 
         {/* Agent Selector (centered pill) */}
+        {typingDone && (
         <div className="mb-6 flex justify-center">
           <div className="relative w-full sm:w-auto">
             <button
@@ -460,9 +459,10 @@ export default function AIChatInterface() {
             )}
           </div>
         </div>
+        )}
 
         {/* Messages Display */}
-        {messages.length > 0 && (
+        {typingDone && messages.length > 0 && (
           <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
             {messages.map((msg) => (
               <MessageBubble key={msg.id} message={msg} />
@@ -486,6 +486,7 @@ export default function AIChatInterface() {
         )}
 
         {/* Chat Input - canonical search bar with toggles */}
+        {typingDone && (
         <form onSubmit={handleSubmit} className="relative">
           <button
             type="button"
@@ -531,9 +532,12 @@ export default function AIChatInterface() {
             </ChatTools>
           </div>
         </form>
+        )}
 
         {/* Dynamic Suggestions */}
-        <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} />
+        {typingDone && (
+          <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} />
+        )}
 
         
       </div>

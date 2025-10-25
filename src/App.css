@@ -297,6 +297,28 @@
 .agent-dot { vertical-align: middle; flex-shrink: 0; }
 .agent-label { vertical-align: middle; }
 
+/* History card legibility: visible on mobile, high-contrast on desktop */
+.history-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.88);
+  padding: 1.25rem;
+  border-radius: 8px;
+  min-height: 80px;
+  display: block;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
+}
+.history-card .panel-system {
+  background: transparent;
+  border-color: rgba(255,255,255,0.08);
+}
+.history-card :where(h3, p, span, li) {
+  color: rgba(255,255,255,0.88);
+}
+@media (max-width: 640px) {
+  .history-card { padding: 0.9rem; min-height: 64px; }
+}
+
 @layer utilities {
   /* Global wrap utilities mirroring spec */
   .overflow-wrap-anywhere { overflow-wrap: anywhere; }

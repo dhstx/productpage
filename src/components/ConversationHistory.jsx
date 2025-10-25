@@ -44,7 +44,7 @@ export default function ConversationHistory({ onSelectSession, currentSessionId 
 
   if (isLoading) {
     return (
-      <div className="panel-system p-4">
+      <div className="history-card p-4" role="status" aria-live="polite">
         <div className="flex items-center gap-3 text-[#B3B3B3]">
           <Clock className="h-5 w-5 animate-spin" />
           <span>Loading conversations...</span>
@@ -55,7 +55,7 @@ export default function ConversationHistory({ onSelectSession, currentSessionId 
 
   if (error) {
     return (
-      <div className="panel-system p-4 border-red-500/30 bg-red-500/10">
+      <div className="history-card p-4" role="alert">
         <div className="text-sm text-red-300">
           Error loading conversations: {error}
         </div>
@@ -65,16 +65,16 @@ export default function ConversationHistory({ onSelectSession, currentSessionId 
 
   if (sessions.length === 0) {
     return (
-      <div className="panel-system p-6 text-center">
-        <MessageSquare className="h-12 w-12 text-[#666] mx-auto mb-3" />
-        <p className="text-[#B3B3B3]">No conversation history yet</p>
-        <p className="text-sm text-[#666] mt-1">Start a chat to begin</p>
+      <div className="history-card p-6 text-center" aria-live="polite">
+        <MessageSquare className="h-12 w-12 mx-auto mb-3" style={{ color: 'rgba(255,255,255,0.6)' }} />
+        <p style={{ color: 'rgba(255,255,255,0.88)' }}>No conversation history yet</p>
+        <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.65)' }}>Start a chat to begin</p>
       </div>
     );
   }
 
   return (
-    <div className="panel-system">
+    <div className="history-card">
       <div className="p-4 border-b border-[#333]">
         <h3 className="text-lg font-semibold text-[#F2F2F2]">Conversation History</h3>
         <p className="text-sm text-[#B3B3B3] mt-1">{sessions.length} conversations</p>

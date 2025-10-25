@@ -16,7 +16,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: getAgentColor('Commander', '#FF6B6B'),
+      color: getAgentColor('Commander', '#A88CFF'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -28,7 +28,7 @@ export default function AIAgents() {
         'Timeline tracking',
         'Team orchestration',
       ],
-      color: getAgentColor('Conductor', '#4ECDC4'),
+      color: getAgentColor('Conductor', '#34D399'),
     },
     {
       icon: <Lightbulb className="w-12 h-12" />,
@@ -88,7 +88,7 @@ export default function AIAgents() {
         'Issue resolution',
         'Stakeholder engagement',
       ],
-      color: getAgentColor('Connector', '#FFFFD2'),
+      color: getAgentColor('Connector', '#F5B63F'),
     },
     {
       icon: <Archive className="w-12 h-12" />,
