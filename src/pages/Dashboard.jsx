@@ -5,6 +5,8 @@ import PTHealthBar from '../components/PTHealthBar';
 import UsageMonitoringDashboard from '../components/UsageMonitoringDashboard';
 import BackArrow from '../components/BackArrow';
 import { Zap, Users, TrendingUp, Settings, CreditCard } from 'lucide-react';
+import AgentRail from '../components/AgentRail';
+import AIChatInterface from '../components/AIChatInterface';
 
 export default function Dashboard() {
   const { user, profile } = useAuth();
@@ -52,170 +54,169 @@ export default function Dashboard() {
     }
   }
 
+  const [selectedAgent, setSelectedAgent] = useState('Commander');
+
   return (
     <>
       <BackArrow />
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="min-h-screen w-full max-w-screen overflow-x-hidden bg-[color:var(--bg)]">
+        <div className="mx-auto max-w-[1280px] px-4 md:px-8 py-8">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Welcome back, {profile?.full_name || user?.email?.split('@')[0] || 'User'}!
-            </h1>
-            <p className="text-gray-600">
-              Here's an overview of your account and usage
+          <div className="mb-6">
+            <h1 className="h2 text-[color:var(--text)] mb-1 uppercase tracking-tight">DASHBOARD</h1>
+            <p className="text-sm" style={{ color: 'var(--muted)' }}>
+              Monitor and configure your AI agents
             </p>
           </div>
 
-          {/* Points Health Bar */}
-          {!loading && ptData && (
-            <div className="mb-8">
-              <PTHealthBar
-                corePT={{
-                  used: ptData.core.used,
-                  total: ptData.core.total,
-                  percentage: ptData.core.percentage,
-                }}
-                advancedPT={{
-                  used: ptData.advanced.used,
-                  total: ptData.advanced.total,
-                  percentage: ptData.advanced.percentage,
-                }}
-                tier={ptData.tier}
-              />
-            </div>
-          )}
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg">
-                  <Zap className="h-6 w-6 text-blue-600" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                {loading ? '...' : stats?.totalAgents || 0}
-              </h3>
-              <p className="text-sm text-gray-600">Active Agents</p>
+          {/* Layout: left rail + main content */}
+          <div className="grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] gap-6">
+            {/* Left Agent Rail */}
+            <div>
+              <AgentRail selectedName={selectedAgent} onSelect={setSelectedAgent} />
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg">
-                  <TrendingUp className="h-6 w-6 text-green-600" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                {loading ? '...' : stats?.totalConversations || 0}
-              </h3>
-              <p className="text-sm text-gray-600">Conversations</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg">
-                  <Users className="h-6 w-6 text-purple-600" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                {loading ? '...' : stats?.teamMembers || 1}
-              </h3>
-              <p className="text-sm text-gray-600">Team Members</p>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg">
-                  <CreditCard className="h-6 w-6 text-orange-600" />
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                {ptData?.tier || '...'}
-              </h3>
-              <p className="text-sm text-gray-600">Current Plan</p>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Link
-              to="/agents"
-              className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow p-6 text-white hover:from-blue-700 hover:to-blue-800 transition-all"
-            >
-              <Zap className="h-8 w-8 mb-3" />
-              <h3 className="text-xl font-bold mb-2">Start Chatting</h3>
-              <p className="text-blue-100">
-                Chat with AI agents to get work done
-              </p>
-            </Link>
-
-            <Link
-              to="/billing"
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
-            >
-              <CreditCard className="h-8 w-8 mb-3 text-gray-700" />
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Manage Billing</h3>
-              <p className="text-gray-600">
-                View usage, upgrade plan, or add Points
-              </p>
-            </Link>
-
-            <Link
-              to="/settings"
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow"
-            >
-              <Settings className="h-8 w-8 mb-3 text-gray-700" />
-              <h3 className="text-xl font-bold mb-2 text-gray-900">Settings</h3>
-              <p className="text-gray-600">
-                Customize your account and preferences
-              </p>
-            </Link>
-          </div>
-
-          {/* Usage Monitoring */}
-          {user && (
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Usage Monitoring</h2>
-              <UsageMonitoringDashboard userId={user.id} />
-            </div>
-          )}
-
-          {/* Recent Activity */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h2>
-            {loading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse flex space-x-4">
-                    <div className="rounded-full bg-gray-200 h-10 w-10"></div>
-                    <div className="flex-1 space-y-2 py-1">
-                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    </div>
+            {/* Main column */}
+            <div className="space-y-6">
+              {/* KPI Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="card-surface p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Total Agents</span>
+                    <Zap className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
                   </div>
-                ))}
-              </div>
-            ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
-              <div className="space-y-4">
-                {stats.recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start space-x-4 pb-4 border-b border-gray-200 last:border-0">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Zap className="h-5 w-5 text-blue-600" />
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{activity.title}</p>
-                      <p className="text-sm text-gray-600">{activity.description}</p>
-                      <p className="text-xs text-gray-500 mt-1">{activity.timestamp}</p>
-                    </div>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                    {loading ? '…' : stats?.totalAgents || 0}
                   </div>
-                ))}
+                </div>
+                <div className="card-surface p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Conversations</span>
+                    <TrendingUp className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
+                  </div>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                    {loading ? '…' : stats?.totalConversations || 0}
+                  </div>
+                </div>
+                <div className="card-surface p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Team Members</span>
+                    <Users className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
+                  </div>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                    {loading ? '…' : stats?.teamMembers || 1}
+                  </div>
+                </div>
+                <div className="card-surface p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Current Plan</span>
+                    <CreditCard className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
+                  </div>
+                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                    {ptData?.tier || '…'}
+                  </div>
+                </div>
               </div>
-            ) : (
-              <p className="text-gray-600">No recent activity</p>
-            )}
+
+              {/* PT Health Bar */}
+              {!loading && ptData && (
+                <div className="card-surface p-4">
+                  <PTHealthBar
+                    corePT={{
+                      used: ptData.core.used,
+                      total: ptData.core.total,
+                      percentage: ptData.core.percentage,
+                    }}
+                    advancedPT={{
+                      used: ptData.advanced.used,
+                      total: ptData.advanced.total,
+                      percentage: ptData.advanced.percentage,
+                    }}
+                    tier={ptData.tier}
+                  />
+                </div>
+              )}
+
+              {/* Agent Chat Box */}
+              <section className="card-surface p-0">
+                <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--card-border)' }}>
+                  <h3 className="text-xs font-semibold uppercase tracking-tight" style={{ color: 'var(--text)' }}>
+                    AGENT CHAT BOX
+                  </h3>
+                </div>
+                <div className="p-4">
+                  <AIChatInterface initialAgent={selectedAgent} onAgentChange={setSelectedAgent} />
+                </div>
+              </section>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link to="/agents" className="card-surface p-5 hover:brightness-110 transition">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Zap className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
+                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Start Chatting</h3>
+                  </div>
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>Chat with AI agents to get work done</p>
+                </Link>
+                <Link to="/billing" className="card-surface p-5 hover:brightness-110 transition">
+                  <div className="flex items-center gap-3 mb-2">
+                    <CreditCard className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
+                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Manage Billing</h3>
+                  </div>
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>View usage, upgrade plan, or add Points</p>
+                </Link>
+                <Link to="/settings" className="card-surface p-5 hover:brightness-110 transition">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Settings className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
+                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Settings</h3>
+                  </div>
+                  <p className="text-sm" style={{ color: 'var(--muted)' }}>Customize your account and preferences</p>
+                </Link>
+              </div>
+
+              {/* Usage Monitoring & Recent Activity Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {user && (
+                  <div className="card-surface p-4">
+                    <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Usage Monitoring</h2>
+                    <UsageMonitoringDashboard userId={user.id} />
+                  </div>
+                )}
+                <div className="card-surface p-4">
+                  <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Recent Activity</h2>
+                  {loading ? (
+                    <div className="space-y-3">
+                      {[1,2,3].map((i) => (
+                        <div key={i} className="flex gap-3">
+                          <div className="h-8 w-8 rounded-full" style={{ background: 'var(--panel-bg)' }} />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 w-3/4 rounded" style={{ background: 'var(--panel-bg)' }} />
+                            <div className="h-3 w-1/2 rounded" style={{ background: 'var(--panel-bg)' }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : stats?.recentActivity?.length ? (
+                    <div className="space-y-3">
+                      {stats.recentActivity.map((activity, index) => (
+                        <div key={index} className="flex items-start gap-3 pb-3 border-b last:border-0" style={{ borderColor: 'var(--card-border)' }}>
+                          <div className="h-8 w-8 rounded-md flex items-center justify-center" style={{ background: 'var(--panel-bg)' }}>
+                            <Zap className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium" style={{ color: 'var(--text)' }}>{activity.title}</p>
+                            <p className="text-xs" style={{ color: 'var(--muted)' }}>{activity.description}</p>
+                            <p className="text-[10px] mt-1" style={{ color: 'var(--muted)' }}>{activity.timestamp}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm" style={{ color: 'var(--muted)' }}>No recent activity</p>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AuthCallback from './pages/AuthCallback';
 import Dashboard from './pages/Dashboard';
+import AdminLayout from './components/AdminLayout';
 import Platforms from './pages/Platforms';
 import Team from './pages/Team';
 import Billing from './pages/Billing';
@@ -80,7 +81,9 @@ function App() {
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <AdminLayout>
+                  <Dashboard />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -88,7 +91,9 @@ function App() {
             path="/platforms"
             element={
               <ProtectedRoute>
-                <Platforms />
+                <AdminLayout>
+                  <Platforms />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -96,7 +101,9 @@ function App() {
             path="/team"
             element={
               <ProtectedRoute>
-                <Team />
+                <AdminLayout>
+                  <Team />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -104,7 +111,9 @@ function App() {
             path="/billing"
             element={
               <ProtectedRoute>
-                <Billing />
+                <AdminLayout>
+                  <Billing />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -112,7 +121,9 @@ function App() {
             path="/settings"
             element={
               <ProtectedRoute>
-                <Settings />
+                <AdminLayout>
+                  <Settings />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -120,7 +131,9 @@ function App() {
             path="/agents"
             element={
               <ProtectedRoute>
-                <AgentManagement />
+                <AdminLayout>
+                  <AgentManagement />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -128,7 +141,9 @@ function App() {
             path="/integrations-management"
             element={
               <ProtectedRoute>
-                <IntegrationsManagement />
+                <AdminLayout>
+                  <IntegrationsManagement />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />

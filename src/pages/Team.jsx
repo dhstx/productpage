@@ -77,14 +77,14 @@ export default function Team() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" style={{ background: 'var(--bg)' }}>
       <BackArrow />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+          <h1 className="h2 mb-2 uppercase tracking-tight" style={{ color: 'var(--text)' }}>
             TEAM MANAGEMENT
           </h1>
-          <p className="text-[#B3B3B3]">
+          <p style={{ color: 'var(--muted)' }}>
             Manage team members and their access to your platforms.
           </p>
         </div>
@@ -110,39 +110,39 @@ export default function Team() {
 
       {/* Team Stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <div className="panel-system p-4">
+        <div className="card-surface p-4">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-[#FFC96C]" />
-            <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Total Members</span>
+            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Total Members</span>
           </div>
-          <div className="text-2xl font-bold text-[#F2F2F2]">4</div>
+          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>4</div>
         </div>
-        <div className="panel-system p-4">
+        <div className="card-surface p-4">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-[#FFC96C]" />
-            <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Admins</span>
+            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Admins</span>
           </div>
-          <div className="text-2xl font-bold text-[#F2F2F2]">2</div>
+          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>2</div>
         </div>
-        <div className="panel-system p-4">
+        <div className="card-surface p-4">
           <div className="flex items-center gap-3 mb-2">
             <Mail className="w-5 h-5 text-[#FFC96C]" />
-            <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Pending Invites</span>
+            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Pending Invites</span>
           </div>
-          <div className="text-2xl font-bold text-[#F2F2F2]">1</div>
+          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>1</div>
         </div>
-        <div className="panel-system p-4">
+        <div className="card-surface p-4">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-[#FFC96C]" />
-            <span className="text-[#B3B3B3] text-sm uppercase tracking-tight">Available Seats</span>
+            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Available Seats</span>
           </div>
-          <div className="text-2xl font-bold text-[#F2F2F2]">46</div>
+          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>46</div>
         </div>
       </div>
 
       {/* Team Members List */}
       <section>
-        <h2 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
+        <h2 className="text-xl font-bold mb-4 uppercase tracking-tight" style={{ color: 'var(--text)' }}>
           TEAM MEMBERS
         </h2>
         <TeamMembersResponsive

@@ -12,12 +12,12 @@ import { getAgentColor } from './ui/agentThemes';
 const TYPEWRITER_CHAR_MS = 61;
 const TYPEWRITER_PAUSE_MS = 1000;
 
-export default function AIChatInterface() {
+export default function AIChatInterface({ initialAgent = 'Commander', onAgentChange }) {
   const [typingDone, setTypingDone] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
-  const [selectedAgent, setSelectedAgent] = useState('Commander');
+  const [selectedAgent, setSelectedAgent] = useState(initialAgent);
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -55,6 +55,7 @@ export default function AIChatInterface() {
     setSelectedAgent(name);
     setShowAgentMenu(false);
     activeAgentRef.current = name;
+    try { onAgentChange?.(name); } catch {}
 
     // Update URL query param
     try {
@@ -519,8 +520,8 @@ export default function AIChatInterface() {
                 ref={textareaRef}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Describe what you need help with..."
-                className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] placeholder-[#888] focus:outline-none"
+                placeholder="Describe what you need help with…"
+                className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
                 rows={3}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {

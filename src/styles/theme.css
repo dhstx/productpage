@@ -1,0 +1,58 @@
+:root {
+  /* Old dark deployment palette */
+  --bg: #0f0f0f;
+  --panel-bg: #131313;
+  --card-bg: #151515;
+  --muted: #9b9b9b;
+  --text: #efefef;
+  --accent-gold: #e5aa5d;
+  --accent-muted: rgba(229,170,93,0.12);
+  --card-border: rgba(255,255,255,0.04);
+
+  /* Back-compat aliases used in the app */
+  --dhstx-black: var(--bg);
+  --dhstx-panel: var(--panel-bg);
+  --dhstx-border: #202020; /* subtle outline */
+  --dhstx-text: var(--text);
+  --dhstx-muted: var(--muted);
+  --dhstx-accent: var(--accent-gold);
+}
+
+[data-theme="light"] {
+  --bg: #F7F7F8;
+  --panel-bg: #FFFFFF;
+  --card-bg: #FFFFFF;
+  --muted: #3A3A3C;
+  --text: #141414;
+  --accent-gold: #E4B850;
+  --accent-muted: rgba(228,184,80,0.12);
+  --card-border: #D9D9DE;
+
+  --dhstx-black: var(--bg);
+  --dhstx-panel: var(--panel-bg);
+  --dhstx-border: var(--card-border);
+  --dhstx-text: var(--text);
+  --dhstx-muted: var(--muted);
+  --dhstx-accent: var(--accent-gold);
+}
+
+/* Base surfaces */
+html:not([data-theme="light"]) body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Reusable card surface */
+.card-surface {
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+
+/* Primary gold button */
+.btn-gold {
+  background: var(--accent-gold);
+  color: #111;
+}
+.btn-gold:hover { filter: brightness(0.96); }
