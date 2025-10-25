@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Bot, Brain, Lightbulb, Target, Wrench, Palette, Megaphone, Users, Archive, DollarSign, Scale, Shield, TrendingUp } from 'lucide-react';
+import { getAgentColor } from './ui/agentThemes';
 import FadeInSection from './FadeInSection';
 
 export default function AIAgents() {
@@ -15,7 +16,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: '#FF6B6B',
+      color: getAgentColor('Commander', '#FF6B6B'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -27,7 +28,7 @@ export default function AIAgents() {
         'Timeline tracking',
         'Team orchestration',
       ],
-      color: '#4ECDC4',
+      color: getAgentColor('Conductor', '#4ECDC4'),
     },
     {
       icon: <Lightbulb className="w-12 h-12" />,
@@ -87,7 +88,7 @@ export default function AIAgents() {
         'Issue resolution',
         'Stakeholder engagement',
       ],
-      color: '#FFFFD2',
+      color: getAgentColor('Connector', '#FFFFD2'),
     },
     {
       icon: <Archive className="w-12 h-12" />,

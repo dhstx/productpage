@@ -6,6 +6,7 @@ import { agents as agentData } from '../lib/agents-enhanced';
 import { sendMessage as sendMessageAPI, getSession } from '../lib/api/agentClient';
 import MessageBubble from './MessageBubble';
 import ConversationHistory from './ConversationHistory';
+import { getAgentColor } from './ui/agentThemes';
 
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
@@ -78,14 +79,7 @@ export default function AIChatInterface() {
   }, []);
 
   const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
-  const currentAgentColor = currentAgent ? currentAgent.color : '#FFC96C';
-  
-  // UI-only theme map for core agents (Commander/Conductor/Connector)
-  const agentThemes = useMemo(() => ({
-    Commander: { hex: agents.find(a => a.name === 'Commander')?.color || '#8b5cf6' },
-    Conductor: { hex: agents.find(a => a.name === 'Conductor')?.color || '#10b981' },
-    Connector: { hex: agents.find(a => a.name === 'Connector')?.color || '#06b6d4' },
-  }), [agents]);
+  const currentAgentColor = currentAgent ? getAgentColor(currentAgent.name, currentAgent.color) : '#FFC96C';
 
   const clearAnimationTimers = () => {
     timeoutsRef.current.forEach((timeoutId) => clearTimeout(timeoutId));
@@ -346,7 +340,7 @@ export default function AIChatInterface() {
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span ref={helloPrefixRef} id="hero-typed" className="inline-flex items-baseline gap-1">
+            <span ref={helloPrefixRef} id="hero-typed" className="inline-flex flex-wrap items-baseline gap-1">
               <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
               <span
                 className="underline underline-offset-4"
@@ -369,7 +363,7 @@ export default function AIChatInterface() {
               const [agentLabelRaw, infoRaw = ''] = phrase.split(' · ');
               const agentLabel = agentLabelRaw?.trim();
               const active = idx === phraseIndex;
-              const themeHex = agentThemes[agentLabel]?.hex || currentAgentColor;
+              const themeHex = getAgentColor(agentLabel, currentAgentColor);
               const fixedInfo = toTitleCase((infoRaw || '').replace(/\s*&\s*/g, ' + '));
               return (
                 <div
@@ -385,24 +379,17 @@ export default function AIChatInterface() {
           </div>
         </div>
 
-        {/* Conversation Controls */}
-        <div className="mb-6 flex gap-3">
-          <button
-            onClick={() => setShowHistory(!showHistory)}
-            className="panel-system px-4 py-2 text-sm font-medium text-[#F2F2F2] hover:bg-[#202020] transition-all"
-          >
-            {showHistory ? 'Hide History' : 'Show History'}
-          </button>
-          
-          {currentSessionId && (
+        {/* Conversation Controls moved: history as attached pill near input */}
+        {currentSessionId && (
+          <div className="mb-6">
             <button
               onClick={startNewConversation}
               className="panel-system px-4 py-2 text-sm font-medium text-[#FFC96C] hover:bg-[#202020] transition-all"
             >
               New Conversation
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Conversation History Panel */}
         {showHistory && (
@@ -461,7 +448,7 @@ export default function AIChatInterface() {
                         height: '14px',
                         borderRadius: '9999px',
                         marginLeft: '2px',
-                        backgroundColor: agent.color,
+                        backgroundColor: getAgentColor(agent.name, agent.color),
                         boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
                       }}
                     />
@@ -500,6 +487,14 @@ export default function AIChatInterface() {
 
         {/* Chat Input - canonical search bar with toggles */}
         <form onSubmit={handleSubmit} className="relative">
+          <button
+            type="button"
+            className="history-pill"
+            aria-pressed={showHistory}
+            onClick={() => setShowHistory(!showHistory)}
+          >
+            {showHistory ? 'Hide History' : 'Show History'}
+          </button>
           <div className="panel-system overflow-hidden p-2">
             <ChatTools
               activeMode={activeMode}
@@ -537,27 +532,61 @@ export default function AIChatInterface() {
           </div>
         </form>
 
-        {/* Action Chips */}
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {[
-            'Analyze board engagement trends',
-            'Draft meeting agenda',
-            'Prioritize initiatives',
-            'Generate progress report',
-          ].map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => setMessage(prompt)}
-              className="panel-system p-3 text-left text-sm text-[#B3B3B3] transition-all hover:bg-[#202020] hover:text-[#F2F2F2]"
-            >
-              <Sparkles className="mb-1 inline h-3 w-3" /> {prompt}
-            </button>
-          ))}
-        </div>
+        {/* Dynamic Suggestions */}
+        <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} />
 
         
       </div>
     </section>
+  );
+}
+
+// ---- Suggestions Row (UI-only) -----------------------------------------
+const defaultSuggestions = [
+  'Draft a meeting agenda',
+  'Summarize board engagement',
+  'Prioritize initiatives',
+  'Generate a progress report',
+];
+
+const suggestionBuckets = [
+  { keys: ['agenda','meeting','minutes'], suggestions: ['Draft a meeting agenda', 'Create talking points', 'Suggest attendees & times'] },
+  { keys: ['board','engagement','boardmember','board meeting'], suggestions: ['Summarize board engagement', 'Highlight low-engagement members', 'Trend analysis of engagement'] },
+  { keys: ['priorit','initiative','roadmap','backlog'], suggestions: ['Prioritize initiatives', 'Rank initiatives by impact/effort', 'Create 90-day roadmap'] },
+  { keys: ['progress','status','report','update'], suggestions: ['Generate progress report', 'Create executive summary', 'List outstanding blockers & owners'] }
+];
+
+function getSuggestions(input) {
+  if (!input || input.trim().length < 2) return defaultSuggestions;
+  const t = input.toLowerCase();
+  const matches = [];
+  suggestionBuckets.forEach(b => {
+    if (b.keys.some(k => t.includes(k))) matches.push(...b.suggestions);
+  });
+  const uniq = [...new Set(matches)];
+  if (uniq.length) return uniq.slice(0,4);
+  return [
+    `Draft a short brief about "${input}"`,
+    `Summarize "${input}"`,
+    `Make a to-do list from "${input}"`,
+    'Refine my request',
+  ];
+}
+
+function SuggestionsRow({ inputValue, onPick }) {
+  const items = getSuggestions(inputValue);
+  return (
+    <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {items.map((prompt) => (
+        <button
+          key={prompt}
+          onClick={() => onPick(prompt)}
+          className="panel-system p-3 text-left text-sm text-[#B3B3B3] transition-all hover:bg-[#202020] hover:text-[#F2F2F2]"
+        >
+          <Sparkles className="mb-1 inline h-3 w-3" /> {prompt}
+        </button>
+      ))}
+    </div>
   );
 }
 
