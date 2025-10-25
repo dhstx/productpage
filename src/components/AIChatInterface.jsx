@@ -431,7 +431,7 @@ export default function AIChatInterface() {
         {/* Chatbox wrapper: hidden until typewriter completes */}
         <div
           className={`chatbox-wrapper ${chatVisible ? 'visible' : ''}`}
-          aria-hidden={chatVisible ? 'false' : 'true'}
+          aria-hidden={!chatVisible}
         >
           {/* Conversation Controls */}
           <div className="mb-6 flex gap-3">
