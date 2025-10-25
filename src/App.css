@@ -786,3 +786,34 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   .reveal-up, .reveal-left, .reveal-right, .cb-reveal, .syntek-title, .fade-once { transition: none; opacity: 1; transform: none; }
 }
 
+/* Respect reduced motion for custom fades */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up, .fade-left { transition: none !important; transform: none !important; opacity: 1 !important; }
+}
+
+/* chatbox initial hidden + up-fade */
+.chatbox-wrapper {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+  pointer-events: none; /* prevent interaction while hidden */
+  visibility: hidden;   /* also prevent keyboard focus */
+}
+.chatbox-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+/* SYNTEK heading: slow left → right */
+.syntek-heading {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+.syntek-heading.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
