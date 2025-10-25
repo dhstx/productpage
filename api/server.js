@@ -9,6 +9,18 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
+// Ensure shared agents module is available in isolated API deploys
+try {
+  // Dynamic import allows graceful failure with helpful message
+  await import('./lib/agents-enhanced.js');
+} catch (err) {
+  console.error('\u274c Missing shared module: ./lib/agents-enhanced.js');
+  console.error('This file should be fetched during postinstall by ./scripts/fetch-shared.js');
+  console.error('Hint: Ensure npm install ran and network access to GitHub is available.');
+  console.error('Original error:', err?.message || err);
+  process.exit(1);
+}
+
 // Import routes
 import authRoutes from './auth/routes.js';
 import stripeRoutes from './stripe/routes.js';

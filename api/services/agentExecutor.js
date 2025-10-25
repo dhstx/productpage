@@ -3,7 +3,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import OpenAI from 'openai';
-import { getAgentById } from '../../src/lib/agents-enhanced.js';
+import { getAgentById } from '../lib/agents-enhanced.js';
 import AGENT_PROMPTS from './agentPrompts.js';
 
 // Initialize AI clients

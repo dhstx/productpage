@@ -1,7 +1,7 @@
 // Orchestrator Service
 // Central intelligence hub that routes requests to appropriate agents
 
-import { routeRequest } from '../../src/lib/agents-enhanced.js';
+import { routeRequest } from '../lib/agents-enhanced.js';
 import { executeAgent } from './agentExecutor.js';
 import { createClient } from '@supabase/supabase-js';
 
