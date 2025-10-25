@@ -10,7 +10,7 @@ import { getAgentColor } from './ui/agentThemes';
 
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
-const TYPEWRITER_PAUSE_MS = 1000;
+const TYPEWRITER_PAUSE_MS = 650; // shorter pause per new spec
 
 export default function AIChatInterface({ initialAgent = 'Commander', onAgentChange }) {
   const [typingDone, setTypingDone] = useState(false);
@@ -20,7 +20,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const [selectedAgent, setSelectedAgent] = useState(initialAgent);
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
-  const [phraseIndex, setPhraseIndex] = useState(0);
+  // removed rotating auxiliary label phrases per updated hero spec
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -65,24 +65,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
   };
 
-  // Typewriter phrases for the three agents (UI only)
-  const typewriterPhrases = [
-    'Commander · strategic ops',
-    'Connector · data + integrations',
-    'Conductor · orchestration & oversight'
-  ];
-
-  useEffect(() => {
-    const reduceMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return; // no rotation under reduced motion
-    const id = setInterval(() => {
-      setPhraseIndex((i) => (i + 1) % typewriterPhrases.length);
-    }, 2400);
-    return () => clearInterval(id);
-  }, []);
+  // (Removed) rotating agent phrases under hero to eliminate purple label
 
   const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
   const currentAgentColor = currentAgent ? getAgentColor(currentAgent.name, currentAgent.color) : '#FFC96C';
@@ -104,19 +87,19 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
+      setTypedText(`Welcome. ${activeAgentRef.current} online.`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
       return;
     }
 
-    // Two-phase typewriter: "Hello." then " I am your {Agent}"
+    // Two-phase typewriter: "Welcome." then " {Agent} online."
     isAnimatingRef.current = true;
     setTypedText('');
 
-    const greetingPart = 'Hello.';
-    const agentPart = ` I am your ${activeAgentRef.current}`;
+    const greetingPart = 'Welcome.';
+    const agentPart = ` ${activeAgentRef.current} online.`;
     const typingSpeed = TYPEWRITER_CHAR_MS;
     const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
@@ -135,7 +118,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     // Pause
     delay += pauseDuration;
 
-    // Type " I am your {Agent}"
+    // Type " {Agent} online."
     agentPart.split('').forEach((ch) => {
       delay += typingSpeed;
       const id = setTimeout(() => {
@@ -147,7 +130,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
     // Completion
     const completionId = setTimeout(() => {
-      setTypedText(`Hello. I am your ${activeAgentRef.current}`);
+      setTypedText(`Welcome. ${activeAgentRef.current} online.`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
@@ -203,11 +186,11 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   useEffect(() => {
     activeAgentRef.current = selectedAgent;
     if (hasPlayedRef.current) {
-      setTypedText(`Hello. I am your ${selectedAgent}`);
+      setTypedText(`Welcome. ${selectedAgent} online.`);
     }
   }, [selectedAgent]);
 
-  // B) Reduce typewriter subheading font-size by 20% multiplicatively
+  // B) Reduce typewriter subheading font-size by 40% multiplicatively
   useEffect(() => {
     const root = sectionRef.current || document.querySelector('.chat-hero');
     if (!root) return;
@@ -215,7 +198,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     if (elSub) {
       const fs = parseFloat(getComputedStyle(elSub).fontSize || '0');
       if (!Number.isNaN(fs) && fs > 0) {
-        elSub.style.fontSize = `${Math.round(fs * 0.8)}px`;
+        elSub.style.fontSize = `${Math.round(fs * 0.6)}px`;
       }
     }
   }, []);
@@ -227,7 +210,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     .join(' ');
 
   // Derive typed prefix vs. agent portion for colored styling
-  const prefixText = 'Hello. I am your ';
+  const prefixText = 'Welcome. ';
   const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
   const typedAgentText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
 
@@ -339,7 +322,12 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span ref={helloPrefixRef} id="hero-typed" className="inline-flex flex-wrap items-baseline gap-1">
+            <span
+              ref={helloPrefixRef}
+              id="hero-typed"
+              aria-live="polite"
+              className="inline-flex flex-wrap items-baseline gap-1"
+            >
               <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
               <span
                 className="underline underline-offset-4"
@@ -356,26 +344,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
               }}
             />
           </h1>
-          {/* Rotating agent phrases (normalized formatting) */}
-          <div className="text-sm text-[#B3B3B3] h-5 relative">
-            {typewriterPhrases.map((phrase, idx) => {
-              const [agentLabelRaw, infoRaw = ''] = phrase.split(' · ');
-              const agentLabel = agentLabelRaw?.trim();
-              const active = idx === phraseIndex;
-              const themeHex = getAgentColor(agentLabel, currentAgentColor);
-              const fixedInfo = toTitleCase((infoRaw || '').replace(/\s*&\s*/g, ' + '));
-              return (
-                <div
-                  key={phrase}
-                  className={`transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 absolute left-0 right-0'}`}
-                >
-                  <span className={'font-semibold'} style={{ color: themeHex }}>{agentLabel}</span>
-                  <span className="mx-2 text-[#666]">·</span>
-                  <span className="text-[#B3B3B3]">{fixedInfo}</span>
-                </div>
-              );
-            })}
-          </div>
+          {/* Removed the small purple agent label line in hero per spec */}
         </div>
 
         {/* Conversation Controls moved: history as attached pill near input */}
