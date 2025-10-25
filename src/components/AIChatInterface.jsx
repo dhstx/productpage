@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles, ChevronDown, Bot } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
@@ -79,6 +79,13 @@ export default function AIChatInterface() {
 
   const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
   const currentAgentColor = currentAgent ? currentAgent.color : '#FFC96C';
+  
+  // UI-only theme map for core agents (Commander/Conductor/Connector)
+  const agentThemes = useMemo(() => ({
+    Commander: { hex: agents.find(a => a.name === 'Commander')?.color || '#8b5cf6' },
+    Conductor: { hex: agents.find(a => a.name === 'Conductor')?.color || '#10b981' },
+    Connector: { hex: agents.find(a => a.name === 'Connector')?.color || '#06b6d4' },
+  }), [agents]);
 
   const clearAnimationTimers = () => {
     timeoutsRef.current.forEach((timeoutId) => clearTimeout(timeoutId));
@@ -200,6 +207,32 @@ export default function AIChatInterface() {
     }
   }, [selectedAgent]);
 
+  // A) Robust +25% font-size increase for hero heading and subheading
+  useEffect(() => {
+    const root = sectionRef.current || document.querySelector('.chat-hero');
+    if (!root) return;
+    const elH1 = root.querySelector('h1');
+    const elH2 = root.querySelector('.subhead');
+    if (elH1) {
+      const fs = parseFloat(getComputedStyle(elH1).fontSize || '0');
+      if (!Number.isNaN(fs) && fs > 0) {
+        elH1.style.fontSize = `${Math.round(fs * 1.25)}px`;
+      }
+    }
+    if (elH2) {
+      const fs2 = parseFloat(getComputedStyle(elH2).fontSize || '0');
+      if (!Number.isNaN(fs2) && fs2 > 0) {
+        elH2.style.fontSize = `${Math.round(fs2 * 1.25)}px`;
+      }
+    }
+  }, []);
+
+  // D) Title-case utility for agent info line
+  const toTitleCase = (s) => s
+    .split(' ')
+    .map(w => (w.length ? (w[0].toUpperCase() + w.slice(1).toLowerCase()) : w))
+    .join(' ');
+
   // Derive typed prefix vs. agent portion for colored styling
   const prefixText = 'Hello. I am your ';
   const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
@@ -308,7 +341,7 @@ export default function AIChatInterface() {
       <div className="mx-auto max-w-4xl">
         {/* Canonical Hero */}
         <div className="mb-6 text-center">
-          <div className="mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
+          <div className="subhead mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
           <h1
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
@@ -330,19 +363,22 @@ export default function AIChatInterface() {
               }}
             />
           </h1>
-          {/* Rotating agent phrases */}
+          {/* Rotating agent phrases (normalized formatting) */}
           <div className="text-sm text-[#B3B3B3] h-5 relative">
             {typewriterPhrases.map((phrase, idx) => {
-              const [agentLabel, rest] = phrase.split(' · ');
+              const [agentLabelRaw, infoRaw = ''] = phrase.split(' · ');
+              const agentLabel = agentLabelRaw?.trim();
               const active = idx === phraseIndex;
+              const themeHex = agentThemes[agentLabel]?.hex || currentAgentColor;
+              const fixedInfo = toTitleCase((infoRaw || '').replace(/\s*&\s*/g, ' + '));
               return (
                 <div
                   key={phrase}
                   className={`transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 absolute left-0 right-0'}`}
                 >
-                  <span className={'font-semibold'} style={{ color: selectedAgent === agentLabel ? currentAgentColor : '#F2F2F2' }}>{agentLabel}</span>
+                  <span className={'font-semibold'} style={{ color: themeHex }}>{agentLabel}</span>
                   <span className="mx-2 text-[#666]">·</span>
-                  <span>{rest}</span>
+                  <span className="text-[#B3B3B3]">{fixedInfo}</span>
                 </div>
               );
             })}
@@ -390,11 +426,17 @@ export default function AIChatInterface() {
             >
               <span className="inline-flex items-center gap-2">
                 <span
-                  className="inline-flex h-6 w-6 items-center justify-center rounded-full"
-                  style={{ backgroundColor: `${currentAgentColor}20` }}
-                >
-                  <span style={{ color: currentAgentColor }}>{currentAgent?.icon || '🤖'}</span>
-                </span>
+                  aria-hidden="true"
+                  className="agent-dot"
+                  style={{
+                    display: 'inline-block',
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '9999px',
+                    backgroundColor: currentAgentColor,
+                    boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
+                  }}
+                />
                 <span>Select Agent</span>
               </span>
               <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? 'rotate-180' : ''}`} />
@@ -411,11 +453,18 @@ export default function AIChatInterface() {
                     aria-selected={selectedAgent === agent.name}
                   >
                     <span
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full"
-                      style={{ backgroundColor: `${agent.color}20` }}
-                    >
-                      <span style={{ color: agent.color }}>{agent.icon || '🤖'}</span>
-                    </span>
+                      aria-hidden="true"
+                      className="agent-dot"
+                      style={{
+                        display: 'inline-block',
+                        width: '14px',
+                        height: '14px',
+                        borderRadius: '9999px',
+                        marginLeft: '2px',
+                        backgroundColor: agent.color,
+                        boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
+                      }}
+                    />
                     <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
                     {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
                   </button>
