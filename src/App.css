@@ -250,16 +250,52 @@
 
 /* Chat hero spacing under fixed header (safe-area aware) */
 .chat-hero {
-  padding-top: calc(var(--site-header-height, 64px) + 1.5rem + env(safe-area-inset-top));
+  /* Lower the hero by extra 0.5in site-wide */
+  padding-top: calc(var(--site-header-height, 64px) + 0.5in + 1.5rem + env(safe-area-inset-top));
   position: relative;
   z-index: 10;
 }
 
 @media (max-width: 640px) {
   .chat-hero {
-    padding-top: calc(var(--site-header-height, 64px) + 1rem + env(safe-area-inset-top));
+    padding-top: calc(var(--site-header-height, 64px) + 0.5in + 1rem + env(safe-area-inset-top));
   }
 }
+
+/* Subtle, attached Show History pill */
+.history-pill {
+  position: absolute;
+  left: 12px;
+  bottom: calc(100% + 8px);
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background-color: rgba(255,255,255,0.03);
+  color: var(--muted, #bbb);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: none;
+}
+@media (max-width: 640px) {
+  .history-pill { left: 8px; bottom: calc(100% + 6px); font-size: 0.75rem; padding: 5px 8px; }
+}
+
+/* Responsive wrapping for hero/typewriter to avoid clipping on mobile */
+.chat-hero h1 {
+  font-size: clamp(28px, 7.5vw, 64px);
+  line-height: 1.08;
+  word-break: break-word;
+}
+.chat-hero .typewriter,
+.chat-hero .subhead {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  font-size: clamp(16px, 4.5vw, 24px);
+}
+
+/* Agent selector dots */
+.agent-dot { vertical-align: middle; flex-shrink: 0; }
+.agent-label { vertical-align: middle; }
 
 @layer utilities {
   /* Global wrap utilities mirroring spec */
