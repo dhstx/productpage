@@ -381,7 +381,7 @@ export default function AIChatInterface() {
         <div className="mb-6 text-center">
           <div
             className={`subhead syntek-heading ${headingVisible ? 'visible' : ''} mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase`}
-            aria-hidden={headingVisible ? 'false' : 'true'}
+            aria-hidden={!headingVisible}
           >
             SYNTEK AUTOMATIONS
           </div>
