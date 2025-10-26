@@ -1,87 +1,37 @@
 :root {
-  /* Default (dark-first) palette; light overrides below */
-  --bg: #0f0f10;
-  --panel-bg: #131313;
-  --card-bg: #111214;
-  --bg-elev: var(--card-bg);
-  --muted: rgba(255,255,255,0.65);
-  --text: #efefef;
+  /* Light defaults */
+  --bg: #f7f7f7;
+  --bg-elev: #ffffff;
+
+  /* Text & borders (LIGHT) */
+  --text: #111111;          /* strong body text */
+  --muted: #595959;         /* secondary text */
+  --card-bg: #ffffff;
+  --card-border: rgba(0,0,0,0.08);
+
+  /* Accents */
   --accent-gold: #e5aa5d;
   --accent-muted: rgba(229,170,93,0.12);
-  --card-border: rgba(255,255,255,0.04);
 
-  /* Pricing background (light) token for price plans */
+  /* Pricing */
   --pricing-bg-light: #f7f7f7;
 }
 
-/* Dark theme tokens used by pricing */
-[data-theme="dark"] {
+/* Dark theme overrides (data-theme model) */
+html[data-theme="dark"] {
   --bg: #0f0f10;
-  --panel-bg: #131313;
-  --card-bg: #111214;
-  --bg-elev: var(--card-bg);
+  --bg-elev: #111214;
+
+  /* Text & borders (DARK) */
   --text: #efefef;
   --muted: rgba(255,255,255,0.65);
+  --card-bg: #111214;
   --card-border: rgba(255,255,255,0.04);
+
+  /* Accents */
   --accent-gold: #e5aa5d;
   --accent-muted: rgba(229,170,93,0.12);
+
+  /* Pricing */
   --pricing-bg-dark: #0f0f10;
-}
-
-/* Light theme tokens */
-[data-theme="light"] {
-  --bg: #ffffff;
-  --panel-bg: #f2f2f2;
-  --card-bg: #f8f8f8;
-  --bg-elev: var(--card-bg);
-  --text: #111111;
-  --muted: #666666;
-  --card-border: rgba(0,0,0,0.12);
-  --accent-gold: #d4941f;
-  --accent-muted: rgba(212,148,31,0.12);
-}
-
-/* Compact aliases used elsewhere in the app (back-compat) */
-.dhstx-bg     { background: var(--panel-bg); }
-.dhstx-panel  { background: var(--panel-bg); }
-.dhstx-border { border-color: var(--card-border); }
-.dhstx-text   { color: var(--text); }
-.dhstx-muted  { color: var(--muted); }
-.dhstx-accent { color: var(--accent-gold); }
-
-/* Base surfaces */
-html:not([data-theme="light"]) body {
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* Reusable card surface */
-.card-surface {
-  background: var(--card-bg);
-  color: var(--text);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-}
-
-/* Primary gold button */
-.btn-gold {
-  background: var(--accent-gold);
-  color: #111;
-}
-.btn-gold:hover { filter: brightness(0.96); }
-
-/* Anti-leak guardrails for light mode (override stray dark-tailwind classes) */
-html[data-theme="light"] .bg-neutral-900,
-html[data-theme="light"] .bg-neutral-950,
-html[data-theme="light"] .bg-zinc-900,
-html[data-theme="light"] [class*="bg-[#0b0b0b]"],
-html[data-theme="light"] [class*="bg-[#111]"] {
-  background-color: var(--bg-elev) !important;
-}
-html[data-theme="light"] .text-white,
-html[data-theme="light"] .text-neutral-300 {
-  color: var(--text) !important;
-}
-html[data-theme="light"] .border-neutral-800 {
-  border-color: var(--card-border) !important;
 }
