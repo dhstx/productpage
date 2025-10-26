@@ -391,8 +391,9 @@
   from { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-14px); }
   to   { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
 }
-.syntek-h1.glitch { animation: glitchFlicker 800ms steps(6, end) forwards; }
-.syntek-h1.reveal { animation: leftReveal 900ms ease forwards; animation-delay: 220ms; }
+/* Run both animations concurrently and 50% slower */
+.syntek-h1.glitch { animation: glitchFlicker 1200ms steps(6, end) forwards; }
+.syntek-h1.reveal { animation: leftReveal 1350ms ease forwards; }
 
 /* Mobile center for Select Agent trigger */
 @media (max-width:640px) {
