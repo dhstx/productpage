@@ -11,6 +11,7 @@ import {
   updateSubscription,
   getCustomerPortalUrl 
 } from '../lib/stripe/checkout';
+import "../styles/dashboard-theme.css";
 
 export default function Billing() {
   const { user, profile } = useAuth();
@@ -189,7 +190,7 @@ export default function Billing() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)' }}>
+    <div className="min-h-screen dashboard-surface">
       <BackArrow />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -221,7 +222,7 @@ export default function Billing() {
 
         {/* Current Plan */}
         {subscription && (
-          <div className="card-surface mb-8 p-6">
+          <div className="dashboard-card mb-8 p-6">
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--text)' }}>
@@ -256,7 +257,7 @@ export default function Billing() {
               <div className="border-t pt-6" style={{ borderColor: 'var(--card-border)' }}>
                 <h3 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Points Usage This Month</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="card-surface p-4">
+                  <div className="dashboard-card p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Core Points</span>
                       <TrendingUp className="h-4 w-4" style={{ color: '#3b82f6' }} />
@@ -269,7 +270,7 @@ export default function Billing() {
                     </div>
                   </div>
 
-                  <div className="card-surface p-4">
+                  <div className="dashboard-card p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Advanced Points</span>
                       <Zap className="h-4 w-4" style={{ color: '#9333ea' }} />
@@ -282,7 +283,7 @@ export default function Billing() {
                     </div>
                   </div>
 
-                  <div className="card-surface p-4">
+                  <div className="dashboard-card p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Resets In</span>
                       <AlertCircle className="h-4 w-4" style={{ color: '#ea580c' }} />
@@ -323,7 +324,7 @@ export default function Billing() {
             {topUpPackages.map((pkg) => (
               <div
                 key={pkg.id}
-                className={`card-surface p-6 ${pkg.popular ? 'ring-2 ring-purple-500/30' : ''}`}
+                className={`dashboard-card p-6 ${pkg.popular ? 'ring-2 ring-purple-500/30' : ''}`}
               >
                 {pkg.popular && (
                   <span className="inline-block px-2 py-1 text-xs font-semibold rounded mb-3" style={{ background: 'var(--accent-muted)', color: 'var(--accent-gold)' }}>
@@ -357,7 +358,7 @@ export default function Billing() {
         {/* Top-Up Confirmation Modal */}
         {showTopUpModal && selectedTopUp && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <div className="w-full max-w-md rounded-xl card-surface">
+            <div className="w-full max-w-md rounded-xl dashboard-card">
               <div className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--card-border)' }}>
                 <h3 className="text-lg font-semibold" style={{ color: 'var(--text)' }}>Confirm Purchase</h3>
                 <button
@@ -410,7 +411,7 @@ export default function Billing() {
               return (
                 <div
                   key={tier.id}
-                  className={`card-surface p-6 ${tier.popular ? 'ring-2 ring-purple-500/30' : ''}`}
+                  className={`dashboard-card p-6 ${tier.popular ? 'ring-2 ring-purple-500/30' : ''}`}
                 >
                   {tier.popular && (
                     <span className="inline-block px-2 py-1 text-xs font-semibold rounded mb-3" style={{ background: 'var(--accent-muted)', color: 'var(--accent-gold)' }}>
@@ -454,7 +455,7 @@ export default function Billing() {
 
         {/* Billing History */}
         {billingHistory.length > 0 && (
-          <div className="card-surface p-6">
+          <div className="dashboard-card p-6">
             <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>Billing History</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full">

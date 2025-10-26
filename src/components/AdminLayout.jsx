@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
 import { useState } from 'react';
+import "../styles/dashboard-theme.css";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from './ui/sheet';
 import ThemeToggle from './ThemeToggle';
 import { logout, getCurrentUser, canUpgrade } from '../lib/auth';
@@ -35,13 +36,13 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0C0C0C]">
+    <div className="min-h-screen dashboard-surface">
       {/* Header */}
-      <header className="border-b border-[#202020] bg-[#0C0C0C] md:sticky top-0 z-50">
+      <header className="md:sticky top-0 z-50 border-b" style={{ background: 'var(--bg)', borderColor: 'var(--card-border)' }}>
         <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
-              <Link to="/" className="text-[#F2F2F2] text-xl font-bold tracking-tight">
+              <Link to="/" className="text-xl font-bold tracking-tight" style={{ color: 'var(--text)' }}>
                 DHStx
               </Link>
               <nav className="hidden md:flex items-center gap-1">
@@ -52,13 +53,14 @@ export default function AdminLayout({ children }) {
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-[2px] transition-colors ${
+                      className={`flex items-center gap-2 px-4 py-2 rounded-[2px] transition-colors`}
+                      style={
                         item.highlight
-                          ? 'bg-[#FFC96C]/10 text-[#FFC96C] border border-[#FFC96C] hover:bg-[#FFC96C]/20'
+                          ? { background: 'var(--accent-muted)', color: 'var(--accent-gold)', border: '1px solid var(--card-border)' }
                           : isActive
-                          ? 'bg-[#1A1A1A] text-[#FFC96C]'
-                          : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
-                      }`}
+                          ? { background: 'var(--card-bg)', color: 'var(--accent-gold)' }
+                          : { color: 'var(--muted)' }
+                      }
                     >
                       <Icon className="w-4 h-4" />
                       <span className="text-sm uppercase tracking-tight">{item.name}</span>
@@ -74,27 +76,29 @@ export default function AdminLayout({ children }) {
               <div className="hidden md:block relative">
                 <button
                   onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-[2px] hover:bg-[#1A1A1A] transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-[2px] transition-colors hover:brightness-110"
+                  style={{ background: 'transparent', color: 'var(--text)' }}
                 >
-                  <div className="w-7 h-7 rounded-[4px] bg-[#202020] flex items-center justify-center">
-                    <span className="text-[#FFC96C] text-sm font-bold">
+                  <div className="w-7 h-7 rounded-[4px] flex items-center justify-center" style={{ background: 'var(--card-bg)' }}>
+                    <span className="text-sm font-bold" style={{ color: 'var(--accent-gold)' }}>
                       {user?.name?.charAt(0) || 'A'}
                     </span>
                   </div>
                   <div className="flex flex-col items-start">
-                    <span className="text-[#F2F2F2] text-sm">{user?.username || 'admin'}</span>
-                    <span className="text-[#B3B3B3] text-xs">{user?.role === 'admin' ? 'Admin' : 'User'}</span>
+                    <span className="text-sm" style={{ color: 'var(--text)' }}>{user?.username || 'admin'}</span>
+                    <span className="text-xs" style={{ color: 'var(--muted)' }}>{user?.role === 'admin' ? 'Admin' : 'User'}</span>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-[#B3B3B3]" />
+                  <ChevronDown className="w-4 h-4" style={{ color: 'var(--muted)' }} />
                 </button>
 
                 {/* Dropdown Menu */}
                 {profileMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-[#202020] rounded-[4px] shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-48 rounded-[4px] shadow-lg z-50" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>
                     <Link
                       to="/settings"
                       onClick={() => setProfileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors"
+                      className="flex items-center gap-3 px-4 py-3 transition-colors hover:brightness-110"
+                      style={{ color: 'var(--muted)' }}
                     >
                       <Settings className="w-4 h-4" />
                       <span className="text-sm">Settings</span>
@@ -102,7 +106,8 @@ export default function AdminLayout({ children }) {
                     <button
                       onClick={handleLogout}
                       disabled={isLoggingOut}
-                      className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#202020] transition-colors w-full text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-3 px-4 py-3 transition-colors w-full text-left disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
+                      style={{ color: 'var(--muted)' }}
                     >
                       <LogOut className="w-4 h-4" />
                       <span className="text-sm">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
@@ -114,12 +119,12 @@ export default function AdminLayout({ children }) {
               {/* Mobile Sheet Navigation */}
               <div className="md:hidden flex items-center gap-1">
                 {/* Mobile settings icon next to hamburger */}
-                <Link to="/settings" aria-label="Open settings" className="text-[#F2F2F2] p-2">
+                <Link to="/settings" aria-label="Open settings" className="p-2" style={{ color: 'var(--text)' }}>
                   <Settings className="w-6 h-6" />
                 </Link>
                 <Sheet>
                   <SheetTrigger asChild>
-                    <button className="text-[#F2F2F2] p-2" aria-label="Open navigation">
+                    <button className="p-2" aria-label="Open navigation" style={{ color: 'var(--text)' }}>
                       <Menu className="w-6 h-6" />
                     </button>
                   </SheetTrigger>
@@ -135,11 +140,8 @@ export default function AdminLayout({ children }) {
                           <SheetClose asChild key={item.name}>
                             <Link
                               to={item.href}
-                              className={`flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors ${
-                                isActive
-                                  ? 'bg-[#1A1A1A] text-[#FFC96C]'
-                                  : 'text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A]'
-                              }`}
+                              className="flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors"
+                              style={isActive ? { background: 'var(--card-bg)', color: 'var(--accent-gold)' } : { color: 'var(--muted)' }}
                             >
                               <Icon className="w-5 h-5" />
                               <span className="uppercase tracking-tight">{item.name}</span>
@@ -151,7 +153,8 @@ export default function AdminLayout({ children }) {
                         <button
                           onClick={handleLogout}
                           disabled={isLoggingOut}
-                          className="flex items-center gap-3 px-4 py-3 text-[#B3B3B3] hover:text-[#F2F2F2] hover:bg-[#1A1A1A] rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center gap-3 px-4 py-3 rounded-[2px] transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-110"
+                          style={{ color: 'var(--muted)' }}
                         >
                           <LogOut className="w-5 h-5" />
                           <span className="uppercase tracking-tight">{isLoggingOut ? 'Logging out...' : 'Logout'}</span>

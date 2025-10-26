@@ -1,0 +1,6 @@
+.dashboard-surface { background: var(--bg); color: var(--text); }
+.dashboard-card { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text); border-radius: 12px; }
+.dashboard-muted { color: var(--muted); }
+.btn-primary { background: var(--accent-gold); color: #111; border-radius: 8px; }
+.btn-primary:hover { filter: brightness(.95); }
+.btn-outline { border: 1px solid var(--card-border); background: transparent; color: var(--text); border-radius: 8px; }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
+import "../styles/dashboard-theme.css";
 import AIChatInterface from '../components/AIChatInterface';
 import PTHealthBar from '../components/PTHealthBar';
 import { useAuth } from '../contexts/AuthContext';
@@ -40,18 +41,18 @@ export default function AgentManagement() {
   return (
     <>
       <BackArrow />
-      <div className="min-h-screen bg-[#0A0A0A] text-[#F2F2F2]">
+      <div className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
+            <h1 className="text-3xl font-bold mb-2 uppercase tracking-tight" style={{ color: 'var(--text)' }}>
               AI AGENTS DASHBOARD
             </h1>
-            <p className="text-[#B3B3B3]">
+            <p style={{ color: 'var(--muted)' }}>
               Chat with our specialized AI agents to get help with your tasks
             </p>
             {user && (
-              <p className="text-sm text-[#808080] mt-2">
+              <p className="text-sm mt-2" style={{ color: 'var(--muted)' }}>
                 Logged in as: {user.email} ({user.user_metadata?.role || 'user'})
               </p>
             )}
@@ -78,18 +79,18 @@ export default function AgentManagement() {
 
           {/* Loading State */}
           {loading && (
-            <div className="mb-6 bg-[#0F0F0F] rounded-lg border border-[#1A1A1A] p-4">
+            <div className="mb-6 rounded-lg p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>
               <div className="animate-pulse flex space-x-4">
                 <div className="flex-1 space-y-3 py-1">
-                  <div className="h-4 bg-[#1A1A1A] rounded w-3/4"></div>
-                  <div className="h-4 bg-[#1A1A1A] rounded w-1/2"></div>
+                  <div className="h-4 rounded w-3/4" style={{ background: 'var(--bg-elev)' }}></div>
+                  <div className="h-4 rounded w-1/2" style={{ background: 'var(--bg-elev)' }}></div>
                 </div>
               </div>
             </div>
           )}
 
           {/* Chat Interface */}
-          <div className="card-surface p-6">
+          <div className="dashboard-card p-6">
             <AIChatInterface onPTUpdate={fetchPTUsage} />
           </div>
         </div>

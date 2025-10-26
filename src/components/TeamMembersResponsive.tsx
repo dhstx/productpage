@@ -66,56 +66,58 @@ export function TeamMembersResponsive({
 
   // Desktop: keep existing table (wrapped for horizontal scroll + sticky first column)
   return (
-    <div className="panel-system tm-table-wrap">
+    <div className="panel-system tm-table-wrap" style={{ background: 'var(--card-bg)', color: 'var(--text)', border: '1px solid var(--card-border)', borderRadius: 12 }}>
       <table className="w-full tm-table">
-        <thead className="bg-white dark:bg-[#0C0C0C]">
-          <tr className="border-b border-zinc-200 dark:border-[#202020]">
-            <th className="text-left p-3 md:p-4 text-zinc-600 dark:text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Member</th>
-            <th className="text-left p-3 md:p-4 text-zinc-600 dark:text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold w-[88px] md:w-auto">Role</th>
-            <th className="text-left p-3 md:p-4 text-zinc-600 dark:text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Status</th>
-            <th className="text-left p-3 md:p-4 text-zinc-600 dark:text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold hidden sm:table-cell">Joined</th>
-            <th className="text-right p-3 md:p-4 text-zinc-600 dark:text-[#B3B3B3] text-xs md:text-sm uppercase tracking-tight font-bold">Actions</th>
+        <thead style={{ background: 'var(--card-bg)' }}>
+          <tr style={{ borderBottom: '1px solid var(--card-border)' }}>
+            <th className="text-left p-3 md:p-4 text-xs md:text-sm uppercase tracking-tight font-bold" style={{ color: 'var(--muted)' }}>Member</th>
+            <th className="text-left p-3 md:p-4 text-xs md:text-sm uppercase tracking-tight font-bold w-[88px] md:w-auto" style={{ color: 'var(--muted)' }}>Role</th>
+            <th className="text-left p-3 md:p-4 text-xs md:text-sm uppercase tracking-tight font-bold" style={{ color: 'var(--muted)' }}>Status</th>
+            <th className="text-left p-3 md:p-4 text-xs md:text-sm uppercase tracking-tight font-bold hidden sm:table-cell" style={{ color: 'var(--muted)' }}>Joined</th>
+            <th className="text-right p-3 md:p-4 text-xs md:text-sm uppercase tracking-tight font-bold" style={{ color: 'var(--muted)' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {members.map((m) => (
-            <tr key={m.id} className="border-b border-zinc-200 dark:border-[#202020] hover:bg-zinc-50 dark:hover:bg-[#1A1A1A]">
+            <tr key={m.id} className="hover:bg-zinc-50" style={{ borderBottom: '1px solid var(--card-border)' }}>
               <td className="p-3 md:p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-[4px] bg-zinc-100 dark:bg-[#202020] flex items-center justify-center flex-shrink-0">
-                    <span className="text-zinc-700 dark:text-white/90 font-bold">{m.name?.[0] ?? "?"}</span>
+                  <div className="w-10 h-10 rounded-[4px] flex items-center justify-center flex-shrink-0" style={{ background: 'var(--bg-elev)' }}>
+                    <span className="font-bold" style={{ color: 'var(--text)' }}>{m.name?.[0] ?? "?"}</span>
                   </div>
                   <div>
-                    <div className="text-zinc-900 dark:text-zinc-100 font-medium text-sm md:text-base">{m.name}</div>
-                    <div className="text-zinc-600 dark:text-zinc-400 text-xs md:text-sm">{m.email}</div>
+                    <div className="font-medium text-sm md:text-base" style={{ color: 'var(--text)' }}>{m.name}</div>
+                    <div className="text-xs md:text-sm" style={{ color: 'var(--muted)' }}>{m.email}</div>
                   </div>
                 </div>
               </td>
               <td className="p-3 md:p-4">
-                <span className="px-2 py-0.5 rounded-[4px] border border-zinc-200 bg-white text-zinc-800 dark:border-white/10 dark:bg-neutral-800 dark:text-zinc-200 text-xs md:text-sm font-medium whitespace-nowrap">
+                <span className="px-2 py-0.5 rounded-[4px] text-xs md:text-sm font-medium whitespace-nowrap" style={{ border: '1px solid var(--card-border)', background: 'var(--card-bg)', color: 'var(--text)' }}>
                   {m.role}
                 </span>
               </td>
               <td className="p-3 md:p-4">
                 <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${m.status === 'Active' ? 'bg-green-600 dark:bg-green-500' : m.status === 'Suspended' ? 'bg-red-500' : 'bg-yellow-500'}`}></div>
-                  <span className="text-zinc-600 dark:text-zinc-400 text-xs md:text-sm">{m.status}</span>
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: m.status === 'Active' ? '#16a34a' : m.status === 'Suspended' ? '#ef4444' : '#f59e0b' }}></div>
+                  <span className="text-xs md:text-sm" style={{ color: 'var(--muted)' }}>{m.status}</span>
                 </div>
               </td>
-              <td className="p-3 md:p-4 text-zinc-600 dark:text-zinc-400 text-xs md:text-sm hidden sm:table-cell">{m.joined}</td>
+              <td className="p-3 md:p-4 text-xs md:text-sm hidden sm:table-cell" style={{ color: 'var(--muted)' }}>{m.joined}</td>
               <td className="p-3 md:p-4">
                 <div className="flex items-center justify-end gap-2">
                   {m.role !== 'Owner' && (
                     <>
                       <button
                         onClick={() => onChangeRole(m.id)}
-                        className="px-2 py-1 rounded-[4px] border border-zinc-200 bg-white text-zinc-800 text-xs md:text-sm hover:bg-zinc-50 dark:border-white/10 dark:bg-neutral-800 dark:text-zinc-100 dark:hover:bg-neutral-700 transition-colors"
+                        className="px-2 py-1 rounded-[4px] transition-colors"
+                        style={{ border: '1px solid var(--card-border)', background: 'transparent', color: 'var(--text)' }}
                       >
                         Change Role
                       </button>
                       <button
                         onClick={() => onRemove(m.id)}
-                        className="p-2 rounded-[4px] border border-zinc-200 bg-white text-zinc-700 hover:bg-red-50 hover:text-red-600 dark:border-white/10 dark:bg-neutral-800 dark:text-zinc-200 dark:hover:bg-red-900/20 transition-colors"
+                        className="p-2 rounded-[4px] transition-colors"
+                        style={{ border: '1px solid var(--card-border)', background: 'transparent', color: 'var(--text)' }}
                         aria-label={`Remove ${m.name}`}
                       >
                         <Trash2 className="w-4 h-4" />
