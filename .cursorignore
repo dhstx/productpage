@@ -1,0 +1,11 @@
+dist/
+node_modules/
+.coverage/
+coverage/
+.playwright-report/
+html-report/
+**/*.backup
+.env*
+**/*.png
+**/*.svg
+**/*.ico

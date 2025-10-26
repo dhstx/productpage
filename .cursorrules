@@ -1,0 +1,10 @@
+# Cursor rules for Real-time Prompt Suggestions feature
+
+- Respect types: all new TS files must be valid under strict mode.
+- Do not log secrets. Redact using `lib/redact.ts` before any logging.
+- Keep LLM calls in JSON schema mode with fail-soft behavior.
+- Use `response_format: { type: "json_schema", json_schema: SUGGESTION_SCHEMA }` for OpenAI Responses API.
+- Client must debounce input, abort in-flight requests, and sample history.
+- UI must support `aria-live="polite"`, keyboard shortcuts (Cmd/Ctrl+1..3), and prefers-reduced-motion.
+- Tests: Playwright smoke and Vitest redact must pass.
+- Optional parity: `server/proxy.ts` and `app.py` are optional helpers.
