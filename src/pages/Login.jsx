@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle';
-import BackArrow from '../components/BackArrow';
+import BackButton from '../components/BackButton';
 import { useAuth } from '../contexts/AuthContext';
 import { getAuthErrorMessage } from '../lib/auth/supabaseAuth';
 
@@ -108,7 +108,7 @@ export default function Login() {
       {/* Login header: back arrow + DHStx logo (left), theme toggle only (right) */}
       <div className="login-header" aria-hidden="false">
         <div className="header-left">
-          <BackArrow />
+          <BackButton />
           <Link to="/" className="logo-btn" aria-label="DHStx Home">
             <span className="logo-text">DHStx</span>
             <span className="sr-only">DHStx</span>

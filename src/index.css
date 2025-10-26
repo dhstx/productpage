@@ -2,18 +2,22 @@
 :root {
   --bg: #ffffff;
   --card-bg: #ffffff;
-  --text: #111111;
-  --muted: #666666;
+  --text: #111111; /* high-contrast ink */
+  --muted: #6b6b6b; /* WCAG AA on white */
   --accent-gold: #e5aa5d;
   --card-border: rgba(0,0,0,0.06);
+  /* Placeholder tokens */
+  --placeholder-light: rgba(0,0,0,0.45);
 }
 [data-theme="dark"] {
   --bg: #0f0f0f;
-  --card-bg: #111111;
+  --card-bg: #111214;
   --text: #efefef;
-  --muted: #9b9b9b;
+  --muted: rgba(255,255,255,0.65);
   --accent-gold: #e5aa5d;
   --card-border: rgba(255,255,255,0.04);
+  /* Placeholder tokens */
+  --placeholder-dark: rgba(255,255,255,0.35);
 }
 
 /* loader & reduced-motion */
@@ -37,9 +41,8 @@
 .themed-card p, .themed-card .muted { color: var(--muted); }
 
 /* Placeholder contrast per theme */
-.themed-input::placeholder { color: var(--muted); opacity: 1; }
-[data-theme="dark"] .themed-input::placeholder { color: rgba(255,255,255,0.38); }
-[data-theme="light"] .themed-input::placeholder { color: rgba(0,0,0,0.45); }
+.themed-input::placeholder { color: var(--placeholder-dark); opacity: 1; }
+[data-theme="light"] .themed-input::placeholder { color: var(--placeholder-light); }
 
 /* Header variant for login page */
 .login-header { position: fixed; inset: 0 auto auto 0; top: 8px; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; pointer-events: none; }
@@ -52,7 +55,8 @@
 .login-card { background: var(--card-bg); color: var(--text); border: 1px solid var(--card-border); }
 .login-card label, .login-card .muted { color: var(--muted); }
 .login-card input { background: rgba(255,255,255,0.02); color: var(--text); border: 1px solid var(--card-border); }
-.login-card input::placeholder { color: rgba(255,255,255,0.35); }
+.login-card input::placeholder { color: var(--placeholder-dark); }
+[data-theme="light"] .login-card input::placeholder { color: var(--placeholder-light); }
 .login-card .primary-btn { background: var(--accent-gold); color: #111; border-radius: 6px; }
 
 /* Brand mark text inside login card */
@@ -65,7 +69,31 @@
 .link-accent { color: var(--accent-gold); text-decoration: none; }
 .link-accent:hover { text-decoration: underline; }
 
+/* Accessible focus visuals */
+.themed-input:focus-visible,
+.back-btn:focus-visible,
+.link-accent:focus-visible {
+  outline: 3px solid rgba(229,170,93,0.28);
+  outline-offset: 3px;
+}
+
 @media (max-width: 640px) {
   .login-header { padding: 10px 12px; }
 }
+
+/* Back arrow button (login header) */
+.back-btn {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+.back-btn:hover { background: rgba(0,0,0,0.06); color: var(--text); }
+@media (prefers-reduced-motion: reduce) { .back-btn { transition: none; } }
 

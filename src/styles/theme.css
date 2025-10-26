@@ -1,13 +1,16 @@
 :root {
-  /* Old dark deployment palette */
+  /* Old dark deployment palette adjusted for AA */
   --bg: #0f0f0f;
   --panel-bg: #131313;
-  --card-bg: #151515;
-  --muted: #9b9b9b;
+  --card-bg: #111214; /* improved contrast */
+  --muted: rgba(255,255,255,0.65);
   --text: #efefef;
   --accent-gold: #e5aa5d;
   --accent-muted: rgba(229,170,93,0.12);
   --card-border: rgba(255,255,255,0.04);
+  /* placeholders */
+  --placeholder-dark: rgba(255,255,255,0.35);
+  --placeholder-light: rgba(0,0,0,0.45);
 
   /* Back-compat aliases used in the app */
   --dhstx-black: var(--bg);
@@ -22,11 +25,13 @@
   --bg: #F7F7F8;
   --panel-bg: #FFFFFF;
   --card-bg: #FFFFFF;
-  --muted: #3A3A3C;
-  --text: #141414;
-  --accent-gold: #E4B850;
+  --muted: #6b6b6b;
+  --text: #111111;
+  --accent-gold: #e5aa5d;
   --accent-muted: rgba(228,184,80,0.12);
-  --card-border: #D9D9DE;
+  --card-border: rgba(0,0,0,0.06);
+  /* placeholders */
+  --placeholder-light: rgba(0,0,0,0.45);
 
   --dhstx-black: var(--bg);
   --dhstx-panel: var(--panel-bg);
