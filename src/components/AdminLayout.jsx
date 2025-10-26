@@ -27,6 +27,7 @@ export default function AdminLayout({ children }) {
   const shouldUpgrade = canUpgrade();
   
   const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Agents', href: '/agents', icon: Bot },
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
     { name: 'Platforms', href: '/platforms', icon: Package },
