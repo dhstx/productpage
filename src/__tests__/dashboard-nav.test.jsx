@@ -1,20 +1,62 @@
+// @vitest-environment jsdom
 import { describe, it, expect } from 'vitest'
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { MemoryRouter, useLocation } from 'react-router-dom'
+import AdminLayout from '../components/AdminLayout.jsx'
 
-// Minimal structural test to assert presence/label only.
-// Note: Full navigation behavior is covered by react-router; here we assert labels/ordering.
+function LocationDisplay() {
+  const location = useLocation()
+  return <div data-testid="location">{location.pathname}</div>
+}
 
 describe('Dashboard nav tab', () => {
-  it('has Dashboard as first label in navigation config (static assert)', async () => {
-    const mod = await import('../components/AdminLayout.jsx')
-    // AdminLayout is a component; we can inspect its source via string to ensure label exists
-    // But since AdminLayout exports default function, we statically import file text cannot be read here.
-    // Instead, assert that the navigation entry is present by simple regex on module source via fetch-like import.meta hack.
-    // As jsdom cannot read FS directly without plugins, we keep a minimal sanity: ensure route exists elsewhere.
-    const app = await import('../App.jsx')
-    expect(app).toBeTruthy()
-    // Presence of dashboard route is already defined in App.jsx, so focus on label existence in AdminLayout source
-    // The simplest non-flaky check: ensure the text 'Dashboard' is present in the stringified component
-    const source = (mod.default || mod).toString()
-    expect(source).toMatch(/Dashboard/)
+  it('renders Dashboard as the first nav item', async () => {
+    render(
+      <MemoryRouter initialEntries={["/dashboard"]}>
+        <AdminLayout>
+          <div />
+        </AdminLayout>
+      </MemoryRouter>
+    )
+
+    // The header contains one primary nav; ensure Dashboard exists and is first
+    const nav = screen.getAllByRole('navigation')[0]
+    const links = within(nav).getAllByRole('link')
+    expect(links[0]).toHaveTextContent(/Dashboard/i)
+  })
+
+  it('navigates to /dashboard when Dashboard is clicked', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={["/agents"]}>
+        <AdminLayout>
+          <div />
+        </AdminLayout>
+        <LocationDisplay />
+      </MemoryRouter>
+    )
+
+    const nav = screen.getAllByRole('navigation')[0]
+    const dashboardLink = within(nav).getByRole('link', { name: /Dashboard/i })
+    await user.click(dashboardLink)
+
+    expect(screen.getByTestId('location').textContent).toBe('/dashboard')
+  })
+
+  it('shows active styling when on /dashboard', async () => {
+    render(
+      <MemoryRouter initialEntries={["/dashboard"]}>
+        <AdminLayout>
+          <div />
+        </AdminLayout>
+      </MemoryRouter>
+    )
+
+    const nav = screen.getAllByRole('navigation')[0]
+    const dashboardLink = within(nav).getByRole('link', { name: /Dashboard/i })
+    const className = dashboardLink.getAttribute('class') || ''
+    // Active state applies accent text color; assert token is present
+    expect(className).toMatch(/text-\[#FFC96C\]/)
   })
 })
