@@ -1,49 +1,34 @@
 :root {
-  /* Old dark deployment palette */
-  --bg: #0f0f0f;
+  /* Old dark deployment palette adjusted for AA */
+  --bg: #0f0f10;
   --panel-bg: #131313;
-  --card-bg: #151515;
-  --muted: #9b9b9b;
+  --card-bg: #111214;
+  --muted: rgba(255,255,255,0.65);
   --text: #efefef;
   --accent-gold: #e5aa5d;
   --accent-muted: rgba(229,170,93,0.12);
   --card-border: rgba(255,255,255,0.04);
   /* Pricing background (light) token for price plans */
   --pricing-bg-light: #f7f7f7;
-
-  /* Back-compat aliases used in the app */
-  --dhstx-black: var(--bg);
-  --dhstx-panel: var(--panel-bg);
-  --dhstx-border: #202020; /* subtle outline */
-  --dhstx-text: var(--text);
-  --dhstx-muted: var(--muted);
-  --dhstx-accent: var(--accent-gold);
-}
-
-[data-theme="light"] {
-  --bg: #F7F7F8;
-  --panel-bg: #FFFFFF;
-  --card-bg: #FFFFFF;
-  --muted: #3A3A3C;
-  --text: #141414;
-  --accent-gold: #E4B850;
-  --accent-muted: rgba(228,184,80,0.12);
-  --card-border: #D9D9DE;
-
-  --dhstx-black: var(--bg);
-  --dhstx-panel: var(--panel-bg);
-  --dhstx-border: var(--card-border);
-  --dhstx-text: var(--text);
-  --dhstx-muted: var(--muted);
-  --dhstx-accent: var(--accent-gold);
 }
 
 /* Dark theme tokens used by pricing */
 [data-theme="dark"] {
+  --text: #efefef;
   --muted: rgba(255,255,255,0.65);
   --card-bg: #111214;
+  --card-border: rgba(255,255,255,0.04);
+  --accent-gold: #e5aa5d;
   --pricing-bg-dark: #0f0f10;
 }
+
+/* Compact aliases used elsewhere in the app (back-compat) */
+.dhstx-bg     { background: var(--panel-bg); }
+.dhstx-panel  { background: var(--panel-bg); }
+.dhstx-border { border-color: var(--card-border); }
+.dhstx-text   { color: var(--text); }
+.dhstx-muted  { color: var(--muted); }
+.dhstx-accent { color: var(--accent-gold); }
 
 /* Base surfaces */
 html:not([data-theme="light"]) body {
@@ -65,3 +50,4 @@ html:not([data-theme="light"]) body {
   color: #111;
 }
 .btn-gold:hover { filter: brightness(0.96); }
+
