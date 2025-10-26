@@ -201,11 +201,13 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, []);
 
-  // Keep typed agent label in sync when user changes selection after animation
+  // Keep typewriter phrase reactive to selected agent
+  // On agent change after initial run, update the phrase to reflect the new agent
+  // without re-running the full mount sequence.
   useEffect(() => {
     activeAgentRef.current = selectedAgent;
     if (hasPlayedRef.current) {
-      setTypedText(`Welcome. ${selectedAgent} online.`);
+      setTypedText(`Welcome. Confer with your ${selectedAgent}.`);
     }
   }, [selectedAgent]);
 
@@ -276,7 +278,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, [chatboxVisible]);
 
-  // H1 glitch + left→right reveal
+  // H1 glitch + left→right reveal (run concurrently)
   useEffect(() => {
     if (!h1Visible) return;
     const reduceMotion =
@@ -287,9 +289,9 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       setH1Class('show');
       return;
     }
-    setH1Class('glitch');
-    const t = setTimeout(() => setH1Class('glitch reveal'), 800);
-    return () => clearTimeout(t);
+    // Apply both classes at once so animations run together
+    setH1Class('glitch reveal');
+    return () => {};
   }, [h1Visible]);
 
   // D) Title-case utility for agent info line
@@ -444,8 +446,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
           {/* Removed the small purple agent label line in hero per spec */}
         </div>
 
-        {/* Chatbox wrapper: mounts after typewriter completes and fades up */}
-        {typingDone && (
+        {/* Chatbox wrapper: mounts once after typewriter completes and stays mounted */}
+        {chatboxMounted && (
           <div className={`chatbox-wrapper up-fade ${chatboxVisible ? 'visible' : ''}`}>
             {/* Conversation Controls moved: history as attached pill near input */}
             {currentSessionId && (
@@ -607,89 +609,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} visibleFlags={chipsVisible} />
           </div>
         )}
-
-        {/* Messages Display */}
-        {typingDone && messages.length > 0 && (
-          <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
-            {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
-            ))}
-            
-            {isLoading && (
-              <div className="flex gap-3 justify-start mb-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC96C]/20">
-                  <Bot className="h-4 w-4 text-[#FFC96C] animate-pulse" />
-                </div>
-                <div className="bg-[#202020] text-[#F2F2F2] rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Chat Input - canonical search bar with toggles */}
-        {typingDone && (
-          <UpfadeOnOpen trigger={typingDone ? 'chat-visible' : 'chat-hidden'}>
-            <form onSubmit={handleSubmit} className="relative">
-              <button
-                type="button"
-                className="history-pill"
-                aria-pressed={showHistory}
-                aria-label={showHistory ? 'Hide history' : 'Show history'}
-                onClick={() => setShowHistory(!showHistory)}
-              >
-                <Clock className="h-4 w-4" aria-hidden="true" />
-                <span className="history-label">{showHistory ? 'Hide History' : 'History'}</span>
-              </button>
-              <div className="panel-system overflow-hidden p-2">
-                <ChatTools
-                  activeMode={activeMode}
-                  onToggleMode={setActiveMode}
-                  onAttach={() => {}}
-                  features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
-                  uploadOnRight
-                  rightAppend={(
-                    <button
-                      type="submit"
-                      disabled={!message.trim()}
-                      className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{ backgroundColor: message.trim() ? currentAgentColor : '#333' }}
-                      aria-label="Send message"
-                    >
-                      <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
-                    </button>
-                  )}
-                >
-                  <textarea
-                    ref={textareaRef}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Describe what you need help with…"
-                    className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
-                    rows={3}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSubmit(e);
-                      }
-                    }}
-                  />
-                </ChatTools>
-              </div>
-            </form>
-          </UpfadeOnOpen>
-        )}
-
-        {/* Dynamic Suggestions */}
-        {typingDone && (
-          <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} />
-        )}
-
+        
         
       </div>
     </section>
