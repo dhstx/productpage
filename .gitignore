@@ -52,4 +52,5 @@ sandbox.txt
 # Misc
 productpage/
 .manus-template-version
-.vercel
+.vercel/*
+!.vercel/project.json
