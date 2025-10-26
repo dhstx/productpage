@@ -1,5 +1,34 @@
 .feature-matrix { --amber:#FFC562; --ink:#0F0F10; --panel:#141416; --muted:#9CA3AF; --fg:#EAEAEA; }
 
+/* Pricing region + cards (UI-only layout for plans) */
+.price-plans-section { margin: 1.25rem 1rem 1.25rem; }
+.price-plans-section .section-title { color: var(--fg); text-transform: uppercase; letter-spacing: .06em; }
+.plans-quick-buttons { display: flex; justify-content: center; }
+
+.pricing-region { position: relative; margin: 0 1rem 1.5rem; }
+.pricing-controls { position: absolute; top: -42px; right: 0; display: flex; gap: .5rem; }
+.pr-arrow { background: rgba(0,0,0,0.25); color: var(--fg); border: 1px solid rgba(255,255,255,.08); padding: 6px 9px; border-radius: 6px; cursor: pointer; }
+.pr-arrow:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+.pricing-snap-container { display:flex; gap:1rem; overflow-x:auto; scroll-snap-type:x mandatory; padding: 1rem 0; -webkit-overflow-scrolling: touch; }
+.pricing-vertical { display:flex; flex-direction: column; gap: 1rem; padding: 1rem 0; }
+.plan-card { scroll-snap-align:center; flex: 0 0 320px; background: var(--panel); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.35); color: var(--fg); }
+.plan-card h3 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .25rem; }
+.plan-card .price { color: var(--amber); font-weight: 800; font-size: 1.25rem; margin-bottom: .25rem; }
+.plan-card .features { color: var(--muted); font-size: .9rem; margin: .5rem 0 .75rem; padding-left: 1rem; }
+.plan-card .cta-row { display:flex; align-items:center; gap:.75rem; }
+.plan-card .cta { background: var(--amber); color: #1B140A; border: none; border-radius: 8px; padding: 10px 12px; font-weight: 700; cursor: pointer; }
+.plan-card .more { color: var(--muted); font-size: .85rem; text-decoration: underline; }
+
+@media (max-width:720px) {
+  .pricing-snap-container { padding-left: 12px; }
+  .plan-card { flex: 0 0 calc(100% - 48px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-snap-container { scroll-behavior:auto; }
+}
+
 /* --- Windows 98 style for tier toggle --- */
 .tier-toggle.win98 {
   display: flex;
