@@ -109,7 +109,7 @@ export default function ChatTools({
             aria-pressed={activeMode === 'agi'}
             disabled={disabled}
           >
-            AGI
+            Agent
           </button>
         )}
 

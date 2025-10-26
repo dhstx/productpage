@@ -373,6 +373,36 @@
   }
 }
 
+/* Up-fade utility for chatbox and chips */
+.up-fade { opacity: 0; transform: translateY(12px); transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1); pointer-events: none; }
+.up-fade.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* H1 glitchy flicker then left→right reveal */
+@keyframes glitchFlicker {
+  0% { opacity: 0; text-shadow: none; }
+  10% { opacity: 0.9; text-shadow: 0 0 8px rgba(255,255,255,0.06); }
+  20% { opacity: 0; transform: translateX(-6px); }
+  30% { opacity: 0.85; transform: translateX(-2px); text-shadow: 0 0 10px rgba(255,255,255,0.08); }
+  45% { opacity: 0; transform: translateX(-8px); }
+  60% { opacity: 0.95; transform: translateX(-1px); text-shadow: 0 0 12px rgba(255,255,255,0.12); }
+  100% { opacity: 1; transform: translateX(0); text-shadow: none; }
+}
+@keyframes leftReveal {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-14px); }
+  to   { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
+}
+.syntek-h1.glitch { animation: glitchFlicker 800ms steps(6, end) forwards; }
+.syntek-h1.reveal { animation: leftReveal 900ms ease forwards; animation-delay: 220ms; }
+
+/* Mobile center for Select Agent trigger */
+@media (max-width:640px) {
+  .select-agent { margin-left: auto; margin-right: auto; display: block; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .up-fade, .syntek-h1 { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
 /* Cog visuals removed: styles deleted to avoid residual spacing */
 
 /* Light Mode — Strategic Clarity */
