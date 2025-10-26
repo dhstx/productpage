@@ -59,22 +59,11 @@ export default function AuthCallback() {
   }
 
   if (status === 'loading') {
-    // Themed loader: visible text + fast spinner + slow cog
+    // Plain themed "Logging in..." text only (no spinners/cogs)
     return (
-      <div className="themed-screen" role="status">
+      <div className="themed-screen" role="status" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Logging in…</div>
-
-          {/* fast gold ring spinner */}
-          <svg className="gold-spinner" viewBox="0 0 50 50" style={{ width: 72, height:72, marginBottom: 16 }} aria-hidden="true" focusable="false">
-            <circle cx="25" cy="25" r="20" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" fill="none" strokeDasharray="31.4 31.4"/>
-          </svg>
-
-          {/* slow cog spinner below using site's gear component */}
-          <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Gear className="gold-spinner slow-spin" color="var(--accent-gold)" radius={24} />
-          </div>
-
+          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Logging in...</div>
           <span className="sr-only">Logging in…</span>
         </div>
       </div>
@@ -117,17 +106,11 @@ export default function AuthCallback() {
     );
   }
 
-  // Success state: keep logic but show same loader while redirect occurs
+  // Success state: keep logic and show same plain text while redirect occurs
   return (
-    <div className="themed-screen" role="status">
+    <div className="themed-screen" role="status" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Logging in…</div>
-        <svg className="gold-spinner" viewBox="0 0 50 50" style={{ width: 72, height:72, marginBottom: 16 }} aria-hidden="true" focusable="false">
-          <circle cx="25" cy="25" r="20" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" fill="none" strokeDasharray="31.4 31.4"/>
-        </svg>
-        <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Gear className="gold-spinner slow-spin" color="var(--accent-gold)" radius={24} />
-        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Logging in...</div>
         <span className="sr-only">Logging in…</span>
       </div>
     </div>

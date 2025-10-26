@@ -15,6 +15,11 @@ const TYPEWRITER_PAUSE_MS = 650; // shorter pause per new spec
 
 export default function AIChatInterface({ initialAgent = 'Commander', onAgentChange }) {
   const [typingDone, setTypingDone] = useState(false);
+  const [chatboxMounted, setChatboxMounted] = useState(false);
+  const [chatboxVisible, setChatboxVisible] = useState(false);
+  const [chipsVisible, setChipsVisible] = useState([false, false, false, false]);
+  const [h1Visible, setH1Visible] = useState(false);
+  const [h1Class, setH1Class] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
@@ -89,26 +94,27 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
-      setTypedText(`Welcome. ${activeAgentRef.current} online.`);
+      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
       return;
     }
 
-    // Two-phase typewriter: "Welcome." then " {Agent} online."
+    // Three-phase typewriter: "Welcome." then " Confer with your " then "{Agent}."
     isAnimatingRef.current = true;
     setTypedText('');
 
     const greetingPart = 'Welcome.';
-    const agentPart = ` ${activeAgentRef.current} online.`;
+    const conferPart = ' Confer with your ';
+    const agentPart = `${activeAgentRef.current}.`;
     // Slow typewriter by 15% (UI-only)
     const typingSpeed = Math.round(TYPEWRITER_CHAR_MS * 1.15);
     const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
     let output = '';
 
-    // Type "Hello."
+    // Type "Welcome."
     greetingPart.split('').forEach((ch) => {
       delay += typingSpeed;
       const id = setTimeout(() => {
@@ -121,7 +127,17 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     // Pause
     delay += pauseDuration;
 
-    // Type " {Agent} online."
+    // Type " Confer with your "
+    conferPart.split('').forEach((ch) => {
+      delay += typingSpeed;
+      const id = setTimeout(() => {
+        output += ch;
+        setTypedText(output);
+      }, delay);
+      timeoutsRef.current.push(id);
+    });
+
+    // Type "{Agent}."
     agentPart.split('').forEach((ch) => {
       delay += typingSpeed;
       const id = setTimeout(() => {
@@ -133,7 +149,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
     // Completion
     const completionId = setTimeout(() => {
-      setTypedText(`Welcome. ${activeAgentRef.current} online.`);
+      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
@@ -193,15 +209,11 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
   }, [selectedAgent]);
 
-  // Scale: Double SYNTEK AUTOMATIONS; halve typewriter H1 (computed sizes)
+  // Computed-size adjustments (UI-only)
+  // - Typewriter H1: 50% of computed size (run once on mount)
   useEffect(() => {
     const root = sectionRef.current || (typeof document !== 'undefined' ? document.querySelector('.chat-hero') : null);
     if (!root) return;
-    const headingEl = subheadRef.current || root.querySelector('.subhead');
-    if (headingEl) {
-      const fs = parseFloat(getComputedStyle(headingEl).fontSize || '0');
-      if (!Number.isNaN(fs) && fs > 0) headingEl.style.fontSize = `${Math.round(fs * 2)}px`;
-    }
     const typeEl = titleRef.current || root.querySelector('h1');
     if (typeEl) {
       const tfs = parseFloat(getComputedStyle(typeEl).fontSize || '0');
@@ -209,16 +221,90 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
   }, []);
 
+  // - SYNTEK AUTOMATIONS: reduce by 10% when it becomes visible
+  useEffect(() => {
+    if (!h1Visible) return;
+    const root = sectionRef.current || (typeof document !== 'undefined' ? document.querySelector('.chat-hero') : null);
+    const headingEl = subheadRef.current || root?.querySelector('.syntek-h1') || root?.querySelector('.subhead');
+    if (headingEl) {
+      const fs = parseFloat(getComputedStyle(headingEl).fontSize || '0');
+      if (!Number.isNaN(fs) && fs > 0) headingEl.style.fontSize = `${Math.round(fs * 0.9)}px`;
+    }
+  }, [h1Visible]);
+
+  // Orchestrate chatbox mount → fade, then chips → H1 reveal
+  useEffect(() => {
+    if (!typingDone) return;
+    setChatboxMounted(true);
+    const t = setTimeout(() => setChatboxVisible(true), 120);
+    return () => clearTimeout(t);
+  }, [typingDone]);
+
+  useEffect(() => {
+    if (!chatboxVisible) return;
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      setChipsVisible([true, true, true, true]);
+      setH1Visible(true);
+      return;
+    }
+
+    const fadeDuration = 420;
+    const base = fadeDuration + 80;
+    const timers = [0, 1, 2, 3].map((i) =>
+      setTimeout(
+        () =>
+          setChipsVisible((prev) => {
+            const copy = [...prev];
+            copy[i] = true;
+            return copy;
+          }),
+        base + i * 140
+      )
+    );
+
+    const totalChipsTime = base + 4 * 140 + 140;
+    const h1Timer = setTimeout(() => setH1Visible(true), totalChipsTime + 120);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      clearTimeout(h1Timer);
+    };
+  }, [chatboxVisible]);
+
+  // H1 glitch + left→right reveal
+  useEffect(() => {
+    if (!h1Visible) return;
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      setH1Class('show');
+      return;
+    }
+    setH1Class('glitch');
+    const t = setTimeout(() => setH1Class('glitch reveal'), 800);
+    return () => clearTimeout(t);
+  }, [h1Visible]);
+
   // D) Title-case utility for agent info line
   const toTitleCase = (s) => s
     .split(' ')
     .map(w => (w.length ? (w[0].toUpperCase() + w.slice(1).toLowerCase()) : w))
     .join(' ');
 
-  // Derive typed prefix vs. agent portion for colored styling
-  const prefixText = 'Welcome. ';
+  // Derive typed segments: prefix ("Welcome. Confer with your "), agent name (colored), and suffix (e.g., '.')
+  const prefixText = 'Welcome. Confer with your ';
   const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
-  const typedAgentText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
+  const restText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
+  const dotIndex = restText.indexOf('.')
+  const typedAgentName = dotIndex >= 0 ? restText.slice(0, dotIndex) : restText;
+  const typedSuffix = dotIndex >= 0 ? restText.slice(dotIndex) : '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -323,7 +409,14 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       <div className="mx-auto max-w-4xl">
         {/* Canonical Hero */}
         <div className="mb-6 text-center">
-          <div ref={subheadRef} className="subhead mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
+          {h1Visible && (
+            <div
+              ref={subheadRef}
+              className={`syntek-h1 mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase ${h1Class}`}
+            >
+              SYNTEK AUTOMATIONS
+            </div>
+          )}
           <h1
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
@@ -335,12 +428,10 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
               className="inline-flex flex-wrap items-baseline gap-1"
             >
               <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-              <span
-                className="underline underline-offset-4"
-                style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}
-              >
-                {typedAgentText}
+              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
+                {typedAgentName}
               </span>
+              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
             </span>
             <span
               className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
@@ -353,67 +444,42 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
           {/* Removed the small purple agent label line in hero per spec */}
         </div>
 
-        {/* Conversation Controls moved: history as attached pill near input */}
-        {typingDone && currentSessionId && (
-          <div className="mb-6">
-            <button
-              onClick={startNewConversation}
-              className="panel-system px-4 py-2 text-sm font-medium text-[#FFC96C] hover:bg-[#202020] transition-all"
-            >
-              New Conversation
-            </button>
-          </div>
-        )}
-
-        {/* Conversation History Panel */}
-        {typingDone && showHistory && (
-          <div className="mb-6">
-            <ConversationHistory 
-              onSelectSession={loadSession}
-              currentSessionId={currentSessionId}
-            />
-          </div>
-        )}
-
-        {/* Agent Selector (centered pill) */}
+        {/* Chatbox wrapper: mounts after typewriter completes and fades up */}
         {typingDone && (
-        <div className="mb-6 flex justify-center">
-          <div className="relative w-full sm:w-auto">
-            <button
-              onClick={() => setShowAgentMenu(!showAgentMenu)}
-              className="flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
-              style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
-              aria-haspopup="listbox"
-              aria-expanded={showAgentMenu}
-            >
-              <span className="inline-flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="agent-dot"
-                  style={{
-                    display: 'inline-block',
-                    width: '14px',
-                    height: '14px',
-                    borderRadius: '9999px',
-                    backgroundColor: currentAgentColor,
-                    boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
-                  }}
-                />
-                <span>Select Agent</span>
-              </span>
-              <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? 'rotate-180' : ''}`} />
-            </button>
+          <div className={`chatbox-wrapper up-fade ${chatboxVisible ? 'visible' : ''}`}>
+            {/* Conversation Controls moved: history as attached pill near input */}
+            {currentSessionId && (
+              <div className="mb-6">
+                <button
+                  onClick={startNewConversation}
+                  className="panel-system px-4 py-2 text-sm font-medium text-[#FFC96C] hover:bg-[#202020] transition-all"
+                >
+                  New Conversation
+                </button>
+              </div>
+            )}
 
-            {showAgentMenu && (
-              <div role="listbox" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
-                {menuAgents.map((agent) => (
-                  <button
-                    key={agent.name}
-                    onClick={() => handleAgentSelect(agent.name)}
-                    className="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020]"
-                    role="option"
-                    aria-selected={selectedAgent === agent.name}
-                  >
+            {/* Conversation History Panel */}
+            {showHistory && (
+              <div className="mb-6">
+                <ConversationHistory 
+                  onSelectSession={loadSession}
+                  currentSessionId={currentSessionId}
+                />
+              </div>
+            )}
+
+            {/* Agent Selector (centered pill) */}
+            <div className="mb-6 flex justify-center">
+              <div className="relative w-full sm:w-auto">
+                <button
+                  onClick={() => setShowAgentMenu(!showAgentMenu)}
+                  className="select-agent flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
+                  style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
+                  aria-haspopup="listbox"
+                  aria-expanded={showAgentMenu}
+                >
+                  <span className="inline-flex items-center gap-2">
                     <span
                       aria-hidden="true"
                       className="agent-dot"
@@ -422,19 +488,124 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                         width: '14px',
                         height: '14px',
                         borderRadius: '9999px',
-                        marginLeft: '2px',
-                        backgroundColor: getAgentColor(agent.name, agent.color),
+                        backgroundColor: currentAgentColor,
                         boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
                       }}
                     />
-                    <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
-                    {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
-                  </button>
+                    <span>Select Agent</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showAgentMenu && (
+                  <div role="listbox" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
+                    {menuAgents.map((agent) => (
+                      <button
+                        key={agent.name}
+                        onClick={() => handleAgentSelect(agent.name)}
+                        className="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020]"
+                        role="option"
+                        aria-selected={selectedAgent === agent.name}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="agent-dot"
+                          style={{
+                            display: 'inline-block',
+                            width: '14px',
+                            height: '14px',
+                            borderRadius: '9999px',
+                            marginLeft: '2px',
+                            backgroundColor: getAgentColor(agent.name, agent.color),
+                            boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
+                          }}
+                        />
+                        <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
+                        {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Messages Display */}
+            {messages.length > 0 && (
+              <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
+                {messages.map((msg) => (
+                  <MessageBubble key={msg.id} message={msg} />
                 ))}
+                {isLoading && (
+                  <div className="flex gap-3 justify-start mb-4">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC96C]/20">
+                      <Bot className="h-4 w-4 text-[#FFC96C] animate-pulse" />
+                    </div>
+                    <div className="bg-[#202020] text-[#F2F2F2] rounded-lg p-4">
+                      <div className="flex gap-2">
+                        <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                        <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                        <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
+
+            {/* Chat Input - canonical search bar with toggles */}
+            <UpfadeOnOpen trigger={chatboxVisible ? 'chat-visible' : 'chat-hidden'}>
+              <form onSubmit={handleSubmit} className="relative">
+                <button
+                  type="button"
+                  className="history-pill"
+                  aria-pressed={showHistory}
+                  aria-label={showHistory ? 'Hide history' : 'Show history'}
+                  onClick={() => setShowHistory(!showHistory)}
+                >
+                  <Clock className="h-4 w-4" aria-hidden="true" />
+                  <span className="history-label">{showHistory ? 'Hide History' : 'History'}</span>
+                </button>
+                <div className="panel-system overflow-hidden p-2">
+                  <ChatTools
+                    activeMode={activeMode}
+                    onToggleMode={setActiveMode}
+                    onAttach={() => {}}
+                    features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
+                    uploadOnRight
+                    rightAppend={(
+                      <button
+                        type="submit"
+                        disabled={!message.trim()}
+                        className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ backgroundColor: message.trim() ? currentAgentColor : '#333' }}
+                        aria-label="Send message"
+                      >
+                        <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
+                      </button>
+                    )}
+                  >
+                    <textarea
+                      ref={textareaRef}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Describe what you need help with…"
+                      className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
+                      rows={3}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
+                    />
+                  </ChatTools>
+                </div>
+              </form>
+            </UpfadeOnOpen>
+
+            {/* Dynamic Suggestions (plug-n-play chips) */}
+            <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} visibleFlags={chipsVisible} />
           </div>
-        </div>
         )}
 
         {/* Messages Display */}
@@ -557,15 +728,15 @@ function getSuggestions(input) {
   ];
 }
 
-function SuggestionsRow({ inputValue, onPick }) {
+function SuggestionsRow({ inputValue, onPick, visibleFlags = [] }) {
   const items = getSuggestions(inputValue);
   return (
     <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {items.map((prompt) => (
+      {items.map((prompt, idx) => (
         <button
           key={prompt}
           onClick={() => onPick(prompt)}
-          className="panel-system p-3 text-left text-sm text-[#B3B3B3] transition-all hover:bg-[#202020] hover:text-[#F2F2F2]"
+          className={`plug-chip panel-system up-fade ${visibleFlags[idx] ? 'visible' : ''} p-3 text-left text-sm text-[#B3B3B3] transition-all hover:bg-[#202020] hover:text-[#F2F2F2]`}
         >
           <Sparkles className="mb-1 inline h-3 w-3" /> {prompt}
         </button>
