@@ -182,7 +182,7 @@ export default function Billing() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading billing information...</p>
+          <p style={{ color: 'var(--muted)' }}>Loading billing information...</p>
         </div>
       </div>
     );
@@ -259,7 +259,7 @@ export default function Billing() {
                   <div className="card-surface p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Core Points</span>
-                      <TrendingUp className="h-4 w-4 text-blue-600" />
+                      <TrendingUp className="h-4 w-4" style={{ color: '#3b82f6' }} />
                     </div>
                     <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
                       {ptData.core.used.toLocaleString()} / {ptData.core.total.toLocaleString()}
@@ -272,7 +272,7 @@ export default function Billing() {
                   <div className="card-surface p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Advanced Points</span>
-                      <Zap className="h-4 w-4 text-purple-600" />
+                      <Zap className="h-4 w-4" style={{ color: '#9333ea' }} />
                     </div>
                     <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
                       {ptData.advanced.used.toLocaleString()} / {ptData.advanced.total.toLocaleString()}
@@ -285,7 +285,7 @@ export default function Billing() {
                   <div className="card-surface p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm" style={{ color: 'var(--muted)' }}>Resets In</span>
-                      <AlertCircle className="h-4 w-4 text-orange-600" />
+                      <AlertCircle className="h-4 w-4" style={{ color: '#ea580c' }} />
                     </div>
                     <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
                       {ptData.days_until_reset || 0} days

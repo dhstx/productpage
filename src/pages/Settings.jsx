@@ -77,7 +77,7 @@ export default function SettingsEnhanced() {
                     className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left"
                     style={activeSection === id ? { background: 'var(--accent-muted, rgba(229,170,93,0.12))', color: 'var(--text)' } : { color: 'var(--text)' }}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                     <span className="text-sm font-medium">{label}</span>
                   </button>
                 ))}
@@ -86,7 +86,7 @@ export default function SettingsEnhanced() {
                   className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left mt-4 pt-4 border-t"
                   style={{ borderColor: 'var(--card-border, var(--border))', color: '#ff6b6b' }}
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                   <span className="text-sm font-medium">Log out</span>
                 </button>
               </nav>
@@ -163,87 +163,94 @@ function ProfileSection({ user, profile }) {
       <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Profile Information</h2>
 
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
-          message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-        }`}>
+        <div className="mb-4 p-4 rounded-lg" style={{
+          background: message.type === 'success' ? 'rgba(34,197,94,0.12)' : 'rgba(220,38,38,0.12)',
+          border: `1px solid ${message.type === 'success' ? 'rgba(34,197,94,0.35)' : 'rgba(220,38,38,0.35)'}`,
+          color: message.type === 'success' ? '#22c55e' : '#ff6b6b'
+        }}>
           {message.text}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
             Full Name
           </label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
             <input
               type="text"
               value={formData.fullName}
               onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
               placeholder="John Doe"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
             Email Address
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
             <input
               type="email"
               value={formData.email}
               disabled
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg cursor-not-allowed"
+              style={{ background: 'var(--card-bg)', color: 'var(--muted)', borderColor: 'var(--card-border)', opacity: 0.7 }}
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+          <p className="text-xs mt-1" style={{ color: 'var(--muted)' }}>Email cannot be changed</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
             Phone Number
           </label>
           <div className="relative">
-            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
             <input
               type="tel"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
               placeholder="+1 (555) 123-4567"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
             Company
           </label>
           <div className="relative">
-            <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
             <input
               type="text"
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
               placeholder="Acme Inc."
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
             Avatar URL
           </label>
           <input
             type="url"
             value={formData.avatarUrl}
             onChange={(e) => setFormData({ ...formData, avatarUrl: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
             placeholder="https://example.com/avatar.jpg"
           />
         </div>
@@ -253,7 +260,7 @@ function ProfileSection({ user, profile }) {
           disabled={saving}
           className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Save className="h-5 w-5" />
+          <Save className="h-5 w-5" style={{ color: 'var(--muted)' }} />
           {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </form>
@@ -325,16 +332,17 @@ function SecuritySection({ user }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
               New Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
               <input
                 type={showPasswords.new ? 'text' : 'password'}
                 value={formData.newPassword}
                 onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-                className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-12 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
                 placeholder="••••••••"
                 required
               />
@@ -344,25 +352,26 @@ function SecuritySection({ user }) {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2"
               >
                 {showPasswords.new ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
+                  <EyeOff className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                 ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
+                  <Eye className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                 )}
               </button>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text)' }}>
               Confirm New Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5" />
               <input
                 type={showPasswords.confirm ? 'text' : 'password'}
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-12 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              style={{ background: 'var(--card-bg)', color: 'var(--text)', borderColor: 'var(--card-border)' }}
                 placeholder="••••••••"
                 required
               />
@@ -372,9 +381,9 @@ function SecuritySection({ user }) {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2"
               >
                 {showPasswords.confirm ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
+                  <EyeOff className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                 ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
+                  <Eye className="h-5 w-5" style={{ color: 'var(--muted)' }} />
                 )}
               </button>
             </div>
@@ -385,7 +394,7 @@ function SecuritySection({ user }) {
             disabled={saving}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Save className="h-5 w-5" />
+            <Save className="h-5 w-5" style={{ color: 'var(--muted)' }} />
             {saving ? 'Updating...' : 'Update Password'}
           </button>
         </form>
@@ -453,9 +462,11 @@ function NotificationsSection({ user }) {
       <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Notification Preferences</h2>
 
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
-          message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
-        }`}>
+        <div className="mb-4 p-4 rounded-lg" style={{
+          background: message.type === 'success' ? 'rgba(34,197,94,0.12)' : 'rgba(220,38,38,0.12)',
+          border: `1px solid ${message.type === 'success' ? 'rgba(34,197,94,0.35)' : 'rgba(220,38,38,0.35)'}`,
+          color: message.type === 'success' ? '#22c55e' : '#ff6b6b'
+        }}>
           {message.text}
         </div>
       )}
@@ -497,7 +508,7 @@ function NotificationsSection({ user }) {
         disabled={saving}
         className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <Save className="h-5 w-5" />
+        <Save className="h-5 w-5" style={{ color: 'var(--muted)' }} />
         {saving ? 'Saving...' : 'Save Preferences'}
       </button>
     </div>
@@ -638,7 +649,7 @@ function DataPrivacySection({ user }) {
           disabled={exporting}
           className="flex items-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Download className="h-5 w-5" />
+          <Download className="h-5 w-5" style={{ color: 'var(--muted)' }} />
           {exporting ? 'Exporting...' : 'Export Data'}
         </button>
       </div>
@@ -654,7 +665,7 @@ function DataPrivacySection({ user }) {
           disabled={deleting}
           className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Trash2 className="h-5 w-5" />
+          <Trash2 className="h-5 w-5" style={{ color: 'var(--muted)' }} />
           {deleting ? 'Deleting...' : 'Delete Account'}
         </button>
       </div>
