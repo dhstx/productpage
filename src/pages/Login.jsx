@@ -110,7 +110,7 @@ export default function Login() {
         <div className="header-left">
           <BackArrow />
           <Link to="/" className="logo-btn" aria-label="DHStx Home">
-            <img src="/logo.png" alt="DHStx" />
+            <span className="logo-text">DHStx</span>
             <span className="sr-only">DHStx</span>
           </Link>
         </div>
@@ -118,23 +118,15 @@ export default function Login() {
           <ThemeToggle inline className="theme-toggle" />
         </div>
       </div>
-      <div className="themed-card" style={{ width: 420, maxWidth: '100%' }}>
-        <div style={{ textAlign: 'center', marginBottom: 12 }}>
-          <img src="/logo.png" alt="DHStx" style={{ width: 40, height: 40, margin: '0 auto' }} />
-          <h1 style={{ marginTop: 10, color: 'var(--text)' }}>Account Login</h1>
-          <p style={{ color: 'var(--muted)', marginTop: 6 }}>Access your organization's admin portal</p>
+      <div className="themed-card login-card" style={{ width: 420, maxWidth: '100%' }}>
+        <div className="login-card-brand" style={{ textAlign: 'center', marginBottom: 12 }}>
+          <h1 className="brand-title" style={{ marginTop: 2 }}>Syntek Automations</h1>
+          <p className="muted" style={{ marginTop: 6 }}>Access your organization's admin portal</p>
         </div>
 
         <form onSubmit={handleSubmit}>
           {error && (
-            <div style={{
-              background: 'rgba(220,38,38,0.12)',
-              border: '1px solid rgba(220,38,38,0.35)',
-              color: '#ffb4b4',
-              padding: '10px 12px',
-              borderRadius: 8,
-              marginBottom: 16,
-            }}>
+            <div className="alert-error" style={{ padding: '10px 12px', borderRadius: 8, marginBottom: 16 }}>
               {error}
             </div>
           )}
@@ -169,7 +161,7 @@ export default function Login() {
             />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+          <div className="login-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <input
                 type="checkbox"
@@ -179,10 +171,10 @@ export default function Login() {
                 onChange={handleChange}
                 style={{ width: 16, height: 16 }}
               />
-              <label htmlFor="rememberMe" style={{ marginLeft: 8, fontSize: 14, color: 'var(--muted)' }}>Remember me</label>
+              <label htmlFor="rememberMe" className="muted" style={{ marginLeft: 8, fontSize: 14 }}>Remember me</label>
             </div>
 
-            <Link to="/forgot-password" style={{ fontSize: 14, color: 'var(--accent-gold)', fontWeight: 600 }}>
+            <Link to="/forgot-password" className="link-accent" style={{ fontSize: 14, fontWeight: 600 }}>
               Forgot password?
             </Link>
           </div>
@@ -193,15 +185,15 @@ export default function Login() {
         </form>
 
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <p style={{ fontSize: 14, color: 'var(--muted)' }}>
+          <p className="muted" style={{ fontSize: 14 }}>
             Don't have an account?{' '}
-            <Link to="/register" style={{ color: 'var(--accent-gold)', fontWeight: 600 }}>Sign up</Link>
+            <Link to="/register" className="link-accent" style={{ fontWeight: 600 }}>Sign up</Link>
           </p>
         </div>
 
         <div style={{ marginTop: 16 }}>
           <div style={{ position: 'relative', textAlign: 'center', marginBottom: 12 }}>
-            <span style={{ color: 'var(--muted)', fontSize: 13 }}>Or continue with</span>
+            <span className="muted" style={{ fontSize: 13 }}>Or continue with</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
