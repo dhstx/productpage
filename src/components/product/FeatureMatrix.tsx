@@ -28,106 +28,109 @@ export default function FeatureMatrix(){
 
   return (
     <section id="pricing" className="feature-matrix" role="region" aria-label="Pricing plans">
-      <div className="price-plans-section">
-        <h2 className="h2 section-title" style={{marginBottom: '0.5rem'}}>Price Plans</h2>
-        <div className="plans-quick-buttons" aria-label="Plan quick buttons">
-          <TierToggle active={active} onChange={setActive}/>
+      {/* Price Plans (force dark visuals independent of site theme) */}
+      <section className="price-plans force-dark" aria-label="Price Plans">
+        <div className="centered">
+          <h2 className="h2 section-title" style={{ marginBottom: '0.5rem' }}>Price Plans</h2>
         </div>
-      </div>
+        <div className="plans-quick-buttons" aria-label="Quick plan selector">
+          <TierToggle active={active} onChange={setActive} />
+        </div>
 
-      {/* Scrollable plan cards / carousel */}
-      <div className="pricing-region">
-        {!prefersReduced && (
-          <div className="pricing-controls" aria-hidden>
-            <button className="pr-arrow left" aria-label="Scroll left" aria-controls="pricing-snap" onClick={() => scrollByDir('left')}>‹</button>
-            <button className="pr-arrow right" aria-label="Scroll right" aria-controls="pricing-snap" onClick={() => scrollByDir('right')}>›</button>
-          </div>
-        )}
+        {/* Scrollable plan cards / carousel */}
+        <div className="pricing-region">
+          {!prefersReduced && (
+            <div className="pricing-controls" aria-hidden>
+              <button className="pr-arrow left" aria-label="Scroll left" aria-controls="pricing-snap" onClick={() => scrollByDir('left')}>‹</button>
+              <button className="pr-arrow right" aria-label="Scroll right" aria-controls="pricing-snap" onClick={() => scrollByDir('right')}>›</button>
+            </div>
+          )}
 
-        {prefersReduced ? (
-          <div className="pricing-vertical" role="list" aria-label="Pricing plans">
-            {PLANS.map(plan => (
-              <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
-                <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
-                <div className="price">{plan.priceLabel} {plan.interval}</div>
-                <ul className="features">
-                  {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
-                </ul>
-                <div className="cta-row">
-                  <button
-                    className="btn-primary"
-                    onClick={async () => {
-                      try {
-                        const mod = await import("@/lib/stripe.js");
-                        await mod.initializeStripeCheckout(plan.id);
-                      } catch {
-                        window.location.href = "/login";
-                      }
-                    }}
-                  >
-                    Choose {plan.name}
-                  </button>
-                  <button
-                    className="more"
-                    aria-expanded={!!expanded[plan.id]}
-                    onClick={() => toggleExpanded(plan.id)}
-                  >
-                    Learn more
-                  </button>
-                </div>
-                {expanded[plan.id] && (
-                  <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
-                    </ul>
+          {prefersReduced ? (
+            <div className="pricing-vertical" role="list" aria-label="Pricing plans">
+              {PLANS.map(plan => (
+                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
+                  <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
+                  <div className="price">{plan.priceLabel} {plan.interval}</div>
+                  <ul className="features">
+                    {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
+                  </ul>
+                  <div className="cta-row">
+                    <button
+                      className="btn-primary"
+                      onClick={async () => {
+                        try {
+                          const mod = await import("@/lib/stripe.js");
+                          await mod.initializeStripeCheckout(plan.id);
+                        } catch {
+                          window.location.href = "/login";
+                        }
+                      }}
+                    >
+                      Choose {plan.name}
+                    </button>
+                    <button
+                      className="more"
+                      aria-expanded={!!expanded[plan.id]}
+                      onClick={() => toggleExpanded(plan.id)}
+                    >
+                      Learn more
+                    </button>
                   </div>
-                )}
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div id="pricing-snap" className="pricing-snap-container" ref={snapRef} tabIndex={0} role="list" aria-label="Pricing plans carousel">
-            {PLANS.map(plan => (
-              <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
-                <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
-                <div className="price">{plan.priceLabel} {plan.interval}</div>
-                <ul className="features">
-                  {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
-                </ul>
-                <div className="cta-row">
-                  <button
-                    className="btn-primary"
-                    onClick={async () => {
-                      try {
-                        const mod = await import("@/lib/stripe.js");
-                        await mod.initializeStripeCheckout(plan.id);
-                      } catch {
-                        window.location.href = "/login";
-                      }
-                    }}
-                  >
-                    Choose {plan.name}
-                  </button>
-                  <button
-                    className="more"
-                    aria-expanded={!!expanded[plan.id]}
-                    onClick={() => toggleExpanded(plan.id)}
-                  >
-                    Learn more
-                  </button>
-                </div>
-                {expanded[plan.id] && (
-                  <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
-                    </ul>
+                  {expanded[plan.id] && (
+                    <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
+                      <ul className="list-disc pl-5 space-y-1">
+                        {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div id="pricing-snap" className="pricing-snap-container" ref={snapRef} tabIndex={0} role="list" aria-label="Pricing plans carousel">
+              {PLANS.map(plan => (
+                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
+                  <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
+                  <div className="price">{plan.priceLabel} {plan.interval}</div>
+                  <ul className="features">
+                    {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
+                  </ul>
+                  <div className="cta-row">
+                    <button
+                      className="btn-primary"
+                      onClick={async () => {
+                        try {
+                          const mod = await import("@/lib/stripe.js");
+                          await mod.initializeStripeCheckout(plan.id);
+                        } catch {
+                          window.location.href = "/login";
+                        }
+                      }}
+                    >
+                      Choose {plan.name}
+                    </button>
+                    <button
+                      className="more"
+                      aria-expanded={!!expanded[plan.id]}
+                      onClick={() => toggleExpanded(plan.id)}
+                    >
+                      Learn more
+                    </button>
                   </div>
-                )}
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
+                  {expanded[plan.id] && (
+                    <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
+                      <ul className="list-disc pl-5 space-y-1">
+                        {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
+                      </ul>
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       {(["Core","Advanced","Security","Support"] as const).map(section => (
         <section key={section} className="matrix-section">
