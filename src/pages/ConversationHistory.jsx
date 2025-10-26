@@ -196,7 +196,7 @@ export default function ConversationHistory() {
             <div className="bg-white p-6 rounded-lg shadow">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">PT Spent</p>
+                  <p className="text-sm text-gray-600">Points Spent</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.total_pt_spent}</p>
                 </div>
                 <Zap className="w-8 h-8 text-yellow-600" />
@@ -335,7 +335,7 @@ export default function ConversationHistory() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Zap className="w-4 h-4" />
-                        {conversation.total_pt_cost} PT
+                        {conversation.total_pt_cost} Points
                       </span>
                     </div>
                   </div>

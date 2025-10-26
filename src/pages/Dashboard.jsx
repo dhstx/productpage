@@ -118,7 +118,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* PT Health Bar */}
+              {/* Point Health Bar */}
               {!loading && ptData && (
                 <div className="card-surface p-4">
                   <PTHealthBar

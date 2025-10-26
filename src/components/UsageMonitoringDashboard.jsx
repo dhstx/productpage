@@ -1,6 +1,6 @@
 /**
  * Usage Monitoring Dashboard
- * Comprehensive view of PT usage, throttle status, and warnings
+ * Comprehensive view of Points usage, throttle status, and warnings
  */
 
 import React, { useState, useEffect } from 'react';
@@ -66,7 +66,7 @@ export default function UsageMonitoringDashboard({ userId }) {
   
   return (
     <div className="usage-monitoring-dashboard space-y-6">
-      {/* PT Status Card */}
+      {/* Point Status Card */}
       <PTStatusCard
         userPTStatus={ptStatus}
         daysInCycle={daysInCycle}
@@ -258,7 +258,7 @@ function RecentUsagePanel({ recentUsage }) {
               <span className="text-gray-700">{usage.agent_id}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-gray-600">{usage.pt_consumed} PT</span>
+              <span className="text-gray-600">{usage.pt_consumed} Points</span>
               <span className="text-gray-400 text-xs">
                 {new Date(usage.created_at).toLocaleTimeString()}
               </span>
@@ -301,7 +301,7 @@ function UsageStatisticsPanel({ usageData }) {
           icon="🟪"
         />
         <StatCard
-          label="Avg PT/Request"
+          label="Avg Points/Request"
           value={statistics.avgPTPerRequest.toFixed(1)}
           icon="📈"
         />
@@ -347,8 +347,8 @@ function StatCard({ label, value, icon }) {
 }
 
 /**
- * PT Cost Estimator Component
- * Shows estimated PT cost before sending request
+ * Point Cost Estimator Component
+ * Shows estimated Point cost before sending request
  */
 export function PTCostEstimator({ message, model = 'auto', responseLength = 'medium' }) {
   const [estimate, setEstimate] = useState(null);
@@ -391,7 +391,7 @@ export function PTCostEstimator({ message, model = 'auto', responseLength = 'med
           Estimated cost:
         </span>
         <span className="font-semibold text-blue-900">
-          {estimate.ptCost} PT
+          {estimate.ptCost} Points
           <span className={`ml-2 px-2 py-0.5 rounded text-xs ${
             estimate.ptType === 'advanced' 
               ? 'bg-purple-100 text-purple-700'

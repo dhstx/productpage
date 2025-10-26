@@ -181,7 +181,7 @@ function PlatformStatusCard({ platform }) {
           status="green"
         />
         <MetricCard
-          label="Total PT (24h)"
+          label="Total Points (24h)"
           value={platform.totalPT.toLocaleString()}
           target={`Core: ${platform.corePT} / Adv: ${platform.advancedPT}`}
           status="green"
@@ -274,7 +274,7 @@ function TierStatusCard({ tier }) {
             <span className="font-medium">${tier.totalCOGS.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
-            <span>Total PT:</span>
+            <span>Total Points:</span>
             <span className="font-medium">{tier.totalPT}</span>
           </div>
         </div>
