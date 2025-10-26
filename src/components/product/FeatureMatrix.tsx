@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { FEATURES, type Tier } from "@/data/featureMatrix";
 import { TierToggle } from "./TierToggle";
@@ -7,7 +7,6 @@ import { FeatureCard } from "./FeatureCard";
 export default function FeatureMatrix(){
   const [active, setActive] = useState<Tier>("Pro");
   const prefersReduced = useReducedMotion();
-  const snapRef = useRef<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const bySection = useMemo(() => {
     const g: Record<string, typeof FEATURES> = { Core:[], Advanced:[], Security:[], Support:[] };
@@ -15,120 +14,63 @@ export default function FeatureMatrix(){
     return g;
   }, []);
 
-  const scrollByDir = (dir: "left" | "right") => {
-    const el = snapRef.current;
-    if (!el) return;
-    const delta = el.clientWidth * 0.8 * (dir === "left" ? -1 : 1);
-    el.scrollBy({ left: delta, behavior: prefersReduced ? "auto" : "smooth" });
-  };
-
   const toggleExpanded = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
     <section id="pricing" className="feature-matrix" role="region" aria-label="Pricing plans">
-      {/* Price Plans (force dark visuals independent of site theme) */}
-      <section className="price-plans force-dark" aria-label="Price Plans">
+      {/* Price Plans */}
+      <section className="price-plans" aria-label="Price Plans">
         <div className="centered">
-          <h2 className="h2 section-title" style={{ marginBottom: '0.5rem' }}>Price Plans</h2>
+          <h2 className="h2 section-title center" style={{ marginBottom: '0.5rem' }}>Price Plans</h2>
         </div>
-        <div className="plans-quick-buttons" aria-label="Quick plan selector">
+        <div className="plans-quick-buttons center" aria-label="Quick plan selector">
           <TierToggle active={active} onChange={setActive} />
         </div>
 
-        {/* Scrollable plan cards / carousel */}
-        <div className="pricing-region">
-          {!prefersReduced && (
-            <div className="pricing-controls" aria-hidden>
-              <button className="pr-arrow left" aria-label="Scroll left" aria-controls="pricing-snap" onClick={() => scrollByDir('left')}>‹</button>
-              <button className="pr-arrow right" aria-label="Scroll right" aria-controls="pricing-snap" onClick={() => scrollByDir('right')}>›</button>
-            </div>
-          )}
-
-          {prefersReduced ? (
-            <div className="pricing-vertical" role="list" aria-label="Pricing plans">
-              {PLANS.map(plan => (
-                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
-                  <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
-                  <div className="price">{plan.priceLabel} {plan.interval}</div>
-                  <ul className="features">
-                    {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
-                  </ul>
-                  <div className="cta-row">
-                    <button
-                      className="btn-primary"
-                      onClick={async () => {
-                        try {
-                          const mod = await import("@/lib/stripe.js");
-                          await mod.initializeStripeCheckout(plan.id);
-                        } catch {
-                          window.location.href = "/login";
-                        }
-                      }}
-                    >
-                      Choose {plan.name}
-                    </button>
-                    <button
-                      className="more"
-                      aria-expanded={!!expanded[plan.id]}
-                      onClick={() => toggleExpanded(plan.id)}
-                    >
-                      Learn more
-                    </button>
+        {/* Centered grid layout for desktop; stacked on mobile */}
+        <div className="pricing-container">
+          <div className="plan-grid" role="list" aria-label="Pricing plans list">
+            {PLANS.map(plan => (
+              <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
+                <h3 id={`plan-${plan.id}`} className="plan-title">{plan.name}</h3>
+                <div className="plan-price">{plan.priceLabel} {plan.interval}</div>
+                <ul className="plan-features">
+                  {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
+                </ul>
+                <div className="cta-row">
+                  <button
+                    className="plan-cta"
+                    onClick={async () => {
+                      try {
+                        const mod = await import("@/lib/stripe.js");
+                        await mod.initializeStripeCheckout(plan.id);
+                      } catch {
+                        window.location.href = "/login";
+                      }
+                    }}
+                  >
+                    Choose {plan.name}
+                  </button>
+                  <button
+                    className="more"
+                    aria-expanded={!!expanded[plan.id]}
+                    onClick={() => toggleExpanded(plan.id)}
+                  >
+                    Learn more
+                  </button>
+                </div>
+                {expanded[plan.id] && (
+                  <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
+                    <ul className="list-disc pl-5 space-y-1">
+                      {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
+                    </ul>
                   </div>
-                  {expanded[plan.id] && (
-                    <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
-                      <ul className="list-disc pl-5 space-y-1">
-                        {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
-                      </ul>
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div id="pricing-snap" className="pricing-snap-container" ref={snapRef} tabIndex={0} role="list" aria-label="Pricing plans carousel">
-              {PLANS.map(plan => (
-                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
-                  <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
-                  <div className="price">{plan.priceLabel} {plan.interval}</div>
-                  <ul className="features">
-                    {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
-                  </ul>
-                  <div className="cta-row">
-                    <button
-                      className="btn-primary"
-                      onClick={async () => {
-                        try {
-                          const mod = await import("@/lib/stripe.js");
-                          await mod.initializeStripeCheckout(plan.id);
-                        } catch {
-                          window.location.href = "/login";
-                        }
-                      }}
-                    >
-                      Choose {plan.name}
-                    </button>
-                    <button
-                      className="more"
-                      aria-expanded={!!expanded[plan.id]}
-                      onClick={() => toggleExpanded(plan.id)}
-                    >
-                      Learn more
-                    </button>
-                  </div>
-                  {expanded[plan.id] && (
-                    <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
-                      <ul className="list-disc pl-5 space-y-1">
-                        {plan.features.map((f, idx) => (<li key={idx}>{f}</li>))}
-                      </ul>
-                    </div>
-                  )}
-                </article>
-              ))}
-            </div>
-          )}
+                )}
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -8,6 +8,8 @@
   --accent-gold: #e5aa5d;
   --accent-muted: rgba(229,170,93,0.12);
   --card-border: rgba(255,255,255,0.04);
+  /* Pricing background (light) token for price plans */
+  --pricing-bg-light: #f7f7f7;
 
   /* Back-compat aliases used in the app */
   --dhstx-black: var(--bg);
@@ -34,6 +36,16 @@
   --dhstx-text: var(--text);
   --dhstx-muted: var(--muted);
   --dhstx-accent: var(--accent-gold);
+}
+
+/* Dark theme tokens used by pricing */
+[data-theme="dark"] {
+  --text: #efefef;
+  --muted: rgba(255,255,255,0.65);
+  --card-bg: #111214;
+  --card-border: rgba(255,255,255,0.04);
+  --accent-gold: #e5aa5d;
+  --pricing-bg-dark: #0f0f10;
 }
 
 /* Base surfaces */
