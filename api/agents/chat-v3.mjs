@@ -5,6 +5,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
+import { randomUUID } from 'crypto';
 import { calculatePTCost, estimatePTCost } from '../services/ptCostCalculator.js';
 import { routeModel, isEmergencyModeActive } from '../services/modelRouter.js';
 import { performThrottleChecks } from '../services/throttleManager.js';
@@ -13,6 +14,14 @@ import { performThrottleChecks } from '../services/throttleManager.js';
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY
 });
+
+// Validate required environment variables before creating Supabase client
+if (!process.env.SUPABASE_URL) {
+  throw new Error('Missing SUPABASE_URL environment variable for chat API');
+}
+if (!process.env.SUPABASE_SERVICE_KEY) {
+  throw new Error('Missing SUPABASE_SERVICE_KEY environment variable for chat API');
+}
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -274,10 +283,9 @@ export default async function handler(req, res) {
  * Handle anonymous user requests
  */
 async function handleAnonymousRequest(message, agent, sessionId, res) {
+  // Auto-generate a sessionId if missing
   if (!sessionId) {
-    return res.status(400).json({
-      error: 'Session ID required for anonymous users'
-    });
+    sessionId = randomUUID();
   }
   
   // Get or create anonymous session
@@ -289,24 +297,34 @@ async function handleAnonymousRequest(message, agent, sessionId, res) {
   
   if (!session) {
     // Create new session
-    const { data: newSession, error } = await supabase
-      .from('anonymous_sessions')
-      .insert({
-        session_id: sessionId,
-        questions_asked: 0,
-        pt_used: 0,
-        max_questions: 1
-      })
-      .select()
-      .single();
-    
-    if (error) {
+    try {
+      const { data: newSession, error } = await supabase
+        .from('anonymous_sessions')
+        .insert({
+          session_id: sessionId,
+          questions_asked: 0,
+          pt_used: 0,
+          max_questions: 1
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase insert error:', error);
+        return res.status(500).json({
+          error: 'Failed to create anonymous session',
+          details: error.message
+        });
+      }
+
+      session = newSession;
+    } catch (error) {
+      console.error('Supabase insert error:', error);
       return res.status(500).json({
-        error: 'Failed to create session'
+        error: 'Failed to create anonymous session',
+        details: error.message
       });
     }
-    
-    session = newSession;
   }
   
   // Check if blocked or exceeded limit
