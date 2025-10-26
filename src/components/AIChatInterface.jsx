@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowUp, Sparkles, ChevronDown, Bot } from 'lucide-react';
+import { ArrowUp, Sparkles, ChevronDown, Bot, Clock } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
 import { agents as agentData } from '../lib/agents-enhanced';
 import { sendMessage as sendMessageAPI, getSession } from '../lib/api/agentClient';
 import MessageBubble from './MessageBubble';
 import ConversationHistory from './ConversationHistory';
 import { getAgentColor } from './ui/agentThemes';
+import UpfadeOnOpen from './UpfadeOnOpen';
 
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
@@ -34,6 +35,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const activeAgentRef = useRef('Commander');
   const hasPlayedRef = useRef(false);
   const titleRef = useRef(null);
+  const subheadRef = useRef(null);
   const helloPrefixRef = useRef(null);
 
   // Get all agents from the enhanced agents library
@@ -100,7 +102,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
     const greetingPart = 'Welcome.';
     const agentPart = ` ${activeAgentRef.current} online.`;
-    const typingSpeed = TYPEWRITER_CHAR_MS;
+    // Slow typewriter by 15% (UI-only)
+    const typingSpeed = Math.round(TYPEWRITER_CHAR_MS * 1.15);
     const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
     let output = '';
@@ -190,16 +193,19 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
   }, [selectedAgent]);
 
-  // B) Reduce typewriter subheading font-size by 40% multiplicatively
+  // Scale: Double SYNTEK AUTOMATIONS; halve typewriter H1 (computed sizes)
   useEffect(() => {
-    const root = sectionRef.current || document.querySelector('.chat-hero');
+    const root = sectionRef.current || (typeof document !== 'undefined' ? document.querySelector('.chat-hero') : null);
     if (!root) return;
-    const elSub = root.querySelector('.subhead');
-    if (elSub) {
-      const fs = parseFloat(getComputedStyle(elSub).fontSize || '0');
-      if (!Number.isNaN(fs) && fs > 0) {
-        elSub.style.fontSize = `${Math.round(fs * 0.6)}px`;
-      }
+    const headingEl = subheadRef.current || root.querySelector('.subhead');
+    if (headingEl) {
+      const fs = parseFloat(getComputedStyle(headingEl).fontSize || '0');
+      if (!Number.isNaN(fs) && fs > 0) headingEl.style.fontSize = `${Math.round(fs * 2)}px`;
+    }
+    const typeEl = titleRef.current || root.querySelector('h1');
+    if (typeEl) {
+      const tfs = parseFloat(getComputedStyle(typeEl).fontSize || '0');
+      if (!Number.isNaN(tfs) && tfs > 0) typeEl.style.fontSize = `${Math.round(tfs * 0.5)}px`;
     }
   }, []);
 
@@ -317,7 +323,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       <div className="mx-auto max-w-4xl">
         {/* Canonical Hero */}
         <div className="mb-6 text-center">
-          <div className="subhead mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
+          <div ref={subheadRef} className="subhead mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase">SYNTEK AUTOMATIONS</div>
           <h1
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
@@ -457,51 +463,55 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
         {/* Chat Input - canonical search bar with toggles */}
         {typingDone && (
-        <form onSubmit={handleSubmit} className="relative">
-          <button
-            type="button"
-            className="history-pill"
-            aria-pressed={showHistory}
-            onClick={() => setShowHistory(!showHistory)}
-          >
-            {showHistory ? 'Hide History' : 'Show History'}
-          </button>
-          <div className="panel-system overflow-hidden p-2">
-            <ChatTools
-              activeMode={activeMode}
-              onToggleMode={setActiveMode}
-              onAttach={() => {}}
-              features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
-              uploadOnRight
-              rightAppend={(
-                <button
-                  type="submit"
-                  disabled={!message.trim()}
-                  className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: message.trim() ? currentAgentColor : '#333' }}
-                  aria-label="Send message"
+          <UpfadeOnOpen trigger={typingDone ? 'chat-visible' : 'chat-hidden'}>
+            <form onSubmit={handleSubmit} className="relative">
+              <button
+                type="button"
+                className="history-pill"
+                aria-pressed={showHistory}
+                aria-label={showHistory ? 'Hide history' : 'Show history'}
+                onClick={() => setShowHistory(!showHistory)}
+              >
+                <Clock className="h-4 w-4" aria-hidden="true" />
+                <span className="history-label">{showHistory ? 'Hide History' : 'History'}</span>
+              </button>
+              <div className="panel-system overflow-hidden p-2">
+                <ChatTools
+                  activeMode={activeMode}
+                  onToggleMode={setActiveMode}
+                  onAttach={() => {}}
+                  features={{ mic: true, upload: true, modes: ['chat', 'agi'] }}
+                  uploadOnRight
+                  rightAppend={(
+                    <button
+                      type="submit"
+                      disabled={!message.trim()}
+                      className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: message.trim() ? currentAgentColor : '#333' }}
+                      aria-label="Send message"
+                    >
+                      <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
+                    </button>
+                  )}
                 >
-                  <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
-                </button>
-              )}
-            >
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Describe what you need help with…"
-                className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
-                rows={3}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-              />
-            </ChatTools>
-          </div>
-        </form>
+                  <textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Describe what you need help with…"
+                    className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
+                    rows={3}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit(e);
+                      }
+                    }}
+                  />
+                </ChatTools>
+              </div>
+            </form>
+          </UpfadeOnOpen>
         )}
 
         {/* Dynamic Suggestions */}

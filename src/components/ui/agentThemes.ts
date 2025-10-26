@@ -1,8 +1,9 @@
 export const agentThemes: Record<string, { hex: string }> = {
-  // Canonicalized to match Select Agent dropdown colors (purple, green/teal, gold)
-  Commander: { hex: "#A88CFF" }, // purple
-  Conductor: { hex: "#34D399" }, // green/teal
-  Connector: { hex: "#F5B63F" }, // gold
+  // UI-only remap per spec:
+  // Commander → gold, Connector → green, Conductor → purple
+  Commander: { hex: "#e5aa5d" }, // gold
+  Connector: { hex: "#34D399" }, // green
+  Conductor: { hex: "#A88CFF" }, // purple
 };
 
 export function getAgentColor(name?: string, fallback = "#FFC96C"): string {

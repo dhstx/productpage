@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { agents as agentData } from '../lib/agents-enhanced';
+import { getAgentColor } from './ui/agentThemes';
 
 export default function AgentRail({ selectedName, onSelect }) {
   const agents = useMemo(() => agentData.slice(0, 12), []);
@@ -21,11 +22,9 @@ export default function AgentRail({ selectedName, onSelect }) {
                 <div className="relative mt-0.5">
                   <div
                     className="h-8 w-8 rounded-md flex items-center justify-center"
-                    style={{ backgroundColor: `${agent.color}22` }}
+                    style={{ backgroundColor: `${getAgentColor(agent.name, agent.color)}22` }}
                   >
-                    <span className="text-base" aria-hidden>
-                      {agent.icon}
-                    </span>
+                    <span className="text-base" aria-hidden style={{ color: getAgentColor(agent.name, agent.color) }}>{agent.icon}</span>
                   </div>
                   <span className="absolute -right-1 -top-1 inline-block h-2 w-2 rounded-full bg-green-500" aria-hidden />
                 </div>
