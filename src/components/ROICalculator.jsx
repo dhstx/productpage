@@ -233,16 +233,7 @@ export default function ROICalculator() {
                   <Download className="w-4 h-4" />
                   Download Full Report
                 </button>
-                <a
-                  href="#pricing"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="btn-primary w-full flex items-center justify-center"
-                >
-                  View Pricing Plans
-                </a>
+                {/* UI-only removal per spec: View Pricing Plans button removed */}
               </div>
 
               {/* Disclaimer */}

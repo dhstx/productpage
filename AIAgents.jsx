@@ -237,7 +237,7 @@ export default function AIAgents() {
             </p>
             <Link to="/login" className="btn-system">
               <Bot className="h-4 w-4" />
-              Start Using Agents
+              View All Agents
             </Link>
           </div>
         </div>
