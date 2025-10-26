@@ -59,12 +59,12 @@ export default function AuthCallback() {
   }
 
   if (status === 'loading') {
-    // Plain themed "Logging in..." text only (no spinners/cogs)
+    // Plain themed "Signing in..." text only (no spinners/cogs)
     return (
       <div className="themed-screen" role="status" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Logging in...</div>
-          <span className="sr-only">Logging in…</span>
+          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Signing in...</div>
+          <span className="sr-only">Signing in…</span>
         </div>
       </div>
     );
@@ -110,8 +110,8 @@ export default function AuthCallback() {
   return (
     <div className="themed-screen" role="status" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Logging in...</div>
-        <span className="sr-only">Logging in…</span>
+        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Signing in...</div>
+        <span className="sr-only">Signing in…</span>
       </div>
     </div>
   );
