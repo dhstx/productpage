@@ -5,6 +5,8 @@
 
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
+import BackArrow from '../components/BackArrow';
 import { useAuth } from '../contexts/AuthContext';
 import { getAuthErrorMessage } from '../lib/auth/supabaseAuth';
 
@@ -103,6 +105,19 @@ export default function Login() {
 
   return (
     <div className="themed-screen" style={{ padding: 16 }}>
+      {/* Login header: back arrow + DHStx logo (left), theme toggle only (right) */}
+      <div className="login-header" aria-hidden="false">
+        <div className="header-left">
+          <BackArrow />
+          <Link to="/" className="logo-btn" aria-label="DHStx Home">
+            <img src="/logo.png" alt="DHStx" />
+            <span className="sr-only">DHStx</span>
+          </Link>
+        </div>
+        <div className="header-right">
+          <ThemeToggle inline className="theme-toggle" />
+        </div>
+      </div>
       <div className="themed-card" style={{ width: 420, maxWidth: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: 12 }}>
           <img src="/logo.png" alt="DHStx" style={{ width: 40, height: 40, margin: '0 auto' }} />

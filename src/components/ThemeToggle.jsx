@@ -62,7 +62,8 @@ export default function ThemeToggle({ inline = false, className = '' }) {
     <button
       onClick={toggleTheme}
       className={`${baseClasses} ${className}`}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label="Toggle color theme"
+      aria-pressed={theme === 'dark' ? true : false}
       type="button"
       id="themeToggle"
     >
