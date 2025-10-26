@@ -199,7 +199,7 @@ export function AdvancedPTSubBar({
       {advancedPercentage >= hardCap && (
         <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
           <strong>🚫 Hard Cap Exceeded:</strong> You've exceeded the Advanced model usage limit. 
-          Overflow fees (2× rate) apply. Upgrade your tier or purchase more Advanced PT.
+          Overflow fees (2× rate) apply. Upgrade your tier or purchase more Advanced Points.
         </div>
       )}
       
@@ -214,8 +214,8 @@ export function AdvancedPTSubBar({
 }
 
 /**
- * Combined PT Status Component
- * Shows both Core and Advanced PT with all indicators
+ * Combined Points Status Component
+ * Shows both Core and Advanced Points with all indicators
  */
 export function PTStatusCard({ 
   userPTStatus,
@@ -244,7 +244,7 @@ export function PTStatusCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">
-          PT Usage
+          Point Usage
         </h3>
         {throttleActive && (
           <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded">
@@ -253,7 +253,7 @@ export function PTStatusCard({
         )}
       </div>
       
-      {/* Core PT Health Bar */}
+      {/* Core Points Health Bar */}
           <PTHealthBar
         ptUsed={corePTUsed}
         ptAllocated={corePTAllocated}

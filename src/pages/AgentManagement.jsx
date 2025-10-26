@@ -57,7 +57,7 @@ export default function AgentManagement() {
             )}
           </div>
 
-          {/* PT Health Bar */}
+          {/* Point Health Bar */}
           {!loading && ptData && (
             <div className="mb-6">
               <PTHealthBar

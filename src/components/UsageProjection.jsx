@@ -47,14 +47,14 @@ export default function UsageProjection({ ptData, billingCycle }) {
 
     if (coreProjectedPercent > 100 || advancedProjectedPercent > 100) {
       status = 'warning';
-      message = 'You may run out of PT before the cycle ends';
+      message = 'You may run out of Points before the cycle ends';
       icon = AlertTriangle;
       color = 'text-orange-600';
       bgColor = 'bg-orange-50';
       borderColor = 'border-orange-200';
     } else if (coreProjectedPercent > 80 || advancedProjectedPercent > 80) {
       status = 'caution';
-      message = 'You\'re using PT faster than expected';
+      message = 'You\'re using Points faster than expected';
       icon = TrendingUp;
       color = 'text-yellow-600';
       bgColor = 'bg-yellow-50';
@@ -101,10 +101,10 @@ export default function UsageProjection({ ptData, billingCycle }) {
           </p>
 
           <div className="space-y-2">
-            {/* Core PT Projection */}
+            {/* Core Points Projection */}
             <div>
               <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                <span>Core PT (projected)</span>
+                <span>Core Points (projected)</span>
                 <span>
                   {projection.core.projected} / {ptData.core.total} ({projection.core.percent}%)
                 </span>
@@ -123,11 +123,11 @@ export default function UsageProjection({ ptData, billingCycle }) {
               </div>
             </div>
 
-            {/* Advanced PT Projection */}
+            {/* Advanced Points Projection */}
             {ptData.advanced.total > 0 && (
               <div>
                 <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                  <span>Advanced PT (projected)</span>
+                  <span>Advanced Points (projected)</span>
                   <span>
                     {projection.advanced.projected} / {ptData.advanced.total} ({projection.advanced.percent}%)
                   </span>

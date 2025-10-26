@@ -606,6 +606,18 @@ html[data-theme="light"] .chip--gold {
 html[data-theme="light"] .bg-system { background: var(--bg) !important; }
 html[data-theme="light"] .bg-panel { background: var(--bg-elev) !important; border-color: var(--border) !important; }
 
+/* Settings page panels should follow tokens */
+html[data-theme="dark"] .settings-panel {
+  background-color: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+html[data-theme="light"] .settings-panel {
+  background-color: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 /* Anti-leak overrides to neutralize dark utilities in light mode */
 html[data-theme="light"] .bg-black,
 html[data-theme="light"] .bg-neutral-900,

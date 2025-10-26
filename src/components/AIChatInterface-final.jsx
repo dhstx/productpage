@@ -44,7 +44,7 @@ const AIChatInterface = ({ agents }) => {
         setPtUsage(data);
       }
     } catch (err) {
-      console.error('Failed to load PT usage:', err);
+      console.error('Failed to load Points usage:', err);
     }
   };
 
@@ -68,7 +68,7 @@ const AIChatInterface = ({ agents }) => {
         setEstimatedPT(data);
       }
     } catch (err) {
-      console.error('Failed to estimate PT cost:', err);
+      console.error('Failed to estimate Point cost:', err);
     }
   };
 
@@ -98,13 +98,13 @@ const AIChatInterface = ({ agents }) => {
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !selectedAgent || isLoading) return;
 
-    // Check if user has enough PT
+    // Check if user has enough Points
     if (ptUsage && estimatedPT) {
       const availablePT = ptUsage.core_pt_remaining + (ptUsage.advanced_pt_remaining || 0);
       if (estimatedPT.estimated_pt > availablePT) {
         setError({
           type: 'insufficient_pt',
-          message: `Not enough PT. Need ${estimatedPT.estimated_pt} PT, have ${availablePT} PT.`,
+          message: `Not enough Points. Need ${estimatedPT.estimated_pt} Points, have ${availablePT} Points.`,
           action: 'upgrade'
         });
         return;
@@ -252,13 +252,13 @@ const AIChatInterface = ({ agents }) => {
             {error.type === 'insufficient_pt' && (
               <div className="mt-2">
                 <p className="text-xs text-red-700">
-                  Required: {error.required} PT | Available: {error.remaining} PT
+                  Required: {error.required} Points | Available: {error.remaining} Points
                 </p>
                 <button
                   onClick={() => window.location.href = '/pricing'}
                   className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
                 >
-                  Upgrade to get more PT →
+                  Upgrade to get more Points →
                 </button>
               </div>
             )}
@@ -315,7 +315,7 @@ const AIChatInterface = ({ agents }) => {
     return (
       <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
         <Zap className="w-3 h-3" />
-        <span>Estimated cost: {estimatedPT.estimated_pt} PT</span>
+        <span>Estimated cost: {estimatedPT.estimated_pt} Points</span>
         {estimatedPT.model_type === 'advanced' && (
           <span className="text-purple-600">(Advanced model)</span>
         )}
@@ -325,7 +325,7 @@ const AIChatInterface = ({ agents }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {/* PT Health Bar */}
+      {/* Point Health Bar */}
       {user && ptUsage && (
         <div className="mb-4">
           <PTHealthBar
@@ -441,13 +441,13 @@ const AIChatInterface = ({ agents }) => {
           </button>
         </div>
 
-        {/* PT Info */}
+        {/* Points Info */}
         {ptUsage && (
           <div className="mt-2 flex items-center justify-between text-xs text-gray-600">
             <div className="flex items-center gap-4">
-              <span>Core PT: {ptUsage.core_pt_remaining} / {ptUsage.core_pt_total}</span>
+              <span>Core Points: {ptUsage.core_pt_remaining} / {ptUsage.core_pt_total}</span>
               {ptUsage.advanced_pt_total > 0 && (
-                <span>Advanced PT: {ptUsage.advanced_pt_remaining} / {ptUsage.advanced_pt_total}</span>
+                <span>Advanced Points: {ptUsage.advanced_pt_remaining} / {ptUsage.advanced_pt_total}</span>
               )}
             </div>
             <span>Resets: {new Date(ptUsage.reset_date).toLocaleDateString()}</span>

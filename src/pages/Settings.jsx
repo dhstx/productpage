@@ -52,21 +52,21 @@ export default function SettingsEnhanced() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="settings-page min-h-screen" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <BackArrow />
         
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>
-          <p className="text-gray-600">Manage your account, billing, and security</p>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>Settings</h1>
+          <p style={{ color: 'var(--muted)' }}>Manage your account, billing, and security</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow p-4">
-              <div className="text-sm font-medium text-gray-500 mb-4 pb-4 border-b border-gray-200">
+            <div className="settings-panel rounded-lg shadow p-4">
+              <div className="text-sm font-medium mb-4 pb-4 border-b" style={{ color: 'var(--muted)', borderColor: 'var(--card-border, var(--border))' }}>
                 Account Settings
               </div>
               <nav className="space-y-1">
@@ -74,11 +74,8 @@ export default function SettingsEnhanced() {
                   <button
                     key={id}
                     onClick={() => setActiveSection(id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${
-                      activeSection === id
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left"
+                    style={activeSection === id ? { background: 'var(--accent-muted, rgba(229,170,93,0.12))', color: 'var(--text)' } : { color: 'var(--text)' }}
                   >
                     <Icon className="h-5 w-5" />
                     <span className="text-sm font-medium">{label}</span>
@@ -86,7 +83,8 @@ export default function SettingsEnhanced() {
                 ))}
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors text-left mt-4 pt-4 border-t border-gray-200"
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left mt-4 pt-4 border-t"
+                  style={{ borderColor: 'var(--card-border, var(--border))', color: '#ff6b6b' }}
                 >
                   <LogOut className="h-5 w-5" />
                   <span className="text-sm font-medium">Log out</span>
@@ -108,14 +106,14 @@ export default function SettingsEnhanced() {
 // Billing Section – link into the dedicated billing page for full management
 function BillingSection() {
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Billing</h2>
-      <p className="text-gray-600 mb-4">
+    <div className="settings-panel rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>Billing</h2>
+      <p className="mb-4" style={{ color: 'var(--muted)' }}>
         Manage your subscription, payment methods, invoices, and purchase additional Points.
       </p>
       <a
         href="/billing"
-        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg btn-system"
       >
         Go to Billing
       </a>
@@ -161,8 +159,8 @@ function ProfileSection({ user, profile }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Profile Information</h2>
+    <div className="settings-panel rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Profile Information</h2>
 
       {message && (
         <div className={`mb-4 p-4 rounded-lg ${
@@ -253,7 +251,7 @@ function ProfileSection({ user, profile }) {
         <button
           type="submit"
           disabled={saving}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save className="h-5 w-5" />
           {saving ? 'Saving...' : 'Save Changes'}
@@ -314,8 +312,8 @@ function SecuritySection({ user }) {
   return (
     <div className="space-y-6">
       {/* Change Password */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Change Password</h2>
+      <div className="settings-panel rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Change Password</h2>
 
         {message && (
           <div className={`mb-4 p-4 rounded-lg ${
@@ -385,7 +383,7 @@ function SecuritySection({ user }) {
           <button
             type="submit"
             disabled={saving}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save className="h-5 w-5" />
             {saving ? 'Updating...' : 'Update Password'}
@@ -394,12 +392,12 @@ function SecuritySection({ user }) {
       </div>
 
       {/* Two-Factor Authentication */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Two-Factor Authentication</h2>
-        <p className="text-gray-600 mb-4">
+      <div className="settings-panel rounded-lg shadow p-6">
+        <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>Two-Factor Authentication</h2>
+        <p className="mb-4" style={{ color: 'var(--muted)' }}>
           Add an extra layer of security to your account
         </p>
-        <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+        <button className="px-4 py-2 rounded-lg" style={{ background: 'var(--accent-muted, rgba(229,170,93,0.12))', color: 'var(--text)' }}>
           Enable 2FA (Coming Soon)
         </button>
       </div>
@@ -451,8 +449,8 @@ function NotificationsSection({ user }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Notification Preferences</h2>
+    <div className="settings-panel rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Notification Preferences</h2>
 
       {message && (
         <div className={`mb-4 p-4 rounded-lg ${
@@ -465,7 +463,7 @@ function NotificationsSection({ user }) {
       <div className="space-y-4">
         {Object.entries({
           emailNotifications: 'Email Notifications',
-          ptAlerts: 'PT Usage Alerts',
+          ptAlerts: 'Point Usage Alerts',
           billingReminders: 'Billing Reminders',
           productUpdates: 'Product Updates',
           marketingEmails: 'Marketing Emails',
@@ -473,9 +471,9 @@ function NotificationsSection({ user }) {
           <div key={key} className="flex items-center justify-between py-3 border-b border-gray-200 last:border-0">
             <div>
               <p className="font-medium text-gray-900">{label}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm" style={{ color: 'var(--muted)' }}>
                 {key === 'emailNotifications' && 'Receive email notifications for important events'}
-                {key === 'ptAlerts' && 'Get notified when you\'re running low on PT'}
+                {key === 'ptAlerts' && 'Get notified when you\'re running low on Points'}
                 {key === 'billingReminders' && 'Reminders about upcoming billing dates'}
                 {key === 'productUpdates' && 'News about new features and improvements'}
                 {key === 'marketingEmails' && 'Promotional offers and tips'}
@@ -497,7 +495,7 @@ function NotificationsSection({ user }) {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Save className="h-5 w-5" />
         {saving ? 'Saving...' : 'Save Preferences'}
@@ -532,15 +530,15 @@ function SessionsSection({ user }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Active Sessions</h2>
-      <p className="text-gray-600 mb-6">
+    <div className="settings-panel rounded-lg shadow p-6">
+      <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--text)' }}>Active Sessions</h2>
+      <p className="mb-6" style={{ color: 'var(--muted)' }}>
         Manage your active sessions across different devices
       </p>
 
       <div className="space-y-4">
         {sessions.map((session) => (
-          <div key={session.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+          <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg" style={{ borderColor: 'var(--card-border, var(--border))' }}>
             <div className="flex items-center gap-4">
               <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-lg">
                 <Shield className="h-5 w-5 text-blue-600" />
@@ -560,10 +558,11 @@ function SessionsSection({ user }) {
               </div>
             </div>
             {!session.current && (
-              <button
-                onClick={() => handleRevoke(session.id)}
-                className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              >
+                <button
+                  onClick={() => handleRevoke(session.id)}
+                  className="px-3 py-1 text-sm rounded-lg transition-colors"
+                  style={{ color: '#ff6b6b', background: 'transparent' }}
+                >
                 Revoke
               </button>
             )}
@@ -629,7 +628,7 @@ function DataPrivacySection({ user }) {
   return (
     <div className="space-y-6">
       {/* Export Data */}
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="settings-panel rounded-lg shadow p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Export Your Data</h2>
         <p className="text-gray-600 mb-4">
           Download a copy of all your data including conversations, settings, and usage history
@@ -637,7 +636,7 @@ function DataPrivacySection({ user }) {
         <button
           onClick={handleExportData}
           disabled={exporting}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg btn-system disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Download className="h-5 w-5" />
           {exporting ? 'Exporting...' : 'Export Data'}
@@ -645,7 +644,7 @@ function DataPrivacySection({ user }) {
       </div>
 
       {/* Delete Account */}
-      <div className="bg-white rounded-lg shadow p-6 border-2 border-red-200">
+      <div className="settings-panel rounded-lg shadow p-6 border-2 border-red-200">
         <h2 className="text-xl font-bold text-red-600 mb-4">Delete Account</h2>
         <p className="text-gray-600 mb-4">
           Permanently delete your account and all associated data. This action cannot be undone.

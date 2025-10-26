@@ -107,7 +107,7 @@ export default function ReferralDashboard() {
           </div>
           
           <p className="mb-6 text-indigo-100">
-            Share your unique link and earn 150 PT for each friend who subscribes!
+            Share your unique link and earn 150 Points for each friend who subscribes!
           </p>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-4">
@@ -182,7 +182,7 @@ export default function ReferralDashboard() {
                   {stats.total_rewards_pt}
                 </span>
               </div>
-              <p className="text-sm text-gray-600">PT Earned</p>
+              <p className="text-sm text-gray-600">Points Earned</p>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow">
@@ -254,7 +254,7 @@ export default function ReferralDashboard() {
                 </p>
                 {tier.bonus_pt > 0 && (
                   <p className="text-sm text-gray-600">
-                    +{tier.bonus_pt} PT bonus
+                    +{tier.bonus_pt} Points bonus
                   </p>
                 )}
               </div>
@@ -319,7 +319,7 @@ export default function ReferralDashboard() {
                         {referral.referrer_reward_amount ? (
                           <span className="flex items-center gap-1">
                             <Zap className="w-4 h-4 text-yellow-600" />
-                            {referral.referrer_reward_amount} PT
+                            {referral.referrer_reward_amount} Points
                           </span>
                         ) : (
                           <span className="text-gray-400">Pending</span>
