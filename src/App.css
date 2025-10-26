@@ -373,9 +373,12 @@
   }
 }
 
-/* Up-fade utility for chatbox and chips */
+/* Up-fade utility for chatbox */
 .up-fade { opacity: 0; transform: translateY(12px); transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1); pointer-events: none; }
 .up-fade.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* Plug-and-play chips: 50% slower up-fade */
+.plug-chip { transition: opacity 630ms cubic-bezier(.2,.9,.3,1), transform 630ms cubic-bezier(.2,.9,.3,1); }
 
 /* H1 glitchy flicker then left→right reveal */
 @keyframes glitchFlicker {
@@ -391,9 +394,16 @@
   from { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-14px); }
   to   { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
 }
-/* Run both animations concurrently and 50% slower */
-.syntek-h1.glitch { animation: glitchFlicker 1200ms steps(6, end) forwards; }
-.syntek-h1.reveal { animation: leftReveal 1350ms ease forwards; }
+/* Ensure H1 occupies layout with final size but is initially invisible */
+.syntek-h1 { opacity: 0; transform: translateX(0); }
+/* Run both animations concurrently and 15% slower */
+.syntek-h1.h1-visible {
+  animation:
+    glitchFlicker 920ms steps(6, end) forwards,
+    leftReveal 1035ms ease forwards;
+}
+/* Static fallback for JS-controlled visibility */
+.syntek-h1.show { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
 
 /* Mobile center for Select Agent trigger */
 @media (max-width:640px) {

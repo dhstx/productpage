@@ -223,16 +223,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
   }, []);
 
-  // - SYNTEK AUTOMATIONS: reduce by 10% when it becomes visible
-  useEffect(() => {
-    if (!h1Visible) return;
-    const root = sectionRef.current || (typeof document !== 'undefined' ? document.querySelector('.chat-hero') : null);
-    const headingEl = subheadRef.current || root?.querySelector('.syntek-h1') || root?.querySelector('.subhead');
-    if (headingEl) {
-      const fs = parseFloat(getComputedStyle(headingEl).fontSize || '0');
-      if (!Number.isNaN(fs) && fs > 0) headingEl.style.fontSize = `${Math.round(fs * 0.9)}px`;
-    }
-  }, [h1Visible]);
+  // Removed font-size mutation on reveal to avoid layout shifts
 
   // Orchestrate chatbox mount → fade, then chips → H1 reveal
   useEffect(() => {
@@ -255,7 +246,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       return;
     }
 
-    const fadeDuration = 420;
+    // Plug-and-play chips: 50% slower up-fade
+    const fadeDuration = 630;
     const base = fadeDuration + 80;
     const timers = [0, 1, 2, 3].map((i) =>
       setTimeout(
@@ -265,11 +257,11 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             copy[i] = true;
             return copy;
           }),
-        base + i * 140
+        base + i * 210
       )
     );
 
-    const totalChipsTime = base + 4 * 140 + 140;
+    const totalChipsTime = base + 4 * 210 + 210;
     const h1Timer = setTimeout(() => setH1Visible(true), totalChipsTime + 120);
 
     return () => {
@@ -289,8 +281,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       setH1Class('show');
       return;
     }
-    // Apply both classes at once so animations run together
-    setH1Class('glitch reveal');
+    // Begin concurrent glitch + leftReveal animations (15% slower via CSS)
+    setH1Class('h1-visible');
     return () => {};
   }, [h1Visible]);
 
@@ -411,14 +403,12 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       <div className="mx-auto max-w-4xl">
         {/* Canonical Hero */}
         <div className="mb-6 text-center">
-          {h1Visible && (
-            <div
-              ref={subheadRef}
-              className={`syntek-h1 mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase ${h1Class}`}
-            >
-              SYNTEK AUTOMATIONS
-            </div>
-          )}
+          <div
+            ref={subheadRef}
+            className={`syntek-h1 mb-2 text-[#F2F2F2] text-[clamp(1.6rem,5vw,2.5rem)] font-extrabold tracking-tight uppercase ${h1Class}`}
+          >
+            SYNTEK AUTOMATIONS
+          </div>
           <h1
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
