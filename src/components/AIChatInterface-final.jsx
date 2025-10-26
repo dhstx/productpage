@@ -393,7 +393,7 @@ const AIChatInterface = ({ agents }) => {
               {message.pt_consumed && (
                 <div className="mt-2 pt-2 border-t border-gray-300 flex items-center gap-2 text-xs opacity-75">
                   <Zap className="w-3 h-3" />
-                  <span>{message.pt_consumed} PT consumed</span>
+                  <span>{message.pt_consumed} Points consumed</span>
                   {message.model_used && (
                     <span className="text-xs">({message.model_used})</span>
                   )}

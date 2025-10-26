@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import "../styles/dashboard-theme.css";
 import BackArrow from '../components/BackArrow';
 import { Users, Mail, Shield, UserPlus } from 'lucide-react';
 import { TeamMembersResponsive } from "@/components/TeamMembersResponsive";
@@ -77,7 +78,7 @@ export default function Team() {
   };
 
   return (
-    <div className="space-y-8" style={{ background: 'var(--bg)' }}>
+    <div className="space-y-8 dashboard-surface">
       <BackArrow />
       <div className="flex items-center justify-between">
         <div>
@@ -91,7 +92,7 @@ export default function Team() {
         {/* Desktop invite button (right aligned) */}
         <button
           onClick={() => setShowInviteModal(true)}
-          className="btn-system hidden md:flex items-center gap-2"
+          className="btn-primary hidden md:flex items-center gap-2 px-4 py-2"
         >
           <UserPlus className="w-4 h-4" />
           Invite Member
@@ -101,7 +102,7 @@ export default function Team() {
       <div className="md:hidden">
         <button
           onClick={() => setShowInviteModal(true)}
-          className="btn-system flex items-center gap-2 mt-2"
+          className="btn-primary flex items-center gap-2 mt-2 px-4 py-2"
         >
           <UserPlus className="w-4 h-4" />
           Invite Member
@@ -110,28 +111,28 @@ export default function Team() {
 
       {/* Team Stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <div className="card-surface p-4">
+        <div className="dashboard-card p-4">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-[#FFC96C]" />
             <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Total Members</span>
           </div>
           <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>4</div>
         </div>
-        <div className="card-surface p-4">
+        <div className="dashboard-card p-4">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-[#FFC96C]" />
             <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Admins</span>
           </div>
           <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>2</div>
         </div>
-        <div className="card-surface p-4">
+        <div className="dashboard-card p-4">
           <div className="flex items-center gap-3 mb-2">
             <Mail className="w-5 h-5 text-[#FFC96C]" />
             <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Pending Invites</span>
           </div>
           <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>1</div>
         </div>
-        <div className="card-surface p-4">
+        <div className="dashboard-card p-4">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-[#FFC96C]" />
             <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Available Seats</span>
@@ -155,7 +156,7 @@ export default function Team() {
       {/* Invite Modal */}
       {showInviteModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="panel-system p-6 max-w-md w-full">
+          <div className="dashboard-card p-6 max-w-md w-full">
             <h3 className="text-xl font-bold text-[#F2F2F2] mb-4 uppercase tracking-tight">
               INVITE TEAM MEMBER
             </h3>
@@ -168,14 +169,15 @@ export default function Team() {
                   type="email"
                   required
                   placeholder="colleague@company.com"
-                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]"
+                  className="w-full px-4 py-2 rounded-[4px] focus:outline-none"
+                  style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--text)' }}
                 />
               </div>
               <div>
                 <label className="block text-[#B3B3B3] text-sm mb-2 uppercase tracking-tight">
                   Role
                 </label>
-                <select className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C]">
+                <select className="w-full px-4 py-2 rounded-[4px] focus:outline-none" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--text)' }}>
                   <option value="member">Member</option>
                   <option value="admin">Admin</option>
                   <option value="viewer">Viewer</option>
@@ -188,17 +190,18 @@ export default function Team() {
                 <textarea
                   rows="3"
                   placeholder="Welcome to the team!"
-                  className="w-full px-4 py-2 bg-[#0C0C0C] border border-[#202020] rounded-[4px] text-[#F2F2F2] focus:outline-none focus:border-[#FFC96C] resize-none"
+                  className="w-full px-4 py-2 rounded-[4px] focus:outline-none resize-none"
+                  style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--text)' }}
                 ></textarea>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="submit" className="btn-system flex-1">
+                <button type="submit" className="btn-primary flex-1 px-4 py-2">
                   Send Invitation
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowInviteModal(false)}
-                  className="px-4 py-2 rounded-[4px] bg-[#202020] text-[#F2F2F2] hover:bg-[#1A1A1A] transition-colors"
+                  className="btn-outline px-4 py-2 rounded-[4px] transition-colors"
                 >
                   Cancel
                 </button>

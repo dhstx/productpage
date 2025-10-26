@@ -3,10 +3,10 @@ import * as RechartsPrimitive from "recharts"
 
 import { cn } from "@/lib/utils"
 
-// Format: { THEME_NAME: CSS_SELECTOR }
+// Map to data-theme attribute for robust theming
 const THEMES = {
-  light: "",
-  dark: ".dark"
+  light: 'html[data-theme="light"]',
+  dark: 'html[data-theme="dark"]'
 }
 
 const ChartContext = React.createContext(null)
