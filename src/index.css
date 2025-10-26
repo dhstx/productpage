@@ -1,0 +1,35 @@
+/* Theme tokens */
+:root {
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --text: #111111;
+  --muted: #666666;
+  --accent-gold: #e5aa5d;
+  --card-border: rgba(0,0,0,0.06);
+}
+[data-theme="dark"] {
+  --bg: #0f0f0f;
+  --card-bg: #111111;
+  --text: #efefef;
+  --muted: #9b9b9b;
+  --accent-gold: #e5aa5d;
+  --card-border: rgba(255,255,255,0.04);
+}
+
+/* loader & reduced-motion */
+.gold-spinner { animation: spin 1.4s linear infinite; filter: drop-shadow(0 0 6px rgba(229,170,93,0.25)); }
+/* Utility to slow the spin for decorative elements like cog */
+.slow-spin { animation-duration: 6s !important; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .gold-spinner { animation: none; transform: none; }
+}
+.sr-only { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+/* Utility: themed backgrounds/text for auth screens */
+.themed-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg); }
+.themed-card { width: 420px; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--card-border); padding: 28px; color: var(--text); box-shadow: 0 8px 28px rgba(0,0,0,0.45); }
+.themed-input { width: 100%; background: rgba(255,255,255,0.02); color: var(--text); border: 1px solid var(--card-border); padding: 10px 12px; border-radius: 6px; }
+.themed-label { font-size: 12px; color: var(--muted); }
+.themed-button { width: 100%; margin-top: 16px; background: var(--accent-gold); border: none; padding: 10px 12px; border-radius: 6px; color: #111; font-weight: 700; cursor: pointer; }
+
