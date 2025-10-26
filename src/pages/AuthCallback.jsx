@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import Gear from '../components/graphics/Gear.jsx';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -58,11 +59,23 @@ export default function AuthCallback() {
   }
 
   if (status === 'loading') {
+    // Themed loader: visible text + fast spinner + slow cog
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-600">Verifying your email...</p>
+      <div className="themed-screen" role="status">
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Logging in…</div>
+
+          {/* fast gold ring spinner */}
+          <svg className="gold-spinner" viewBox="0 0 50 50" style={{ width: 72, height:72, marginBottom: 16 }} aria-hidden="true" focusable="false">
+            <circle cx="25" cy="25" r="20" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" fill="none" strokeDasharray="31.4 31.4"/>
+          </svg>
+
+          {/* slow cog spinner below using site's gear component */}
+          <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Gear className="gold-spinner slow-spin" color="var(--accent-gold)" radius={24} />
+          </div>
+
+          <span className="sr-only">Logging in…</span>
         </div>
       </div>
     );
@@ -104,33 +117,18 @@ export default function AuthCallback() {
     );
   }
 
+  // Success state: keep logic but show same loader while redirect occurs
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-        <div className="mb-4">
-          <svg
-            className="mx-auto h-16 w-16 text-green-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+    <div className="themed-screen" role="status">
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 16 }}>Logging in…</div>
+        <svg className="gold-spinner" viewBox="0 0 50 50" style={{ width: 72, height:72, marginBottom: 16 }} aria-hidden="true" focusable="false">
+          <circle cx="25" cy="25" r="20" stroke="var(--accent-gold)" strokeWidth="4" strokeLinecap="round" fill="none" strokeDasharray="31.4 31.4"/>
+        </svg>
+        <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Gear className="gold-spinner slow-spin" color="var(--accent-gold)" radius={24} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Email Verified!
-        </h2>
-        <p className="text-gray-600 mb-4">
-          Your email has been successfully verified.
-        </p>
-        <p className="text-sm text-gray-500">
-          Redirecting to dashboard...
-        </p>
+        <span className="sr-only">Logging in…</span>
       </div>
     </div>
   );
