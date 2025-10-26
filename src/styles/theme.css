@@ -40,11 +40,8 @@
 
 /* Dark theme tokens used by pricing */
 [data-theme="dark"] {
-  --text: #efefef;
   --muted: rgba(255,255,255,0.65);
   --card-bg: #111214;
-  --card-border: rgba(255,255,255,0.04);
-  --accent-gold: #e5aa5d;
   --pricing-bg-dark: #0f0f10;
 }
 
