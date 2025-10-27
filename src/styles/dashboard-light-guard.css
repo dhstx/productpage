@@ -1,0 +1,21 @@
+/* Force readable text in LIGHT theme for stray classes */
+html[data-theme="light"] .dashboard [class*="text-white"],
+html[data-theme="light"] .dashboard .text-neutral-300,
+html[data-theme="light"] .dashboard .text-zinc-300,
+html[data-theme="light"] .dashboard .opacity-60 {
+  color: var(--text) !important;
+  opacity: 1 !important;
+}
+html[data-theme="light"] .dashboard .muted,
+html[data-theme="light"] .dashboard .subtle,
+html[data-theme="light"] .dashboard .text-neutral-500 {
+  color: var(--muted) !important;
+}
+
+/* Cards that were hard-coded too dark in light mode */
+html[data-theme="light"] .dashboard .bg-neutral-900,
+html[data-theme="light"] .dashboard .bg-zinc-900 {
+  background: var(--card-bg) !important;
+  color: var(--text) !important;
+  border-color: var(--card-border) !important;
+}

@@ -353,7 +353,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     requestAnimationFrame(() => el.classList.add('is-ready'));
   }, [chatboxMounted]);
 
-  // Optional: measure actual chatbox height once and set the reserved variable on the slot
+  // Optional: one-time measure to tighten reserved space (runs after first paint)
   useEffect(() => {
     if (!chatboxMounted) return;
     const slot = document.querySelector('.public-chatbox-slot');
@@ -361,11 +361,9 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     if (!slot || !el) return;
     const update = () => {
       const h = Math.ceil(el.getBoundingClientRect().height);
-      slot.style.setProperty('--public-chatbox-min-h', `${Math.max(360, h)}px`);
+      if (h > 0) slot.style.setProperty('--public-chatbox-min-h', `${Math.max(600, h)}px`);
     };
     setTimeout(update, 0);
-    window.addEventListener('resize', update, { passive: true });
-    return () => window.removeEventListener('resize', update);
   }, [chatboxMounted]);
 
   // D) Title-case utility for agent info line
