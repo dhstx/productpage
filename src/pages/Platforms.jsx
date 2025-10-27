@@ -28,11 +28,8 @@ export default function Platforms() {
       <section className="space-y-6">
         {purchases.map((purchase) => (
           <div key={purchase.id} className="card-surface flex flex-col gap-6 p-6">
-            <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div className="flex min-w-0 items-start gap-4">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[4px]" style={{ background: 'var(--panel-bg)' }}>
-                  <Target className="h-6 w-6 text-[#FFC96C]" />
-                </div>
+            <div className="flex min-w-0 flex-col md:flex-row md:items-start md:justify-between">
+              <div className="flex min-w-0 items-start">
                 <div className="min-w-0 space-y-2">
                   <h3 className="h3 uppercase tracking-tight text-pretty" style={{ color: 'var(--text)' }}>
                     Management Portal

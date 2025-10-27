@@ -7,7 +7,7 @@ import "@/styles/usage.css";
 import PTHealthBar from '../components/PTHealthBar';
 import UsageMonitoringDashboard from '../components/UsageMonitoringDashboard';
 import BackArrow from '../components/BackArrow';
-import { Zap, Users, TrendingUp, Settings, CreditCard } from 'lucide-react';
+import { Zap, Users, TrendingUp, CreditCard } from 'lucide-react';
 import AgentRail from '../components/AgentRail';
 import { AgentSelectionProvider } from '@/context/AgentSelectionContext';
 import DashboardChatbox from '@/components/chat/DashboardChatbox';
@@ -154,30 +154,7 @@ export default function Dashboard() {
                 </div>
               </section>
 
-              {/* Quick Actions */}
-              <div className="dash-metrics grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Link to="/agents" className="dashboard-card p-5 hover:brightness-110 transition">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Zap className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
-                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Start Chatting</h3>
-                  </div>
-                  <p className="text-sm dashboard-muted">Chat with AI agents to get work done</p>
-                </Link>
-                <Link to="/billing" className="dashboard-card p-5 hover:brightness-110 transition">
-                  <div className="flex items-center gap-3 mb-2">
-                    <CreditCard className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
-                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Manage Billing</h3>
-                  </div>
-                  <p className="text-sm dashboard-muted">View usage, upgrade plan, or add Points</p>
-                </Link>
-                <Link to="/settings" className="dashboard-card p-5 hover:brightness-110 transition">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Settings className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />
-                    <h3 className="font-semibold" style={{ color: 'var(--text)' }}>Settings</h3>
-                  </div>
-                  <p className="text-sm dashboard-muted">Customize your account and preferences</p>
-                </Link>
-              </div>
+              {/* Actions removed per design cleanup */}
 
               {/* Usage Monitoring & Recent Activity Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
