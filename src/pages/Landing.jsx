@@ -71,7 +71,7 @@ export default function Landing() {
         <section id="syntek-svg-section" className="syntek-image-container">
           <img
             id="syntek-svg"
-            className="syntek-hero fade-once"
+            className="syntek-hero-svg syntek-hero fade-once"
             src="/assets/SYNTEK AUTOMATIONS.svg"
             alt="Syntek Automations mark"
             width="1024"

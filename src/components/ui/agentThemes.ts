@@ -19,11 +19,12 @@ export const baseThemes: Record<string, { hex: string }> = {
 // Back-compat: preserve existing export name
 export const agentThemes = baseThemes;
 
-// Public overrides = ORIGINAL colors for the three only (icons unchanged)
+// Public overrides: map Connector to site gold token
 const publicOverrides: Partial<Record<string, { hex: string }>> = {
   Commander: { hex: "#A88CFF" },
   Conductor: { hex: "#34D399" },
-  Connector: { hex: "#F5B63F" },
+  // Use CSS variable token for gold so it stays in sync with theme
+  Connector: { hex: "var(--accent-gold)" },
 };
 
 export type AgentColorContext = "public" | "dashboard";

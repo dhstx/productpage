@@ -839,7 +839,7 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2in;
+  margin-top: 0; /* offset handled by .syntek-hero-svg to avoid double spacing */
   margin-bottom: 2in;
 }
 
@@ -853,6 +853,12 @@ html[data-theme="light"] :where(select, .dropdown, .menu) :where(:disabled, [ari
   width: 1024px;
   height: auto;         /* keep aspect ratio */
   max-width: 100%;      /* responsive */
+}
+
+/* Main page only: push SYNTEK SVG down by exactly 2 inches */
+.syntek-hero-svg {
+  display: block;
+  margin-top: 2in;
 }
 
 /* One-time fade-in utility (opacity + slight up-translate) */

@@ -99,9 +99,22 @@ export default function PublicChatbox() {
                   role="menuitem"
                   onClick={() => setSelected(name)}
                   className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/10"
-                  style={{ backgroundColor: active ? `${c}12` : undefined }}
+                  style={{
+                    backgroundColor: active
+                      ? (c.startsWith('var(') ? `color-mix(in srgb, ${c} 8%, transparent)` : `${c}12`)
+                      : undefined
+                  }}
                 >
-                  <span className="inline-flex items-center justify-center rounded" style={{ width:18,height:18, background:`${c}22` }}>
+                  <span
+                    className="inline-flex items-center justify-center rounded"
+                    style={{
+                      width:18,
+                      height:18,
+                      background: c.startsWith('var(')
+                        ? `color-mix(in srgb, ${c} 13%, transparent)`
+                        : `${c}22`
+                    }}
+                  >
                     {React.createElement(Icon, { size: 12, color: c })}
                   </span>
                   <span>{name}</span>

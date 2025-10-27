@@ -36,6 +36,9 @@
   text-underline-offset: 4px;
 }
 
+/* Ensure underline follows the current text color */
+.legacy-typer { text-decoration-color: currentColor; }
+
 .legacy-shell {
   margin-top: 18px;
   background: var(--card-bg);

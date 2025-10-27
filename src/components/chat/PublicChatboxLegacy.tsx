@@ -59,7 +59,17 @@ export default function PublicChatboxLegacy() {
               return (
                 <div key={n} role="menuitem" onClick={()=>setAgent(n)}
                   className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-white/5">
-                  <span className="inline-flex items-center justify-center rounded" style={{width:18,height:18, background:`${c}22`}}>
+                  <span
+                    className="inline-flex items-center justify-center rounded"
+                    style={{
+                      width:18,
+                      height:18,
+                      // If c is a CSS variable, use color-mix for a soft tint; otherwise use hex with alpha suffix
+                      background: c.startsWith('var(')
+                        ? `color-mix(in srgb, ${c} 13%, transparent)`
+                        : `${c}22`
+                    }}
+                  >
                     {React.createElement(I, { size: 12, color: c })}
                   </span>
                   <span>{n}</span>
