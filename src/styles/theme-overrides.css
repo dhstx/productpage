@@ -223,3 +223,35 @@
   opacity: 0.6;
 }
 
+/* === Light-mode readability fallbacks for dashboard tabs === */
+html[data-theme="light"] {
+  /* Provide safe defaults if tokens are missing */
+  --text: #121212;
+  --muted: #444;
+  --card-bg: #ffffff;
+  --card-border: #cccccc;
+  --accent: #c58f2b; /* fallback accent */
+}
+
+/* Light mode fix for key sections */
+html[data-theme="light"] .dashboard,
+html[data-theme="light"] .platforms,
+html[data-theme="light"] .platforms-page,
+html[data-theme="light"] .team {
+  color: var(--text) !important;
+  background: var(--card-bg);
+}
+
+html[data-theme="light"] .card,
+html[data-theme="light"] [class*="bg-neutral"],
+html[data-theme="light"] .border-dark {
+  background: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="light"] .muted,
+html[data-theme="light"] .text-muted {
+  color: var(--muted) !important;
+}
+

@@ -3,6 +3,7 @@ import BackArrow from '../components/BackArrow';
 import { getMockPurchases } from '../lib/stripe';
 import { Link } from 'react-router-dom';
 import "@/styles/platforms-layout.css";
+import "@/styles/theme-overrides.css";
 
 export default function Platforms() {
   const purchases = getMockPurchases();

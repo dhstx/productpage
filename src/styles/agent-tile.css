@@ -1,14 +1,26 @@
-.agent-tile {
+.agent-tile,
+.agent-tile button {
   position: relative;
-  background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 12px;
-  overflow: visible; /* prevent clipping of outer ring */
+  border-radius: 10px;
+  overflow: visible; /* allow full highlight visibility */
+  background: var(--card-bg);
+  transition: all 0.15s ease;
 }
 .agent-tile--active {
   /* outer focus ring that won't be cut off */
-  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--agent-ring, var(--accent-gold));
-  border-color: color-mix(in oklab, var(--agent-ring, var(--accent-gold)) 45%, var(--card-border));
+  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--agent-ring, var(--accent, var(--accent-gold)));
+  border-color: color-mix(in oklab, var(--agent-ring, var(--accent, var(--accent-gold))) 45%, var(--card-border));
+}
+
+html[data-theme="light"] .agent-tile--active {
+  box-shadow:
+    0 0 0 2px var(--card-bg),
+    0 0 0 4px color-mix(in oklab, var(--agent-ring, var(--accent, var(--accent-gold))) 85%, white);
+}
+
+.agent-tile:hover {
+  background: color-mix(in oklab, var(--card-bg) 90%, var(--accent, var(--accent-gold)) 10%);
 }
 .agent-tile__row { display:flex; align-items:center; gap:.5rem; }
 .agent-tile__icon { width:18px; height:18px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; }
