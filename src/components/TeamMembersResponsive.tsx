@@ -79,7 +79,7 @@ export function TeamMembersResponsive({
         </thead>
         <tbody>
           {members.map((m) => (
-            <tr key={m.id} className="" style={{ borderBottom: '1px solid var(--card-border)' }}>
+            <tr key={m.id} style={{ borderBottom: '1px solid var(--card-border)' }}>
               <td className="p-3 md:p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-[4px] flex items-center justify-center flex-shrink-0" style={{ background: 'var(--bg-elev)' }}>
