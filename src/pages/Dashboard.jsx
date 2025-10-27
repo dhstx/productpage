@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/dashboard-theme.css";
+import "@/styles/usage.css";
 import PTHealthBar from '../components/PTHealthBar';
 import UsageMonitoringDashboard from '../components/UsageMonitoringDashboard';
 import BackArrow from '../components/BackArrow';
@@ -180,9 +181,13 @@ export default function Dashboard() {
               {/* Usage Monitoring & Recent Activity Row */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {user && (
-                  <div className="dashboard-card p-4">
-                    <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--text)' }}>Usage Monitoring</h2>
-                    <UsageMonitoringDashboard userId={user.id} />
+                  <div className="dashboard-card">
+                    <div className="usage-card">
+                      <h3 className="usage-title">USAGE MONITORING</h3>
+                      <div className="mt-3 usage-card">
+                        <UsageMonitoringDashboard userId={user.id} />
+                      </div>
+                    </div>
                   </div>
                 )}
                 <div className="dashboard-card p-4">
