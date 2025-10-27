@@ -1,30 +1,45 @@
 import { useMemo } from 'react';
 import { agents as agentData } from '../lib/agents-enhanced';
-import { getAgentColor } from './ui/agentThemes';
+import { getAgentColorForContext } from './ui/agentThemes';
+import getIcon from './ui/agentIcons';
+import { useAgentSelection } from '@/context/AgentSelectionContext';
 
 export default function AgentRail({ selectedName, onSelect }) {
+  const { selected, setSelected } = (() => {
+    try {
+      return useAgentSelection();
+    } catch {
+      // Fallback if provider not present (public pages)
+      return { selected: selectedName, setSelected: onSelect };
+    }
+  })();
+
   const agents = useMemo(() => agentData.slice(0, 12), []);
 
   return (
     <aside className="sticky top-20 h-[calc(100vh-120px)] overflow-y-auto pr-2">
       <div className="space-y-2">
         {agents.map((agent) => {
-          const isActive = selectedName === agent.name;
+          const isActive = selected === agent.name;
+          const color = getAgentColorForContext(agent.name, 'dashboard');
+          const Icon = getIcon(agent.name);
           return (
             <button
               key={agent.id}
-              onClick={() => onSelect?.(agent.name)}
-              className={`w-full text-left card-surface p-3 transition-colors hover:bg-[color:var(--panel-bg)] ${
-                isActive ? 'outline outline-1 outline-[color:var(--accent-gold)]' : ''
-              }`}
+              onClick={() => setSelected?.(agent.name)}
+              className={`w-full text-left card-surface p-3 transition-colors hover:bg-[color:var(--panel-bg)] ${isActive ? 'ring-2' : ''}`}
+              style={{
+                borderColor: isActive ? color : undefined,
+                backgroundColor: isActive ? `${color}10` : undefined,
+              }}
             >
               <div className="flex items-start gap-3">
                 <div className="relative mt-0.5">
                   <div
                     className="h-8 w-8 rounded-md flex items-center justify-center"
-                    style={{ backgroundColor: `${getAgentColor(agent.name, agent.color)}22` }}
+                    style={{ backgroundColor: `${color}22` }}
                   >
-                    <span className="text-base" aria-hidden style={{ color: getAgentColor(agent.name, agent.color) }}>{agent.icon}</span>
+                    <Icon size={16} color={color} />
                   </div>
                   <span className="absolute -right-1 -top-1 inline-block h-2 w-2 rounded-full bg-green-500" aria-hidden />
                 </div>

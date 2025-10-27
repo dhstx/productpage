@@ -1,8 +1,9 @@
 // Canonical palette for ALL agents (used everywhere consistently)
-export const agentThemes: Record<string, { hex: string }> = {
-  Commander:    { hex: "#A88CFF" }, // purple (strategic)
-  Conductor:    { hex: "#34D399" }, // teal/green (ops flow)
-  Connector:    { hex: "#F5B63F" }, // gold (relationships)
+export const baseThemes: Record<string, { hex: string }> = {
+  Commander:    { hex: "#A88CFF" }, // KEEP
+  Conductor:    { hex: "#34D399" }, // KEEP
+  Connector:    { hex: "#F5B63F" }, // KEEP
+  // Additional agents
   Scout:        { hex: "#95E1D3" },
   Builder:      { hex: "#F38181" },
   Muse:         { hex: "#AA96DA" },
@@ -15,7 +16,29 @@ export const agentThemes: Record<string, { hex: string }> = {
   Orchestrator: { hex: "#FFC96C" },
 };
 
-export function getAgentColor(name?: string, fallback = "#FFC96C"): string {
+// Back-compat: preserve existing export name
+export const agentThemes = baseThemes;
+
+// Public overrides = ORIGINAL colors for the three only (icons unchanged)
+const publicOverrides: Partial<Record<string, { hex: string }>> = {
+  Commander: { hex: "#A88CFF" },
+  Conductor: { hex: "#34D399" },
+  Connector: { hex: "#F5B63F" },
+};
+
+export type AgentColorContext = "public" | "dashboard";
+
+export function getAgentColorForContext(
+  name?: string,
+  ctx: AgentColorContext = "dashboard",
+  fallback = "#FFC96C"
+): string {
   if (!name) return fallback;
-  return agentThemes[name]?.hex ?? fallback;
+  if (ctx === "public" && publicOverrides[name]) return publicOverrides[name]!.hex;
+  return baseThemes[name]?.hex ?? fallback;
+}
+
+// Back-compat for existing imports:
+export function getAgentColor(name?: string, fallback = "#FFC96C"): string {
+  return getAgentColorForContext(name, "dashboard", fallback);
 }

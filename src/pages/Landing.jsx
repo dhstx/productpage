@@ -5,7 +5,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
-import AIChatInterface from '../components/AIChatInterface';
+import PublicChatbox from '@/components/chat/PublicChatbox';
 import AnimatedButton from '../components/AnimatedButton';
 import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
@@ -63,7 +63,7 @@ export default function Landing() {
         </header>
 
         {/* AI Chat Interface */}
-        <AIChatInterface />
+        <PublicChatbox />
 
         {/* SYNTEK AUTOMATIONS mark above Hero */}
         <section id="syntek-svg-section" className="syntek-image-container">
