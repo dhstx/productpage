@@ -1,0 +1,46 @@
+:root {
+  --page-gutter: clamp(16px, 4vw, 24px);
+  --page-max: 1200px;
+}
+.platforms-page .container {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+.platforms-page .panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.platforms-page .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.platforms-page .kpi-card {
+  min-height: auto;
+  padding: 12px 14px;
+  background: var(--bg-elev, var(--card-bg));
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+@media (max-width: 900px) {
+  .platforms-page .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px) {
+  .platforms-page .kpi-grid { grid-template-columns: 1fr; }
+}
+
+/* “SYSTEM STATUS”, “URGENT ACTIONS”, “UPCOMING EVENTS” same width rhythm as Management Portal */
+.platforms-page .section {
+  margin-top: 16px;
+}
+.platforms-page .section .panel { padding: 16px; }
+
+/* tighten Quick Actions row */
+.platforms-page .quick-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+/* Remove leftover icon space if an icon was dropped */
+.platforms-page .title-row,
+.platforms-page .title-row > * { gap: 0 !important; padding-left: 0 !important; }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/dashboard-theme.css";
 import "@/styles/dashboard-light-guard.css";
+import "@/styles/light-guards.css";
 import "@/styles/dashboard-mobile.css";
 import "@/styles/usage.css";
 import PTHealthBar from '../components/PTHealthBar';

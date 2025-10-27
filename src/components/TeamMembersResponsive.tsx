@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Trash2 } from "lucide-react";
+import "@/styles/team-actions.css";
 
 export type Member = {
   id: string;
@@ -37,8 +38,8 @@ export function TeamMembersResponsive({
               <div className="tm-actions">
                 {m.role !== "Owner" && (
                   <>
-                    <button className="btn btn-ghost" onClick={() => onChangeRole(m.id)}>Change Role</button>
-                    <button className="btn btn-danger" onClick={() => onRemove(m.id)} aria-label={`Remove ${m.name}`}>
+                    <button className="team-action" onClick={() => onChangeRole(m.id)}>Change Role</button>
+                    <button className="team-action team-action--danger" onClick={() => onRemove(m.id)} aria-label={`Remove ${m.name}`}>
                       🗑
                     </button>
                   </>
@@ -107,19 +108,8 @@ export function TeamMembersResponsive({
                 <div className="flex items-center justify-end gap-2">
                   {m.role !== 'Owner' && (
                     <>
-                      <button
-                        onClick={() => onChangeRole(m.id)}
-                        className="px-2 py-1 rounded-[4px] transition-colors"
-                        style={{ border: '1px solid var(--card-border)', background: 'transparent', color: 'var(--text)' }}
-                      >
-                        Change Role
-                      </button>
-                      <button
-                        onClick={() => onRemove(m.id)}
-                        className="p-2 rounded-[4px] transition-colors"
-                        style={{ border: '1px solid var(--card-border)', background: 'transparent', color: 'var(--text)' }}
-                        aria-label={`Remove ${m.name}`}
-                      >
+                      <button onClick={() => onChangeRole(m.id)} className="team-action">Change Role</button>
+                      <button onClick={() => onRemove(m.id)} className="team-action team-action--danger" aria-label={`Remove ${m.name}`}>
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </>

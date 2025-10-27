@@ -1,0 +1,16 @@
+.team-action {
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+html[data-theme="light"] .team-action:hover {
+  background: rgba(0,0,0,.06);
+}
+html[data-theme="dark"] .team-action:hover {
+  background: rgba(255,255,255,.06);
+}
+.team-action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 3px var(--accent-gold);
+}
+.team-action--danger:hover { color: var(--danger, #dc2626); }
