@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import '@/styles/agent-tile.css';
 import { agents as agentData } from '../lib/agents-enhanced';
 import { getAgentColorForContext } from './ui/agentThemes';
 import getIcon from './ui/agentIcons';
@@ -17,8 +18,8 @@ export default function AgentRail({ selectedName, onSelect }) {
   const agents = useMemo(() => agentData.slice(0, 12), []);
 
   return (
-    <aside className="sticky top-20 h-[calc(100vh-120px)] overflow-y-auto pr-2">
-      <div className="space-y-2">
+    <aside className="pr-2 lg:sticky lg:top-20 lg:h-[calc(100vh-120px)] lg:overflow-y-auto">
+      <div className="agent-tile-grid lg:block lg:space-y-2">
         {agents.map((agent) => {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
@@ -27,16 +28,16 @@ export default function AgentRail({ selectedName, onSelect }) {
             <button
               key={agent.id}
               onClick={() => setSelected?.(agent.name)}
-              className={`w-full text-left card-surface p-3 transition-colors hover:bg-[color:var(--panel-bg)] ${isActive ? 'ring-2' : ''}`}
+              className={`agent-tile w-full text-left card-surface p-3 transition-colors hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
               style={{
-                borderColor: isActive ? color : undefined,
+                '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
               }}
             >
-              <div className="flex items-start gap-3">
+              <div className="agent-tile__row items-start gap-3">
                 <div className="relative mt-0.5">
                   <div
-                    className="h-8 w-8 rounded-md flex items-center justify-center"
+                    className="agent-tile__icon h-8 w-8 rounded-md flex items-center justify-center"
                     style={{ backgroundColor: `${color}22` }}
                   >
                     <Icon size={16} color={color} />
