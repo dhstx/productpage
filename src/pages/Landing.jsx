@@ -6,6 +6,7 @@ import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
 import LandingChatInterface from '../components/LandingChatInterface';
+import "@/styles/public-chatbox.css";
 import AnimatedButton from '../components/AnimatedButton';
 import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
@@ -62,8 +63,10 @@ export default function Landing() {
           </div>
         </header>
 
-        {/* AI Chat Interface */}
-        <LandingChatInterface />
+        {/* AI Chat Interface reserved slot to avoid layout jump */}
+        <section className="public-chatbox-slot">
+          <LandingChatInterface />
+        </section>
 
         {/* SYNTEK AUTOMATIONS mark above Hero */}
         <section id="syntek-svg-section" className="syntek-image-container">

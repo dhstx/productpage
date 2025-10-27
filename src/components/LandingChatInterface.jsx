@@ -68,6 +68,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const [showHistory, setShowHistory] = useState(false);
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
+  const chatboxRootRef = useRef(null);
   const contentRef = useRef(null);
   const timeoutsRef = useRef([]);
   const isAnimatingRef = useRef(false);
@@ -344,6 +345,29 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     return () => {};
   }, [h1Visible]);
 
+  // Ensure chatbox appear animation only affects opacity/transform
+  useEffect(() => {
+    if (!chatboxMounted) return;
+    const el = chatboxRootRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => el.classList.add('is-ready'));
+  }, [chatboxMounted]);
+
+  // Optional: measure actual chatbox height once and set the reserved variable on the slot
+  useEffect(() => {
+    if (!chatboxMounted) return;
+    const slot = document.querySelector('.public-chatbox-slot');
+    const el = chatboxRootRef.current;
+    if (!slot || !el) return;
+    const update = () => {
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      slot.style.setProperty('--public-chatbox-min-h', `${Math.max(360, h)}px`);
+    };
+    setTimeout(update, 0);
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
+  }, [chatboxMounted]);
+
   // D) Title-case utility for agent info line
   const toTitleCase = (s) => s
     .split(' ')
@@ -496,7 +520,12 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
         {/* Chatbox wrapper: mounts once after typewriter completes and stays mounted */}
         {chatboxMounted && (
-          <div className={`chatbox-wrapper up-fade ${chatboxVisible ? 'visible' : ''}`}>
+          <section
+            ref={chatboxRootRef}
+            className="public-chatbox-appear"
+            aria-label="Public chatbox"
+          >
+          <div className={`chatbox-wrapper`}>
             {/* Conversation Controls moved: history as attached pill near input */}
             {currentSessionId && (
               <div className="mb-6">
@@ -656,6 +685,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             {/* Dynamic Suggestions (plug-n-play chips) */}
             <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} visibleFlags={chipsVisible} />
           </div>
+          </section>
         )}
         
         
