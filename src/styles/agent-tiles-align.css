@@ -1,5 +1,5 @@
 .agent-tile { display: flex; align-items: center; padding: 10px 12px; gap: 8px;
-  background: var(--card-bg); border:1px solid var(--card-border); border-radius:12px; }
+  background: var(--card-bg); border:1px solid var(--card-border); border-radius:10px; }
 .agent-tile__icon { width: 22px; height: 22px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; }
 .agent-tile__name { line-height: 1.1; font-weight: 600; letter-spacing: .01em; align-self: center; }
 

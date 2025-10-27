@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import "../styles/dashboard-theme.css";
+import "@/styles/theme-overrides.css";
 import BackArrow from '../components/BackArrow';
 import { Users, Mail, Shield, UserPlus } from 'lucide-react';
 import { TeamMembersResponsive } from "@/components/TeamMembersResponsive";

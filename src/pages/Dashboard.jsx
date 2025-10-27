@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/dashboard-theme.css";
+import "@/styles/theme-overrides.css";
 import "@/styles/dashboard-light-guard.css";
 import "@/styles/light-guards.css";
 import "@/styles/dashboard-mobile.css";
