@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PTStatusCard } from './PTHealthBar';
+import "@/styles/usage.css";
 
 export default function UsageMonitoringDashboard({ userId }) {
   const [usageData, setUsageData] = useState(null);
@@ -45,7 +46,7 @@ export default function UsageMonitoringDashboard({ userId }) {
   
   if (error) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+      <div className="usage-card" style={{ color: 'var(--text)' }}>
         Error loading usage data: {error}
       </div>
     );
@@ -129,13 +130,13 @@ function normalizeUsagePayload(payload) {
  */
 function WarningsPanel({ warnings }) {
   return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-      <h4 className="text-sm font-semibold text-yellow-900 mb-2 flex items-center gap-2">
+    <div className="usage-card">
+      <h4 className="text-sm font-semibold mb-2 flex items-center gap-2" style={{ color: 'var(--text)' }}>
         ⚠️ Warnings
       </h4>
       <div className="space-y-2">
         {warnings.map((warning, index) => (
-          <div key={index} className="text-sm text-yellow-800">
+          <div key={index} className="text-sm" style={{ color: 'var(--text)' }}>
             <span className="font-medium">{warning.type}:</span> {warning.message}
           </div>
         ))}
@@ -160,28 +161,31 @@ function ThrottleStatusPanel({ throttleStatus }) {
   } = throttleStatus;
   
   return (
-    <div className={`rounded-lg p-4 border ${
-      currentlyThrottled 
-        ? 'bg-red-50 border-red-200' 
-        : 'bg-green-50 border-green-200'
-    }`}>
-      <h4 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${
-        currentlyThrottled ? 'text-red-900' : 'text-green-900'
-      }`}>
+    <div className="usage-card">
+      <h4 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--text)' }}>
         {currentlyThrottled ? '⏸️ Throttle Active' : '✅ No Active Throttles'}
       </h4>
-      
+
       {currentlyThrottled && (
-        <div className="mb-4 p-3 bg-white rounded border border-red-300">
-          <div className="text-sm text-red-800">
+        <div
+          className="mb-4"
+          style={{
+            padding: 12,
+            background: 'var(--bg-elev)',
+            border: '1px solid var(--card-border)',
+            borderRadius: 8,
+            color: 'var(--text)'
+          }}
+        >
+          <div className="text-sm">
             <strong>Reason:</strong> {throttleReason}
           </div>
-          <div className="text-sm text-red-800 mt-1">
+          <div className="text-sm mt-1">
             <strong>Expires:</strong> {new Date(throttleUntil).toLocaleString()}
           </div>
         </div>
       )}
-      
+
       {/* Metrics Grid */}
       <div className="grid grid-cols-2 gap-4">
         <MetricCard
@@ -190,7 +194,7 @@ function ThrottleStatusPanel({ throttleStatus }) {
           status={burnRate72h > 40 ? 'danger' : burnRate72h > 30 ? 'warning' : 'ok'}
           threshold="Limit: 40%"
         />
-        
+
         <MetricCard
           label="Advanced Usage"
           value={`${advancedUsagePercentage}%`}
@@ -198,11 +202,11 @@ function ThrottleStatusPanel({ throttleStatus }) {
           threshold={`Soft: 20%, Hard: 25%`}
         />
       </div>
-      
+
       {/* Historical Stats */}
       {historicalStats && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="text-xs text-gray-600 space-y-1">
+        <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--card-border)' }}>
+          <div className="text-xs space-y-1" style={{ color: 'var(--muted)' }}>
             <div>Throttle events: {historicalStats.throttleCount}</div>
             <div>Soft cap breaches: {historicalStats.softCapBreaches}</div>
             <div>Hard cap breaches: {historicalStats.hardCapBreaches}</div>
@@ -218,18 +222,12 @@ function ThrottleStatusPanel({ throttleStatus }) {
  * Metric Card
  */
 function MetricCard({ label, value, status, threshold }) {
-  const statusColors = {
-    ok: 'bg-green-100 text-green-800 border-green-200',
-    warning: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    danger: 'bg-red-100 text-red-800 border-red-200'
-  };
-  
   return (
-    <div className={`p-3 rounded border ${statusColors[status]}`}>
-      <div className="text-xs font-medium mb-1">{label}</div>
-      <div className="text-2xl font-bold">{value}</div>
+    <div className="usage-card p-3">
+      <div className="text-xs font-medium mb-1" style={{ color: 'var(--muted)' }}>{label}</div>
+      <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{value}</div>
       {threshold && (
-        <div className="text-xs mt-1 opacity-75">{threshold}</div>
+        <div className="text-xs mt-1 usage-subtle">{threshold}</div>
       )}
     </div>
   );
@@ -240,26 +238,22 @@ function MetricCard({ label, value, status, threshold }) {
  */
 function RecentUsagePanel({ recentUsage }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
-      <h4 className="text-sm font-semibold text-gray-900 mb-3">
+    <div className="usage-card">
+      <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--text)' }}>
         Recent Activity
       </h4>
       <div className="space-y-2">
         {recentUsage.slice(0, 5).map((usage, index) => (
-          <div key={index} className="flex items-center justify-between text-sm py-2 border-b border-gray-100 last:border-0">
+          <div key={index} className="flex items-center justify-between text-sm py-2 border-b last:border-0" style={{ borderColor: 'var(--card-border)' }}>
             <div className="flex items-center gap-2">
-              <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                usage.model_class === 'advanced' 
-                  ? 'bg-purple-100 text-purple-700'
-                  : 'bg-blue-100 text-blue-700'
-              }`}>
+              <span className="px-2 py-0.5 rounded text-xs font-medium" style={{ background: 'var(--bg-elev)', border: '1px solid var(--card-border)', color: 'var(--text)' }}>
                 {usage.model_class}
               </span>
-              <span className="text-gray-700">{usage.agent_id}</span>
+              <span style={{ color: 'var(--text)' }}>{usage.agent_id}</span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-gray-600">{usage.pt_consumed} Points</span>
-              <span className="text-gray-400 text-xs">
+              <span className="usage-subtle">{usage.pt_consumed} Points</span>
+              <span className="text-xs usage-subtle">
                 {new Date(usage.created_at).toLocaleTimeString()}
               </span>
             </div>
@@ -279,11 +273,11 @@ function UsageStatisticsPanel({ usageData }) {
   if (!statistics) return null;
   
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4">
-      <h4 className="text-sm font-semibold text-gray-900 mb-3">
+    <div className="usage-card">
+      <h4 className="text-sm font-semibold mb-3" style={{ color: 'var(--text)' }}>
         Usage Statistics
       </h4>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           label="Total Requests"
@@ -306,25 +300,23 @@ function UsageStatisticsPanel({ usageData }) {
           icon="📈"
         />
       </div>
-      
+
       {/* Model Distribution Chart */}
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <div className="text-xs font-medium text-gray-600 mb-2">
+      <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--card-border)' }}>
+        <div className="text-xs font-medium mb-2" style={{ color: 'var(--muted)' }}>
           Model Distribution
         </div>
         <div className="flex h-4 rounded-full overflow-hidden">
-          <div 
-            className="bg-blue-500"
-            style={{ width: `${statistics.corePercentage}%` }}
+          <div
+            style={{ width: `${statistics.corePercentage}%`, background: 'var(--accent-gold)' }}
             title={`Core: ${statistics.corePercentage}%`}
           />
-          <div 
-            className="bg-purple-500"
-            style={{ width: `${statistics.advancedPercentage}%` }}
+          <div
+            style={{ width: `${statistics.advancedPercentage}%`, background: 'color-mix(in oklab, var(--accent-gold) 50%, transparent)' }}
             title={`Advanced: ${statistics.advancedPercentage}%`}
           />
         </div>
-        <div className="flex justify-between text-xs text-gray-600 mt-1">
+        <div className="flex justify-between text-xs mt-1" style={{ color: 'var(--muted)' }}>
           <span>Core: {statistics.corePercentage}%</span>
           <span>Advanced: {statistics.advancedPercentage}%</span>
         </div>
@@ -340,8 +332,8 @@ function StatCard({ label, value, icon }) {
   return (
     <div className="text-center">
       <div className="text-2xl mb-1">{icon}</div>
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
-      <div className="text-xs text-gray-600 mt-1">{label}</div>
+      <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>{value}</div>
+      <div className="text-xs mt-1" style={{ color: 'var(--muted)' }}>{label}</div>
     </div>
   );
 }

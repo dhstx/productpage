@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import "@/styles/usage.css";
 
 export default function PTHealthBar({ 
   ptUsed, 
@@ -23,19 +24,16 @@ export default function PTHealthBar({
   const projectedUsage = Math.round(ptUsed + (dailyUsage * (daysInMonth - daysInCycle)));
   const projectedPercentage = ptAllocated > 0 ? (projectedUsage / ptAllocated) * 100 : 0;
   
-  // Determine color and status
-  let colorClass, statusText, statusIcon;
+  // Determine status text/icon (visuals tokenized below)
+  let statusText, statusIcon;
   
   if (usagePercentage < 50) {
-    colorClass = 'bg-green-500';
     statusText = 'On track';
     statusIcon = '🟢';
   } else if (usagePercentage < 85) {
-    colorClass = 'bg-yellow-500';
     statusText = 'Moderate usage';
     statusIcon = '🟡';
   } else {
-    colorClass = 'bg-red-500';
     statusText = 'High usage';
     statusIcon = '🔴';
   }
@@ -48,36 +46,36 @@ export default function PTHealthBar({
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>
             {statusIcon} {ptLabel}
           </span>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs" style={{ color: 'var(--muted)' }}>
             {statusText}
           </span>
         </div>
-        <div className="text-sm font-semibold text-gray-900">
+        <div className="text-sm font-semibold" style={{ color: 'var(--text)' }}>
           {ptUsed.toLocaleString()} / {ptAllocated.toLocaleString()} Points
         </div>
       </div>
       
       {/* Progress bar */}
-      <div className="relative w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className={`absolute top-0 left-0 h-full ${colorClass} transition-all duration-500 ease-out`}
-          style={{ width: `${Math.min(100, usagePercentage)}%` }}
+      <div className="relative w-full overflow-hidden" style={{ height: 8, borderRadius: 8, background: 'var(--bg-elev)', border: '1px solid var(--card-border)' }}>
+        <div
+          className="absolute top-0 left-0 h-full transition-all duration-500 ease-out"
+          style={{ width: `${Math.min(100, usagePercentage)}%`, background: 'var(--accent-gold)', borderRadius: 8 }}
         />
         
         {/* Projection indicator (if showing) */}
         {showProjection && projectedPercentage > usagePercentage && (
-          <div 
-            className="absolute top-0 left-0 h-full bg-gray-400 opacity-30"
-            style={{ width: `${Math.min(100, projectedPercentage)}%` }}
+          <div
+            className="absolute top-0 left-0 h-full"
+            style={{ width: `${Math.min(100, projectedPercentage)}%`, background: 'color-mix(in oklab, var(--accent-gold) 40%, transparent)', borderRadius: 8 }}
           />
         )}
       </div>
       
       {/* Details */}
-      <div className="flex items-center justify-between mt-2 text-xs text-gray-600">
+      <div className="flex items-center justify-between mt-2 text-xs" style={{ color: 'var(--muted)' }}>
         <span>
           {ptRemaining.toLocaleString()} Points remaining
         </span>
@@ -88,10 +86,10 @@ export default function PTHealthBar({
       
       {/* Projection message */}
       {showProjection && daysInCycle > 0 && (
-        <div className="mt-2 text-xs text-gray-500 italic">
+        <div className="mt-2 text-xs italic" style={{ color: 'var(--muted)' }}>
           At current rate: ~{projectedUsage.toLocaleString()} Points by month end
           {projectedUsage > ptAllocated && (
-            <span className="text-red-600 font-medium ml-1">
+            <span className="font-medium ml-1" style={{ color: 'var(--text)' }}>
               (⚠️ {(projectedUsage - ptAllocated).toLocaleString()} Points over limit)
             </span>
           )}
@@ -100,14 +98,14 @@ export default function PTHealthBar({
       
       {/* Warning messages */}
       {usagePercentage >= 85 && (
-        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
+        <div className="mt-2 p-2 usage-card text-xs" style={{ padding: 8 }}>
           <strong>⚠️ Warning:</strong> You've used {Math.round(usagePercentage)}% of your Points. 
           Throttle activates at 100%. Consider upgrading or slowing usage.
         </div>
       )}
       
       {usagePercentage >= 50 && usagePercentage < 85 && (
-        <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-700">
+        <div className="mt-2 p-2 usage-card text-xs" style={{ padding: 8 }}>
           <strong>💡 Tip:</strong> You've used {Math.round(usagePercentage)}% of your Points. 
           Monitor your usage to avoid running out before month end.
         </div>
@@ -134,18 +132,15 @@ export function AdvancedPTSubBar({
   const hardCapPct = Math.round(hardCap * 100);
   
   // Determine status
-  let statusColor, statusText, statusIcon;
+  let statusText, statusIcon;
   
   if (advancedPercentage >= hardCap) {
-    statusColor = 'text-red-600';
     statusText = 'Hard cap exceeded';
     statusIcon = '🚫';
   } else if (advancedPercentage >= softCap) {
-    statusColor = 'text-yellow-600';
     statusText = 'Approaching limit';
     statusIcon = '⚠️';
   } else {
-    statusColor = 'text-green-600';
     statusText = 'Within limits';
     statusIcon = '✅';
   }
@@ -155,56 +150,46 @@ export function AdvancedPTSubBar({
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-600">
+          <span className="text-xs font-medium" style={{ color: 'var(--muted)' }}>
             {statusIcon} Advanced Model Usage
           </span>
         </div>
-        <div className={`text-xs font-semibold ${statusColor}`}>
+        <div className="text-xs font-semibold" style={{ color: 'var(--text)' }}>
           {advancedPct}% of total Points
         </div>
       </div>
       
       {/* Progress bar with cap indicators */}
-      <div className="relative w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="relative w-full h-2 rounded-full overflow-hidden" style={{ background: 'var(--bg-elev)', border: '1px solid var(--card-border)' }}>
         {/* Soft cap indicator */}
-        <div 
-          className="absolute top-0 h-full w-0.5 bg-yellow-400"
-          style={{ left: `${softCapPct}%` }}
-        />
+        <div className="absolute top-0 h-full w-0.5" style={{ left: `${softCapPct}%`, background: 'var(--card-border)' }} />
         
         {/* Hard cap indicator */}
-        <div 
-          className="absolute top-0 h-full w-0.5 bg-red-500"
-          style={{ left: `${hardCapPct}%` }}
-        />
+        <div className="absolute top-0 h-full w-0.5" style={{ left: `${hardCapPct}%`, background: 'var(--card-border)' }} />
         
         {/* Usage bar */}
-        <div 
-          className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out ${
-            advancedPercentage >= hardCap ? 'bg-red-500' :
-            advancedPercentage >= softCap ? 'bg-yellow-500' :
-            'bg-blue-500'
-          }`}
-          style={{ width: `${Math.min(100, advancedPct)}%` }}
+        <div
+          className="absolute top-0 left-0 h-full transition-all duration-500 ease-out"
+          style={{ width: `${Math.min(100, advancedPct)}%`, background: 'var(--accent-gold)' }}
         />
       </div>
       
       {/* Cap labels */}
-      <div className="flex items-center justify-between mt-1 text-xs text-gray-500">
+      <div className="flex items-center justify-between mt-1 text-xs" style={{ color: 'var(--muted)' }}>
         <span>Soft cap: {softCapPct}%</span>
         <span>Hard cap: {hardCapPct}%</span>
       </div>
       
       {/* Warning messages */}
       {advancedPercentage >= hardCap && (
-        <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
+        <div className="mt-2 p-2 usage-card text-xs" style={{ padding: 8 }}>
           <strong>🚫 Hard Cap Exceeded:</strong> You've exceeded the Advanced model usage limit. 
           Overflow fees (2× rate) apply. Upgrade your tier or purchase more Advanced Points.
         </div>
       )}
       
       {advancedPercentage >= softCap && advancedPercentage < hardCap && (
-        <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-700">
+        <div className="mt-2 p-2 usage-card text-xs" style={{ padding: 8 }}>
           <strong>⚠️ Soft Cap Reached:</strong> You're approaching the Advanced model usage limit ({hardCapPct}%). 
           Consider upgrading to Pro Plus or Business tier for higher limits.
         </div>
@@ -240,14 +225,14 @@ export function PTStatusCard({
   const daysRemaining = cycleEnd ? Math.ceil((cycleEnd - now) / (1000 * 60 * 60 * 24)) : 0;
   
   return (
-    <div className={`pt-status-card bg-white rounded-lg shadow-sm border border-gray-200 p-4 ${className}`}>
+    <div className={`pt-status-card usage-card p-4 ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold" style={{ color: 'var(--text)' }}>
           Point Usage
         </h3>
         {throttleActive && (
-          <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded">
+          <span className="px-2 py-1 text-xs font-medium rounded" style={{ background: 'var(--bg-elev)', color: 'var(--text)', border: '1px solid var(--card-border)' }}>
             ⏸️ Throttled
           </span>
         )}
@@ -288,14 +273,14 @@ export function PTStatusCard({
       
       {/* Billing cycle info */}
       {cycleEnd && (
-        <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-600">
+        <div className="mt-4 pt-4 text-xs" style={{ borderTop: '1px solid var(--card-border)', color: 'var(--muted)' }}>
           <div className="flex items-center justify-between">
             <span>Billing cycle resets in:</span>
-            <span className="font-medium text-gray-900">
+            <span className="font-medium" style={{ color: 'var(--text)' }}>
               {daysRemaining} days
             </span>
           </div>
-          <div className="mt-1 text-gray-500">
+          <div className="mt-1" style={{ color: 'var(--muted)' }}>
             {cycleEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </div>
         </div>
@@ -304,7 +289,14 @@ export function PTStatusCard({
       {/* Upgrade CTA (if usage high) */}
       {(corePTUsed / corePTAllocated) > 0.80 && (
         <div className="mt-4">
-          <button className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+          <button
+            className="w-full text-sm font-medium rounded-lg transition-colors"
+            style={{
+              padding: '8px 16px',
+              background: 'var(--accent-gold)',
+              color: 'var(--text)'
+            }}
+          >
             Upgrade for More Points →
           </button>
         </div>
