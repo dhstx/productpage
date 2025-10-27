@@ -1,0 +1,85 @@
+:root {
+  --legacy-hero-max: 1100px;
+  --legacy-type-char-ms: 32ms;     /* per-char timing */
+  --legacy-type-pause-ms: 850ms;   /* pause between words */
+}
+
+.hero-legacy-wrap {
+  max-width: var(--legacy-hero-max);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.hero-legacy-title {
+  font-weight: 800;
+  font-size: clamp(36px, 6vw, 56px);
+  letter-spacing: .02em;
+  text-align: center;
+}
+
+.hero-legacy-sub {
+  margin-top: .5rem;
+  font-weight: 700;
+  font-size: clamp(18px, 2.6vw, 28px);
+  text-align: center;
+  line-height: 1.25;
+  min-block-size: 1.6em; /* baseline pinned */
+}
+
+.legacy-typer {
+  display: inline-block;
+  min-width: 7ch;       /* prevents early hop */
+  line-height: 1;
+  transform: none !important;
+  vertical-align: baseline;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.legacy-shell {
+  margin-top: 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px;
+  animation: legacyFade 240ms ease-out both 120ms;
+}
+
+.legacy-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin-bottom: 8px;
+}
+
+.legacy-pill {
+  border: 1px solid var(--card-border); border-radius: 999px;
+  padding: 6px 12px; display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+}
+
+.legacy-input {
+  width: 100%; min-height: 60px;
+  color: var(--text);
+  background: var(--input-bg, transparent);
+  border: 1px solid var(--card-border);
+  border-radius: 30px;
+  padding: 16px 18px;
+  outline: none;
+}
+
+.legacy-actions {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 14px;
+}
+
+.legacy-action {
+  text-align: left;
+  border: 1px solid var(--card-border);
+  border-radius: 8px; padding: 12px 14px;
+  background: transparent;
+}
+
+@media (min-width: 900px) {
+  .legacy-actions { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+@keyframes legacyFade { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
