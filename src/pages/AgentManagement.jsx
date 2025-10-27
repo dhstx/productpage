@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
 import "../styles/dashboard-theme.css";
-import AIChatInterface from '../components/AIChatInterface';
+import { AgentSelectionProvider } from '@/context/AgentSelectionContext';
+import DashboardChatbox from '@/components/chat/DashboardChatbox';
 import PTHealthBar from '../components/PTHealthBar';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -91,7 +92,9 @@ export default function AgentManagement() {
 
           {/* Chat Interface */}
           <div className="dashboard-card p-6">
-            <AIChatInterface onPTUpdate={fetchPTUsage} />
+            <AgentSelectionProvider>
+              <DashboardChatbox />
+            </AgentSelectionProvider>
           </div>
         </div>
       </div>

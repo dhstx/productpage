@@ -7,7 +7,8 @@ import UsageMonitoringDashboard from '../components/UsageMonitoringDashboard';
 import BackArrow from '../components/BackArrow';
 import { Zap, Users, TrendingUp, Settings, CreditCard } from 'lucide-react';
 import AgentRail from '../components/AgentRail';
-import AIChatInterface from '../components/AIChatInterface';
+import { AgentSelectionProvider } from '@/context/AgentSelectionContext';
+import DashboardChatbox from '@/components/chat/DashboardChatbox';
 
 export default function Dashboard() {
   const { user, profile } = useAuth();
@@ -71,14 +72,15 @@ export default function Dashboard() {
           </div>
 
           {/* Layout: left rail + main content */}
-          <div className="grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] gap-6">
-            {/* Left Agent Rail */}
-            <div>
-              <AgentRail selectedName={selectedAgent} onSelect={setSelectedAgent} />
-            </div>
+          <AgentSelectionProvider initial={selectedAgent}>
+            <div className="grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] gap-6">
+              {/* Left Agent Rail */}
+              <div>
+                <AgentRail selectedName={selectedAgent} onSelect={setSelectedAgent} />
+              </div>
 
-            {/* Main column */}
-            <div className="space-y-6">
+              {/* Main column */}
+              <div className="space-y-6">
               {/* KPI Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="dashboard-card p-4">
@@ -146,7 +148,7 @@ export default function Dashboard() {
                   </h3>
                 </div>
                 <div className="p-4">
-                  <AIChatInterface initialAgent={selectedAgent} onAgentChange={setSelectedAgent} />
+                  <DashboardChatbox />
                 </div>
               </section>
 
@@ -217,8 +219,9 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
+              </div>
             </div>
-          </div>
+          </AgentSelectionProvider>
         </div>
       </div>
     </>
