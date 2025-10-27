@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/dashboard-theme.css";
+import "@/styles/dashboard-mobile.css";
 import "@/styles/usage.css";
 import PTHealthBar from '../components/PTHealthBar';
 import UsageMonitoringDashboard from '../components/UsageMonitoringDashboard';
@@ -74,14 +75,14 @@ export default function Dashboard() {
 
           {/* Layout: left rail + main content */}
           <AgentSelectionProvider initial={selectedAgent}>
-            <div className="grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] gap-6">
+            <div className="dash-grid lg:grid lg:grid-cols-[300px_minmax(0,1fr)] gap-6">
               {/* Left Agent Rail */}
-              <div>
+              <div className="dash-agents">
                 <AgentRail selectedName={selectedAgent} onSelect={setSelectedAgent} />
               </div>
 
               {/* Main column */}
-              <div className="space-y-6">
+              <div className="dash-chat space-y-6">
               {/* KPI Row */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="dashboard-card p-4">
@@ -154,7 +155,7 @@ export default function Dashboard() {
               </section>
 
               {/* Quick Actions */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="dash-metrics grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link to="/agents" className="dashboard-card p-5 hover:brightness-110 transition">
                   <div className="flex items-center gap-3 mb-2">
                     <Zap className="w-5 h-5" style={{ color: 'var(--accent-gold)' }} />

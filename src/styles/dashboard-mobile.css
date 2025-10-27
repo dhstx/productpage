@@ -1,0 +1,17 @@
+@media (max-width: 900px) {
+  .dash-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .dash-chat  { order: 1; }
+  .dash-agents{ order: 2; }
+  .dash-metrics{ order: 3; }
+}
+@media (max-width: 900px) {
+  .agent-tile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr)); /* 2-up small phones */
+    gap: 10px;
+  }
+}
+@media (min-width: 540px) and (max-width: 900px) {
+  .agent-tile-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } /* 3-up on larger phones/tablets */
+}
+.agent-tile--compact .truncate { font-size: .875rem; }  /* smaller, readable */
