@@ -28,19 +28,23 @@ export default function PublicChatbox() {
   }, [selected]);
 
   const color = getAgentColorForContext(selected, "public");
-  const titleRef = useRef<HTMLSpanElement>(null);
 
+  // Public hero typewriter: animate letters only into the .public-typer span
   useEffect(() => {
-    const el = titleRef.current; if (!el) return;
+    const el = document.querySelector<HTMLSpanElement>(".public-typer");
+    if (!el) return;
     let abort = false;
     const sleep = (ms:number)=> new Promise(r=>setTimeout(r,ms));
     const type = async (word:string) => {
       el.textContent = "";
-      el.style.color = color;  // color BEFORE typing
-      for (let i=0; i<word.length && !abort; i++) { el.textContent += word[i]; await sleep(32); }
+      el.style.color = color;
+      for (let i=0; i<word.length && !abort; i++) {
+        el.textContent += word[i];
+        await sleep(32);
+      }
       await sleep(850);
     };
-    (async ()=>{
+    (async ()=> {
       for (const name of queue) { if (abort) break; await type(name); }
     })();
     return () => { abort = true; };
@@ -68,13 +72,6 @@ export default function PublicChatbox() {
 
   return (
     <section ref={rootRef as any} aria-label="Public Chatbox" className="public-chatbox-appear mx-auto max-w-5xl px-4">
-      <header className="text-center mb-6">
-        <h1 className="text-5xl font-extrabold tracking-wide">SYNTEK AUTOMATIONS</h1>
-        <h2 className="mt-2 text-2xl font-semibold">
-          WELCOME. CONFER WITH YOUR{" "}
-          <span ref={titleRef} style={{ color }} className="underline underline-offset-4"> </span>.
-        </h2>
-      </header>
 
       {/* Controls row (legacy spacing) */}
       <div className="flex items-center justify-center gap-3 mb-4">

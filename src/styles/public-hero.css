@@ -1,0 +1,43 @@
+/* Hero stage with fixed height and centered content */
+.hero-stage {
+  position: relative;
+  /* constant stage height — tune as needed */
+  min-block-size: clamp(560px, 72vh, 860px);
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  width: min(1100px, 100%);
+  /* ensure nothing accidentally changes stage height */
+  overflow: visible;
+}
+
+.hero-headline {
+  text-align: center;
+}
+
+.hero-subtitle {
+  line-height: 1.25;
+  min-block-size: 1.6em; /* keeps baseline steady even when word is empty */
+}
+
+/* Chatbox overlay never participates in flow */
+.public-chatbox-overlay {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(24px, 6vh, 72px);  /* lifts it off the bottom of the stage */
+  width: min(1100px, 100%);
+  z-index: 2;
+}
+
+/* Typewriter word: no vertical animation */
+.public-typer {
+  display: inline-block;
+  vertical-align: baseline;
+  line-height: 1;
+  min-width: 7ch;   /* reserve width to avoid early hop */
+  transform: none !important;
+}
+
+/* Remove any previous spacer */
+.after-hero-offset { display: none !important; }
