@@ -1,9 +1,18 @@
+// Canonical palette for ALL agents (used everywhere consistently)
 export const agentThemes: Record<string, { hex: string }> = {
-  // UI-only remap per spec:
-  // Commander → gold, Connector → green, Conductor → purple
-  Commander: { hex: "#e5aa5d" }, // gold
-  Connector: { hex: "#34D399" }, // green
-  Conductor: { hex: "#A88CFF" }, // purple
+  Commander:    { hex: "#A88CFF" }, // purple (strategic)
+  Conductor:    { hex: "#34D399" }, // teal/green (ops flow)
+  Connector:    { hex: "#F5B63F" }, // gold (relationships)
+  Scout:        { hex: "#95E1D3" },
+  Builder:      { hex: "#F38181" },
+  Muse:         { hex: "#AA96DA" },
+  Echo:         { hex: "#FCBAD3" },
+  Archivist:    { hex: "#A8D8EA" },
+  Ledger:       { hex: "#FFD93D" },
+  Counselor:    { hex: "#6BCB77" },
+  Sentinel:     { hex: "#4D96FF" },
+  Optimizer:    { hex: "#FF6B9D" },
+  Orchestrator: { hex: "#FFC96C" },
 };
 
 export function getAgentColor(name?: string, fallback = "#FFC96C"): string {
