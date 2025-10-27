@@ -5,8 +5,8 @@ import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
-import LandingChatInterface from '../components/LandingChatInterface';
-import "@/styles/public-chatbox.css";
+import PublicChatbox from "@/components/chat/PublicChatbox";
+import "@/styles/public-hero.css";
 import AnimatedButton from '../components/AnimatedButton';
 import FadeInSection from '../components/FadeInSection';
 import PageTransition from '../components/PageTransition';
@@ -63,9 +63,20 @@ export default function Landing() {
           </div>
         </header>
 
-        {/* AI Chat Interface reserved slot to avoid layout jump */}
-        <section className="public-chatbox-slot">
-          <LandingChatInterface />
+        {/* Fixed-height hero stage with overlay chatbox */}
+        <section className="hero-stage">
+          <header className="hero-headline">
+            <h1 className="text-5xl font-extrabold tracking-wide">SYNTEK AUTOMATIONS</h1>
+            <h2 className="hero-subtitle text-2xl font-semibold mt-2">
+              WELCOME.&nbsp;
+              <span className="underline underline-offset-4 public-typer"></span>
+            </h2>
+          </header>
+
+          {/* Chatbox sits on its own overlay layer, not affecting layout */}
+          <div className="public-chatbox-overlay">
+            <PublicChatbox />
+          </div>
         </section>
 
         {/* SYNTEK AUTOMATIONS mark above Hero */}
