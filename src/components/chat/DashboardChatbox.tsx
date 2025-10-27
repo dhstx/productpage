@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUp, ChevronDown, Bot, Clock } from "lucide-react";
 import { useAgentSelection } from "@/context/AgentSelectionContext";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
@@ -17,6 +17,30 @@ export default function DashboardChatbox() {
 
   const [message, setMessage] = useState("");
   const [showAgentMenu, setShowAgentMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowAgentMenu(false);
+    };
+    const onClickAway = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowAgentMenu(false);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClickAway);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClickAway);
+    };
+  }, []);
+
+  const chooseAgent = (name: string) => {
+    setSelected(name);
+    setShowAgentMenu(false);
+    textareaRef.current?.focus();
+  };
+
   const [messages, setMessages] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -85,7 +109,7 @@ export default function DashboardChatbox() {
           <button
             onClick={() => setShowAgentMenu(!showAgentMenu)}
             className="select-agent flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
-            aria-haspopup="listbox"
+            aria-haspopup="menu"
             aria-expanded={showAgentMenu}
           >
             <span className="inline-flex items-center gap-2">
@@ -107,12 +131,12 @@ export default function DashboardChatbox() {
           </button>
 
           {showAgentMenu && (
-            <div role="menu" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
+            <div ref={menuRef} role="menu" className="absolute left-1/2 z-20 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
               {allNames.map((name) => {
                 const c = getAgentColorForContext(name, "dashboard");
                 const I = getIcon(name);
                 return (
-                  <div key={name} onClick={() => setSelected(name)} className="flex items-center gap-2 px-3 py-2 cursor-pointer">
+                  <div key={name} role="menuitem" onClick={() => chooseAgent(name)} className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-white/5">
                     <span className="inline-flex items-center justify-center rounded" style={{ width: 18, height: 18, backgroundColor: `${c}22` }}>
                       <I size={14} color={c} />
                     </span>
