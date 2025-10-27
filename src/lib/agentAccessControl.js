@@ -104,6 +104,32 @@ export const TIER_CONFIG = {
   }
 };
 
+// Simple name-based availability with auth gating
+const CORE_THREE = ['Commander', 'Conductor', 'Connector'];
+
+/**
+ * Return list of agent names available for the given tier and auth state
+ */
+export function getAvailableAgents(userTier = 'freemium', isAuthenticated = false) {
+  // Public/unauthenticated: limit to the core three
+  if (!isAuthenticated) return CORE_THREE;
+
+  // Tier mapping by product tier (names must match display names)
+  const tierMap = {
+    public: CORE_THREE,
+    freemium: CORE_THREE,
+    entry: CORE_THREE.concat(['Scout', 'Echo']),
+    pro: CORE_THREE.concat(['Scout', 'Echo', 'Builder', 'Muse']),
+    proplus: CORE_THREE.concat(['Scout', 'Echo', 'Builder', 'Muse', 'Archivist', 'Ledger']),
+    business: [
+      ...CORE_THREE,
+      'Scout','Echo','Builder','Muse','Archivist','Ledger','Counselor','Sentinel','Optimizer','Orchestrator'
+    ],
+  };
+
+  return tierMap[userTier] || CORE_THREE;
+}
+
 /**
  * Check if user has access to a specific agent
  */

@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { Search, Lock, Star, TrendingUp, X } from 'lucide-react';
 import { agents as agentData } from '../lib/agents-enhanced';
 import { getAvailableAgents } from '../lib/agentAccessControl';
+import { getAgentColor } from './ui/agentThemes';
+import getAgentIcon from './ui/agentIcons';
 
 export default function EnhancedAgentSelector({ 
   selectedAgent, 
@@ -18,9 +20,7 @@ export default function EnhancedAgentSelector({
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
 
   // Get available agents based on user tier
-  const availableAgents = useMemo(() => {
-    return getAvailableAgents(userTier);
-  }, [userTier]);
+  const availableAgents = useMemo(() => getAvailableAgents(userTier, true), [userTier]);
 
   // Filter and sort agents
   const filteredAgents = useMemo(() => {
@@ -188,11 +188,9 @@ export default function EnhancedAgentSelector({
                   )}
 
                   {/* Agent Icon */}
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-                    style={{ backgroundColor: `${agent.color}20` }}
-                  >
-                    <span className="text-2xl">{agent.icon}</span>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
+                       style={{ backgroundColor: `${getAgentColor(agent.name, agent.color)}20` }}>
+                    {React.createElement(getAgentIcon(agent.name), { size: 20, color: getAgentColor(agent.name, agent.color) })}
                   </div>
 
                   {/* Agent Info */}
