@@ -1,31 +1,25 @@
-/**** Public Chatbox reserved space + appear animation ****/
+/*** Public Chatbox reserved space + appear animation (main page) ***/
 .public-chatbox-slot {
-  /* Reserve space so below sections never jump */
-  min-block-size: var(--public-chatbox-min-h, 520px);
   display: grid;
   place-items: center;
   margin: 0 auto;
   width: min(1100px, 100%);
-  /* Avoid layout thrash while offscreen/initial */
+  /* Default desktop reservation (already smooth) */
+  min-block-size: var(--public-chatbox-min-h, 560px);
   content-visibility: auto;
-  contain-intrinsic-size: auto 520px; /* fallback */
+  contain-intrinsic-size: auto 560px;
 }
 
-.public-chatbox-appear {
-  will-change: opacity, transform;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 280ms ease, transform 320ms ease;
+/* Mobile: reserve MORE space so the next section never “peeks” */
+@media (max-width: 768px) {
+  :root { --public-chatbox-min-h: 640px; }          /* conservative */
+  .public-chatbox-slot { contain-intrinsic-size: auto 640px; }
 }
-.public-chatbox-appear.is-ready {
-  opacity: 1;
-  transform: translateY(0);
+@media (max-width: 480px) {
+  :root { --public-chatbox-min-h: 700px; }          /* aggressive; prevents bottom peek */
+  .public-chatbox-slot { contain-intrinsic-size: auto 700px; }
 }
 
-/* Responsive reserved heights; tweak to your legacy hero composition */
-@media (max-width: 1024px) {
-  :root { --public-chatbox-min-h: 480px; }
-}
-@media (max-width: 640px) {
-  :root { --public-chatbox-min-h: 440px; }
-}
+/* Appearance animation MUST NOT change height */
+.public-chatbox-appear { opacity: 0; transform: translateY(8px); transition: opacity 280ms ease, transform 320ms ease; }
+.public-chatbox-appear.is-ready { opacity: 1; transform: translateY(0); }

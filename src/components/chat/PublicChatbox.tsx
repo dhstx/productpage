@@ -60,11 +60,10 @@ export default function PublicChatbox() {
     if (!slot || !el) return;
     const update = () => {
       const h = Math.ceil(el.getBoundingClientRect().height);
-      slot.style.setProperty("--public-chatbox-min-h", `${Math.max(360, h)}px`);
+      if (h > 0) slot.style.setProperty("--public-chatbox-min-h", `${Math.max(600, h)}px`);
     };
+    // One-time tune after first paint; avoids CLS while preventing bottom peek on small screens
     setTimeout(update, 0);
-    window.addEventListener("resize", update, { passive: true });
-    return () => window.removeEventListener("resize", update);
   }, []);
 
   return (

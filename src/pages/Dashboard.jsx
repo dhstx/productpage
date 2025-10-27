@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import "../styles/dashboard-theme.css";
+import "@/styles/dashboard-light-guard.css";
 import "@/styles/dashboard-mobile.css";
 import "@/styles/usage.css";
 import PTHealthBar from '../components/PTHealthBar';
@@ -63,7 +64,7 @@ export default function Dashboard() {
   return (
     <>
       <BackArrow />
-      <div className="min-h-screen w-full max-w-screen overflow-x-hidden dashboard-surface">
+      <div className="dashboard min-h-screen w-full max-w-screen overflow-x-hidden dashboard-surface">
         <div className="mx-auto max-w-[1280px] px-4 md:px-8 py-8">
           {/* Header */}
           <div className="mb-6">
