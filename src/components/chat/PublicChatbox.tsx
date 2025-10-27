@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
+import "@/styles/public-chatbox.css";
 import getIcon from "@/components/ui/agentIcons";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
 
@@ -6,6 +7,7 @@ const PUBLIC_AGENTS = ["Commander","Conductor","Connector"] as const;
 type PublicAgent = typeof PUBLIC_AGENTS[number];
 
 export default function PublicChatbox() {
+  const rootRef = useRef<HTMLElement | null>(null);
   // Keep selection stable across refresh for nicer demos
   const [selected, setSelected] = useState<PublicAgent>(() => {
     if (typeof window !== "undefined") {
@@ -44,8 +46,29 @@ export default function PublicChatbox() {
     return () => { abort = true; };
   }, [queue, color]);
 
+  // Fade-in without changing layout height
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => el.classList.add("is-ready"));
+  }, []);
+
+  // Optional: measure height once and set reserved variable on slot
+  useEffect(() => {
+    const slot = document.querySelector<HTMLElement>(".public-chatbox-slot");
+    const el = rootRef.current as HTMLElement | null;
+    if (!slot || !el) return;
+    const update = () => {
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      slot.style.setProperty("--public-chatbox-min-h", `${Math.max(360, h)}px`);
+    };
+    setTimeout(update, 0);
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   return (
-    <section aria-label="Public Chatbox" className="mx-auto max-w-5xl px-4">
+    <section ref={rootRef as any} aria-label="Public Chatbox" className="public-chatbox-appear mx-auto max-w-5xl px-4">
       <header className="text-center mb-6">
         <h1 className="text-5xl font-extrabold tracking-wide">SYNTEK AUTOMATIONS</h1>
         <h2 className="mt-2 text-2xl font-semibold">
