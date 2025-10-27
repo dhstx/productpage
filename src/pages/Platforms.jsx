@@ -1,4 +1,4 @@
-import { ExternalLink, AlertCircle, Calendar } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
 import { getMockPurchases } from '../lib/stripe';
 import { Link } from 'react-router-dom';
