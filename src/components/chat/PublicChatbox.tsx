@@ -1,216 +1,120 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowUp, ChevronDown, Bot, Clock } from "lucide-react";
-import { getAgentColorForContext } from "@/components/ui/agentThemes";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import getIcon from "@/components/ui/agentIcons";
-import { sendMessage as sendMessageAPI, getSession } from "@/lib/api/agentClient";
-import ChatTools from "./ChatTools";
-import MessageBubble from "../MessageBubble";
-import ConversationHistory from "../ConversationHistory";
+import { getAgentColorForContext } from "@/components/ui/agentThemes";
 
-const ctx: "public" = "public";
-const publicAgents = ["Commander", "Conductor", "Connector"] as const;
-
-type PublicAgentName = (typeof publicAgents)[number];
+const PUBLIC_AGENTS = ["Commander","Conductor","Connector"] as const;
+type PublicAgent = typeof PUBLIC_AGENTS[number];
 
 export default function PublicChatbox() {
-  const [message, setMessage] = useState("");
-  const [showAgentMenu, setShowAgentMenu] = useState(false);
-  const [selected, setSelected] = useState<PublicAgentName>("Commander");
-  const [messages, setMessages] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
-  const [showHistory, setShowHistory] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  const color = getAgentColorForContext(selected, ctx);
-  const Icon = getIcon(selected);
-
-  const handleAgentSelect = (name: PublicAgentName) => {
-    setSelected(name);
-    setShowAgentMenu(false);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!message.trim() || isLoading) return;
-
-    const userMessage = message.trim();
-    setMessage("");
-    setError(null);
-    setIsLoading(true);
-
-    const newUserMessage = {
-      id: Date.now(),
-      role: "user",
-      content: userMessage,
-      timestamp: new Date().toISOString(),
-    };
-    setMessages((prev) => [...prev, newUserMessage]);
-
-    try {
-      const selectedAgentId = selected.toLowerCase();
-      const response = await sendMessageAPI(userMessage, selectedAgentId, currentSessionId);
-
-      if (!currentSessionId && response.data?.sessionId) {
-        setCurrentSessionId(response.data.sessionId);
-      }
-
-      const agentMessage = {
-        id: Date.now() + 1,
-        role: "agent",
-        agent: response.data?.agent || selected,
-        content: response.data?.response || "No response",
-        timestamp: new Date().toISOString(),
-        metadata: response.data?.metadata || {},
-      };
-      setMessages((prev) => [...prev, agentMessage]);
-    } catch (err: any) {
-      console.error("Error sending message:", err);
-      setError(err.message);
-      const errorMessage = {
-        id: Date.now() + 1,
-        role: "error",
-        content: `Error: ${err.message}`,
-        timestamp: new Date().toISOString(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
+  // Keep selection stable across refresh for nicer demos
+  const [selected, setSelected] = useState<PublicAgent>(() => {
+    if (typeof window !== "undefined") {
+      const s = window.localStorage.getItem("publicAgent");
+      if (s && PUBLIC_AGENTS.includes(s as PublicAgent)) return s as PublicAgent;
     }
-  };
+    return "Commander";
+  });
 
-  const title = selected;
+  useEffect(() => {
+    try { window.localStorage.setItem("publicAgent", selected); } catch {}
+  }, [selected]);
+
+  // Typewriter that starts with the currently selected agent (no flicker)
+  const queue = useMemo<PublicAgent[]>(() => {
+    const idx = PUBLIC_AGENTS.indexOf(selected);
+    return [...PUBLIC_AGENTS.slice(idx), ...PUBLIC_AGENTS.slice(0, idx)];
+  }, [selected]);
+
+  const color = getAgentColorForContext(selected, "public");
+  const titleRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = titleRef.current; if (!el) return;
+    let abort = false;
+    const sleep = (ms:number)=> new Promise(r=>setTimeout(r,ms));
+    const type = async (word:string) => {
+      el.textContent = "";
+      el.style.color = color;  // color BEFORE typing
+      for (let i=0; i<word.length && !abort; i++) { el.textContent += word[i]; await sleep(32); }
+      await sleep(850);
+    };
+    (async ()=>{
+      for (const name of queue) { if (abort) break; await type(name); }
+    })();
+    return () => { abort = true; };
+  }, [queue, color]);
 
   return (
-    <section className="w-full px-4 py-8">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold" style={{ color }}>
-            {title} <span data-build="public-chat-v1" />
-          </h2>
-        </div>
+    <section aria-label="Public Chatbox" className="mx-auto max-w-5xl px-4">
+      <header className="text-center mb-6">
+        <h1 className="text-5xl font-extrabold tracking-wide">SYNTEK AUTOMATIONS</h1>
+        <h2 className="mt-2 text-2xl font-semibold">
+          WELCOME. CONFER WITH YOUR{" "}
+          <span ref={titleRef} style={{ color }} className="underline underline-offset-4"> </span>.
+        </h2>
+      </header>
 
-        <div className="mb-6 flex justify-center">
-          <div className="relative w-full sm:w-auto">
-            <button
-              onClick={() => setShowAgentMenu(!showAgentMenu)}
-              className="select-agent flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
-              aria-haspopup="listbox"
-              aria-expanded={showAgentMenu}
-            >
-              <span className="inline-flex items-center gap-2">
-                <span
-                  aria-hidden="true"
-                  className="agent-dot"
-                  style={{
-                    display: "inline-block",
-                    width: "14px",
-                    height: "14px",
-                    borderRadius: "9999px",
-                    backgroundColor: color,
-                    boxShadow: "0 0 0 2px rgba(0,0,0,0.2)",
-                  }}
-                />
-                <span>{selected}</span>
-              </span>
-              <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? "rotate-180" : ""}`} />
-            </button>
-
-            {showAgentMenu && (
-              <div role="listbox" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
-                {publicAgents.map((name) => {
-                  const c = getAgentColorForContext(name, ctx);
-                  const I = getIcon(name);
-                  return (
-                    <div key={name} onClick={() => handleAgentSelect(name)} className="flex items-center gap-2 px-3 py-2 cursor-pointer">
-                      <span className="inline-flex items-center justify-center rounded" style={{ width: 18, height: 18, backgroundColor: `${c}22` }}>
-                        <I size={14} color={c} />
-                      </span>
-                      <span>{name}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {messages.length > 0 && (
-          <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
-            {messages.map((msg) => (
-              <MessageBubble key={msg.id} message={msg} />
-            ))}
-            {isLoading && (
-              <div className="flex gap-3 justify-start mb-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFC96C]/20">
-                  <Bot className="h-4 w-4 text-[#FFC96C] animate-pulse" />
-                </div>
-                <div className="bg-[#202020] text-[#F2F2F2] rounded-lg p-4">
-                  <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <div className="w-2 h-2 bg-[#FFC96C] rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="relative">
-          <button
-            type="button"
-            className="history-pill"
-            aria-pressed={showHistory}
-            aria-label={showHistory ? "Hide history" : "Show history"}
-            onClick={() => setShowHistory(!showHistory)}
-          >
-            <Clock className="h-4 w-4" aria-hidden="true" />
-            <span className="history-label">{showHistory ? "Hide History" : "History"}</span>
+      {/* Controls row (legacy spacing) */}
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <button className="px-4 py-1.5 rounded-full border" style={{borderColor:"var(--card-border)"}}>
+          <span className="mr-2">⏺</span>History
+        </button>
+        <div className="relative">
+          <button className="px-4 py-1.5 rounded-full border" style={{borderColor:"var(--card-border)"}}>
+            <span className="inline-flex items-center gap-2">
+              {React.createElement(getIcon(selected), { size: 14, color })}
+              {selected}
+            </span>
+            <span className="ml-2">▾</span>
           </button>
-          <div className="panel-system overflow-hidden p-2">
-            <ChatTools
-              activeMode="chat"
-              onToggleMode={() => {}}
-              onAttach={() => {}}
-              features={{ mic: true, upload: true, modes: ["chat", "agi"] }}
-              uploadOnRight
-              rightAppend={(
-                <button
-                  type="submit"
-                  disabled={!message.trim()}
-                  className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: message.trim() ? color : "#333" }}
-                  aria-label="Send message"
-                >
-                  <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
-                </button>
-              )}
-            >
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Describe what you need help with…"
-                className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
-                rows={3}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSubmit(e);
-                  }
-                }}
-              />
-            </ChatTools>
-          </div>
-        </form>
 
-        {showHistory && (
-          <div className="mb-6">
-            <ConversationHistory onSelectSession={() => {}} currentSessionId={currentSessionId} />
+          {/* Simple dropdown */}
+          <div className="absolute left-0 mt-2 w-44 rounded-lg border bg-[var(--card-bg)] shadow-lg z-10">
+            {PUBLIC_AGENTS.map(name => {
+              const c = getAgentColorForContext(name, "public");
+              const Icon = getIcon(name);
+              const active = name === selected;
+              return (
+                <div
+                  key={name}
+                  role="menuitem"
+                  onClick={() => setSelected(name)}
+                  className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-black/10"
+                  style={{ backgroundColor: active ? `${c}12` : undefined }}
+                >
+                  <span className="inline-flex items-center justify-center rounded" style={{ width:18,height:18, background:`${c}22` }}>
+                    {React.createElement(Icon, { size: 12, color: c })}
+                  </span>
+                  <span>{name}</span>
+                </div>
+              );
+            })}
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Legacy large rounded input */}
+      <div className="mx-auto mb-4 rounded-3xl py-5 px-6 border"
+           style={{ maxWidth: "900px", background:"var(--card-bg)", borderColor:"var(--card-border)" }}>
+        <input
+          placeholder="Describe what you need help with..."
+          className="w-full bg-transparent outline-none text-lg"
+          style={{ color:"var(--text)" }}
+        />
+        {/* Actions row (icon buttons) */}
+        <div className="mt-3 flex gap-2">
+          <button className="px-3 py-1.5 rounded-full border" style={{borderColor:"var(--card-border)"}}>✎</button>
+          <button className="px-3 py-1.5 rounded-full border" style={{borderColor:"var(--card-border)"}}>Chat</button>
+          <button className="px-3 py-1.5 rounded-full border" style={{borderColor:"var(--card-border)"}}>Agent</button>
+        </div>
+      </div>
+
+      {/* Legacy suggestion buttons */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-4xl mx-auto">
+        <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Draft a meeting agenda</button>
+        <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Summarize board engagement</button>
+        <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Prioritize initiatives</button>
+        <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Generate a progress report</button>
       </div>
     </section>
   );
