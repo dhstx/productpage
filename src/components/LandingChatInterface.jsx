@@ -682,6 +682,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
             {/* Dynamic Suggestions (plug-n-play chips) */}
             <SuggestionsRow inputValue={message} onPick={(text) => setMessage(text)} visibleFlags={chipsVisible} />
+            <div className="chat-bottom-spacer" aria-hidden="true" role="presentation"></div>
           </div>
           </section>
         )}

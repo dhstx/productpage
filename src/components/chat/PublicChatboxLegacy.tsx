@@ -83,6 +83,7 @@ export default function PublicChatboxLegacy() {
         <button className="legacy-action">✧ Prioritize initiatives</button>
         <button className="legacy-action">✧ Generate a progress report</button>
       </div>
+      <div className="chat-bottom-spacer" aria-hidden="true" role="presentation"></div>
     </section>
   );
 }

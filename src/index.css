@@ -279,3 +279,29 @@
   }
 }
 
+/* CHAT BOTTOM SPACER - added by Cursor patch */
+:root {
+  --chat-bottom-spacer: 2in; /* default: 1in = 96px per CSS spec, so 2in ≈ 192px */
+}
+
+.chat-bottom-spacer {
+  height: var(--chat-bottom-spacer);
+  min-height: 192px;
+  width: 100%;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  background: transparent;
+}
+
+/* Smaller gap on small screens */
+@media (max-width: 640px) {
+  :root { --chat-bottom-spacer: 6rem; } /* ~96px on most displays */
+  .chat-bottom-spacer { min-height: 96px; }
+}
+
+/* Defensive fallback to ensure downstream content moves */
+.chat-container, .chatbox-wrapper, .chatbox, .plug-play-prompts {
+  margin-bottom: var(--chat-bottom-spacer) !important;
+}
+

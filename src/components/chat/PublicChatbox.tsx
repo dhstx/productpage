@@ -135,6 +135,7 @@ export default function PublicChatbox() {
         <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Prioritize initiatives</button>
         <button className="rounded-md border px-4 py-2 text-left" style={{borderColor:"var(--card-border)"}}>✧ Generate a progress report</button>
       </div>
+      <div className="chat-bottom-spacer" aria-hidden="true" role="presentation"></div>
     </section>
   );
 }
