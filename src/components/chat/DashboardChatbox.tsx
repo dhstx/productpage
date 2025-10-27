@@ -4,7 +4,7 @@ import { useAgentSelection } from "@/context/AgentSelectionContext";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
 import getIcon from "@/components/ui/agentIcons";
 import { agents } from "@/lib/agents-enhanced";
-import { sendMessage as sendMessageAPI, getSession } from "@/lib/api/agentClient";
+import { sendMessage as sendMessageAPI } from "@/lib/api/agentClient";
 import ChatTools from "./ChatTools";
 import MessageBubble from "../MessageBubble";
 import ConversationHistory from "../ConversationHistory";
