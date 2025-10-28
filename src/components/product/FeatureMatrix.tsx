@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { FEATURES, type Tier } from "@/data/featureMatrix";
 import { TierToggle } from "./TierToggle";
 import { FeatureCard } from "./FeatureCard";
+import "@/styles/pricing-desktop.css";
 
 export default function FeatureMatrix(){
   const [active, setActive] = useState<Tier>("Pro");
@@ -29,7 +30,7 @@ export default function FeatureMatrix(){
   return (
     <section id="pricing" className="feature-matrix" role="region" aria-label="Pricing plans">
       {/* Price Plans (force dark visuals independent of site theme) */}
-      <section className="price-plans force-dark" aria-label="Price Plans">
+      <section className="price-plans price-plans-section force-dark" aria-label="Price Plans">
         <div className="centered">
           <h2 className="h2 section-title" style={{ marginBottom: '0.5rem' }}>Price Plans</h2>
         </div>
@@ -47,15 +48,15 @@ export default function FeatureMatrix(){
           )}
 
           {prefersReduced ? (
-            <div className="pricing-vertical" role="list" aria-label="Pricing plans">
+            <div className="pricing-vertical price-plan-grid" role="list" aria-label="Pricing plans">
               {PLANS.map(plan => (
-                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
+                <article key={plan.id} className="plan-card price-plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
                   <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
                   <div className="price">{plan.priceLabel} {plan.interval}</div>
                   <ul className="features">
                     {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
                   </ul>
-                  <div className="cta-row">
+                  <div className="cta-row price-cta">
                     <button
                       className="btn-primary"
                       onClick={async () => {
@@ -88,15 +89,15 @@ export default function FeatureMatrix(){
               ))}
             </div>
           ) : (
-            <div id="pricing-snap" className="pricing-snap-container" ref={snapRef} tabIndex={0} role="list" aria-label="Pricing plans carousel">
+            <div id="pricing-snap" className="pricing-snap-container price-plan-grid" ref={snapRef} tabIndex={0} role="list" aria-label="Pricing plans carousel">
               {PLANS.map(plan => (
-                <article key={plan.id} className="plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
+                <article key={plan.id} className="plan-card price-plan-card" role="listitem" aria-labelledby={`plan-${plan.id}`}>
                   <h3 id={`plan-${plan.id}`}>{plan.name}</h3>
                   <div className="price">{plan.priceLabel} {plan.interval}</div>
                   <ul className="features">
                     {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
                   </ul>
-                  <div className="cta-row">
+                  <div className="cta-row price-cta">
                     <button
                       className="btn-primary"
                       onClick={async () => {
