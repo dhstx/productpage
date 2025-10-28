@@ -1,0 +1,60 @@
+/*** Public Chatbox reserved space + appear animation (main page) ***/
+.public-chatbox-slot {
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  width: min(1100px, 100%);
+  /* Default desktop reservation (already smooth) */
+  min-block-size: var(--public-chatbox-min-h, 560px);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
+}
+
+/* Mobile: reserve MORE space so the next section never “peeks” */
+@media (max-width: 768px) {
+  :root { --public-chatbox-min-h: 640px; }          /* conservative */
+  .public-chatbox-slot { contain-intrinsic-size: auto 640px; }
+}
+@media (max-width: 480px) {
+  :root { --public-chatbox-min-h: 700px; }          /* aggressive; prevents bottom peek */
+  .public-chatbox-slot { contain-intrinsic-size: auto 700px; }
+}
+
+/* Appearance animation MUST NOT change height */
+.public-chatbox-appear { opacity: 0; transform: none; transition: opacity 280ms ease; }
+.public-chatbox-appear.is-ready { opacity: 1; }
+
+.typewriter-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 1.75rem;
+  margin-block-end: 0.75rem;
+  font-family: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+}
+
+.typewriter-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.typewriter-text .public-typer {
+  display: inline-block;
+  min-width: 4ch;
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.75ch;
+  animation: blink-caret 0.8s steps(1, end) infinite;
+}
+
+@keyframes blink-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
