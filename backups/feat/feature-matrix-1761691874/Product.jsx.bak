@@ -4,7 +4,6 @@ import { ArrowLeft, Target, Users, Calendar, Sparkles, Shield, Zap, Database, Ch
 import ThemeToggle from '../components/ThemeToggle';
 import FeatureMatrix from '@/components/product/FeatureMatrix';
 import '@/styles/feature-matrix.css';
-import '@/styles/features-comparison.css';
 import ROICalculator from '../components/ROICalculator';
 import BackArrow from '../components/BackArrow';
 import FadeInSection from '../components/FadeInSection';
@@ -29,118 +28,6 @@ export default function Product() {
       window.removeEventListener('orientationchange', setHeaderHeight);
       mo.disconnect();
     };
-  }, []);
-
-  // Build a desktop comparison matrix from existing feature cards (mobile keeps stacked cards)
-  useEffect(() => {
-    const buildFeatureMatrix = () => {
-      const documentRoot = document;
-      const featureCards = Array.from(documentRoot.querySelectorAll('.feature-card'));
-      if (!featureCards.length) return;
-
-      const matrixRoot = documentRoot.querySelector('.fc-matrix');
-      if (!matrixRoot) return;
-
-      // Clear previous rows
-      Array.from(matrixRoot.querySelectorAll('.fc-row')).forEach((node) => node.remove());
-
-      const rows = featureCards.map((cardElement, index) => {
-        const titleElement = cardElement.querySelector('h3, h4, .title') || cardElement;
-        const rawTitle = titleElement ? (titleElement.textContent || titleElement.innerText || '').trim() : `Feature ${index + 1}`;
-        const category = cardElement.getAttribute('data-category') || 'core';
-        const id = cardElement.getAttribute('data-feature-id') || `f${index}`;
-
-        // Detect per-plan availability from classes on the card
-        const isStarter = cardElement.classList.contains('available-starter');
-        const isPro = cardElement.classList.contains('available-pro');
-        const isEnterprise = cardElement.classList.contains('available-enterprise');
-
-        return {
-          id,
-          title: rawTitle,
-          category,
-          avail: {
-            starter: isStarter,
-            pro: isPro,
-            enterprise: isEnterprise,
-          },
-          card: cardElement,
-        };
-      });
-
-      rows.forEach((row) => {
-        const rowElement = document.createElement('div');
-        rowElement.className = 'fc-row';
-        rowElement.dataset.category = row.category;
-
-        const featureCell = document.createElement('div');
-        featureCell.className = 'fc-feature';
-        featureCell.innerHTML = `<div class="fc-feature-title">${row.title}</div>`;
-
-        const starterCell = document.createElement('div');
-        starterCell.className = `fc-cell ${row.avail.starter ? 'fc-available' : 'fc-unavailable'}`;
-        starterCell.innerHTML = row.avail.starter ? '✓' : '✕';
-
-        const proCell = document.createElement('div');
-        proCell.className = `fc-cell ${row.avail.pro ? 'fc-available' : 'fc-unavailable'}`;
-        proCell.innerHTML = row.avail.pro ? '✓' : '✕';
-
-        const enterpriseCell = document.createElement('div');
-        enterpriseCell.className = `fc-cell ${row.avail.enterprise ? 'fc-available' : 'fc-unavailable'}`;
-        enterpriseCell.innerHTML = row.avail.enterprise ? '✓' : '✕';
-
-        rowElement.appendChild(featureCell);
-        rowElement.appendChild(starterCell);
-        rowElement.appendChild(proCell);
-        rowElement.appendChild(enterpriseCell);
-
-        // Clicking a row shows the full card in a detail panel below the matrix
-        rowElement.addEventListener('click', () => {
-          const detailRoot = documentRoot.querySelector('.fc-detail');
-          if (!detailRoot) return;
-          detailRoot.innerHTML = '';
-          const cloned = row.card.cloneNode(true);
-          cloned.classList.add('detail-card');
-          detailRoot.appendChild(cloned);
-          cloned.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-
-        matrixRoot.appendChild(rowElement);
-      });
-
-      // Ensure detail container exists
-      if (!documentRoot.querySelector('.fc-detail')) {
-        const detail = document.createElement('div');
-        detail.className = 'fc-detail';
-        matrixRoot.parentNode?.insertBefore(detail, matrixRoot.nextSibling);
-      }
-
-      // Wire up filter controls
-      const controlsRoot = documentRoot.querySelector('.fc-controls');
-      if (controlsRoot) {
-        const buttons = Array.from(controlsRoot.querySelectorAll('button[role="tab"]'));
-        const applyFilter = (filter) => {
-          // Update aria-selected
-          buttons.forEach((btn) => btn.setAttribute('aria-selected', String(btn.getAttribute('data-filter') === filter)));
-          // Show/hide rows
-          Array.from(matrixRoot.querySelectorAll('.fc-row')).forEach((r) => {
-            const category = r.getAttribute('data-category');
-            const show = filter === 'all' || category === filter;
-            (r).style.display = show ? 'grid' : 'none';
-          });
-        };
-        buttons.forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const filter = btn.getAttribute('data-filter') || 'all';
-            applyFilter(filter);
-          });
-        });
-      }
-    };
-
-    // Build after hydration
-    const id = window.setTimeout(buildFeatureMatrix, 0);
-    return () => window.clearTimeout(id);
   }, []);
   
   return (
@@ -185,31 +72,9 @@ export default function Product() {
           </section>
         </FadeInSection>
 
-        {/* Desktop comparison matrix (hidden on mobile) */}
-        <section className="features-comparison" aria-labelledby="features-comparison-heading">
-          <h2 id="features-comparison-heading" className="sr-only">Features & Capabilities Comparison</h2>
-          <div className="fc-controls" role="tablist" aria-label="Feature categories">
-            <button role="tab" aria-selected="true" data-filter="all">All</button>
-            <button role="tab" aria-selected="false" data-filter="core">Core</button>
-            <button role="tab" aria-selected="false" data-filter="advanced">Advanced</button>
-            <button role="tab" aria-selected="false" data-filter="security">Security</button>
-            <button role="tab" aria-selected="false" data-filter="support">Support</button>
-          </div>
-          <div className="fc-matrix" aria-hidden="false" data-filter="all">
-            <div className="fc-header-row">
-              <div className="fc-feature-col">Feature</div>
-              <div className="fc-plan-col">Starter</div>
-              <div className="fc-plan-col">Pro</div>
-              <div className="fc-plan-col">Enterprise</div>
-            </div>
-            {/* rows populated by useEffect */}
-          </div>
-          <div className="fc-detail" />
-        </section>
-
         {/* Core Features */}
         <FadeInSection>
-          <section className="feature-section mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
+          <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
             <div className="mb-4 text-center">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">CORE FEATURES</span>
             </div>
@@ -251,7 +116,7 @@ export default function Product() {
 
         {/* Enterprise Grade */}
         <FadeInSection>
-          <section className="feature-section mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
+          <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
             <div className="mb-4 text-center">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">ENTERPRISE GRADE</span>
             </div>
@@ -333,14 +198,8 @@ export default function Product() {
 }
 
 function FeatureCard({ icon, title, description }) {
-  const slug = (title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   return (
-    <div
-      className="panel-system flex min-w-0 flex-col gap-4 p-6 feature-card available-starter available-pro available-enterprise"
-      data-category="core"
-      data-feature-id={slug}
-      id={slug}
-    >
+    <div className="panel-system flex min-w-0 flex-col gap-4 p-6">
       <div className="text-[#FFC96C]">{icon}</div>
       <h3 className="h3 text-[#F2F2F2] uppercase tracking-tight">{title}</h3>
       <p className="text-sm text-[#B3B3B3] leading-relaxed text-pretty">{description}</p>
@@ -349,19 +208,8 @@ function FeatureCard({ icon, title, description }) {
 }
 
 function CapabilityCard({ icon, title, description, features }) {
-  const slug = (title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  const isSecurity = /security/i.test(title || '');
-  const category = isSecurity ? 'security' : 'advanced';
-  const availabilityClasses = isSecurity
-    ? 'available-enterprise'
-    : 'available-pro available-enterprise';
   return (
-    <div
-      className={`panel-system flex min-w-0 flex-col gap-4 p-6 feature-card ${availabilityClasses}`}
-      data-category={category}
-      data-feature-id={slug}
-      id={slug}
-    >
+    <div className="panel-system flex min-w-0 flex-col gap-4 p-6">
       <div className="text-[#FFC96C]">{icon}</div>
       <h3 className="h3 text-[#F2F2F2] uppercase tracking-tight">{title}</h3>
       <p className="text-sm text-[#B3B3B3] text-pretty">{description}</p>

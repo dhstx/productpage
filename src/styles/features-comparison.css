@@ -1,0 +1,46 @@
+/* Feature Comparison Matrix — desktop-first */
+.features-comparison { max-width:1280px; margin:2rem auto; padding:1rem; color:var(--text, #e5e5e5); display:block; }
+
+/* Controls */
+.fc-controls { display:flex; gap:.5rem; justify-content:center; margin-bottom:1rem; flex-wrap:wrap; }
+.fc-controls button[role="tab"] { background:transparent; border:1px solid var(--card-border, #2a2a2a); padding:.35rem .6rem; border-radius:8px; font-weight:700; color:var(--text, #e5e5e5); cursor:pointer; }
+.fc-controls button[role="tab"][aria-selected="true"] { background: linear-gradient(180deg, color-mix(in oklab,var(--accent-gold, #FFC96C) 12%, transparent), transparent); box-shadow: 0 6px 20px rgba(0,0,0,.25); border-color: color-mix(in oklab,var(--accent-gold, #FFC96C) 55%, var(--card-border, #2a2a2a)); }
+
+.fc-matrix { border-radius:8px; overflow:hidden; background:transparent; border:1px solid transparent; }
+
+/* header */
+.fc-header-row { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; background:transparent; padding:.5rem 1rem; gap:1rem; align-items:center; font-weight:700; color:var(--muted-fg, #b3b3b3); }
+
+/* rows */
+.fc-row { display:grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap:1rem; align-items:center; padding:.75rem 1rem; border-top:1px solid color-mix(in oklab,var(--card-border, #2a2a2a) 40%, transparent); }
+.fc-row:nth-child(odd) { background: color-mix(in oklab,var(--card-bg, #0C0C0C) 96%, black 2%); }
+
+/* feature cell */
+.fc-feature { display:flex; align-items:center; gap:.6rem; font-weight:700; color:var(--text, #e5e5e5); }
+.fc-desc { color:var(--muted-fg, #b3b3b3); font-weight:400; }
+
+/* plan cells: show tick / cross / partial */
+.fc-cell { display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--muted-fg, #b3b3b3); }
+.fc-cell .fc-icon { width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; border-radius:6px; }
+
+/* availability states */
+.fc-available { color:var(--accent-gold, #FFC96C); }
+.fc-unavailable { color:var(--muted-fg, #b3b3b3); opacity:.6; }
+
+/* desktop only: show matrix; hide old grid below */
+@media (min-width:1024px) {
+  .feature-section { display:none !important; } /* hide old card sections on desktop */
+  .features-comparison { display:block; }
+}
+
+/* mobile: hide matrix, show original cards */
+@media (max-width:1023px) {
+  .features-comparison { display:none; }
+  .feature-section { display:block !important; }
+}
+
+/* Accordion detail styling */
+.fc-detail { margin-top:1rem; border-top:1px solid var(--card-border, #2a2a2a); padding-top:1rem; }
+.fc-detail .detail-card { margin-bottom:.75rem; }
+
+:root[data-theme="light"] .fc-row:nth-child(odd) { background: color-mix(in oklab,var(--card-bg, #ffffff) 96%, white 4%); }
