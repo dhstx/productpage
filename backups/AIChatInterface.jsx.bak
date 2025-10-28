@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import styles from './AIChatInterface.module.css';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles, ChevronDown, Bot, Clock } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
@@ -490,28 +489,25 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span className={styles.typewriterContainer}>
-              <span
-                ref={helloPrefixRef}
-                id="hero-typed"
-                aria-live="polite"
-                className={`${styles.typewriterText} inline-flex flex-wrap items-baseline gap-1`}
-              >
-                <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-                <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
-                  {typedAgentName}
-                </span>
-                <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
+            <span
+              ref={helloPrefixRef}
+              id="hero-typed"
+              aria-live="polite"
+              className="inline-flex flex-wrap items-baseline gap-1"
+            >
+              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
+              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
+                {typedAgentName}
               </span>
-              <span
-                className={styles.cursor}
-                style={{
-                  backgroundColor: currentAgentColor,
-                  opacity: typingDone ? 0 : 1,
-                }}
-                aria-hidden="true"
-              />
+              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
             </span>
+            <span
+              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
+              style={{
+                backgroundColor: currentAgentColor,
+                opacity: typingDone ? 0 : 1,
+              }}
+            />
           </h1>
           {/* Removed the small purple agent label line in hero per spec */}
         </div>

@@ -1,0 +1,27 @@
+/* Scoped to AIChatInterface hero typewriter */
+.typewriterContainer {
+  display: inline-flex;
+  align-items: baseline; /* keep text aligned with surrounding baseline */
+  height: 1em;           /* fix vertical layout to final line height */
+  line-height: 1;
+  position: relative;
+}
+
+.typewriterText {
+  display: inline-block;
+  white-space: nowrap;   /* prevent wrapping -> no vertical reflow while typing */
+  overflow: hidden;      /* safe if future CSS typing width steps are added */
+  position: relative;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 0.5ch;    /* subtle spacing from the text */
+  animation: blink-caret 0.8s steps(1) infinite;
+}
+
+@keyframes blink-caret {
+  50% { opacity: 0; }
+}
