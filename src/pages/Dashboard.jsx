@@ -70,8 +70,8 @@ export default function Dashboard() {
         <div className="mx-auto max-w-[1280px] px-4 md:px-8 py-8">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="h2 mb-1 uppercase tracking-tight" style={{ color: 'var(--text)' }}>DASHBOARD</h1>
-            <p className="text-sm dashboard-muted">
+            <h1 className="h2 mb-1 uppercase tracking-tight text-primary">DASHBOARD</h1>
+            <p className="text-sm text-muted-fg">
               Monitor and configure your AI agents
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function Dashboard() {
                     <span className="text-xs uppercase tracking-tight dashboard-muted">Total Agents</span>
                     <Zap className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
                   </div>
-                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                  <div className="text-2xl font-extrabold text-primary">
                     {loading ? '…' : stats?.totalAgents || 0}
                   </div>
                 </div>
@@ -102,7 +102,7 @@ export default function Dashboard() {
                     <span className="text-xs uppercase tracking-tight dashboard-muted">Conversations</span>
                     <TrendingUp className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
                   </div>
-                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                  <div className="text-2xl font-extrabold text-primary">
                     {loading ? '…' : stats?.totalConversations || 0}
                   </div>
                 </div>
@@ -111,7 +111,7 @@ export default function Dashboard() {
                     <span className="text-xs uppercase tracking-tight dashboard-muted">Team Members</span>
                     <Users className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
                   </div>
-                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                  <div className="text-2xl font-extrabold text-primary">
                     {loading ? '…' : stats?.teamMembers || 1}
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function Dashboard() {
                     <span className="text-xs uppercase tracking-tight dashboard-muted">Current Plan</span>
                     <CreditCard className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} />
                   </div>
-                  <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
+                  <div className="text-2xl font-extrabold text-primary">
                     {ptData?.tier || '…'}
                   </div>
                 </div>
@@ -148,7 +148,7 @@ export default function Dashboard() {
               {/* Agent Chat Box */}
               <section className="dashboard-card p-0">
                 <div className="px-4 py-3 border-b" style={{ borderColor: 'var(--card-border)' }}>
-                  <h3 className="text-xs font-semibold uppercase tracking-tight" style={{ color: 'var(--text)' }}>
+                  <h3 className="text-xs font-semibold uppercase tracking-tight text-primary">
                     AGENT CHAT BOX
                   </h3>
                 </div>

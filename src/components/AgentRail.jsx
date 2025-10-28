@@ -20,7 +20,7 @@ export default function AgentRail({ selectedName, onSelect }) {
 
   return (
     <aside className="pr-2 lg:sticky lg:top-20 lg:h-[calc(100vh-120px)] lg:overflow-y-auto">
-      <div className="agent-tile-grid lg:block lg:space-y-2">
+      <div className="agent-tile-grid lg:block lg:space-y-2" style={{ overflow: 'visible' }}>
         {agents.map((agent) => {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
@@ -29,7 +29,7 @@ export default function AgentRail({ selectedName, onSelect }) {
             <button
               key={agent.id}
               onClick={() => setSelected?.(agent.name)}
-              className={`agent-tile w-full text-left transition-colors hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
+              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
               style={{
                 '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
