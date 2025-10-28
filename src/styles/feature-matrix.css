@@ -153,3 +153,112 @@
 .tier-cell .x { color:#6B7280; font-size:18px; }
 .tier-cell .value { color:var(--fg); font-weight:600; font-size:.95rem; }
 .tier-label { margin-top:2px; font-size:.7rem; opacity:.8; }
+
+/* Pricing — Desktop layout improvements */
+.price-plans-section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr; /* stack by default, enlarged at desktop via media query */
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+/* Controls (tabs / toggle row) — center and keep compact on desktop */
+.price-plans-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Grid of plan cards: three columns on desktop */
+.price-plan-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-auto-rows: 1fr;
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  .price-plan-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .price-plans-section {
+    padding: 3rem 2rem;
+  }
+
+  .price-plan-card {
+    /* force equal-height cards, pleasant padding and legible line-lengths */
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset;
+  }
+
+  .price-plan-card .price-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .price-plan-card .price-cta {
+    margin-top: auto; /* lock CTA to the card bottom */
+    display: inline-block;
+  }
+
+  /* Make plan features area into columns on wide screens */
+  .price-plan-card .plan-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .price-plan-card .plan-features ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted-fg);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+/* Keep mobile layout unchanged - exact fallback to existing rules */
+@media (max-width: 1023px) {
+  .price-plan-grid {
+    grid-template-columns: 1fr;
+  }
+  .price-plan-card {
+    min-height: auto;
+    padding: 1rem;
+  }
+}
+
+/* Accessibility / high-contrast guard: ensure text remains legible in both themes */
+.price-plans-section h2 {
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+.price-plan-card .price {
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+/* Keyboard focus for CTA */
+.price-plan-card .price-cta:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--accent-gold) 60%, var(--card-bg));
+  outline-offset: 2px;
+}
