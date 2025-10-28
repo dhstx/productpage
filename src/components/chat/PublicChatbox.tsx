@@ -115,6 +115,12 @@ export default function PublicChatbox() {
       {/* Legacy large rounded input */}
       <div className="mx-auto mb-4 rounded-3xl py-5 px-6 border"
            style={{ maxWidth: "900px", background:"var(--card-bg)", borderColor:"var(--card-border)" }}>
+        <div className="typewriter-container" aria-live="polite" aria-atomic="true">
+          <span className="typewriter-text">
+            <span className="public-typer" aria-live="polite" aria-label="Active agent"></span>
+            <span className="cursor" aria-hidden="true">|</span>
+          </span>
+        </div>
         <input
           placeholder="Describe what you need help with..."
           className="w-full bg-transparent outline-none text-lg"
