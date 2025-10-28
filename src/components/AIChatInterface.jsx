@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles, ChevronDown, Bot, Clock } from 'lucide-react';
 import ChatTools from './chat/ChatTools';
@@ -7,9 +7,6 @@ import { sendMessage as sendMessageAPI, getSession } from '../lib/api/agentClien
 import MessageBubble from './MessageBubble';
 import ConversationHistory from './ConversationHistory';
 import { getAgentColor } from './ui/agentThemes';
-import getAgentIcon from './ui/agentIcons';
-import { getAvailableAgents } from '../lib/agentAccessControl';
-import { getSession as getAuthSession } from '../lib/auth/supabaseAuth';
 import UpfadeOnOpen from './UpfadeOnOpen';
 
 // Timing controls for the hero typewriter greeting
@@ -35,24 +32,9 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     domain: agent.domain
   }));
 
-  // Auth state for gating available agents
-  const [isAuthed, setIsAuthed] = useState(false);
-  useEffect(() => {
-    (async () => {
-      try {
-        const { session } = await getAuthSession();
-        setIsAuthed(Boolean(session?.user));
-      } catch {
-        setIsAuthed(false);
-      }
-    })();
-  }, []);
-
-  // Determine available agents by tier + auth
-  const userTier = 'freemium';
-  const allowedNames = useMemo(() => getAvailableAgents(userTier, isAuthed), [userTier, isAuthed]);
-  const allowedSet = useMemo(() => new Set(allowedNames), [allowedNames]);
-  const menuAgents = useMemo(() => agents.filter(a => allowedSet.has(a.name)), [agents, allowedSet]);
+  // Restrict UI to Commander, Connector, Conductor (UI only)
+  const allowedSet = new Set(['Commander', 'Connector', 'Conductor']);
+  const menuAgents = agents.filter(a => allowedSet.has(a.name));
 
   const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
@@ -542,7 +524,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
               <div className="relative w-full sm:w-auto">
                 <button
                   onClick={() => setShowAgentMenu(!showAgentMenu)}
-                  className="select-agent flex items-center justify-between gap-3 rounded-full border border-token bg-card px-5 py-2 text-sm text-fg shadow-sm ring-1 ring-transparent hover:bg-[color:var(--accent)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ring-offset-2 ring-offset-bg"
+                  className="select-agent flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
                   style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
                   aria-haspopup="listbox"
                   aria-expanded={showAgentMenu}
@@ -575,10 +557,19 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                         role="option"
                         aria-selected={selectedAgent === agent.name}
                       >
-                        <span className="agent-dot inline-flex items-center justify-center rounded"
-                              style={{ width: '16px', height: '16px', backgroundColor: `${getAgentColor(agent.name, agent.color)}33` }}>
-                          {React.createElement(getAgentIcon(agent.name), { size: 12, color: getAgentColor(agent.name, agent.color) })}
-                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="agent-dot"
+                          style={{
+                            display: 'inline-block',
+                            width: '14px',
+                            height: '14px',
+                            borderRadius: '9999px',
+                            marginLeft: '2px',
+                            backgroundColor: getAgentColor(agent.name, agent.color),
+                            boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
+                          }}
+                        />
                         <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
                         {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
                       </button>
