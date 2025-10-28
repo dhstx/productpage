@@ -57,9 +57,6 @@ export default function Product() {
         {/* Platform Overview */}
         <FadeInSection>
           <section className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 px-4 pb-12 pt-16 sm:pt-20 md:px-8 md:pt-32 chat-hero" aria-label="Chat hero">
-            <div className="mb-2 text-center">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">PLATFORM OVERVIEW</span>
-            </div>
             <h1 className="h1 leading-tight text-balance font-bold text-[#F2F2F2] mb-6 uppercase tracking-tight text-center">
               COMPLETE MANAGEMENT SYSTEM
             </h1>
