@@ -542,7 +542,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
               <div className="relative w-full sm:w-auto">
                 <button
                   onClick={() => setShowAgentMenu(!showAgentMenu)}
-                  className="select-agent flex items-center justify-between gap-3 rounded-full border border-[#202020] bg-[#0C0C0C] px-5 py-2 text-sm text-[#F2F2F2] shadow-sm ring-1 ring-transparent hover:bg-[#121212] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC96C]/50"
+                  className="select-agent flex items-center justify-between gap-3 rounded-full border border-token bg-card px-5 py-2 text-sm text-fg shadow-sm ring-1 ring-transparent hover:bg-[color:var(--accent)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ring-offset-2 ring-offset-bg"
                   style={{ boxShadow: '0 2px 10px rgba(0,0,0,0.25)' }}
                   aria-haspopup="listbox"
                   aria-expanded={showAgentMenu}

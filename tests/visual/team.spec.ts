@@ -35,6 +35,12 @@ test.describe('Team Members card - iOS Safari visual', () => {
 
     // Capture card screenshot for visual reference
     await expect(card).toHaveScreenshot('team-card-light-ios.png')
+
+    // Verify focus outline appears on Change Role
+    const changeRole = page.getByRole('button', { name: /change role/i }).first()
+    await changeRole.focus()
+    const outlineWidth = await changeRole.evaluate((el) => getComputedStyle(el).outlineWidth)
+    expect(outlineWidth).not.toBe('0px')
   })
 
   test('mobile dark mode card screenshot (webkit iPhone)', async ({ page }) => {

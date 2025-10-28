@@ -128,7 +128,8 @@
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-[#F2F2F2] uppercase tracking-tight;
+    @apply font-bold uppercase tracking-tight;
+    color: var(--primary, var(--text, #F2F2F2));
     font-family: 'Inter', sans-serif;
   }
   
@@ -220,7 +221,7 @@
   
   /* DHStx Text Utilities */
   .text-primary {
-    @apply text-[#F2F2F2];
+    color: var(--fg-strong, var(--text, #F2F2F2));
   }
   
   .text-secondary {
@@ -372,6 +373,15 @@
       padding: calc(12px / 0.875) calc(14px / 0.875);
     }
   }
+
+  /* Theme token utilities (A11y + Theming) */
+  .text-fg { color: var(--fg, var(--text)); }
+  .text-muted-fg { color: var(--muted-fg, var(--muted)); }
+  .bg-card { background-color: var(--card, var(--card-bg)); }
+  .border-token { border-color: var(--border); }
+  .ring-offset-bg { --tw-ring-offset-color: var(--bg); }
+  .ring-accent { --tw-ring-color: var(--accent); }
+  .ring-destructive { --tw-ring-color: var(--destructive); }
 }
 
 /* Up-fade utility for chatbox */

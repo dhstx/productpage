@@ -38,8 +38,17 @@ export function TeamMembersResponsive({
               <div className="tm-actions">
                 {m.role !== "Owner" && (
                   <>
-                    <button className="team-action" onClick={() => onChangeRole(m.id)}>Change Role</button>
-                    <button className="team-action team-action--danger" onClick={() => onRemove(m.id)} aria-label={`Remove ${m.name}`}>
+                    <button
+                      className="team-action"
+                      onClick={() => onChangeRole(m.id)}
+                    >
+                      Change Role
+                    </button>
+                    <button
+                      className="team-action team-action--danger"
+                      onClick={() => onRemove(m.id)}
+                      aria-label={`Remove ${m.name}`}
+                    >
                       🗑
                     </button>
                   </>
@@ -108,8 +117,18 @@ export function TeamMembersResponsive({
                 <div className="flex items-center justify-end gap-2">
                   {m.role !== 'Owner' && (
                     <>
-                      <button onClick={() => onChangeRole(m.id)} className="team-action">Change Role</button>
-                      <button onClick={() => onRemove(m.id)} className="team-action team-action--danger" aria-label={`Remove ${m.name}`}>
+                      <button
+                        onClick={() => onChangeRole(m.id)}
+                        className="team-action"
+                      >
+                        Change Role
+                      </button>
+                      <button
+                        onClick={() => onRemove(m.id)}
+                        className="team-action team-action--danger"
+                        aria-label={`Remove ${m.name}`}
+                        title={`Remove ${m.name}`}
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </>
