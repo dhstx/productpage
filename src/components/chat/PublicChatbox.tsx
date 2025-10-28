@@ -117,7 +117,7 @@ export default function PublicChatbox() {
            style={{ maxWidth: "900px", background:"var(--card-bg)", borderColor:"var(--card-border)" }}>
         <div className="typewriter-container" aria-live="polite" aria-atomic="true">
           <span className="typewriter-text">
-            <span className="public-typer" aria-live="polite" aria-label="Active agent"></span>
+            <span className="public-typer" aria-label="Active agent"></span>
             <span className="cursor" aria-hidden="true">|</span>
           </span>
         </div>
