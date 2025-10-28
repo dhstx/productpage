@@ -5,7 +5,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import ProductDemo from '../components/ProductDemo';
 import AIAgents from '../components/AIAgents';
 import ContactForm from '../components/ContactForm';
-import LandingChatInterface from '../components/LandingChatInterface';
+import AIChatInterface from '../components/AIChatInterface';
 import "@/styles/public-chatbox.css";
 import AnimatedButton from '../components/AnimatedButton';
 import FadeInSection from '../components/FadeInSection';
@@ -65,7 +65,7 @@ export default function Landing() {
 
         {/* AI Chat Interface reserved slot to avoid layout jump */}
         <section className="public-chatbox-slot pb-[2in]">
-          <LandingChatInterface />
+          <AIChatInterface />
         </section>
 
         {/* SYNTEK AUTOMATIONS mark above Hero */}
