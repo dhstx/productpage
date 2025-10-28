@@ -30,6 +30,43 @@ export default function Product() {
     };
   }, []);
   
+  // Accessible tabs for Features & Capabilities filter
+  useEffect(() => {
+    const root = document.querySelector('.features-capabilities');
+    if (!root) return;
+    const grid = root.querySelector('.features-grid');
+    const tabs = root.querySelectorAll('[role="tab"]');
+    function setFilter(filter, selectedBtn) {
+      if (!grid) return;
+      grid.setAttribute('data-filter', filter);
+      tabs.forEach(b => b.setAttribute('aria-selected', b === selectedBtn ? 'true' : 'false'));
+    }
+    // default all
+    const allBtn = root.querySelector('[data-filter="all"]');
+    setFilter('all', allBtn);
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => setFilter(btn.getAttribute('data-filter'), btn));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const arr = Array.from(tabs);
+          const idx = arr.indexOf(btn);
+          const next = e.key === 'ArrowRight' ? arr[(idx+1)%arr.length] : arr[(idx-1+arr.length)%arr.length];
+          next.focus();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setFilter(btn.getAttribute('data-filter'), btn);
+        }
+      });
+    });
+    return () => {
+      tabs.forEach(btn => {
+        btn.removeEventListener('click', ()=>{});
+      });
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
       <BackArrow />
@@ -72,85 +109,86 @@ export default function Product() {
           </section>
         </FadeInSection>
 
-        {/* Core Features */}
-        <FadeInSection>
-          <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
-            <div className="mb-4 text-center">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">CORE FEATURES</span>
-            </div>
-            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
-              EVERYTHING YOU NEED
-            </h2>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2">
-              <FadeInSection delay={100}>
+        {/* Features & Capabilities (Core + Advanced) */}
+        <section className="features-capabilities" aria-labelledby="features-heading">
+          <h2 id="features-heading">Features & Capabilities</h2>
+          <div className="features-controls" role="tablist" aria-label="Feature categories">
+            <button role="tab" aria-selected="true" data-filter="all">All</button>
+            <button role="tab" aria-selected="false" data-filter="core">Core</button>
+            <button role="tab" aria-selected="false" data-filter="advanced">Advanced</button>
+          </div>
+          <div id="features-grid" className="features-grid" role="list" data-filter="all">
+            {/* Core items */}
+            <FadeInSection delay={100}>
+              <div className="feature-card" data-category="core" role="listitem">
                 <FeatureCard
                   icon={<Target className="w-6 h-6" />}
                   title="Strategic Initiatives Tracker"
                   description="Visualize and prioritize initiatives using effort-impact matrices. Track progress, assign owners, and ensure alignment with organizational goals."
                 />
-              </FadeInSection>
-              <FadeInSection delay={200}>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={200}>
+              <div className="feature-card" data-category="core" role="listitem">
                 <FeatureCard
                   icon={<Users className="w-6 h-6" />}
                   title="Member Engagement Database"
                   description="Manage comprehensive member records with engagement tracking, participation history, and professional networking capabilities."
                 />
-              </FadeInSection>
-              <FadeInSection delay={300}>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={300}>
+              <div className="feature-card" data-category="core" role="listitem">
                 <FeatureCard
                   icon={<Calendar className="w-6 h-6" />}
                   title="Events & Calendar Management"
                   description="Plan meetings, gatherings, and events with RSVP tracking, attendance management, and automated reminders."
                 />
-              </FadeInSection>
-              <FadeInSection delay={400}>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={400}>
+              <div className="feature-card" data-category="core" role="listitem">
                 <FeatureCard
                   icon={<Sparkles className="w-6 h-6" />}
                   title="AI-Powered Intelligence"
                   description="Three specialized AI agents provide organizational assistance, team coordination, and analytics insights to enhance decision-making."
                 />
-              </FadeInSection>
-            </div>
-          </section>
-        </FadeInSection>
+              </div>
+            </FadeInSection>
 
-        {/* Enterprise Grade */}
-        <FadeInSection>
-          <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
-            <div className="mb-4 text-center">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">ENTERPRISE GRADE</span>
-            </div>
-            <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
-              BUILT FOR SCALE
-            </h2>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <FadeInSection delay={100}>
+            {/* Advanced (Enterprise Grade) items */}
+            <FadeInSection delay={100}>
+              <div className="feature-card" data-category="advanced" role="listitem">
                 <CapabilityCard
                   icon={<Shield className="w-8 h-8" />}
                   title="Enterprise Security"
                   description="SSO/SAML integration, role-based access control, and audit logs ensure your data stays secure and compliant."
                   features={['Single Sign-On', 'RBAC Permissions', 'Audit Trails', 'SOC 2 Ready']}
                 />
-              </FadeInSection>
-              <FadeInSection delay={200}>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={200}>
+              <div className="feature-card" data-category="advanced" role="listitem">
                 <CapabilityCard
                   icon={<Zap className="w-8 h-8" />}
                   title="Automation & Workflows"
                   description="Automated email notifications, task assignments, and progress tracking keep your team aligned and informed."
                   features={['Email Alerts', 'Task Automation', 'Progress Tracking', 'Smart Reminders']}
                 />
-              </FadeInSection>
-              <FadeInSection delay={300}>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={300}>
+              <div className="feature-card" data-category="advanced" role="listitem">
                 <CapabilityCard
                   icon={<Database className="w-8 h-8" />}
                   title="Data Management"
                   description="Import/export capabilities, bulk operations, and seamless migration from existing systems."
                   features={['Bulk Import', 'CSV Export', 'Data Migration', 'API Access']}
                 />
-              </FadeInSection>
-            </div>
-          </section>
-        </FadeInSection>
+              </div>
+            </FadeInSection>
+          </div>
+        </section>
 
         {/* CTA */}
         <FadeInSection>
