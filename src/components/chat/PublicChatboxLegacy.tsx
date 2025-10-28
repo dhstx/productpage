@@ -84,8 +84,7 @@ export default function PublicChatboxLegacy() {
         <button className="legacy-action">✧ Generate a progress report</button>
       </div>
 
-      {/* Plug-n-play prompts block ends above */}
-      <div className="h-[2in]" aria-hidden="true" />
+
     </section>
   );
 }

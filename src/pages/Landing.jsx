@@ -63,7 +63,7 @@ export default function Landing() {
         </header>
 
         {/* Legacy hero + chatbox (exact styling/animation/timing) */}
-        <section className="mt-16 mb-10">
+        <section className="mt-16 pb-[2in]">
           <PublicChatboxLegacy />
         </section>
 
