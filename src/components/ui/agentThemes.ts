@@ -1,8 +1,8 @@
 // Canonical palette for ALL agents (used everywhere consistently)
 export const baseThemes: Record<string, { hex: string }> = {
-  Commander:    { hex: "#A88CFF" }, // KEEP
-  Conductor:    { hex: "#34D399" }, // KEEP
-  Connector:    { hex: "#F5B63F" }, // KEEP
+  Commander:    { hex: "#FFC96C" }, // ORANGE - from deployment Pj8E7V3Td9GBFXYLY6t2ZSmp1LGN
+  Conductor:    { hex: "#A88CFF" }, // PURPLE
+  Connector:    { hex: "#34D399" }, // GREEN
   // Additional agents
   Scout:        { hex: "#95E1D3" },
   Builder:      { hex: "#F38181" },
@@ -21,9 +21,9 @@ export const agentThemes = baseThemes;
 
 // Public overrides = ORIGINAL colors for the three only (icons unchanged)
 const publicOverrides: Partial<Record<string, { hex: string }>> = {
-  Commander: { hex: "#A88CFF" },
-  Conductor: { hex: "#34D399" },
-  Connector: { hex: "#F5B63F" },
+  Commander: { hex: "#FFC96C" },
+  Conductor: { hex: "#A88CFF" },
+  Connector: { hex: "#34D399" },
 };
 
 export type AgentColorContext = "public" | "dashboard";
