@@ -29,7 +29,7 @@ export default function FeatureMatrix(){
   return (
     <section id="pricing" className="feature-matrix" role="region" aria-label="Pricing plans">
       {/* Price Plans (force dark visuals independent of site theme) */}
-      <section className="price-plans force-dark" aria-label="Price Plans">
+      <section className="price-plans force-dark price-top" aria-label="Price Plans">
         <div className="centered">
           <h2 className="h2 section-title" style={{ marginBottom: '0.5rem' }}>Price Plans</h2>
         </div>
@@ -55,27 +55,31 @@ export default function FeatureMatrix(){
                   <ul className="features">
                     {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
                   </ul>
-                  <div className="cta-row">
-                    <button
-                      className="btn-primary"
-                      onClick={async () => {
-                        try {
-                          const mod = await import("@/lib/stripe.js");
-                          await mod.initializeStripeCheckout(plan.id);
-                        } catch {
-                          window.location.href = "/login";
-                        }
-                      }}
-                    >
-                      Choose {plan.name}
-                    </button>
-                    <button
-                      className="more"
-                      aria-expanded={!!expanded[plan.id]}
-                      onClick={() => toggleExpanded(plan.id)}
-                    >
-                      Learn more
-                    </button>
+                  <div className="choose-and-learn">
+                    <div className="choose-buttons">
+                      <button
+                        className="btn-primary"
+                        onClick={async () => {
+                          try {
+                            const mod = await import("@/lib/stripe.js");
+                            await mod.initializeStripeCheckout(plan.id);
+                          } catch {
+                            window.location.href = "/login";
+                          }
+                        }}
+                      >
+                        Choose {plan.name}
+                      </button>
+                    </div>
+                    <div className="learn-more-wrap">
+                      <button
+                        className="more"
+                        aria-expanded={!!expanded[plan.id]}
+                        onClick={() => toggleExpanded(plan.id)}
+                      >
+                        Learn more
+                      </button>
+                    </div>
                   </div>
                   {expanded[plan.id] && (
                     <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
@@ -96,27 +100,31 @@ export default function FeatureMatrix(){
                   <ul className="features">
                     {plan.features.slice(0,5).map((f, idx) => (<li key={idx}>{f}</li>))}
                   </ul>
-                  <div className="cta-row">
-                    <button
-                      className="btn-primary"
-                      onClick={async () => {
-                        try {
-                          const mod = await import("@/lib/stripe.js");
-                          await mod.initializeStripeCheckout(plan.id);
-                        } catch {
-                          window.location.href = "/login";
-                        }
-                      }}
-                    >
-                      Choose {plan.name}
-                    </button>
-                    <button
-                      className="more"
-                      aria-expanded={!!expanded[plan.id]}
-                      onClick={() => toggleExpanded(plan.id)}
-                    >
-                      Learn more
-                    </button>
+                  <div className="choose-and-learn">
+                    <div className="choose-buttons">
+                      <button
+                        className="btn-primary"
+                        onClick={async () => {
+                          try {
+                            const mod = await import("@/lib/stripe.js");
+                            await mod.initializeStripeCheckout(plan.id);
+                          } catch {
+                            window.location.href = "/login";
+                          }
+                        }}
+                      >
+                        Choose {plan.name}
+                      </button>
+                    </div>
+                    <div className="learn-more-wrap">
+                      <button
+                        className="more"
+                        aria-expanded={!!expanded[plan.id]}
+                        onClick={() => toggleExpanded(plan.id)}
+                      >
+                        Learn more
+                      </button>
+                    </div>
                   </div>
                   {expanded[plan.id] && (
                     <div className="mt-2 text-sm" style={{ color: 'var(--muted)' }}>
@@ -132,27 +140,29 @@ export default function FeatureMatrix(){
         </div>
       </section>
 
-      {(["Core","Advanced","Security","Support"] as const).map(section => (
-        <section key={section} className="matrix-section">
-          <header className="section-head">
-            <motion.h2
-              initial={{opacity:0,y:8}}
-              whileInView={{opacity:1,y:0}}
-              viewport={{once:true}}
-              transition={{ duration: prefersReduced ? 0.15 : 0.3 }}
-            >
-              {section === "Security" ? "Security & Compliance" : section + " Features"}
-            </motion.h2>
-            <div className="section-glow" aria-hidden />
-          </header>
+      <div className="price-bottom">
+        {(["Core","Advanced","Security","Support"] as const).map(section => (
+          <section key={section} className="matrix-section">
+            <header className="section-head">
+              <motion.h2
+                initial={{opacity:0,y:8}}
+                whileInView={{opacity:1,y:0}}
+                viewport={{once:true}}
+                transition={{ duration: prefersReduced ? 0.15 : 0.3 }}
+              >
+                {section === "Security" ? "Security & Compliance" : section + " Features"}
+              </motion.h2>
+              <div className="section-glow" aria-hidden />
+            </header>
 
-          <motion.div layout className="cards-grid" transition={{ duration: prefersReduced ? 0.15 : 0.3 }}>
-            {bySection[section].map(f => (
-              <FeatureCard key={f.id} feature={f} active={active}/>
-            ))}
-          </motion.div>
-        </section>
-      ))}
+            <motion.div layout className="cards-grid" transition={{ duration: prefersReduced ? 0.15 : 0.3 }}>
+              {bySection[section].map(f => (
+                <FeatureCard key={f.id} feature={f} active={active}/>
+              ))}
+            </motion.div>
+          </section>
+        ))}
+      </div>
     </section>
   );
 }

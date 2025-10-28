@@ -153,3 +153,46 @@
 .tier-cell .x { color:#6B7280; font-size:18px; }
 .tier-cell .value { color:var(--fg); font-weight:600; font-size:.95rem; }
 .tier-label { margin-top:2px; font-size:.7rem; opacity:.8; }
+
+/* Cursor patch: Price Plans layout tweaks */
+
+/* Top section: side-by-side larger plans on desktop */
+@media (min-width: 1024px) {
+  /* Transform snap container into a grid on desktop */
+  .price-plans .pricing-snap-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    overflow: visible;
+  }
+  /* Reduced motion list becomes a grid on desktop */
+  .price-plans .pricing-vertical {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  /* Larger cards with CTA anchored at bottom */
+  .price-plans .plan-card {
+    flex: 0 0 auto;           /* undo large fixed flex-basis */
+    padding: 1.5rem;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Reposition learn-more under choose buttons */
+.choose-and-learn { display: flex; flex-direction: column; gap: .375rem; align-items: flex-start; }
+.choose-and-learn .choose-buttons { display: flex; gap: .5rem; }
+.learn-more-wrap { display: block; margin-top: .25rem; text-align: left; }
+
+/* Bottom section: center horizontally and compress width */
+.price-bottom { display: flex; justify-content: center; margin: 1.5rem 0; padding: 0 1rem; }
+.price-bottom .matrix-section { max-width: 980px; width: 100%; margin-left: auto; margin-right: auto; }
+.price-bottom .cards-grid { width: 100%; }
+
+/* Keep mobile stacking natural */
+@media (max-width: 1023px) {
+  .price-bottom { padding: 0 12px; }
+  .choose-and-learn { align-items: center; }
+}
