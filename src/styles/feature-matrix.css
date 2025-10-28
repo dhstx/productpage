@@ -244,6 +244,10 @@
     min-height: auto;
     padding: 1rem;
   }
+  /* Preserve existing mobile carousel behavior for non-reduced-motion variant */
+  .pricing-snap-container.price-plan-grid {
+    display: flex;
+  }
 }
 
 /* Accessibility / high-contrast guard: ensure text remains legible in both themes */
