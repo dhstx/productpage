@@ -1,0 +1,155 @@
+.feature-matrix { --amber:#FFC562; --ink:#0F0F10; --panel:#141416; --muted:#9CA3AF; --fg:#EAEAEA; }
+
+/* Pricing region + cards (UI-only layout for plans) */
+.price-plans-section { margin: 1.25rem 1rem 1.25rem; }
+.price-plans-section .section-title { color: var(--fg); text-transform: uppercase; letter-spacing: .06em; }
+.plans-quick-buttons { display: flex; justify-content: center; gap: 1rem; margin: 0 0 1.25rem 0; }
+
+/* Force dark visuals inside pricing region regardless of site theme */
+.price-plans.force-dark {
+  --pp-bg: #0f0f10; /* dark panel */
+  --pp-card: #111214;
+  --pp-border: rgba(255,255,255,0.04);
+  --pp-text: #efefef;
+  --pp-muted: rgba(255,255,255,0.65);
+  background: var(--pp-bg);
+  color: var(--pp-text);
+  padding: 2rem 1rem;
+}
+.price-plans.force-dark .plan-card {
+  background: var(--pp-card);
+  border: 1px solid var(--pp-border);
+  color: var(--pp-text);
+}
+.price-plans.force-dark .plan-card .features { color: var(--pp-muted); }
+.price-plans .centered { display:flex; justify-content:center; align-items:center; flex-direction:column; }
+
+.pricing-region { position: relative; margin: 0 1rem 1.5rem; }
+.pricing-controls { position: absolute; top: -42px; right: 0; display: flex; gap: .5rem; }
+.pr-arrow { background: rgba(0,0,0,0.25); color: var(--fg); border: 1px solid rgba(255,255,255,.08); padding: 6px 9px; border-radius: 6px; cursor: pointer; }
+.pr-arrow:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+.pricing-snap-container { display:flex; gap:1rem; overflow-x:auto; scroll-snap-type:x proximity; padding: 1rem 0; -webkit-overflow-scrolling: touch; }
+.pricing-vertical { display:flex; flex-direction: column; gap: 1rem; padding: 1rem 0; }
+.plan-card { scroll-snap-align:center; flex: 0 0 320px; background: var(--panel); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.35); color: var(--fg); margin: 0 auto; }
+.plan-card h3 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .25rem; }
+.plan-card .price { color: var(--amber); font-weight: 800; font-size: 1.25rem; margin-bottom: .25rem; }
+.plan-card .features { color: var(--muted); font-size: .9rem; margin: .5rem 0 .75rem; padding-left: 1rem; }
+.plan-card .cta-row { display:flex; align-items:center; gap:.75rem; }
+.plan-card .cta { background: var(--amber); color: #1B140A; border: none; border-radius: 8px; padding: 10px 12px; font-weight: 700; cursor: pointer; }
+.plan-card .more { color: var(--muted); font-size: .85rem; text-decoration: underline; }
+
+@media (max-width:720px) {
+  .pricing-snap-container { padding-left: 12px; }
+  .plan-card { flex: 0 0 calc(100% - 48px); }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop: center the pricing region and use wider cards */
+  .price-plans .pricing-region { margin-left:auto; margin-right:auto; max-width: 1280px; }
+  .plan-card { flex: 0 0 760px; padding: 2rem; border-radius: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-snap-container { scroll-behavior:auto; }
+}
+
+/* --- Windows 98 style for tier toggle --- */
+.tier-toggle.win98 {
+  display: flex;
+  justify-content: center;            /* center align the group */
+  align-items: center;
+  gap: 0;
+  margin: 0 auto 1.25rem auto;
+  padding: .25rem;
+  width: 100%;
+  backdrop-filter: none;              /* override legacy styles */
+}
+
+.tier-toggle.win98 .w98-btn {
+  /* Base */
+  position: relative;
+  min-width: 132px;                   /* give breathing room; tweak as needed */
+  padding: 10px 16px;
+  color: #111;
+  font-weight: 600;
+  line-height: 1;
+  background: #dcdcdc;                /* classic 98 gray */
+  border: 2px solid #000;             /* outer border (98 style) */
+
+  /* Bevel: light top/left, dark bottom/right */
+  box-shadow:
+    inset 1px 1px 0 #fff,             /* top-left highlight */
+    inset -1px -1px 0 #808080;        /* bottom-right shadow */
+
+  /* Segmented look */
+  border-right-width: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier-toggle.win98 .w98-btn.is-first { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+.tier-toggle.win98 .w98-btn.is-last  { border-right-width: 2px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+@media (max-width: 520px) {
+  .tier-toggle.win98 .w98-btn { min-width: 100px; padding: 10px 12px; }
+}
+
+/* Hover: slight lighten */
+.tier-toggle.win98 .w98-btn:hover {
+  background: #e6e6e6;
+}
+
+/* Focus: dotted ring (98 vibes) */
+.tier-toggle.win98 .w98-btn:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+/* Active (“pressed in”) – invert bevel and add inner inset */
+.tier-toggle.win98 .w98-btn.is-active {
+  background: #c8c8c8;
+  box-shadow:
+    inset 1px 1px 0 #808080,          /* top-left now darker */
+    inset -1px -1px 0 #fff,           /* bottom-right now light */
+    inset 0 0 0 2px #b4b4b4;          /* inner inset edge */
+}
+
+/* Dark theme compatibility: keep the 98 look readable on dark bg */
+:root[data-theme="dark"] .tier-toggle.win98 .w98-btn {
+  color: #111;
+}
+:root[data-theme="dark"] .tier-toggle.win98 {
+  /* optional faint backdrop if content behind is very dark */
+  backdrop-filter: saturate(120%) blur(2px);
+}
+
+/* Label sizing, optional letterspacing for the era */
+.tier-toggle.win98 .w98-label {
+  letter-spacing: .2px;
+}
+
+.matrix-section { margin:2rem 0 3rem; }
+.section-head { position:relative; margin:0 1rem 1rem; }
+.section-head h2 { font-size:1.1rem; letter-spacing:.06em; color:var(--fg); text-transform:uppercase; }
+.section-glow { position:absolute; left:0; bottom:-6px; width:140px; height:2px; background:radial-gradient(60px 6px at left, var(--amber), transparent 70%); filter:blur(1px);}
+
+.cards-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:14px; padding:0 1rem; }
+@media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } }
+
+.feature-card { background:var(--panel); border:1px solid rgba(255,255,255,.06); border-radius:14px; padding:14px; position:relative; overflow:hidden; }
+.feature-card::after{content:""; position:absolute; inset:-1px; background: radial-gradient(220px 60px at top left, rgba(255,197,98,.08), transparent 60%); pointer-events:none;}
+.feature-card:hover { box-shadow: 0 0 0 1px rgba(255,197,98,.18), 0 10px 30px rgba(0,0,0,.45); transform: translateY(-1px); transition: box-shadow .25s ease, transform .25s ease; }
+
+.feature-head { display:flex; align-items:center; gap:.6rem; margin-bottom:.5rem; }
+.feature-dot { width:8px; height:8px; border-radius:2px; background: var(--amber); box-shadow:0 0 10px rgba(255,197,98,.6); }
+.feature-head h3 { font-size:.98rem; color:var(--fg); }
+
+.tier-strip { display:flex; gap:.5rem; }
+.tier-cell { flex:1; min-height:54px; border:1px solid rgba(255,255,255,.06); border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--muted); background:rgba(255,255,255,.02); }
+.tier-cell.active { outline:1px solid var(--amber); background:linear-gradient(180deg,rgba(255,197,98,.10), rgba(255,197,98,.02)); color:var(--fg);} 
+.tier-cell .check { color:var(--amber); font-size:18px; }
+.tier-cell .x { color:#6B7280; font-size:18px; }
+.tier-cell .value { color:var(--fg); font-weight:600; font-size:.95rem; }
+.tier-label { margin-top:2px; font-size:.7rem; opacity:.8; }
