@@ -9,14 +9,14 @@
 }
 /* Selected state uses ring analog (box-shadow) and visible overflow */
 .agent-tile--active {
-  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--agent-ring, var(--accent-gold));
+  /* Bring highlight fully inside the button bounds to avoid clipping */
+  outline: 2px solid var(--agent-ring, var(--accent-gold));
+  outline-offset: -2px; /* inward by a few pixels */
   border-color: color-mix(in oklab, var(--agent-ring, var(--accent-gold)) 45%, var(--card-border));
 }
 
 html[data-theme="light"] .agent-tile--active {
-  box-shadow:
-    0 0 0 2px var(--bg, var(--card-bg)),
-    0 0 0 4px color-mix(in oklab, var(--agent-ring, var(--accent, var(--accent-gold))) 85%, white);
+  outline-color: color-mix(in oklab, var(--agent-ring, var(--accent, var(--accent-gold))) 85%, white);
 }
 
 .agent-tile:hover {

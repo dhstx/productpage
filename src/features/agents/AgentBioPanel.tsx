@@ -26,7 +26,13 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
         {/* Root overlay + container (Content used as container for focus trap) */}
         <DialogPrimitive.Content className="fixed inset-0 z-[70] m-0 p-0 border-0 outline-none">
           {/* Centering container */}
-          <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+          <div
+            className="absolute inset-0 flex items-center justify-center p-4 md:p-8"
+            onClick={(e) => {
+              // Close only when clicking the backdrop area, not inside the panel
+              if (e.currentTarget === e.target) onClose();
+            }}
+          >
             {/* Panel */}
             <div
               className="agent-bio-panel relative grid w-full max-w-[960px] border border-[color:var(--border)] rounded-2xl shadow-2xl md:grid-cols-[1fr_300px] overflow-y-auto scroll-smooth custom-scrollbar"
