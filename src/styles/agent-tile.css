@@ -9,8 +9,8 @@
 }
 /* Selected state uses ring analog (box-shadow) and visible overflow */
 .agent-tile--active {
-  box-shadow: 0 0 0 2px var(--bg, var(--card-bg)), 0 0 0 4px var(--agent-ring, var(--accent, var(--accent-gold)));
-  border-color: color-mix(in oklab, var(--agent-ring, var(--accent, var(--accent-gold))) 45%, var(--card-border));
+  box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--agent-ring, var(--accent-gold));
+  border-color: color-mix(in oklab, var(--agent-ring, var(--accent-gold)) 45%, var(--card-border));
 }
 
 html[data-theme="light"] .agent-tile--active {
