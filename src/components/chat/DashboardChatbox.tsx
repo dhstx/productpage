@@ -8,14 +8,27 @@ import { sendMessage as sendMessageAPI } from "@/lib/api/agentClient";
 import ChatTools from "./ChatTools";
 import MessageBubble from "../MessageBubble";
 import ConversationHistory from "../ConversationHistory";
+// Subscribe to enable/disable changes (SSR-safe); use relative path, not "@/…"
+import { isEnabled, subscribeEnabled } from "../../features/agents/utils/agentEnabled";
 
 export default function DashboardChatbox() {
   const { selected, setSelected } = useAgentSelection();
-  const allNames = useMemo(() => agents.map((a) => a.name), []);
+  // Trigger re-render when enabled map changes globally
+  const [enabledTick, setEnabledTick] = useState(0);
+  useEffect(() => {
+    return subscribeEnabled(() => setEnabledTick((v) => v + 1));
+  }, []);
+
+  // Only include enabled agents in dropdown
+  const enabledAgentNames = useMemo(() => (
+    agents.filter((a) => isEnabled(a.id)).map((a) => a.name)
+  ), [/* updated via setEnabledTick */]);
+
   const color = getAgentColorForContext(selected, "dashboard");
   const Icon = getIcon(selected);
 
   const [message, setMessage] = useState("");
+  const [notice, setNotice] = useState<string | null>(null);
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -35,6 +48,28 @@ export default function DashboardChatbox() {
     };
   }, []);
 
+  // Guard current selection when enable map changes or selection changes
+  useEffect(() => {
+    const selectedId = (selected || "").toLowerCase();
+    const selectedEnabled = !!selected && isEnabled(selectedId);
+    const enabledList = agents.filter((a) => isEnabled(a.id));
+    if (!selectedEnabled) {
+      const fallback = enabledList[0]?.name;
+      if (fallback) {
+        setSelected(fallback);
+        setNotice(`Agent disabled — switched to ${fallback}`);
+      } else {
+        setNotice("No enabled agents");
+      }
+    }
+    if (notice) {
+      const t = setTimeout(() => setNotice(null), 2500);
+      return () => clearTimeout(t);
+    }
+    return;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabledTick, selected]);
+
   const chooseAgent = (name: string) => {
     setSelected(name);
     setShowAgentMenu(false);
@@ -50,7 +85,13 @@ export default function DashboardChatbox() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim() || isLoading) return;
+    const selectedId = (selected || "").toLowerCase();
+    if (!message.trim() || isLoading || !selected || !isEnabled(selectedId)) {
+      if (!selected || !isEnabled(selectedId)) {
+        setError("Select an enabled agent to chat.");
+      }
+      return;
+    }
 
     const userMessage = message.trim();
     setMessage("");
@@ -111,6 +152,8 @@ export default function DashboardChatbox() {
             className="select-agent flex items-center justify-between gap-3 rounded-full border border-token bg-card px-5 py-2 text-sm text-fg shadow-sm ring-1 ring-transparent hover:bg-[color:var(--accent)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ring-offset-2 ring-offset-bg"
             aria-haspopup="menu"
             aria-expanded={showAgentMenu}
+            aria-disabled={enabledAgentNames.length === 0}
+            title={enabledAgentNames.length === 0 ? "No enabled agents" : undefined}
           >
             <span className="inline-flex items-center gap-2">
               <span
@@ -122,17 +165,17 @@ export default function DashboardChatbox() {
                   height: "14px",
                   borderRadius: "9999px",
                   backgroundColor: color,
-                  boxShadow: "0 0 0 2px rgba(0,0,0,0.2)",
+                  boxShadow: "none",
                 }}
               />
-              <span>{selected}</span>
+              <span>{enabledAgentNames.length === 0 ? "No enabled agents" : selected}</span>
             </span>
             <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? "rotate-180" : ""}`} />
           </button>
 
           {showAgentMenu && (
             <div ref={menuRef} role="menu" className="absolute left-1/2 z-20 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
-              {allNames.map((name) => {
+              {enabledAgentNames.map((name) => {
                 const c = getAgentColorForContext(name, "dashboard");
                 const I = getIcon(name);
                 return (
@@ -144,10 +187,21 @@ export default function DashboardChatbox() {
                   </div>
                 );
               })}
+              {enabledAgentNames.length === 0 && (
+                <div className="px-3 py-2 text-sm" style={{ color: "var(--muted)" }}>
+                  No enabled agents
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
+      {notice && (
+        <div className="mb-3 text-center text-xs" style={{ color: "var(--muted)" }} role="status">
+          {notice}
+        </div>
+      )}
 
       {messages.length > 0 && (
         <div className="mb-6 panel-system max-h-[500px] overflow-y-auto p-4">
@@ -192,10 +246,12 @@ export default function DashboardChatbox() {
             rightAppend={(
               <button
                 type="submit"
-                disabled={!message.trim()}
+                disabled={!message.trim() || !selected || !isEnabled((selected || "").toLowerCase()) || isLoading}
                 className="flex h-10 w-10 items-center justify-center rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: message.trim() ? color : "#333" }}
                 aria-label="Send message"
+                aria-disabled={!selected || !isEnabled((selected || "").toLowerCase())}
+                title={!selected || !isEnabled((selected || "").toLowerCase()) ? "Select an enabled agent" : undefined}
               >
                 <ArrowUp className="h-4 w-4 text-[#1A1A1A]" />
               </button>
