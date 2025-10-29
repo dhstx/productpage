@@ -48,7 +48,7 @@ export default function AgentManagement() {
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold mb-2 uppercase tracking-tight" style={{ color: 'var(--text)' }}>
-              AI AGENTS DASHBOARD
+              AGENT DASHBOARD
             </h1>
             <p style={{ color: 'var(--muted)' }}>
               Understand and customize your agents to sharpen the efficacy of your tasks

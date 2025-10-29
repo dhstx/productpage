@@ -36,6 +36,12 @@ export function toggleEnabled(agentKey: string): void {
   setEnabled(agentKey, !isEnabled(agentKey));
 }
 
+// New explicit helper used by grid, dashboard, and bio components.
+// Kept separate to avoid breaking existing imports of toggleEnabled.
+export function toggleAndNotify(agentKey: string): void {
+  setEnabled(agentKey, !isEnabled(agentKey));
+}
+
 /** Subscribe to global updates; returns an unsubscribe fn. */
 export function subscribeEnabled(fn: (key?: string) => void): () => void {
   if (!hasWindow()) return () => {};
