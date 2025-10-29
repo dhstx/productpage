@@ -10,7 +10,7 @@ export type AgentBioPanelProps = {
 
 export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
   const open = !!agent;
-  const { state, set, toggle } = useAgentFocus(agent?.key ?? '', agent?.focuses ?? []);
+  const { state, toggle } = useAgentFocus(agent?.key ?? '', agent?.focuses ?? []);
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
