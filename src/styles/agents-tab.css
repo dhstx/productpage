@@ -1,0 +1,35 @@
+/* Agents tab custom styles (tokenized) */
+
+@keyframes agents-flicker {
+  0% { opacity: 0; filter: none; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+.agents-flicker-in {
+  animation: agents-flicker 120ms ease-out both;
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+}
+
+/* Panel tokens ensure light/dark cohesion */
+.agents-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+}
+
+.agents-panel .agents-divider {
+  border-color: var(--card-border);
+}
+
+.agents-toggle {
+  background: var(--bg-elev);
+  border: 1px solid var(--card-border);
+}
+
+.agents-toggle[aria-checked="true"] {
+  background: var(--accent-muted);
+}

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
 import "../styles/dashboard-theme.css";
-import { AgentSelectionProvider } from '@/context/AgentSelectionContext';
-import DashboardChatbox from '@/components/chat/DashboardChatbox';
 import PTHealthBar from '../components/PTHealthBar';
 import { useAuth } from '../contexts/AuthContext';
+import '@/styles/agents-tab.css';
+import AgentsGrid from '@/features/agents/AgentsGrid';
 
 export default function AgentManagement() {
   const { user } = useAuth();
@@ -50,7 +50,7 @@ export default function AgentManagement() {
               AI AGENTS DASHBOARD
             </h1>
             <p style={{ color: 'var(--muted)' }}>
-              Chat with our specialized AI agents to get help with your tasks
+              Understand and customize your agents to sharpen the efficacy of your tasks
             </p>
             {user && (
               <p className="text-sm mt-2" style={{ color: 'var(--muted)' }}>
@@ -90,11 +90,9 @@ export default function AgentManagement() {
             </div>
           )}
 
-          {/* Chat Interface */}
+          {/* Agents Customization Hub */}
           <div className="dashboard-card p-6">
-            <AgentSelectionProvider>
-              <DashboardChatbox />
-            </AgentSelectionProvider>
+            <AgentsGrid />
           </div>
         </div>
       </div>
