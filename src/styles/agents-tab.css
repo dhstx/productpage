@@ -1,5 +1,14 @@
 /* Agents tab specific enhancements */
 
+/* Modal surface tokens (frosted glass) */
+.agent-bio-panel { 
+  --modal-surface: rgba(20, 20, 20, 0.85); /* dark default */
+  background: var(--modal-surface);
+  -webkit-backdrop-filter: saturate(1.1) blur(8px);
+  backdrop-filter: saturate(1.1) blur(8px);
+}
+html[data-theme="light"] .agent-bio-panel { --modal-surface: rgba(255, 255, 255, 0.9); }
+
 /* Rounded gold scrollbar (already used) */
 .custom-scrollbar::-webkit-scrollbar { width: 8px; }
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -12,7 +21,7 @@
 /* Section headings inside bio (one size up + bold) */
 .bio-section-h {
   font-weight: 700;
-  font-size: 1.05em; /* +1 step relative to base text */
+  font-size: 1.125em; /* one size larger for readability */
   margin-top: 1rem;
   margin-bottom: .35rem;
   color: var(--text);
