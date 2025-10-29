@@ -11,6 +11,7 @@
 .agent-tile--active {
   box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--agent-ring, var(--accent-gold));
   border-color: color-mix(in oklab, var(--agent-ring, var(--accent-gold)) 45%, var(--card-border));
+  overflow: visible; /* ensure highlight not clipped */
 }
 
 html[data-theme="light"] .agent-tile--active {

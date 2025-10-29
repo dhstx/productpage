@@ -4,3 +4,9 @@
 .btn-primary { background: var(--accent-gold); color: #111; border-radius: 8px; }
 .btn-primary:hover { filter: brightness(.95); }
 .btn-outline { border: 1px solid var(--card-border); background: transparent; color: var(--text); border-radius: 8px; }
+
+/* Ensure agent rail highlight is not clipped on the left */
+.dash-agents {
+  overflow-x: visible;
+  padding-left: 4px;
+}
