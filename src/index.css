@@ -279,3 +279,53 @@
   }
 }
 
+/*
+  Global cursor affordances for interactive elements across the dashboard
+  - Applies pointer for clearly interactive controls
+  - Avoids interfering with text inputs and draggable UI
+*/
+[role="button"],
+button,
+a,
+[role="tab"],
+[role="link"],
+[role="menuitem"],
+[role="option"],
+[role="checkbox"],
+[role="switch"],
+[aria-haspopup],
+[aria-controls],
+[aria-expanded],
+[aria-pressed],
+summary,
+.clickable,
+.interactive,
+.toggle,
+.menu-item {
+  cursor: pointer;
+}
+
+/* Ensure native text inputs preserve I-beam cursor */
+input,
+textarea,
+select,
+[contenteditable="true"],
+[role="textbox"] {
+  cursor: text;
+}
+
+/* Do not override draggable affordances */
+[draggable="true"] {
+  cursor: grab;
+}
+[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Respect disabled states */
+button:disabled,
+[disabled],
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
