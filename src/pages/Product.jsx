@@ -72,9 +72,6 @@ export default function Product() {
         {/* Core Features */}
         <FadeInSection>
           <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:px-8">
-            <div className="mb-4 text-center">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#FFC96C] sm:text-sm">CORE FEATURES</span>
-            </div>
             <h2 className="h2 leading-tight text-balance font-bold text-[#F2F2F2] mb-12 uppercase tracking-tight text-center">
               EVERYTHING YOU NEED
             </h2>
