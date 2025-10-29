@@ -15,8 +15,14 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogContent
-        className="w-full max-w-4xl"
-        style={{ background: 'var(--panel)', color: 'var(--text)', borderColor: 'var(--border)' }}
+        className="relative z-50 rounded-2xl shadow-lg border border-[color:var(--border)] bg-[color:var(--panel)] agent-bio-panel"
+        style={{
+          width: 'min(90vw, 960px)',
+          backdropFilter: 'blur(12px)',
+          backgroundColor: 'color-mix(in srgb, var(--panel) 95%, var(--bg))',
+          color: 'var(--text)',
+          borderColor: 'var(--border)'
+        }}
       >
         {agent && (
           <div className="space-y-4">
@@ -29,7 +35,7 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left: VERBATIM BIO */}
-              <div className="whitespace-pre-wrap overflow-y-auto pr-3" style={{ maxHeight: '60vh' }}>
+              <div className="bio-pane whitespace-pre-wrap overflow-y-auto pr-4 custom-scrollbar" style={{ maxHeight: '60vh' }}>
                 {agent.bio}
               </div>
 
