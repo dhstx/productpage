@@ -2,7 +2,10 @@ import React from 'react';
 import type { AgentProfile } from './agents.data';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useAgentFocus } from './agentFocusStore';
-import '@/styles/agents-tab.css';
+import '../../styles/agents-tab.css';
+import { useAgentEnabled } from './AgentEnabledProvider';
+import * as Icons from '../../components/ui/agentIcons';
+import { agentColor, AgentIconFallback } from './agentThemeFallback';
 
 export type AgentBioPanelProps = {
   agent: AgentProfile | null;
@@ -13,6 +16,10 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
   const open = !!agent;
   const { state, toggle } = useAgentFocus(agent?.key ?? '', agent?.focuses ?? []);
   const formattedBio = agent ? formatBio(agent.bio ?? '') : '';
+  const { isEnabled, toggle: toggleEnabled } = useAgentEnabled();
+  const agentKey = agent?.key ?? '';
+  const enabled = isEnabled(agentKey);
+  const IconComponent = (agent && (Icons as any)[agent.icon]) || AgentIconFallback;
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -46,14 +53,38 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
             >
               {/* Sticky header bar */}
               <header
-                className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 border-b border-[color:var(--border)] px-5 py-4 md:px-6"
-                style={{ background: 'var(--modal-surface)', backdropFilter: 'saturate(1.1) blur(8px)' }}
+                className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 border-b border-[color:var(--border)] px-5 py-4 md:px-6 bg-[color:var(--panel)] backdrop-blur-sm"
               >
-                <div className="min-w-0">
-                  <h3 id="agent-title" className="text-lg md:text-xl font-semibold leading-tight">{agent?.name}</h3>
-                  {agent?.title && (
-                    <p className="text-sm md:text-base text-[color:var(--muted)]">{agent.title}</p>
+                <div className="min-w-0 flex items-start gap-3">
+                  {/* Enable/Disable toggle icon */}
+                  {agent && (
+                    <button
+                      type="button"
+                      aria-label={enabled ? 'Disable agent' : 'Enable agent'}
+                      onClick={() => toggleEnabled(agentKey)}
+                      className={`shrink-0 grid place-items-center rounded-md border transition h-10 w-10 md:h-9 md:w-9 ${enabled ? '' : 'opacity-60'}`}
+                      style={{
+                        borderColor: 'var(--border)',
+                        color: enabled ? agentColor(agent.name) : 'var(--muted)',
+                        background: 'var(--panel)'
+                      }}
+                    >
+                      <IconComponent size={18} color="currentColor" />
+                    </button>
                   )}
+
+                  <div className="min-w-0">
+                    <h3
+                      id="agent-title"
+                      className="text-lg md:text-xl font-semibold leading-tight"
+                      style={{ color: enabled ? agentColor(agent?.name) : 'var(--muted)' }}
+                    >
+                      {agent?.name}
+                    </h3>
+                    {agent?.title && (
+                      <p className="text-sm md:text-base text-[color:var(--muted)]">{agent.title}</p>
+                    )}
+                  </div>
                 </div>
                 {/* Close X (bigger on mobile) */}
                 <button

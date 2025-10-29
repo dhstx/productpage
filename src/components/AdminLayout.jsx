@@ -38,7 +38,7 @@ export default function AdminLayout({ children }) {
   return (
     <div className="min-h-screen dashboard-surface">
       {/* Header */}
-      <header className="md:sticky top-0 z-50 border-b" style={{ background: 'var(--bg)', borderColor: 'var(--card-border)' }}>
+      <header className="sticky top-0 z-50 bg-[color:var(--panel)] border-b border-[color:var(--border)] backdrop-blur-md">
         <div className="mx-auto max-w-screen-xl px-4 md:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
@@ -171,7 +171,7 @@ export default function AdminLayout({ children }) {
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-screen-xl px-4 md:px-8 py-8">
+      <main className="mx-auto max-w-screen-xl px-4 md:px-8 pt-[var(--header-height,4rem)] pb-8">
         {children}
       </main>
 

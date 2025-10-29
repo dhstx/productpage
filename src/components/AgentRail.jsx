@@ -5,6 +5,7 @@ import { agents as agentData } from '../lib/agents-enhanced';
 import { getAgentColorForContext } from './ui/agentThemes';
 import getIcon from './ui/agentIcons';
 import { useAgentSelection } from '@/context/AgentSelectionContext';
+import { useAgentEnabled } from '../features/agents/AgentEnabledProvider';
 
 export default function AgentRail({ selectedName, onSelect }) {
   const { selected, setSelected } = (() => {
@@ -17,6 +18,7 @@ export default function AgentRail({ selectedName, onSelect }) {
   })();
 
   const agents = useMemo(() => agentData.slice(0, 12), []);
+  const { isEnabled } = useAgentEnabled();
 
   return (
     <aside
@@ -28,15 +30,20 @@ export default function AgentRail({ selectedName, onSelect }) {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
           const Icon = getIcon(agent.name);
+          const enabled = isEnabled(agent.id);
           return (
             <button
               key={agent.id}
-              onClick={() => setSelected?.(agent.name)}
+              onClick={enabled ? () => setSelected?.(agent.name) : undefined}
               className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
               style={{
                 '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
+                filter: !enabled ? 'grayscale(1)' : undefined,
+                opacity: !enabled ? 0.6 : 1,
+                pointerEvents: !enabled ? 'none' : 'auto',
               }}
+              disabled={!enabled}
             >
               <span className="agent-tile__icon" style={{ backgroundColor: `${color}22` }}>
                 <Icon size={16} color={color} />
