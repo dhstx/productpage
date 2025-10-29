@@ -19,7 +19,10 @@ export default function AgentRail({ selectedName, onSelect }) {
   const agents = useMemo(() => agentData.slice(0, 12), []);
 
   return (
-    <aside className="pr-2 lg:sticky lg:top-20 lg:h-[calc(100vh-120px)] lg:overflow-y-auto">
+    <aside
+      className="pl-[2px] pr-2 lg:sticky lg:top-20 lg:h-[calc(100vh-120px)] lg:overflow-y-auto"
+      style={{ overflowX: 'visible' }}
+    >
       <div className="agent-tile-grid lg:block lg:space-y-2" style={{ overflow: 'visible' }}>
         {agents.map((agent) => {
           const isActive = selected === agent.name;

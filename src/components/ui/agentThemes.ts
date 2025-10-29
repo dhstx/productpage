@@ -13,7 +13,7 @@ export const baseThemes: Record<string, { hex: string }> = {
   Counselor:    { hex: "#6BCB77" },
   Sentinel:     { hex: "#4D96FF" },
   Optimizer:    { hex: "#FF6B9D" },
-  Orchestrator: { hex: "#FFC96C" },
+  Orchestrator: { hex: "#06B6D4" }, // cyan — not used elsewhere
 };
 
 // Back-compat: preserve existing export name
