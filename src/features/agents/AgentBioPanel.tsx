@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import type { AgentProfile } from './agents.data';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useAgentFocus } from './agentFocusStore';
 import '@/styles/agents-tab.css';
+import { getAgentColorForContext, AgentIcon as AgentGlyph } from '@/features/agents/agentTheme.util';
+import { isAgentEnabled, toggleAgentEnabled, subscribe } from '@/features/agents/agentEnabled.store';
 
 export type AgentBioPanelProps = {
   agent: AgentProfile | null;
@@ -13,6 +15,18 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
   const open = !!agent;
   const { state, toggle } = useAgentFocus(agent?.key ?? '', agent?.focuses ?? []);
   const formattedBio = agent ? formatBio(agent.bio ?? '') : '';
+
+  // Hook: subscribe to store without deps, SSR-safe default
+  function useAgentEnabled(key: string) {
+    return useSyncExternalStore(
+      subscribe,
+      () => isAgentEnabled(key),
+      () => true
+    );
+  }
+
+  const color = agent ? getAgentColorForContext(agent.key, 'dashboard') : undefined;
+  const enabled = agent ? useAgentEnabled(agent.key) : true;
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
@@ -35,35 +49,48 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
           >
             {/* Panel */}
             <div
-              className="agent-bio-panel relative grid w-full max-w-[960px] border border-[color:var(--border)] rounded-2xl shadow-2xl md:grid-cols-[1fr_300px] overflow-y-auto scroll-smooth custom-scrollbar"
+              className="agent-bio-panel relative grid w-full max-w-[960px] bg-[color:var(--panel)] border border-[color:var(--border)] rounded-2xl shadow-2xl md:grid-cols-[1fr_300px] overflow-y-auto scroll-smooth custom-scrollbar"
               style={{
                 width: 'min(92vw, 960px)',
-                maxHeight: 'min(90vh, 900px)',
-                background: 'var(--modal-surface)',
-                backdropFilter: 'saturate(1.1) blur(8px)'
+                maxHeight: 'min(88vh, 900px)',
+                // stronger surface in light mode while keeping blur
+                backgroundColor: 'color-mix(in srgb, var(--panel) 95%, var(--bg))'
               }}
               role="dialog" aria-modal="true"
             >
-              {/* Sticky header bar */}
-              <header
-                className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 border-b border-[color:var(--border)] px-5 py-4 md:px-6"
-                style={{ background: 'var(--modal-surface)', backdropFilter: 'saturate(1.1) blur(8px)' }}
-              >
+              {/* Sticky header bar with color + toggle icon */}
+              <header className="sticky top-0 z-10 col-span-full flex items-center gap-3 bg-[color:var(--panel)]/95 backdrop-blur-sm border-b border-[color:var(--border)] px-5 py-4 md:px-6">
+                <button
+                  type="button"
+                  onClick={() => agent && toggleAgentEnabled(agent.key)}
+                  aria-pressed={!enabled}
+                  title={enabled ? 'Disable agent' : 'Enable agent'}
+                  className={[
+                    'h-10 w-10 rounded-lg grid place-items-center border',
+                    'border-[color:var(--border)] hover:bg-[color:var(--panel)]/80 transition',
+                    enabled ? '' : 'opacity-50 grayscale'
+                  ].join(' ')}
+                  style={{ color }}
+                >
+                  <AgentGlyph className="h-6 w-6" />
+                </button>
                 <div className="min-w-0">
-                  <h3 id="agent-title" className="text-lg md:text-xl font-semibold leading-tight">{agent?.name}</h3>
+                  <h3 className="text-lg md:text-xl font-semibold leading-tight" style={{ color }}>{agent?.name}</h3>
                   {agent?.title && (
                     <p className="text-sm md:text-base text-[color:var(--muted)]">{agent.title}</p>
                   )}
                 </div>
-                {/* Close X (bigger on mobile) */}
-                <button
-                  aria-label="Close agent details"
-                  onClick={onClose}
-                  className="shrink-0 grid place-items-center rounded-full border border-[color:var(--border)] hover:bg-[color:var(--panel)]/80 transition h-11 w-11 md:h-9 md:w-9"
-                  style={{ marginRight: '0.25rem', marginTop: '0.25rem' }}
-                >
-                  ×
-                </button>
+                <div className="ml-auto">
+                  {/* Close X (bigger on mobile) */}
+                  <button
+                    aria-label="Close agent details"
+                    onClick={onClose}
+                    className="shrink-0 grid place-items-center rounded-full border border-[color:var(--border)] hover:bg-[color:var(--panel)]/80 transition h-11 w-11 md:h-9 md:w-9"
+                    style={{ marginRight: '0.25rem', marginTop: '0.25rem' }}
+                  >
+                    ×
+                  </button>
+                </div>
               </header>
 
               {agent && (

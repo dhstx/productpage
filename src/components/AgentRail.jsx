@@ -1,10 +1,15 @@
-import { useMemo } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 import '@/styles/agent-tile.css';
 import '@/styles/agent-tiles-align.css';
 import { agents as agentData } from '../lib/agents-enhanced';
 import { getAgentColorForContext } from './ui/agentThemes';
 import getIcon from './ui/agentIcons';
 import { useAgentSelection } from '@/context/AgentSelectionContext';
+import { isAgentEnabled, subscribe } from '@/features/agents/agentEnabled.store';
+
+function useEnabled(key) {
+  return useSyncExternalStore(subscribe, () => isAgentEnabled(key), () => true);
+}
 
 export default function AgentRail({ selectedName, onSelect }) {
   const { selected, setSelected } = (() => {
@@ -28,15 +33,18 @@ export default function AgentRail({ selectedName, onSelect }) {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
           const Icon = getIcon(agent.name);
+          const enabled = useEnabled(agent.id || agent.name?.toLowerCase?.());
           return (
             <button
               key={agent.id}
-              onClick={() => setSelected?.(agent.name)}
-              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
+              onClick={enabled ? () => setSelected?.(agent.name) : undefined}
+              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''} ${enabled ? '' : 'opacity-50 grayscale cursor-not-allowed'}`}
               style={{
                 '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
               }}
+              aria-disabled={!enabled}
+              title={enabled ? agent.name : 'Agent is disabled. Open its bio to re-enable.'}
             >
               <span className="agent-tile__icon" style={{ backgroundColor: `${color}22` }}>
                 <Icon size={16} color={color} />

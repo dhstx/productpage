@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import './App.css';
 import './styles/team-members.css';
 
@@ -41,8 +42,10 @@ import ScrollToTop from './components/ScrollToTop';
 
 // Contexts
 import { AuthProvider } from './contexts/AuthContext';
+import { initAgentEnabledStore } from '@/features/agents/agentEnabled.store';
 
 function App() {
+  useEffect(() => { initAgentEnabledStore(); }, []);
   return (
     <Router>
       <AuthProvider>
