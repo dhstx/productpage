@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { AgentProfile } from './agents.data';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useAgentFocus } from './agentFocusStore';
 import '@/styles/agents-tab.css';
+import { isEnabled, toggleEnabled, subscribeEnabled } from './utils/agentEnabled';
+import getAgentIcon from '../../components/ui/agentIcons';
 
 export type AgentBioPanelProps = {
   agent: AgentProfile | null;
@@ -44,27 +46,8 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
               }}
               role="dialog" aria-modal="true"
             >
-              {/* Sticky header bar */}
-              <header
-                className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 border-b border-[color:var(--border)] px-5 py-4 md:px-6"
-                style={{ background: 'var(--modal-surface)', backdropFilter: 'saturate(1.1) blur(8px)' }}
-              >
-                <div className="min-w-0">
-                  <h3 id="agent-title" className="text-lg md:text-xl font-semibold leading-tight">{agent?.name}</h3>
-                  {agent?.title && (
-                    <p className="text-sm md:text-base text-[color:var(--muted)]">{agent.title}</p>
-                  )}
-                </div>
-                {/* Close X (bigger on mobile) */}
-                <button
-                  aria-label="Close agent details"
-                  onClick={onClose}
-                  className="shrink-0 grid place-items-center rounded-full border border-[color:var(--border)] hover:bg-[color:var(--panel)]/80 transition h-11 w-11 md:h-9 md:w-9"
-                  style={{ marginRight: '0.25rem', marginTop: '0.25rem' }}
-                >
-                  ×
-                </button>
-              </header>
+              {/* Sticky header bar with toggleable large icon */}
+              {agent && <AgentBioHeader agent={agent} onClose={onClose} />}
 
               {agent && (
                 <>
@@ -133,6 +116,89 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void 
 }
 
 export default AgentBioPanel;
+
+// Helpers for AgentBioHeader
+function toDisplayNameFromKey(key: string): string {
+  if (!key) return '';
+  return key.charAt(0).toUpperCase() + key.slice(1);
+}
+
+function agentTint(key: string) {
+  // Use CSS var if defined; fall back to accent gold
+  return `var(--agent-${key}-color, var(--accent-gold))`;
+}
+
+function AgentGlyph({ name, color }: { name: string; color: string }) {
+  const Icon = getAgentIcon(name);
+  return <Icon size={28} color={color} className="h-7 w-7" />;
+}
+
+export function AgentBioHeader({
+  agent,
+  onClose,
+}: {
+  agent: AgentProfile;
+  onClose: () => void;
+}) {
+  const [enabled, setEnabled] = useState<boolean>(true);
+  useEffect(() => {
+    setEnabled(isEnabled(agent.key));
+    return subscribeEnabled(() => setEnabled(isEnabled(agent.key)));
+  }, [agent.key]);
+
+  const color = agentTint(agent.key);
+  const displayName = toDisplayNameFromKey(agent.key);
+
+  return (
+    <header
+      className="sticky top-0 z-10 col-span-full flex items-center justify-between gap-3 px-5 py-4 md:px-6 border-b border-[color:var(--border)]"
+      style={{ background: 'var(--panel)' }}
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        {/* Larger, colorized icon that toggles ON/OFF */}
+        <button
+          type="button"
+          onClick={() => toggleEnabled(agent.key)}
+          role="switch"
+          aria-checked={enabled}
+          title={enabled ? 'Disable agent' : 'Enable agent'}
+          className="grid place-items-center rounded-md border focus:outline-none focus-visible:ring-2"
+          style={{
+            width: '46px',
+            height: '46px',
+            borderColor: enabled ? (color as unknown as string) : 'var(--border)',
+            color: enabled ? (color as unknown as string) : 'var(--muted)',
+            background: 'transparent',
+          }}
+        >
+          <AgentGlyph name={displayName} color={enabled ? (color as unknown as string) : 'var(--muted)'} />
+        </button>
+
+        <div className="min-w-0">
+          <h3 className="text-lg md:text-xl font-semibold leading-tight" style={{ color: color as unknown as string }}>
+            {agent.name}
+          </h3>
+          {agent.title ? (
+            <p className="text-sm md:text-base" style={{ color: 'var(--muted)' }}>
+              {agent.title}
+            </p>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Keep existing X close button */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="h-10 w-10 grid place-items-center rounded-full border hover:bg-[color:var(--panel)]/80 transition"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        ×
+      </button>
+    </header>
+  );
+}
 
 // Simple safe formatter: remove lines beginning with "Title:" and style key section labels.
 function formatBio(raw: string): string {

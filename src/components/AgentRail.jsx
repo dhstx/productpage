@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import '@/styles/agent-tile.css';
 import '@/styles/agent-tiles-align.css';
 import { agents as agentData } from '../lib/agents-enhanced';
 import { getAgentColorForContext } from './ui/agentThemes';
 import getIcon from './ui/agentIcons';
 import { useAgentSelection } from '@/context/AgentSelectionContext';
+import { isEnabled, subscribeEnabled } from '../features/agents/utils/agentEnabled';
 
 export default function AgentRail({ selectedName, onSelect }) {
   const { selected, setSelected } = (() => {
@@ -17,6 +18,10 @@ export default function AgentRail({ selectedName, onSelect }) {
   })();
 
   const agents = useMemo(() => agentData.slice(0, 12), []);
+  const [enabledTick, setEnabledTick] = useState(0);
+  useEffect(() => {
+    return subscribeEnabled(() => setEnabledTick((v) => v + 1));
+  }, []);
 
   return (
     <aside
@@ -28,18 +33,23 @@ export default function AgentRail({ selectedName, onSelect }) {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
           const Icon = getIcon(agent.name);
+          const enabled = isEnabled(agent.id);
           return (
             <button
               key={agent.id}
-              onClick={() => setSelected?.(agent.name)}
-              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
+              onClick={enabled ? () => setSelected?.(agent.name) : undefined}
+              aria-disabled={!enabled}
+              title={enabled ? agent.name : 'Agent is disabled. Open its bio to re-enable.'}
+              className={`agent-tile w-full text-left transition ${
+                enabled ? 'hover:bg-[color:var(--panel-bg)] cursor-pointer' : 'opacity-50 grayscale cursor-not-allowed'
+              } ${isActive ? 'agent-tile--active' : ''}`}
               style={{
                 '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
               }}
             >
-              <span className="agent-tile__icon" style={{ backgroundColor: `${color}22` }}>
-                <Icon size={16} color={color} />
+              <span className="agent-tile__icon" style={{ backgroundColor: enabled ? `${color}22` : 'transparent' }}>
+                <Icon size={16} color={enabled ? color : 'var(--muted)'} />
               </span>
               <span className="agent-tile__name" style={{ color: 'var(--text)' }}>{agent.name}</span>
             </button>
