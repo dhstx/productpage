@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
 import "../styles/dashboard-theme.css";
-import { AgentSelectionProvider } from '@/context/AgentSelectionContext';
-import DashboardChatbox from '@/components/chat/DashboardChatbox';
+import AgentsGrid from '@/features/agents/AgentsGrid';
+import AgentBioPanel from '@/features/agents/AgentBioPanel';
+import type { AgentProfile } from '@/features/agents/agents.data';
 import PTHealthBar from '../components/PTHealthBar';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -10,6 +11,7 @@ export default function AgentManagement() {
   const { user } = useAuth();
   const [ptData, setPtData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedAgent, setSelectedAgent] = useState/** @type {null | AgentProfile} */(null);
 
   useEffect(() => {
     if (user) {
@@ -50,7 +52,7 @@ export default function AgentManagement() {
               AI AGENTS DASHBOARD
             </h1>
             <p style={{ color: 'var(--muted)' }}>
-              Chat with our specialized AI agents to get help with your tasks
+              Understand and customize your agents to sharpen the efficacy of your tasks
             </p>
             {user && (
               <p className="text-sm mt-2" style={{ color: 'var(--muted)' }}>
@@ -80,22 +82,21 @@ export default function AgentManagement() {
 
           {/* Loading State */}
           {loading && (
-            <div className="mb-6 rounded-lg p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>
-              <div className="animate-pulse flex space-x-4">
-                <div className="flex-1 space-y-3 py-1">
-                  <div className="h-4 rounded w-3/4" style={{ background: 'var(--bg-elev)' }}></div>
-                  <div className="h-4 rounded w-1/2" style={{ background: 'var(--bg-elev)' }}></div>
-                </div>
+            <div className="mb-6 rounded-lg p-4 border" style={{ background: 'var(--panel)', borderColor: 'var(--border)' }}>
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 rounded w-3/4" style={{ background: 'color-mix(in oklab, var(--border) 40%, transparent)' }}></div>
+                <div className="h-4 rounded w-1/2" style={{ background: 'color-mix(in oklab, var(--border) 40%, transparent)' }}></div>
               </div>
             </div>
           )}
 
-          {/* Chat Interface */}
-          <div className="dashboard-card p-6">
-            <AgentSelectionProvider>
-              <DashboardChatbox />
-            </AgentSelectionProvider>
+          {/* Agents Grid */}
+          <div className="rounded-lg border p-6" style={{ background: 'var(--panel)', borderColor: 'var(--border)' }}>
+            <AgentsGrid onSelect={(agent) => setSelectedAgent(agent)} />
           </div>
+
+          {/* Bio Panel */}
+          <AgentBioPanel agent={selectedAgent} onClose={() => setSelectedAgent(null)} />
         </div>
       </div>
     </>
