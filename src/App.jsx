@@ -41,10 +41,12 @@ import ScrollToTop from './components/ScrollToTop';
 
 // Contexts
 import { AuthProvider } from './contexts/AuthContext';
+import { AgentEnabledProvider } from './features/agents/AgentEnabledProvider';
 
 function App() {
   return (
     <Router>
+      <AgentEnabledProvider>
       <AuthProvider>
         <Analytics />
         <ScrollHistoryManager />
@@ -162,6 +164,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
+      </AgentEnabledProvider>
     </Router>
   );
 }

@@ -5,6 +5,7 @@ import { agents as agentData } from '../lib/agents-enhanced';
 import { getAgentColorForContext } from './ui/agentThemes';
 import getIcon from './ui/agentIcons';
 import { useAgentSelection } from '@/context/AgentSelectionContext';
+import { useAgentEnabled } from '../features/agents/AgentEnabledProvider';
 
 export default function AgentRail({ selectedName, onSelect }) {
   const { selected, setSelected } = (() => {
@@ -17,6 +18,13 @@ export default function AgentRail({ selectedName, onSelect }) {
   })();
 
   const agents = useMemo(() => agentData.slice(0, 12), []);
+  const { isEnabled } = (() => {
+    try {
+      return useAgentEnabled();
+    } catch {
+      return { isEnabled: () => true };
+    }
+  })();
 
   return (
     <aside
@@ -28,18 +36,20 @@ export default function AgentRail({ selectedName, onSelect }) {
           const isActive = selected === agent.name;
           const color = getAgentColorForContext(agent.name, 'dashboard');
           const Icon = getIcon(agent.name);
+          const enabled = isEnabled(agent.id);
           return (
             <button
               key={agent.id}
               onClick={() => setSelected?.(agent.name)}
-              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''}`}
+              aria-disabled={!enabled}
+              className={`agent-tile w-full text-left transition hover:bg-[color:var(--panel-bg)] ${isActive ? 'agent-tile--active' : ''} ${!enabled ? 'opacity-40 grayscale pointer-events-none' : ''}`}
               style={{
                 '--agent-ring': color,
                 backgroundColor: isActive ? `${color}10` : undefined,
               }}
             >
               <span className="agent-tile__icon" style={{ backgroundColor: `${color}22` }}>
-                <Icon size={16} color={color} />
+                <Icon size={16} color={enabled ? color : 'var(--muted)'} />
               </span>
               <span className="agent-tile__name" style={{ color: 'var(--text)' }}>{agent.name}</span>
             </button>
