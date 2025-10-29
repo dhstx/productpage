@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
+import PageTitle from '@/components/PageTitle';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../lib/auth';
 import { 
@@ -175,9 +176,7 @@ export default function IntegrationsManagement() {
     <div className="space-y-8">
       <BackArrow />
       <div>
-        <h1 className="text-3xl font-bold text-[#F2F2F2] mb-2 uppercase tracking-tight">
-          INTEGRATIONS
-        </h1>
+        <PageTitle className="mb-2 uppercase tracking-tight">INTEGRATIONS</PageTitle>
         <p className="text-[#B3B3B3]">
           Connect your favorite tools and automate your workflow
         </p>

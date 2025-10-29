@@ -18,6 +18,8 @@ import {
   CreditCard
 } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
+import PageTitle from '@/components/PageTitle';
+import BillingContent from '@/features/billing/BillingContent';
 import { useAuth } from '../contexts/AuthContext';
 import supabaseAuth from '../lib/auth/supabaseAuth';
 
@@ -58,7 +60,7 @@ export default function SettingsEnhanced() {
         
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--text)' }}>Settings</h1>
+          <PageTitle className="mb-2 uppercase tracking-tight">SETTINGS</PageTitle>
           <p style={{ color: 'var(--muted)' }}>Manage your account, billing, and security</p>
         </div>
 
@@ -107,16 +109,13 @@ export default function SettingsEnhanced() {
 function BillingSection() {
   return (
     <div className="settings-panel rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text)' }}>Billing</h2>
-      <p className="mb-4" style={{ color: 'var(--muted)' }}>
-        Manage your subscription, payment methods, invoices, and purchase additional Points.
-      </p>
-      <a
-        href="/billing"
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg btn-system"
-      >
-        Go to Billing
-      </a>
+      <div className="mb-4">
+        <h2 className="text-xl font-bold" style={{ color: 'var(--text)' }}>Billing</h2>
+        <p className="mt-2" style={{ color: 'var(--muted)' }}>
+          Manage your subscription, payment methods, invoices, and purchase additional Points.
+        </p>
+      </div>
+      <BillingContent embedded />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import "../styles/dashboard-theme.css";
 import "@/styles/theme-overrides.css";
 import BackArrow from '../components/BackArrow';
+import PageTitle from '@/components/PageTitle';
 import { Users, Mail, Shield, UserPlus } from 'lucide-react';
 import { TeamMembersResponsive } from "@/components/TeamMembersResponsive";
 
@@ -83,9 +84,7 @@ export default function Team() {
       <BackArrow />
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="h2 mb-2 uppercase tracking-tight text-primary">
-            TEAM MANAGEMENT
-          </h1>
+          <PageTitle className="mb-2 uppercase tracking-tight">TEAM MANAGEMENT</PageTitle>
           <p className="text-muted-fg">
             Manage team members and their access to your platforms.
           </p>

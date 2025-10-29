@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
+import PageTitle from '@/components/PageTitle';
 import { getMockPurchases } from '../lib/stripe';
 import { Link } from 'react-router-dom';
 import "@/styles/platforms-layout.css";
@@ -25,7 +26,7 @@ export default function Platforms() {
     <div className="platforms-page">
       <BackArrow />
       <header className="container">
-        <h1>PLATFORMS</h1>
+        <PageTitle className="uppercase">PLATFORMS</PageTitle>
         <p className="muted">Access and manage your platform instances and system status.</p>
       </header>
 
