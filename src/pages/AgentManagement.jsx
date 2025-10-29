@@ -3,7 +3,6 @@ import BackArrow from '../components/BackArrow';
 import "../styles/dashboard-theme.css";
 import AgentsGrid from '@/features/agents/AgentsGrid';
 import AgentBioPanel from '@/features/agents/AgentBioPanel';
-import type { AgentProfile } from '@/features/agents/agents.data';
 import PTHealthBar from '../components/PTHealthBar';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -11,7 +10,7 @@ export default function AgentManagement() {
   const { user } = useAuth();
   const [ptData, setPtData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedAgent, setSelectedAgent] = useState/** @type {null | AgentProfile} */(null);
+  const [selectedAgent, setSelectedAgent] = useState(null);
 
   useEffect(() => {
     if (user) {
