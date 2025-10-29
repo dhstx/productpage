@@ -3,8 +3,9 @@ import type { AgentProfile } from './agents.data';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useAgentFocus } from './agentFocusStore';
 import '@/styles/agents-tab.css';
-import { isEnabled, toggleEnabled, subscribeEnabled } from './utils/agentEnabled';
+import { isEnabled, toggleAndNotify, subscribeEnabled } from './utils/agentEnabled';
 import getAgentIcon from '../../components/ui/agentIcons';
+import { getAgentColorForContext } from '../../components/ui/agentThemes';
 
 export type AgentBioPanelProps = {
   agent: AgentProfile | null;
@@ -124,8 +125,8 @@ function toDisplayNameFromKey(key: string): string {
 }
 
 function agentTint(key: string) {
-  // Use CSS var if defined; fall back to accent gold
-  return `var(--agent-${key}-color, var(--accent-gold))`;
+  const display = toDisplayNameFromKey(key);
+  return getAgentColorForContext(display, 'dashboard');
 }
 
 function AgentGlyph({ name, color }: { name: string; color: string }) {
@@ -158,17 +159,20 @@ export function AgentBioHeader({
         {/* Larger, colorized icon that toggles ON/OFF */}
         <button
           type="button"
-          onClick={() => toggleEnabled(agent.key)}
+          onClick={() => toggleAndNotify(agent.key)}
           role="switch"
           aria-checked={enabled}
-          title={enabled ? 'Disable agent' : 'Enable agent'}
-          className="grid place-items-center rounded-md border focus:outline-none focus-visible:ring-2"
+          title={"Toggle Agent ON/OFF"}
+          className="grid place-items-center rounded-md border focus:outline-none"
           style={{
             width: '46px',
             height: '46px',
             borderColor: enabled ? (color as unknown as string) : 'var(--border)',
             color: enabled ? (color as unknown as string) : 'var(--muted)',
             background: 'transparent',
+            transition: 'all 0.2s ease-in-out',
+            filter: enabled ? 'none' : 'grayscale(100%)',
+            opacity: enabled ? 1 : 0.7,
           }}
         >
           <AgentGlyph name={displayName} color={enabled ? (color as unknown as string) : 'var(--muted)'} />
