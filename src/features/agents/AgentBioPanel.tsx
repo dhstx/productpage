@@ -29,15 +29,20 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
           <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
             {/* Panel */}
             <div
-              className="agent-bio-panel relative grid w-full max-w-[960px] bg-[color:var(--panel)] border border-[color:var(--border)] rounded-2xl shadow-2xl md:grid-cols-[1fr_300px]"
+              className="agent-bio-panel relative grid w-full max-w-[960px] border border-[color:var(--border)] rounded-2xl shadow-2xl md:grid-cols-[1fr_300px] overflow-y-auto scroll-smooth custom-scrollbar"
               style={{
                 width: 'min(92vw, 960px)',
-                maxHeight: 'min(88vh, 900px)',
+                maxHeight: 'min(90vh, 900px)',
+                background: 'var(--modal-surface)',
+                backdropFilter: 'saturate(1.1) blur(8px)'
               }}
               role="dialog" aria-modal="true"
             >
               {/* Sticky header bar */}
-              <header className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 bg-[color:var(--panel)]/95 backdrop-blur-sm border-b border-[color:var(--border)] px-5 py-4 md:px-6">
+              <header
+                className="sticky top-0 z-10 col-span-full flex items-start justify-between gap-3 border-b border-[color:var(--border)] px-5 py-4 md:px-6"
+                style={{ background: 'var(--modal-surface)', backdropFilter: 'saturate(1.1) blur(8px)' }}
+              >
                 <div className="min-w-0">
                   <h3 id="agent-title" className="text-lg md:text-xl font-semibold leading-tight">{agent?.name}</h3>
                   {agent?.title && (
@@ -59,16 +64,15 @@ export function AgentBioPanel({ agent, onClose }: AgentBioPanelProps) {
                 <>
                   {/* Left: scrollable bio */}
                   <div
-                    className="bio-pane whitespace-pre-wrap overflow-y-auto px-5 pb-5 md:px-6 md:pb-6 custom-scrollbar"
-                    style={{ maxHeight: 'calc(88vh - 64px)' }}
+                    className="bio-pane whitespace-pre-wrap overflow-visible md:overflow-y-auto px-5 pb-24 md:px-6 md:pb-6 custom-scrollbar md:max-h-[calc(90vh-64px)]"
                   >
                     <div dangerouslySetInnerHTML={{ __html: formattedBio }} />
                   </div>
 
                   {/* Right: toggles */}
                   <aside
-                    className="px-5 py-5 md:px-6 md:py-6 border-t md:border-t-0 md:border-l border-[color:var(--border)] overflow-y-auto custom-scrollbar"
-                    style={{ maxHeight: 'calc(88vh - 64px)' }}
+                    className="px-5 py-3 md:px-6 md:py-6 border-t md:border-t-0 md:border-l border-[color:var(--border)] overflow-visible md:overflow-y-auto custom-scrollbar md:static sticky bottom-0 pb-safe"
+                    style={{ background: 'var(--modal-surface)', backdropFilter: 'saturate(1.1) blur(8px)' }}
                   >
                     <div className="flex flex-col gap-4">
                       {agent.focuses.map((f) => (
