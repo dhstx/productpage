@@ -259,7 +259,10 @@ export default function Billing() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="dashboard-card p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm" style={{ color: 'var(--muted)' }}>Core Points</span>
+                      <span className="text-sm flex items-center gap-2" style={{ color: 'var(--muted)' }}>
+                        <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: 'var(--green-500)' }} aria-hidden="true" />
+                        Core Points
+                      </span>
                       <TrendingUp className="h-4 w-4" style={{ color: '#3b82f6' }} />
                     </div>
                     <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>
