@@ -8,12 +8,14 @@ import { sendMessage as sendMessageAPI } from "@/lib/api/agentClient";
 import ChatTools from "./ChatTools";
 import MessageBubble from "../MessageBubble";
 import ConversationHistory from "../ConversationHistory";
+import { useAgentEnabled } from "@/features/agents/agentEnabledStore";
 
 export default function DashboardChatbox() {
   const { selected, setSelected } = useAgentSelection();
   const allNames = useMemo(() => agents.map((a) => a.name), []);
   const color = getAgentColorForContext(selected, "dashboard");
   const Icon = getIcon(selected);
+  const { isEnabled } = useAgentEnabled();
 
   const [message, setMessage] = useState("");
   const [showAgentMenu, setShowAgentMenu] = useState(false);
@@ -36,6 +38,9 @@ export default function DashboardChatbox() {
   }, []);
 
   const chooseAgent = (name: string) => {
+    const agent = agents.find((a) => a.name === name);
+    const key = agent?.id || name.toLowerCase();
+    if (!isEnabled(key)) return; // Guard: cannot select disabled agent
     setSelected(name);
     setShowAgentMenu(false);
     textareaRef.current?.focus();
@@ -135,8 +140,10 @@ export default function DashboardChatbox() {
               {allNames.map((name) => {
                 const c = getAgentColorForContext(name, "dashboard");
                 const I = getIcon(name);
+                const agent = agents.find((a) => a.name === name);
+                const enabled = isEnabled(agent?.id || name.toLowerCase());
                 return (
-                  <div key={name} role="menuitem" onClick={() => chooseAgent(name)} className="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-white/5">
+                  <div key={name} role="menuitem" onClick={enabled ? (() => chooseAgent(name)) : undefined} className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-white/5 ${enabled ? '' : 'opacity-50 grayscale cursor-not-allowed'}`} aria-disabled={!enabled} title={enabled ? name : 'Agent is disabled. Open bio to re-enable.'} style={{ pointerEvents: enabled ? 'auto' : 'none' }}>
                     <span className="inline-flex items-center justify-center rounded" style={{ width: 18, height: 18, backgroundColor: `${c}22` }}>
                       <I size={14} color={c} />
                     </span>

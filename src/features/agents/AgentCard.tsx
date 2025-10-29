@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AgentProfile } from './agents.data';
 import * as Icons from '@/components/ui/agentIcons';
+import { useAgentEnabled } from './agentEnabledStore';
 
 export type AgentCardProps = {
   agent: AgentProfile;
@@ -10,14 +11,22 @@ export type AgentCardProps = {
 
 export function AgentCard({ agent, color, onSelect }: AgentCardProps) {
   const IconComponent = (Icons as any)[agent.icon] || (Icons as any).CommanderIcon;
+  const { isEnabled } = useAgentEnabled();
+  const enabled = isEnabled(agent.key);
 
   return (
     <button
       type="button"
-      onClick={() => onSelect?.(agent)}
-      className="group flex flex-col items-center gap-3 rounded-lg border p-4 text-center transition-colors hover:opacity-95 focus:outline-none focus-visible:ring-2"
-      style={{ background: 'var(--panel)', borderColor: 'var(--border)', color: 'var(--text)' }}
+      onClick={enabled ? (() => onSelect?.(agent)) : undefined}
+      className={[
+        'group flex flex-col items-center gap-3 rounded-lg border p-4 text-center transition-colors focus:outline-none focus-visible:ring-2',
+        enabled ? 'hover:opacity-95 cursor-pointer' : 'opacity-50 grayscale cursor-not-allowed',
+      ].join(' ')}
+      style={{ background: 'var(--panel)', borderColor: 'var(--border)', color: 'var(--text)', pointerEvents: enabled ? 'auto' : 'none' }}
       aria-label={`${agent.name} – ${agent.title}`}
+      aria-disabled={!enabled}
+      tabIndex={enabled ? 0 : -1}
+      title={enabled ? agent.name : 'Agent is disabled. Open bio to re-enable.'}
     >
       <div
         className="flex items-center justify-center rounded-md h-14 w-14 sm:h-16 sm:w-16"

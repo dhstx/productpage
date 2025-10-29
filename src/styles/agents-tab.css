@@ -9,6 +9,21 @@
 }
 html[data-theme="light"] .agent-bio-panel { --modal-surface: rgba(255, 255, 255, 0.9); }
 
+/* Icon toggle slash for disabled state */
+.agent-icon-toggle { position: relative; }
+.agent-icon-toggle.is-disabled::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 120%;
+  height: 2px;
+  background: currentColor;
+  transform: rotate(-25deg);
+  opacity: .7;
+  pointer-events: none;
+}
+
 /* Rounded gold scrollbar (already used) */
 .custom-scrollbar::-webkit-scrollbar { width: 8px; }
 .custom-scrollbar::-webkit-scrollbar-thumb {
