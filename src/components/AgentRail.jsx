@@ -18,7 +18,7 @@ export default function AgentRail({ selectedName, onSelect }) {
   })();
 
   const agents = useMemo(() => agentData.slice(0, 12), []);
-  const [enabledTick, setEnabledTick] = useState(0);
+  const [, setEnabledTick] = useState(0);
   useEffect(() => {
     return subscribeEnabled(() => setEnabledTick((v) => v + 1));
   }, []);
