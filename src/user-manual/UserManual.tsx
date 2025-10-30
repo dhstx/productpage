@@ -17,8 +17,8 @@ export default function UserManual() {
   const doc = index.byPath[path] ?? index.byPath['/user-manual'];
 
   return (
-    <main className="min-h-screen bg-white text-black dark:bg-neutral-950 dark:text-neutral-100">
-      <div className="mx-auto max-w-5xl px-6 py-10">
+    <div className="w-full">
+      <div className="mx-auto max-w-5xl">
         <header className="mb-6">
           <h1 className="text-3xl font-semibold">User Manual</h1>
           <p className="text-base text-neutral-600 dark:text-neutral-300">
@@ -53,6 +53,6 @@ export default function UserManual() {
           <Feedback articlePath={doc.path} />
         </footer>
       </div>
-    </main>
+    </div>
   );
 }
