@@ -42,7 +42,7 @@ export default function Landing() {
 
   return (
     <PageTransition>
-    <div className="min-h-screen w-full max-w-screen overflow-x-hidden min-w-0 bg-[#0C0C0C]">
+    <div className="min-h-screen w-full max-w-screen min-w-0 bg-[#0C0C0C]">
       <div className="relative flex flex-col">
         {/* Header */}
         <header id="site-header" className="sticky top-0 left-0 right-0 z-50 border-b border-[#202020] bg-[#0C0C0C]">
