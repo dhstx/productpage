@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { isDevEnvironment } from '@/lib/helpSafeMode';
 import { buildManualIndex, searchManual, SYNONYMS } from '@/user-manual/searchIndex';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +10,10 @@ export default function SearchBox() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
+    if (isDevEnvironment()) {
+      // eslint-disable-next-line no-console
+      console.warn('[help][search] hydration start');
+    }
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
