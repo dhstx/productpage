@@ -363,30 +363,37 @@ body > .page-banner {
 
 /* === Global header: make it fixed and follow the user === */
 /* Make primary <header> fixed site-wide so it follows on scroll */
+/* COMMENTED OUT: This global override prevents component-level sticky positioning */
+/*
 header {
   position: fixed !important;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 90 !important; /* intentionally lower than banner (banner:100) */
+  z-index: 90 !important;
   height: var(--site-header-height, 64px) !important;
-  background: var(--bg) !important; /* respect light/dark theming */
+  background: var(--bg) !important;
   border-bottom: 1px solid var(--card-border);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
-  /* keep header visuals stable when switching pages */
   box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 }
+*/
 
 /* Ensure page content is not hidden under the fixed header */
 /* Provide banner height token for consistent offsets */
 :root { --banner-height: 44px; }
 
+/* COMMENTED OUT: Padding assumes fixed header, not needed with sticky */
+/*
 main {
   padding-top: calc(var(--site-header-height, 64px) + var(--banner-height, 44px) + 1rem) !important;
 }
+*/
 
 /* Safe-area support on mobile devices with notches */
+/* COMMENTED OUT: Mobile overrides assume fixed header */
+/*
 @media (max-width: 768px) {
   header {
     height: calc(var(--site-header-height, 64px) + env(safe-area-inset-top));
@@ -396,11 +403,15 @@ main {
     padding-top: calc(var(--site-header-height, 64px) + env(safe-area-inset-top) + var(--banner-height, 44px) + 1rem) !important;
   }
 }
+*/
 
 /* Respect reduced motion preference while keeping a small polish transition */
+/* COMMENTED OUT: Let components control their own transitions */
+/*
 @media (prefers-reduced-motion: no-preference) {
   header { transition: background 140ms ease, transform 140ms ease; }
 }
+*/
 
 /* === Dashboard/admin header fallback === */
 /* Some admin/dashboard components may use custom header containers — ensure they are fixed too */
