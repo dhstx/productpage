@@ -103,6 +103,56 @@ export default function Login() {
     } catch {}
   }, []);
 
+  /* ========================================================
+     Mobile portrait scroll lock:
+     - Adds dhstx-no-scroll to html/body while in portrait and <= 640px.
+     - Keeps desktop and landscape unaffected.
+     - Cleans up on unmount and responds to orientation/resize.
+     ======================================================== */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const mq = window.matchMedia('(orientation: portrait) and (max-width: 640px)');
+
+    const applyLock = (m) => {
+      try {
+        if (m.matches) {
+          document.documentElement.classList.add('dhstx-no-scroll');
+          document.body.classList.add('dhstx-no-scroll');
+        } else {
+          document.documentElement.classList.remove('dhstx-no-scroll');
+          document.body.classList.remove('dhstx-no-scroll');
+        }
+      } catch (err) {
+        // defensive: ignore
+      }
+    };
+
+    // initial apply
+    applyLock(mq);
+
+    // Listen for changes in modern and older browsers
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', applyLock);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(applyLock);
+    }
+
+    // cleanup on unmount
+    return () => {
+      try {
+        if (typeof mq.removeEventListener === 'function') {
+          mq.removeEventListener('change', applyLock);
+        } else if (typeof mq.removeListener === 'function') {
+          mq.removeListener(applyLock);
+        }
+      } finally {
+        document.documentElement.classList.remove('dhstx-no-scroll');
+        document.body.classList.remove('dhstx-no-scroll');
+      }
+    };
+  }, []);
+
   return (
     <div className="themed-screen" style={{ padding: 16 }}>
       {/* Login header: back arrow + DHStx logo (left), theme toggle only (right) */}

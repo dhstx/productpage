@@ -292,7 +292,9 @@ html[data-theme="light"] .text-muted {
 .dhstx-banner,
 .banner,
 .page-banner,
-.founding-banner {
+.founding-banner,
+[data-banner],
+[role="banner"] {
   position: -webkit-sticky;
   position: sticky;
   top: calc(var(--site-header-height, 64px)); /* stick directly under the fixed header */
@@ -322,7 +324,9 @@ html[data-theme="light"] .text-muted {
 .dhstx-banner > .banner-inner,
 .banner > .banner-inner,
 .page-banner > .banner-inner,
-.founding-banner > .banner-inner {
+.founding-banner > .banner-inner,
+[data-banner] > .banner-inner,
+[role="banner"] > .banner-inner {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -333,6 +337,7 @@ html[data-theme="light"] .text-muted {
 .banner + .banner,
 .page-banner + .page-banner,
 .founding-banner + .founding-banner,
+[data-banner] + [data-banner],
 .dhstx-banner ~ .dhstx-banner,
 .banner ~ .banner {
   display: none !important;
@@ -348,7 +353,8 @@ html[data-theme="light"] .text-muted {
 /* Fallback: if a page places a banner as a direct child of body */
 body > .dhstx-banner,
 body > .banner,
-body > .page-banner {
+body > .page-banner,
+body > [data-banner] {
   position: relative !important;
   z-index: 100 !important;
 }
@@ -420,7 +426,9 @@ main {
 .themed-screen .dhstx-banner,
 .themed-screen .banner,
 .themed-screen .page-banner,
-.themed-screen .founding-banner {
+.themed-screen .founding-banner,
+.themed-screen [data-banner],
+.themed-screen [role="banner"] {
   background-color: var(--bg-elev, rgba(17,17,17,0.98)) !important;
   background-image: none !important;
   opacity: 1 !important;
@@ -433,9 +441,23 @@ main {
 .themed-screen .dhstx-banner > .banner-inner,
 .themed-screen .banner > .banner-inner,
 .themed-screen .page-banner > .banner-inner,
-.themed-screen .founding-banner > .banner-inner {
+.themed-screen .founding-banner > .banner-inner,
+.themed-screen [data-banner] > .banner-inner,
+.themed-screen [role="banner"] > .banner-inner {
   background: transparent;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* -----------------------------------------------------------
+   LOGIN PAGE: Mobile portrait scroll-lock
+   - Adds CSS class dhstx-no-scroll usage.
+   ----------------------------------------------------------- */
+html.dhstx-no-scroll,
+body.dhstx-no-scroll {
+  height: 100% !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  -webkit-overflow-scrolling: auto !important;
 }
