@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
+import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap, BookText } from 'lucide-react';
 import { useState } from 'react';
 import "../styles/dashboard-theme.css";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from './ui/sheet';
@@ -33,6 +33,8 @@ export default function AdminLayout({ children }) {
     { name: 'Integrations', href: '/integrations-management', icon: Zap },
     { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
+    // Insert User Manual immediately to the right of Team
+    { name: 'User Manual', href: '/user-manual', icon: BookText },
   ];
 
   return (

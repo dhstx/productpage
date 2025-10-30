@@ -1,0 +1,35 @@
+---
+title: Getting started
+description: Connect the essentials, run your first automation, and see value in 15 minutes.
+tags: [onboarding, setup]
+updated: 2025-10-30
+---
+
+## 1) Connect the essentials (5–10 min)
+- Sign in and confirm access to the **Automations Dashboard**.  
+- Connect Notion (knowledge), GitHub (code), Vercel (deploy), email + calendar.  
+- Optional: Stripe, Read.ai, Taskade, Make.com.
+
+> **Tip**  
+> Start with the tools you already live in; expand later.
+
+## 2) Run your first workflow (5 min)
+- In the Workflows list, choose **“Create & deploy a starter site”**.
+- Say: “Create a repo from template, deploy to Vercel, and post the link to Notion.”
+
+## 3) See it in your data
+- Tasks appear in Master Tasks; summaries log to your knowledge base.
+- Deploy preview URL is posted to your dashboard for one‑click share.
+
+## Visual: first‑run pathway (Mermaid)
+```mermaid
+flowchart LR
+A[Speak or type intent] --> B[Manus Hub (router)]
+B --> C[Select sub-agent]
+C --> D[Call apps: Notion/GitHub/Vercel/Email]
+D --> E[Results logged & surfaced]
+```
+
+### Common pitfalls
+- Missing API keys block actions; add them in Settings → Integrations.
+- If a workflow loops, pause it and check the app credentials.

@@ -32,6 +32,7 @@ import TermsOfService from './pages/policies/TermsOfService';
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
 import CookiePolicy from './pages/policies/CookiePolicy';
 import MarginMonitoringDashboard from './pages/admin/MarginMonitoringDashboard';
+import UserManual from './user-manual/UserManual';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -143,6 +144,17 @@ function App() {
               <ProtectedRoute>
                 <AdminLayout>
                   <IntegrationsManagement />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/user-manual/*"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <UserManual />
                 </AdminLayout>
               </ProtectedRoute>
             }

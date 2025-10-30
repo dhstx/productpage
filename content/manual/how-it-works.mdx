@@ -1,0 +1,24 @@
+---
+title: How Syntek works
+description: Inside the orchestration—Manus Hub, agent roles, and app connections.
+tags: [architecture, agents]
+updated: 2025-10-30
+---
+
+Syntek uses **Manus Hub** as an orchestration brain. It routes your intent to specialized **sub‑agents** (Conductor, Connector, Archivist, Scout, Builder, Ledger, Muse, Echo, Counselor, Commander). Each agent interfaces with the right app and returns a verifiable result.
+
+### Architecture at a glance
+```mermaid
+flowchart TD
+U[User intent] --> H[Manus Hub (router)]
+H --> A1[Conductor: tasks & scheduling]
+H --> A2[Connector: email & comms]
+H --> A3[Archivist: knowledge mgmt]
+H --> A4[Scout: research]
+H --> A5[Builder: devops & deploys]
+A5 --> GH[GitHub]
+A5 --> VE[Vercel]
+A2 --> GM[Gmail]
+A1 --> CA[Calendar]
+A3 --> NO[Notion]
+```
