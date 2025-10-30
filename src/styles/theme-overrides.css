@@ -285,20 +285,30 @@ html[data-theme="light"] .text-muted {
   animation: panelFadeIn 0.25s ease-out;
 }
 
-/* === Fix: make all DHSTX banners stick to the top of the viewport === */
-/* Use a fixed placement so banners follow user scroll while staying below the site header. */
+/* === Banners: keep them stuck under the header and opaque === */
+/* Target common banner selectors used in the codebase. If your banner uses a different classname,
+   add it to this list (e.g., .founding-banner). 
+   Use position: sticky so banners remain in the flow (no duplicate visual height) and will stick below the header. */
 .dhstx-banner,
 .banner,
 .page-banner,
 .founding-banner {
-  position: fixed !important;
-  top: calc(var(--site-header-height, 64px)); /* sit below the site header */
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(var(--site-header-height, 64px)); /* stick directly under the fixed header */
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 95;
-  transform: translateZ(0);
-  /* Opaque, theme-aware surface */
+  z-index: 110; /* higher than header (header:100) so banner is fully visible and not overtaken */
+
+  /* Normalize visual box model so banner doesn't look doubled in height */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.6rem 0;            /* consistent vertical rhythm */
+  min-height: 44px;            /* sensible minimum */
+  display: block;
+
+  /* Use the theme surface token; fallback to near-opaque if missing */
   background-color: var(--bg-elev, rgba(255,255,255,0.95)) !important;
   border-bottom: 1px solid var(--card-border) !important;
   box-shadow: 0 1px 0 rgba(0,0,0,0.04);
@@ -306,6 +316,18 @@ html[data-theme="light"] .text-muted {
   backdrop-filter: blur(4px);
   pointer-events: auto;
 }
+
+/* Small content wrapper inside the banner (if present) should not add extra height */
+.dhstx-banner > .banner-inner,
+.banner > .banner-inner,
+.page-banner > .banner-inner {
+  margin: 0;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Ensure banner text / items don't increase the banner height unexpectedly */
+.dhstx-banner * { line-height: 1.15; }
 
 /* Small nicety: prevent rapid shift for users with reduced motion disabled */
 @media (prefers-reduced-motion: no-preference) {
