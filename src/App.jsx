@@ -28,6 +28,7 @@ import Security from './pages/Security';
 import Integrations from './pages/Integrations';
 import StatusLive from './pages/StatusLive';
 import Changelog from './pages/Changelog';
+import UserManual from './pages/UserManual';
 import TermsOfService from './pages/policies/TermsOfService';
 import PrivacyPolicy from './pages/policies/PrivacyPolicy';
 import CookiePolicy from './pages/policies/CookiePolicy';
@@ -103,6 +104,16 @@ function App() {
               <ProtectedRoute>
                 <AdminLayout>
                   <Team />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-manual/*"
+            element={
+              <ProtectedRoute>
+                <AdminLayout>
+                  <UserManual />
                 </AdminLayout>
               </ProtectedRoute>
             }

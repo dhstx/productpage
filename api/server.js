@@ -34,6 +34,7 @@ import subscriptionRoutes from './subscriptions/routes.js';
 import subscriptionCurrentRoutes from './routes/subscription.js';
 import userRoutes from './users/routes.js';
 import statusRoutes from './status/routes.js';
+import helpRoutes from './help/routes.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -127,6 +128,7 @@ app.use('/api/subscription', subscriptionCurrentRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/status', statusRoutes);
+app.use('/api/help', helpRoutes);
 
 // 404 handler
 app.use((req, res) => {
