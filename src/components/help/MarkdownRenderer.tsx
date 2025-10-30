@@ -66,7 +66,7 @@ export function extractHeadingsFromContent(content: string): Heading[] {
   return result;
 }
 
-export default function MarkdownRenderer({ content }: { content: string }) {
+export default function MarkdownRenderer({ content, videoEnabled = true }: { content: string; videoEnabled?: boolean }) {
   const lines = content.split('\n');
   const elements: JSX.Element[] = [];
   let inCode = false;
@@ -181,13 +181,22 @@ export default function MarkdownRenderer({ content }: { content: string }) {
       const title = /title=\"([^\"]*)\"/.exec(attrs)?.[1];
       const summary = /summary=\"([^\"]*)\"/.exec(attrs)?.[1];
       const videoId = /videoId=\"([^\"]*)\"/.exec(attrs)?.[1];
-      // lazy import to avoid circular dep
-      const VideoBlock = require('./VideoBlock').default as React.ComponentType<{
-        title?: string;
-        summary?: string;
-        videoId?: string;
-      }>;
-      elements.push(<VideoBlock key={`vb-${elements.length}`} title={title} summary={summary} videoId={videoId} />);
+      if (!videoEnabled) {
+        elements.push(
+          <div key={`vb-${elements.length}`} className="my-4 rounded border border-neutral-200 p-3 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+            <div className="font-medium">{title ?? 'Video'}</div>
+            <div>Safe Mode is enabled — video disabled.</div>
+          </div>
+        );
+      } else {
+        // lazy import to avoid circular dep
+        const VideoBlock = require('./VideoBlock').default as React.ComponentType<{
+          title?: string;
+          summary?: string;
+          videoId?: string;
+        }>;
+        elements.push(<VideoBlock key={`vb-${elements.length}`} title={title} summary={summary} videoId={videoId} />);
+      }
       continue;
     }
 

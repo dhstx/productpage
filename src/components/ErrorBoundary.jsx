@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { logError } from '../lib/errorHandler';
 
 /**
@@ -133,18 +132,9 @@ class ErrorBoundary extends Component {
   }
 }
 
-ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
-  fallback: PropTypes.func,
-  title: PropTypes.string,
-  message: PropTypes.string,
-  name: PropTypes.string,
-  onReset: PropTypes.func,
-  showSupport: PropTypes.bool
-};
-
+// Default props
 ErrorBoundary.defaultProps = {
-  showSupport: true
+  showSupport: true,
 };
 
 export default ErrorBoundary;

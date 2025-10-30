@@ -384,6 +384,35 @@ pnpm run test:ui
 pnpm run test:coverage
 ```
 
+### User Manual - Safe Mode
+
+For CI and local debugging you can enable Safe Mode for the User Manual feature. Safe Mode avoids loading client-only widgets (search/video) and bypasses auth checks only for `/user-manual` to prevent redirect loops during tests.
+
+- Enable at build/runtime via env: `NEXT_PUBLIC_HELP_SAFE_MODE=true`
+- Or toggle at runtime (dev/tests) by setting localStorage: `localStorage.setItem('NEXT_PUBLIC_HELP_SAFE_MODE','true')`
+
+When Safe Mode is on:
+- SearchBox is replaced with a disabled input
+- `<VideoBlock />` is rendered as a lightweight placeholder
+- ProtectedRoute allows `/user-manual` even if not authenticated
+
+#### Targeted tests for User Manual
+
+Unit tests:
+
+```bash
+pnpm vitest run src/__tests__/user-manual.unit.test.tsx
+```
+
+Playwright E2E (installs browsers on first run):
+
+```bash
+pnpm exec playwright install --with-deps
+pnpm playwright test tests/visual/user-manual.spec.ts --project=webkit
+# To record the initial header snapshot:
+pnpm playwright test tests/visual/user-manual.spec.ts --project=webkit --update-snapshots
+```
+
 ### Coverage Requirements
 
 - **Minimum coverage**: 80%
