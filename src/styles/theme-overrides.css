@@ -439,3 +439,93 @@ main {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* ===== canonical site banner + login scroll-lock ===== */
+:root { --site-banner-height: 44px; }
+
+/* canonical sticky banner clone and site-banner */
+#site-banner-clone,
+.site-banner {
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(var(--site-header-height, 64px));
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 110;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  min-height: var(--site-banner-height);
+  background-color: var(--bg-elev, rgba(17,17,17,0.96)) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  pointer-events: auto;
+  line-height: 1.15;
+}
+
+/* legacy selectors recognized by runtime (minimal rules) */
+.dhstx-banner,
+.banner,
+.page-banner,
+.founding-banner,
+[data-banner],
+[role="banner"] { box-sizing: border-box; }
+
+/* hide explicit fixed-position banners (safety) */
+.dhstx-banner[style*="position:fixed"],
+.dhstx-banner[style*="position: fixed"],
+.banner[style*="position:fixed"],
+.banner[style*="position: fixed"],
+.page-banner[style*="position:fixed"],
+.page-banner[style*="position: fixed"],
+.founding-banner[style*="position:fixed"],
+.founding-banner[style*="position: fixed"],
+[data-banner][style*="position:fixed"],
+[data-banner][style*="position: fixed"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* hide duplicate sibling banners (keep first or clone only) */
+#site-banner-clone + #site-banner-clone,
+.site-banner + .site-banner,
+.dhstx-banner + .dhstx-banner,
+.banner + .banner,
+.page-banner + .page-banner {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  visibility: hidden !important;
+}
+
+/* normalize inner wrapper */
+.site-banner > .banner-inner,
+.dhstx-banner > .banner-inner,
+.banner > .banner-inner,
+.page-banner > .banner-inner,
+[data-banner] > .banner-inner {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* reserve space for header + banner */
+main {
+  padding-top: calc(var(--site-header-height, 64px) + var(--site-banner-height, 44px) + 1rem) !important;
+}
+
+/* login scroll-lock utility */
+html.dhstx-no-scroll,
+body.dhstx-no-scroll {
+  height: 100% !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  -webkit-overflow-scrolling: auto !important;
+}

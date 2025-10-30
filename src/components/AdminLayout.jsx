@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package, CreditCard, Settings, LogOut, Menu, Users, ChevronDown, Bot, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import "../styles/dashboard-theme.css";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from './ui/sheet';
 import ThemeToggle from './ThemeToggle';
@@ -34,6 +34,136 @@ export default function AdminLayout({ children }) {
     { name: 'Platforms', href: '/platforms', icon: Package },
     { name: 'Team', href: '/team', icon: Users },
   ];
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return; // SSR guard
+
+    const selectors = [
+      '.site-banner',
+      '.dhstx-banner',
+      '.banner',
+      '.page-banner',
+      '.founding-banner',
+      '[data-banner]',
+      '[role="banner"]'
+    ];
+
+    const collectNodes = () => {
+      const out = [];
+      selectors.forEach(s => {
+        try { document.querySelectorAll(s).forEach(n => out.push(n)); } catch (_) {}
+      });
+      return Array.from(new Set(out));
+    };
+
+    function makeCloneFrom(node) {
+      const clone = node.cloneNode(true);
+      clone.removeAttribute('id');
+      // Clear inline positioning to avoid fixed artifacts
+      clone.style.position = '';
+      clone.style.top = '';
+      clone.style.left = '';
+      clone.style.right = '';
+      clone.style.zIndex = '';
+      clone.classList.add('site-banner');
+      clone.id = 'site-banner-clone';
+      return clone;
+    }
+
+    function canonicalize() {
+      try {
+        const nodes = collectNodes();
+        if (!nodes.length) return;
+
+        const preferred = nodes.find(n => n.classList && n.classList.contains('site-banner'));
+        const source = preferred || nodes[0];
+        if (!source) return;
+
+        // create or update clone
+        let clone = document.getElementById('site-banner-clone');
+        if (!clone) {
+          clone = makeCloneFrom(source);
+          const header = document.querySelector('header') || document.querySelector('.site-header');
+          if (header && header.parentNode) {
+            header.parentNode.insertBefore(clone, header.nextSibling);
+          } else {
+            document.body.insertBefore(clone, document.body.firstChild);
+          }
+        } else {
+          clone.innerHTML = source.innerHTML;
+          clone.classList.add('site-banner');
+        }
+
+        // enforce sticky inline for reliability
+        clone.style.position = 'sticky';
+        clone.style.top = 'calc(var(--site-header-height, 64px))';
+        clone.style.left = '0';
+        clone.style.right = '0';
+        clone.style.zIndex = '110';
+
+        // compute height and set CSS var
+        const rect = clone.getBoundingClientRect();
+        const h = Math.max(Math.round(rect.height), 44);
+        document.documentElement.style.setProperty('--site-banner-height', `${h}px`);
+
+        // hide all original nodes (including source)
+        nodes.forEach(n => {
+          try {
+            if (n !== clone) {
+              n.style.display = 'none';
+              n.style.visibility = 'hidden';
+              n.style.height = '0';
+              n.style.margin = '0';
+              n.style.padding = '0';
+            } else {
+              n.style.display = 'none';
+              n.style.visibility = 'hidden';
+              n.style.height = '0';
+              n.style.margin = '0';
+              n.style.padding = '0';
+            }
+          } catch (_) {}
+        });
+
+        // also hide explicit fixed banners that match selectors
+        document.querySelectorAll('[style*="position:fixed"], [style*="position: fixed"]').forEach(n => {
+          try {
+            if (n !== clone && selectors.some(s => n.matches && n.matches(s))) {
+              n.style.display = 'none';
+            }
+          } catch (_) {}
+        });
+      } catch (err) {
+        // non-fatal
+        // console.warn('banner canonicalize error', err);
+      }
+    }
+
+    const runNow = () => { canonicalize(); setTimeout(canonicalize, 750); };
+    if (document.readyState === 'interactive' || document.readyState === 'complete') runNow();
+    else document.addEventListener('DOMContentLoaded', runNow);
+
+    const mo = new MutationObserver(() => canonicalize());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    const updateHeight = () => {
+      const clone = document.getElementById('site-banner-clone');
+      if (clone) {
+        const rect = clone.getBoundingClientRect();
+        const h = Math.max(Math.round(rect.height), 44);
+        document.documentElement.style.setProperty('--site-banner-height', `${h}px`);
+      }
+    };
+    window.addEventListener('resize', updateHeight);
+    window.addEventListener('orientationchange', updateHeight);
+
+    return () => {
+      mo.disconnect();
+      document.removeEventListener('DOMContentLoaded', runNow);
+      window.removeEventListener('resize', updateHeight);
+      window.removeEventListener('orientationchange', updateHeight);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen dashboard-surface">
