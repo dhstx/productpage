@@ -103,6 +103,40 @@ export default function Login() {
     } catch {}
   }, []);
 
+  // Prevent page scroll on small portrait devices while on Login only
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+    const mediaQuery = window.matchMedia('(orientation: portrait) and (max-width: 640px)');
+
+    const updateScrollLock = () => {
+      const shouldLock = mediaQuery.matches;
+      const rootEl = document.documentElement;
+      const bodyEl = document.body;
+      if (!rootEl || !bodyEl) return;
+      rootEl.classList.toggle('dhstx-no-scroll', shouldLock);
+      bodyEl.classList.toggle('dhstx-no-scroll', shouldLock);
+    };
+
+    // Initial apply and subscribe to changes
+    updateScrollLock();
+    if (mediaQuery.addEventListener) mediaQuery.addEventListener('change', updateScrollLock);
+    else if (mediaQuery.addListener) mediaQuery.addListener(updateScrollLock);
+    window.addEventListener('resize', updateScrollLock);
+    window.addEventListener('orientationchange', updateScrollLock);
+
+    return () => {
+      if (mediaQuery.removeEventListener) mediaQuery.removeEventListener('change', updateScrollLock);
+      else if (mediaQuery.removeListener) mediaQuery.removeListener(updateScrollLock);
+      window.removeEventListener('resize', updateScrollLock);
+      window.removeEventListener('orientationchange', updateScrollLock);
+      const rootEl = document.documentElement;
+      const bodyEl = document.body;
+      if (rootEl) rootEl.classList.remove('dhstx-no-scroll');
+      if (bodyEl) bodyEl.classList.remove('dhstx-no-scroll');
+    };
+  }, []);
+
   return (
     <div className="themed-screen" style={{ padding: 16 }}>
       {/* Login header: back arrow + DHStx logo (left), theme toggle only (right) */}

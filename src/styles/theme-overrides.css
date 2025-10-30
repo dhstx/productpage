@@ -439,3 +439,96 @@ main {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* === SITE BANNERS: canonical sticky banner rules ===
+   - Use .site-banner for all site banners (in-flow sticky beneath header)
+   - Avoid fixed-position variants; keep banners in document flow.
+   - Use tokens for header/banner heights so main spacing is correct.
+*/
+ :root {
+  --site-banner-height: 44px; /* tweak if your banner needs more */
+}
+
+/* canonical banner */
+.site-banner,
+.dhstx-banner, /* fallback */
+.banner,
+.page-banner,
+.founding-banner,
+[data-banner],
+[role="banner"] {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: calc(var(--site-header-height, 64px)) !important; /* below header */
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 110 !important; /* above header which should be <=100 */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  min-height: var(--site-banner-height) !important;
+  display: block;
+  background-color: var(--bg-elev, rgba(17,17,17,0.96)) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  pointer-events: auto;
+  line-height: 1.15;
+}
+
+/* Hide explicit fixed-position banners so only the in-flow sticky banner remains visible */
+.site-banner[style*="position:fixed"],
+.dhstx-banner[style*="position:fixed"],
+.banner[style*="position:fixed"],
+.page-banner[style*="position:fixed"],
+.founding-banner[style*="position:fixed"],
+[data-banner][style*="position:fixed"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide duplicate sibling banners (keep the first) */
+.site-banner + .site-banner,
+.dhstx-banner + .dhstx-banner,
+.banner + .banner,
+.page-banner + .page-banner,
+.founding-banner + .founding-banner,
+[data-banner] + [data-banner] {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  visibility: hidden !important;
+}
+
+/* normalize inner wrapper */
+.site-banner > .banner-inner,
+.dhstx-banner > .banner-inner,
+.banner > .banner-inner,
+.page-banner > .banner-inner,
+[data-banner] > .banner-inner {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure main content respects header + banner heights */
+main {
+  padding-top: calc(var(--site-header-height, 64px) + var(--site-banner-height) + 1rem) !important;
+}
+
+/* Safety: if ancestor has transform, sticky may not work; highlight ancestor in debug mode only (remove in prod) */
+.debug-sticky-ancestors * { outline: none !important; }
+
+/* Login-page: prevent scroll when class is toggled for mobile portrait */
+html.dhstx-no-scroll,
+body.dhstx-no-scroll {
+  overflow: hidden !important;
+  height: 100%;
+  touch-action: none;
+}
