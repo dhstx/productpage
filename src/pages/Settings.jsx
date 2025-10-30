@@ -18,7 +18,7 @@ import {
   CreditCard
 } from 'lucide-react';
 import BackArrow from '../components/BackArrow';
-import PageTitle from '@/components/PageTitle';
+import PageHeading from '../components/PageHeading';
 import BillingContent from '@/features/billing/BillingContent';
 import { useAuth } from '../contexts/AuthContext';
 import supabaseAuth from '../lib/auth/supabaseAuth';
@@ -60,7 +60,7 @@ export default function SettingsEnhanced() {
         
         {/* Header */}
         <div className="mb-8">
-          <PageTitle className="mb-2 uppercase tracking-tight">SETTINGS</PageTitle>
+          <PageHeading className="mb-2 uppercase tracking-tight">SETTINGS</PageHeading>
           <p style={{ color: 'var(--muted)' }}>Manage your account, billing, and security</p>
         </div>
 

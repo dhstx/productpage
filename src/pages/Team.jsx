@@ -2,7 +2,7 @@ import { useState } from 'react';
 import "../styles/dashboard-theme.css";
 import "@/styles/theme-overrides.css";
 import BackArrow from '../components/BackArrow';
-import PageTitle from '@/components/PageTitle';
+import PageHeading from '../components/PageHeading';
 import { Users, Mail, Shield, UserPlus } from 'lucide-react';
 import { TeamMembersResponsive } from "@/components/TeamMembersResponsive";
 
@@ -84,7 +84,7 @@ export default function Team() {
       <BackArrow />
       <div className="flex items-center justify-between">
         <div>
-          <PageTitle className="mb-2 uppercase tracking-tight">TEAM MANAGEMENT</PageTitle>
+          <PageHeading className="mb-2 uppercase tracking-tight">TEAM</PageHeading>
           <p className="text-muted-fg">
             Manage team members and their access to your platforms.
           </p>
@@ -110,34 +110,22 @@ export default function Team() {
       </div>
 
       {/* Team Stats */}
-      <div className="grid md:grid-cols-4 gap-4">
-        <div className="dashboard-card p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Total Members</span>
-          </div>
-          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>4</div>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Total Members</div>
+          <div className="text-base font-semibold" style={{ color: 'var(--text)' }}>4</div>
         </div>
-        <div className="dashboard-card p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Admins</span>
-          </div>
-          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>2</div>
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Admins</div>
+          <div className="text-base font-semibold" style={{ color: 'var(--text)' }}>2</div>
         </div>
-        <div className="dashboard-card p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Mail className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Pending Invites</span>
-          </div>
-          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>1</div>
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Pending Invites</div>
+          <div className="text-base font-semibold" style={{ color: 'var(--text)' }}>1</div>
         </div>
-        <div className="dashboard-card p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5" style={{ color: 'var(--accent)' }} />
-            <span className="text-sm uppercase tracking-tight" style={{ color: 'var(--muted)' }}>Available Seats</span>
-          </div>
-          <div className="text-2xl font-bold" style={{ color: 'var(--text)' }}>46</div>
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <div className="text-[10px] uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Available Seats</div>
+          <div className="text-base font-semibold" style={{ color: 'var(--text)' }}>46</div>
         </div>
       </div>
 
