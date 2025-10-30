@@ -190,12 +190,21 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
         );
       } else {
         // lazy import to avoid circular dep
-        const VideoBlock = require('./VideoBlock').default as React.ComponentType<{
-          title?: string;
-          summary?: string;
-          videoId?: string;
-        }>;
-        elements.push(<VideoBlock key={`vb-${elements.length}`} title={title} summary={summary} videoId={videoId} />);
+        try {
+          const VideoBlock = require('./VideoBlock').default as React.ComponentType<{
+            title?: string;
+            summary?: string;
+            videoId?: string;
+          }>;
+          elements.push(
+            <VideoBlock key={`vb-${elements.length}`} title={title} summary={summary} videoId={videoId} />
+          );
+        } catch (e) {
+          if (process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn('[user-manual:widget]', e);
+          }
+        }
       }
       continue;
     }
