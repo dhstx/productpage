@@ -1,14 +1,14 @@
 import React, { Suspense, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import LeftNav from '@/src/components/help/LeftNav';
-import RightTOC from '@/src/components/help/RightTOC';
-import Feedback from '@/src/components/help/Feedback';
-import LastUpdated from '@/src/components/help/LastUpdated';
-import RelatedArticles from '@/src/components/help/RelatedArticles';
-import MarkdownRenderer from '@/src/components/help/MarkdownRenderer';
-import { buildManualIndex } from '@/src/user-manual/searchIndex';
+import LeftNav from '@/components/help/LeftNav';
+import RightTOC from '@/components/help/RightTOC';
+import Feedback from '@/components/help/Feedback';
+import LastUpdated from '@/components/help/LastUpdated';
+import RelatedArticles from '@/components/help/RelatedArticles';
+import MarkdownRenderer from '@/components/help/MarkdownRenderer';
+import { buildManualIndex } from '@/user-manual/searchIndex';
 
-const SearchBox = React.lazy(() => import('@/src/components/help/SearchBox'));
+const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
 export default function UserManual() {
   const index = useMemo(() => buildManualIndex(), []);

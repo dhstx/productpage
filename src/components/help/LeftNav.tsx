@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { buildManualIndex } from '@/src/user-manual/searchIndex';
+import { buildManualIndex } from '@/user-manual/searchIndex';
 
 export default function LeftNav() {
   const index = useMemo(() => buildManualIndex(), []);

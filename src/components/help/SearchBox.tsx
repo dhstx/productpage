@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { buildManualIndex, searchManual, SYNONYMS } from '@/src/user-manual/searchIndex';
+import { buildManualIndex, searchManual, SYNONYMS } from '@/user-manual/searchIndex';
 import { Link } from 'react-router-dom';
 
 export default function SearchBox() {
