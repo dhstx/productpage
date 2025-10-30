@@ -299,17 +299,18 @@ html[data-theme="light"] .text-muted {
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 110; /* higher than header (header:100) so banner is fully visible and not overtaken */
+  z-index: 100 !important; /* above header:90 */
 
   /* Normalize visual box model so banner doesn't look doubled in height */
   box-sizing: border-box;
   margin: 0;
-  padding: 0.6rem 0;            /* consistent vertical rhythm */
-  min-height: 44px;            /* sensible minimum */
+  padding: 0.45rem 0.75rem;   /* compact and consistent */
+  min-height: var(--banner-height, 44px);
   display: block;
+  line-height: 1.15; /* avoid tall line-height */
 
   /* Use the theme surface token; fallback to near-opaque if missing */
-  background-color: var(--bg-elev, rgba(255,255,255,0.95)) !important;
+  background-color: var(--bg-elev, rgba(17,17,17,0.96)) !important;
   border-bottom: 1px solid var(--card-border) !important;
   box-shadow: 0 1px 0 rgba(0,0,0,0.04);
   -webkit-backdrop-filter: blur(4px);
@@ -320,14 +321,37 @@ html[data-theme="light"] .text-muted {
 /* Small content wrapper inside the banner (if present) should not add extra height */
 .dhstx-banner > .banner-inner,
 .banner > .banner-inner,
-.page-banner > .banner-inner {
+.page-banner > .banner-inner,
+.founding-banner > .banner-inner {
   margin: 0;
-  padding: 0 1rem;
+  padding: 0;
   box-sizing: border-box;
+}
+
+/* Hide duplicated sibling banners to prevent doubled-height visuals */
+.dhstx-banner + .dhstx-banner,
+.banner + .banner,
+.page-banner + .page-banner,
+.founding-banner + .founding-banner,
+.dhstx-banner ~ .dhstx-banner,
+.banner ~ .banner {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Ensure banner text / items don't increase the banner height unexpectedly */
 .dhstx-banner * { line-height: 1.15; }
+
+/* Fallback: if a page places a banner as a direct child of body */
+body > .dhstx-banner,
+body > .banner,
+body > .page-banner {
+  position: relative !important;
+  z-index: 100 !important;
+}
 
 /* Small nicety: prevent rapid shift for users with reduced motion disabled */
 @media (prefers-reduced-motion: no-preference) {
@@ -344,8 +368,8 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100; /* above normal content, below modals/overlays */
-  height: var(--site-header-height, 64px);
+  z-index: 90 !important; /* intentionally lower than banner (banner:100) */
+  height: var(--site-header-height, 64px) !important;
   background: var(--bg) !important; /* respect light/dark theming */
   border-bottom: 1px solid var(--card-border);
   -webkit-backdrop-filter: blur(6px);
@@ -355,8 +379,11 @@ header {
 }
 
 /* Ensure page content is not hidden under the fixed header */
+/* Provide banner height token for consistent offsets */
+:root { --banner-height: 44px; }
+
 main {
-  padding-top: calc(var(--site-header-height, 64px) + 1rem) !important;
+  padding-top: calc(var(--site-header-height, 64px) + var(--banner-height, 44px) + 1rem) !important;
 }
 
 /* Safe-area support on mobile devices with notches */
@@ -366,7 +393,7 @@ main {
     padding-top: env(safe-area-inset-top);
   }
   main {
-    padding-top: calc(var(--site-header-height, 64px) + env(safe-area-inset-top) + 1rem) !important;
+    padding-top: calc(var(--site-header-height, 64px) + env(safe-area-inset-top) + var(--banner-height, 44px) + 1rem) !important;
   }
 }
 
@@ -384,8 +411,31 @@ main {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 100 !important;
   background: var(--bg) !important;
   border-bottom: 1px solid var(--card-border);
 }
 
+/* === Login / sign-in page banner opacity fix (scoped) === */
+.themed-screen .dhstx-banner,
+.themed-screen .banner,
+.themed-screen .page-banner,
+.themed-screen .founding-banner {
+  background-color: var(--bg-elev, rgba(17,17,17,0.98)) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04) !important;
+}
+
+.themed-screen .dhstx-banner > .banner-inner,
+.themed-screen .banner > .banner-inner,
+.themed-screen .page-banner > .banner-inner,
+.themed-screen .founding-banner > .banner-inner {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
