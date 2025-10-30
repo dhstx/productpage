@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import './App.css';
 import './styles/team-members.css';
 
@@ -43,6 +44,100 @@ import ScrollToTop from './components/ScrollToTop';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
+  // Canonicalize site-wide banner and keep sticky under header
+  useEffect(() => {
+    if (typeof window === 'undefined') return; // SSR guard
+
+    const selectors = [
+      '.site-banner',
+      '.dhstx-banner',
+      '.banner',
+      '.page-banner',
+      '.founding-banner',
+      '[data-banner]',
+      '[role="banner"]'
+    ];
+
+    function findBanners() {
+      const found = [];
+      selectors.forEach(s => {
+        try { document.querySelectorAll(s).forEach(n => found.push(n)); } catch (_) {}
+      });
+      return Array.from(new Set(found));
+    }
+
+    function canonicalize() {
+      const nodes = findBanners();
+      if (!nodes.length) return;
+
+      // Prefer an already-labeled canonical element
+      const preferred = nodes.find(n => n.classList && n.classList.contains('site-banner'));
+      const canonical = preferred || nodes[0];
+
+      try {
+        // Move canonical right after top-level header to ensure sticky works
+        const header = document.querySelector('header') || document.querySelector('.site-header') || null;
+        if (header && canonical) {
+          if (header.nextSibling !== canonical) header.parentNode.insertBefore(canonical, header.nextSibling);
+        } else if (canonical && document.body.firstChild !== canonical) {
+          // fallback: top of body
+          document.body.insertBefore(canonical, document.body.firstChild);
+        }
+
+        // Ensure canonical class & enforce sticky in-flow inline (defensive: overrides bad inline fixed)
+        canonical.classList.add('site-banner');
+
+        // Force sticky positioning inline so it takes effect even if stylesheets lag
+        canonical.style.position = 'sticky';
+        canonical.style.top = 'calc(var(--site-header-height, 64px))';
+        canonical.style.left = '0';
+        canonical.style.right = '0';
+        canonical.style.zIndex = '110';
+
+        // compute final height and set variable
+        const rect = canonical.getBoundingClientRect();
+        const h = Math.max(Math.round(rect.height), 44);
+        document.documentElement.style.setProperty('--site-banner-height', `${h}px`);
+
+        // hide other banner nodes (non-destructive)
+        nodes.forEach(n => {
+          if (n !== canonical) {
+            n.style.display = 'none';
+            n.style.visibility = 'hidden';
+            n.style.height = '0';
+            n.style.margin = '0';
+            n.style.padding = '0';
+          }
+        });
+
+        // also hide any explicit fixed-position matched banners as backup
+        const fixed = Array.from(document.querySelectorAll('[style*="position:fixed"], [style*="position: fixed"]'));
+        fixed.forEach(n => {
+          try {
+            if (n !== canonical && selectors.some(s => n.matches && n.matches(s))) {
+              n.style.display = 'none';
+            }
+          } catch (_) {}
+        });
+      } catch (err) {
+        /* swallow: non-fatal */
+      }
+    }
+
+    // run after interactive/load, and again shortly after to catch client-rendered banners
+    const runNow = () => { canonicalize(); setTimeout(canonicalize, 600); };
+    if (document.readyState === 'interactive' || document.readyState === 'complete') runNow();
+    else document.addEventListener('DOMContentLoaded', runNow);
+
+    // Observe body for SPA navigation / dynamic injection of banners
+    const mo = new MutationObserver(() => canonicalize());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mo.disconnect();
+      document.removeEventListener('DOMContentLoaded', runNow);
+    };
+  }, []);
   return (
     <Router>
       <AuthProvider>

@@ -439,3 +439,92 @@ main {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* =========================
+   Canonical site banner + scroll-lock
+   ========================= */
+
+/* token for banner height (computed by runtime) */
+:root { --site-banner-height: 44px; }
+
+/* Canonical site-banner: in-flow sticky beneath header */
+.site-banner {
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(var(--site-header-height, 64px));
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 110;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  min-height: var(--site-banner-height);
+  background-color: var(--bg-elev, rgba(17,17,17,0.96)) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  pointer-events: auto;
+  line-height: 1.15;
+}
+
+/* Minimal fallback selectors so legacy banners are recognized by runtime */
+.dhstx-banner, .banner, .page-banner, .founding-banner, [data-banner], [role="banner"] {
+  box-sizing: border-box;
+}
+
+/* Hide any banner elements that are explicitly fixed (avoid fixed duplicates) */
+.dhstx-banner[style*="position:fixed"], .dhstx-banner[style*="position: fixed"],
+.banner[style*="position:fixed"], .banner[style*="position: fixed"],
+.page-banner[style*="position:fixed"], .page-banner[style*="position: fixed"],
+.founding-banner[style*="position:fixed"], .founding-banner[style*="position: fixed"],
+[data-banner][style*="position:fixed"], [data-banner][style*="position: fixed"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide duplicate sibling banners (keep only first instance) */
+.site-banner + .site-banner,
+.dhstx-banner + .dhstx-banner,
+.banner + .banner,
+.page-banner + .page-banner,
+.founding-banner + .founding-banner,
+[data-banner] + [data-banner] {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Normalize inner wrapper if present */
+.site-banner > .banner-inner,
+.dhstx-banner > .banner-inner,
+.banner > .banner-inner,
+.page-banner > .banner-inner,
+[data-banner] > .banner-inner {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main must leave room for header + banner (runtime sets --site-banner-height) */
+main {
+  padding-top: calc(var(--site-header-height, 64px) + var(--site-banner-height, 44px) + 1rem) !important;
+}
+
+/* Scroll-lock class (used only by Login.jsx hook) */
+html.dhstx-no-scroll,
+body.dhstx-no-scroll {
+  height: 100% !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  -webkit-overflow-scrolling: auto !important;
+}
+
+/* Ensure variable is defined even if earlier block fails to parse */
+:root { --site-banner-height: 44px; }
