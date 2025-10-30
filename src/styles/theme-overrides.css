@@ -285,3 +285,21 @@ html[data-theme="light"] .text-muted {
   animation: panelFadeIn 0.25s ease-out;
 }
 
+/* === Fix: make all DHSTX banners stick to the top of the viewport === */
+/* Use a fixed placement so banners follow user scroll while staying below the site header. */
+.dhstx-banner {
+  position: fixed;
+  top: var(--site-header-height, 64px); /* leave space for the sticky header */
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 75;
+  transform: translateZ(0);
+  /* keep existing visuals; this should only change position. */
+}
+
+/* Small nicety: prevent rapid shift for users with reduced motion disabled */
+@media (prefers-reduced-motion: no-preference) {
+  .dhstx-banner { transition: transform 160ms ease; }
+}
+
