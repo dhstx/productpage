@@ -7,6 +7,14 @@
   --accent-gold: #d4941f;
   --card-border: rgba(0,0,0,0.12);
   --accent-muted: rgba(212,148,31,0.12);
+  /* Safety aliases to avoid black-screen failures */
+  --fg: var(--text);
+}
+
+/* Safety: also expose .dark overrides in addition to [data-theme="dark"] */
+.dark {
+  --bg: #0a0a0a;
+  --fg: #f5f5f5;
 }
 
 [data-theme="dark"] {
@@ -17,6 +25,7 @@
   --accent-gold: #e5aa5d;
   --card-border: rgba(255,255,255,0.08);
   --accent-muted: rgba(229,170,93,0.12);
+  --fg: var(--text);
 }
 
 /* Light mode specific overrides */
@@ -28,6 +37,7 @@
   --accent-gold: #d4941f;
   --card-border: rgba(0,0,0,0.12);
   --accent-muted: rgba(212,148,31,0.12);
+  --fg: var(--text);
 }
 
 /* loader & reduced-motion */
