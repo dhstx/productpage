@@ -287,19 +287,83 @@ html[data-theme="light"] .text-muted {
 
 /* === Fix: make all DHSTX banners stick to the top of the viewport === */
 /* Use a fixed placement so banners follow user scroll while staying below the site header. */
-.dhstx-banner {
-  position: fixed;
-  top: var(--site-header-height, 64px); /* leave space for the sticky header */
+.dhstx-banner,
+.banner,
+.page-banner,
+.founding-banner {
+  position: fixed !important;
+  top: calc(var(--site-header-height, 64px)); /* sit below the site header */
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 75;
+  z-index: 95;
   transform: translateZ(0);
-  /* keep existing visuals; this should only change position. */
+  /* Opaque, theme-aware surface */
+  background-color: var(--bg-elev, rgba(255,255,255,0.95)) !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
 }
 
 /* Small nicety: prevent rapid shift for users with reduced motion disabled */
 @media (prefers-reduced-motion: no-preference) {
-  .dhstx-banner { transition: transform 160ms ease; }
+  .dhstx-banner,
+  .banner,
+  .page-banner,
+  .founding-banner { transition: transform 160ms ease; }
+}
+
+/* === Global header: make it fixed and follow the user === */
+/* Make primary <header> fixed site-wide so it follows on scroll */
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100; /* above normal content, below modals/overlays */
+  height: var(--site-header-height, 64px);
+  background: var(--bg) !important; /* respect light/dark theming */
+  border-bottom: 1px solid var(--card-border);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  /* keep header visuals stable when switching pages */
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* Ensure page content is not hidden under the fixed header */
+main {
+  padding-top: calc(var(--site-header-height, 64px) + 1rem) !important;
+}
+
+/* Safe-area support on mobile devices with notches */
+@media (max-width: 768px) {
+  header {
+    height: calc(var(--site-header-height, 64px) + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+  }
+  main {
+    padding-top: calc(var(--site-header-height, 64px) + env(safe-area-inset-top) + 1rem) !important;
+  }
+}
+
+/* Respect reduced motion preference while keeping a small polish transition */
+@media (prefers-reduced-motion: no-preference) {
+  header { transition: background 140ms ease, transform 140ms ease; }
+}
+
+/* === Dashboard/admin header fallback === */
+/* Some admin/dashboard components may use custom header containers — ensure they are fixed too */
+.admin-header,
+.dashboard-header,
+.site-header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg) !important;
+  border-bottom: 1px solid var(--card-border);
 }
 
