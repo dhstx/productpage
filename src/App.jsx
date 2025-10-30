@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import './App.css';
 import './styles/team-members.css';
 
@@ -43,6 +44,152 @@ import ScrollToTop from './components/ScrollToTop';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
+  // --- start snippet ---
+  useEffect(() => {
+    if (typeof window === 'undefined') return; // SSR guard
+
+    const selectors = [
+      '.site-banner',
+      '.dhstx-banner',
+      '.banner',
+      '.page-banner',
+      '.founding-banner',
+      '[data-banner]',
+      '[role="banner"]'
+    ];
+
+    function collectNodes() {
+      const out = [];
+      selectors.forEach(s => {
+        try { document.querySelectorAll(s).forEach(n => out.push(n)); } catch (e) {}
+      });
+      return Array.from(new Set(out));
+    }
+
+    function makeCloneFrom(node) {
+      // deep clone, but strip problematic attributes and inline fixed position
+      const clone = node.cloneNode(true);
+      // Remove ids that could collide
+      clone.removeAttribute('id');
+      // Clean inline style that may force fixed position
+      clone.style.position = '';
+      clone.style.top = '';
+      clone.style.left = '';
+      clone.style.right = '';
+      clone.style.zIndex = '';
+      // Ensure canonical class
+      clone.classList.add('site-banner');
+      clone.id = 'site-banner-clone';
+      return clone;
+    }
+
+    function canonicalize() {
+      try {
+        const nodes = collectNodes();
+        if (!nodes.length) return;
+
+        // Prefer an already-labeled site-banner
+        const preferred = nodes.find(n => n.classList && n.classList.contains('site-banner'));
+        const source = preferred || nodes[0];
+        if (!source) return;
+
+        // If a clone already exists, update it; otherwise create it
+        let clone = document.getElementById('site-banner-clone');
+        if (!clone) {
+          clone = makeCloneFrom(source);
+          // Insert clone after top-level header
+          const header = document.querySelector('header') || document.querySelector('.site-header') || document.body.firstChild;
+          if (header && header.parentNode) {
+            if (header.nextSibling) header.parentNode.insertBefore(clone, header.nextSibling);
+            else header.parentNode.appendChild(clone);
+          } else {
+            document.body.insertBefore(clone, document.body.firstChild);
+          }
+        } else {
+          // Update clone's content to reflect source
+          clone.innerHTML = source.innerHTML;
+          // ensure classes are present
+          clone.classList.add('site-banner');
+        }
+
+        // Force sticky inline (defensive)
+        clone.style.position = 'sticky';
+        clone.style.top = 'calc(var(--site-header-height, 64px))';
+        clone.style.left = '0';
+        clone.style.right = '0';
+        clone.style.zIndex = '110';
+
+        // Compute height and set CSS var for main spacing
+        const rect = clone.getBoundingClientRect();
+        const h = Math.max(Math.round(rect.height), 44);
+        document.documentElement.style.setProperty('--site-banner-height', `${h}px`);
+
+        // Hide all original banner nodes (non-destructive)
+        nodes.forEach(n => {
+          if (n !== source) {
+            try {
+              n.style.display = 'none';
+              n.style.visibility = 'hidden';
+              n.style.height = '0';
+              n.style.margin = '0';
+              n.style.padding = '0';
+            } catch (e) {}
+          } else {
+            // hide the original source as well; clone is now authoritative
+            try {
+              n.style.display = 'none';
+              n.style.visibility = 'hidden';
+              n.style.height = '0';
+              n.style.margin = '0';
+              n.style.padding = '0';
+            } catch (e) {}
+          }
+        });
+
+        // Remove other fixed banners that match selectors (safety)
+        document.querySelectorAll('[style*="position:fixed"], [style*="position: fixed"]').forEach(n => {
+          try {
+            if (n.id !== 'site-banner-clone' && selectors.some(s => n.matches && n.matches(s))) {
+              n.style.display = 'none';
+            }
+          } catch (e) {}
+        });
+
+      } catch (err) {
+        // non-fatal
+        console.warn('Banner canonicalization failed', err);
+      }
+    }
+
+    // run initial canonicalization after DOM ready and after a small delay (for client-rendered banners)
+    const runNow = () => { canonicalize(); setTimeout(canonicalize, 750); };
+    if (document.readyState === 'interactive' || document.readyState === 'complete') runNow();
+    else document.addEventListener('DOMContentLoaded', runNow);
+
+    // Observe mutations so SPA navigation / lazy injection is handled
+    const mo = new MutationObserver(() => canonicalize());
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    // Recompute clone height on window resize/zoom
+    const onResize = () => {
+      const clone = document.getElementById('site-banner-clone');
+      if (clone) {
+        const rect = clone.getBoundingClientRect();
+        const h = Math.max(Math.round(rect.height), 44);
+        document.documentElement.style.setProperty('--site-banner-height', `${h}px`);
+      }
+    };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+
+    return () => {
+      mo.disconnect();
+      document.removeEventListener('DOMContentLoaded', runNow);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
+  }, []);
+  // --- end snippet ---
   return (
     <Router>
       <AuthProvider>
