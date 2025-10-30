@@ -4,7 +4,7 @@ import "../styles/dashboard-theme.css";
 import AgentsGrid from '@/features/agents/AgentsGrid';
 import AgentBioPanel from '@/features/agents/AgentBioPanel';
 import PTHealthBar from '../components/PTHealthBar';
-import PageTitle from '../components/PageTitle';
+import PageHeading from '../components/PageHeading';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function AgentManagement() {
@@ -48,7 +48,7 @@ export default function AgentManagement() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-6">
-            <PageTitle className="mb-2 uppercase tracking-tight">AGENT DASHBOARD</PageTitle>
+            <PageHeading className="mb-2 uppercase tracking-tight">AGENT DASHBOARD</PageHeading>
             <p style={{ color: 'var(--muted)' }}>
               Understand and customize your agents to sharpen the efficacy of your tasks
             </p>

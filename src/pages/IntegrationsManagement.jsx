@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import BackArrow from '../components/BackArrow';
-import PageTitle from '@/components/PageTitle';
+import PageHeading from '../components/PageHeading';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../lib/auth';
 import { 
@@ -176,46 +176,25 @@ export default function IntegrationsManagement() {
     <div className="space-y-8">
       <BackArrow />
       <div>
-        <PageTitle className="mb-2 uppercase tracking-tight">INTEGRATIONS</PageTitle>
+        <PageHeading className="mb-2 uppercase tracking-tight">INTEGRATIONS</PageHeading>
         <p className="text-[#B3B3B3]">
           Connect your favorite tools and automate your workflow
         </p>
       </div>
 
-      {/* Stats - Reduced height by half */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="panel-system p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
-                Connected
-              </p>
-              <p className="text-2xl font-bold text-[#FFC96C]">{connectedCount} / 20</p>
-            </div>
-            <Check className="w-6 h-6 text-[#10B981]" />
-          </div>
+      {/* Stats - 3-wide on mobile, icons removed */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[color:var(--muted)]">Connected</p>
+          <p className="text-base md:text-lg font-semibold text-[color:var(--text)]">{connectedCount} / 20</p>
         </div>
-        <div className="panel-system p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
-                Available
-              </p>
-              <p className="text-2xl font-bold text-[#F2F2F2]">{integrations.length - connectedCount}</p>
-            </div>
-            <Zap className="w-6 h-6 text-[#FFC96C]" />
-          </div>
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[color:var(--muted)]">Available</p>
+          <p className="text-base md:text-lg font-semibold text-[color:var(--text)]">{integrations.length - connectedCount}</p>
         </div>
-        <div className="panel-system p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[#B3B3B3] text-xs uppercase tracking-tight mb-1">
-                Total
-              </p>
-              <p className="text-2xl font-bold text-[#F2F2F2]">{integrations.length}</p>
-            </div>
-            <Database className="w-6 h-6 text-[#B3B3B3]" />
-          </div>
+        <div className="rounded-xl border bg-[color:var(--panel)] p-3 text-center">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-wider text-[color:var(--muted)]">Total</p>
+          <p className="text-base md:text-lg font-semibold text-[color:var(--text)]">{integrations.length}</p>
         </div>
       </div>
 
