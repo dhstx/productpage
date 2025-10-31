@@ -41,7 +41,7 @@ export default function ArrowSlider() {
           style={{ transform: `translateX(-${index * 100}%)`, width: `${slides.length * 100}%` }}
         >
           {slides.map((v, i) => (
-            <figure key={i} className="w-full shrink-0 px-4 py-4">
+            <figure id={`video-${i}`} key={i} className="w-full shrink-0 px-4 py-4">
               <div className="mb-3">
                 <YouTube videoId={v.videoId} title={v.title} poster={v.poster} />
               </div>

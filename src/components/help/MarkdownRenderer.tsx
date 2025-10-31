@@ -100,6 +100,14 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
     listBuffer = [];
   }
 
+  const renderSeparator = (key: string) => (
+    <div key={key} className="um-heading-separator" aria-hidden="true">
+      <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
+      </svg>
+    </div>
+  );
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     // code fence
@@ -156,6 +164,10 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
     if (line.startsWith('## ')) {
       flushList();
       const text = line.slice(3).trim();
+      const lowerText = text.toLowerCase();
+      if (lowerText === 'security & auditing') {
+        elements.push(renderSeparator(`sep-${elements.length}`));
+      }
       elements.push(
         <h2 key={`h2-${elements.length}`} id={slugify(text)} className="mb-3 mt-8 scroll-mt-24 text-xl font-semibold">
           {parseInline(text)}
