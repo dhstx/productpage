@@ -35,7 +35,7 @@ export default function SwipeCarousel() {
   const list = React.useMemo(() => loadList(walkthroughsSource), []);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const lastIndexRef = React.useRef(0);
-  const [index, setIndex] = React.useState(0);
+  const [, setIndex] = React.useState(0);
   const [isPaused, setIsPaused] = React.useState(false);
   const prefersReducedMotionRef = React.useRef(false);
   const autoTimerRef = React.useRef<number>();
