@@ -1,0 +1,20 @@
+[
+  {
+    "videoId": "wrfM7Yf0Q1c",
+    "title": "Workflows: from prompt to action",
+    "summary": "See Manus Hub route natural language through agents (Conductor/Builder/Connector) to apps like GitHub, Vercel, Notion.",
+    "duration": "07:12"
+  },
+  {
+    "videoId": "sQ3Gk9HdTuV",
+    "title": "Security walk-through",
+    "summary": "Set scopes, audit logs, and approval gates for sensitive flows.",
+    "duration": "05:46"
+  },
+  {
+    "videoId": "L9P2cNaXbJs",
+    "title": "Quickstart",
+    "summary": "Connect Notion/GitHub/Vercel, ship a starter site, and post the link to your knowledge base.",
+    "duration": "04:58"
+  }
+]

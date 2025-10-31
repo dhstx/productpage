@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LeftNav from '@/components/help/LeftNav';
 import RightTOC from '@/components/help/RightTOC';
 import Feedback from '@/components/help/Feedback';
@@ -9,6 +9,7 @@ import MarkdownRenderer from '@/components/help/MarkdownRenderer';
 import { buildManualIndex } from '@/user-manual/searchIndex';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
+import WalkthroughsView from '@/user-manual/WalkthroughsView';
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
@@ -44,8 +45,10 @@ export default function UserManual() {
   const index = useMemo(() => buildManualIndex(), []);
   const location = useLocation();
   const path = location.pathname.replace(/\/$/, '') || '/user-manual';
+  const isWalkthroughs = path === '/user-manual/walkthroughs';
   // Resolve article with a never-throw fallback
   const doc = (() => {
+    if (isWalkthroughs) return null;
     try {
       const resolved = index.byPath[path] ?? index.byPath['/user-manual'];
       if (resolved && typeof resolved.content === 'string') return resolved;
@@ -62,6 +65,18 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
+  const subNavItems = [
+    {
+      label: 'Overview',
+      href: '/user-manual',
+      active: !isWalkthroughs,
+    },
+    {
+      label: 'Walkthroughs',
+      href: '/user-manual/walkthroughs',
+      active: isWalkthroughs,
+    },
+  ];
 
   if (isDevEnvironment()) {
     // eslint-disable-next-line no-console
@@ -84,6 +99,25 @@ export default function UserManual() {
               <p className="text-base text-neutral-600 dark:text-neutral-300">
                 Learn Syntek Automations—how it works, why it matters, and how to win with it.
               </p>
+              <nav
+                aria-label="User manual sub navigation"
+                className="mt-4 flex flex-wrap gap-2 border-b border-neutral-200 pb-2 text-sm font-medium dark:border-neutral-800"
+              >
+                {subNavItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    aria-current={item.active ? 'page' : undefined}
+                    className={`rounded px-3 py-1.5 transition-colors ${
+                      item.active
+                        ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
+                        : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
             </header>
 
             {/* Inline Search (hydrated client-side only) */}
@@ -107,19 +141,25 @@ export default function UserManual() {
                 <LeftNav />
               </aside>
               <article id="help-article">
-                <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
-                <div className="mt-6">
-                  <LastUpdated updated={doc.updated} />
-                </div>
+                {isWalkthroughs ? (
+                  <WalkthroughsView />
+                ) : (
+                  <>
+                    <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                    <div className="mt-6">
+                      <LastUpdated updated={doc.updated} />
+                    </div>
+                  </>
+                )}
               </article>
               <aside aria-label="On this page" className="h-fit lg:sticky lg:top-6">
-                <RightTOC headings={doc.headings} />
-                <RelatedArticles current={doc} index={index} />
+                <RightTOC headings={doc?.headings ?? []} />
+                {doc ? <RelatedArticles current={doc} index={index} /> : null}
               </aside>
             </div>
 
             <footer className="mt-12">
-              <Feedback articlePath={doc.path} />
+              <Feedback articlePath={doc?.path ?? path} />
             </footer>
           </ErrorBoundary>
         </div>
