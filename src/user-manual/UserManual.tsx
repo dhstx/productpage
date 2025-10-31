@@ -1,25 +1,45 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LeftNav from '@/components/help/LeftNav';
 import RightTOC from '@/components/help/RightTOC';
 import Feedback from '@/components/help/Feedback';
 import LastUpdated from '@/components/help/LastUpdated';
 import RelatedArticles from '@/components/help/RelatedArticles';
-import MarkdownRenderer from '@/components/help/MarkdownRenderer';
 import { buildManualIndex } from '@/user-manual/searchIndex';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
+import { getArticle, type Article } from '@/user-manual/_article';
+
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
+const WalkthroughsCarousel = React.lazy(() => import('@/user-manual/walkthroughs/WalkthroughsCarousel'));
+const WalkthroughsGrid = React.lazy(() => import('@/user-manual/walkthroughs/WalkthroughsGrid'));
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
+      const stackLines = typeof error?.stack === 'string'
+        ? error.stack.split('\n').map((line) => line.trim()).filter(Boolean)
+        : [];
+      const originLine = (() => {
+        for (const line of stackLines) {
+          const cleaned = line.replace(/^at\s+/, '').replace(/^\(/, '').replace(/\)$/, '');
+          if (/(\/src\/|\.\.[/\\])/.test(cleaned) && /:\d+:\d+/.test(cleaned)) {
+            return cleaned;
+          }
+          if (/(?:\.tsx|\.ts|\.jsx|\.js):\d+:\d+/.test(cleaned)) {
+            return cleaned;
+          }
+        }
+        return stackLines[0] ?? 'unknown';
+      })();
+
       // eslint-disable-next-line no-console
       console.error('[user-manual:error]', {
         name: (error && (error as any).name) || 'Error',
         message: (error && (error as any).message) || '',
         stack: (error && (error as any).stack) || '',
+        origin: originLine,
       });
     }
   }, [error]);
@@ -40,9 +60,34 @@ function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }
   );
 }
 
+function ArticleSkeleton() {
+  return (
+    <div className="space-y-4">
+      <div className="h-8 w-40 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+      <div className="h-5 w-full animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+      <div className="h-5 w-5/6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+      <div className="h-5 w-4/6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
+    </div>
+  );
+}
+
 export default function UserManual() {
   const index = useMemo(() => buildManualIndex(), []);
   const location = useLocation();
+  const fallbackArticle = useMemo<Article>(
+    () => ({
+      title: 'User Manual',
+      body: (
+        <div>
+          <h1 className="text-2xl font-semibold">User Manual</h1>
+          <p className="mt-2 text-sm opacity-80">
+            Baseline guide loaded in fallback mode. Navigate sections in the left nav, or scroll to Walkthroughs below.
+          </p>
+        </div>
+      ),
+    }),
+    []
+  );
   const path = location.pathname.replace(/\/$/, '') || '/user-manual';
   // Resolve article with a never-throw fallback
   const doc = (() => {
@@ -62,10 +107,50 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
+  const [article, setArticle] = useState<Article | null>(null);
+  const [articleLoadError, setArticleLoadError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    setArticle(null);
+    (async () => {
+      try {
+        const result = await getArticle(doc.slug);
+        if (!active) return;
+        setArticle(result);
+        setArticleLoadError(null);
+      } catch (err) {
+        if (!active) return;
+        const normalizedError = err instanceof Error ? err : new Error(String(err));
+        setArticleLoadError(normalizedError);
+        let fallback = fallbackArticle;
+        try {
+          fallback = await getArticle();
+        } catch {
+          fallback = fallbackArticle;
+        }
+        if (!active) return;
+        setArticle(fallback);
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.error('[user-manual:article-load]', normalizedError);
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [doc.slug, fallbackArticle]);
 
   if (isDevEnvironment()) {
     // eslint-disable-next-line no-console
-    console.warn('[help] render', { path, docFound: !!doc, safeMode });
+    console.warn('[help] render', {
+      path,
+      docFound: !!doc,
+      safeMode,
+      articleReady: !!article,
+      articleError: articleLoadError ? articleLoadError.name : null,
+    });
   }
 
   return (
@@ -107,9 +192,17 @@ export default function UserManual() {
                 <LeftNav />
               </aside>
               <article id="help-article">
-                <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                <section id="content">{article?.body ?? <ArticleSkeleton />}</section>
                 <div className="mt-6">
                   <LastUpdated updated={doc.updated} />
+                </div>
+                <div className="mt-12 space-y-12">
+                  <Suspense fallback={<div className="h-32 w-full animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-900" />}>
+                    <WalkthroughsCarousel />
+                  </Suspense>
+                  <Suspense fallback={null}>
+                    <WalkthroughsGrid />
+                  </Suspense>
                 </div>
               </article>
               <aside aria-label="On this page" className="h-fit lg:sticky lg:top-6">

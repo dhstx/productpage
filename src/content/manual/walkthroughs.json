@@ -1,0 +1,23 @@
+[
+  {
+    "id": "quickstart",
+    "title": "10-minute Quickstart",
+    "summary": "Connect essentials and launch your first Syntek automation.",
+    "videoId": "l1t5vS7QyXg",
+    "href": "https://www.youtube.com/watch?v=l1t5vS7QyXg"
+  },
+  {
+    "id": "workflows",
+    "title": "Workflows: from prompt to action",
+    "summary": "See Manus Hub route a natural language request through approvers and apps.",
+    "videoId": "pPrWq9ZV3rI",
+    "href": "https://www.youtube.com/watch?v=pPrWq9ZV3rI"
+  },
+  {
+    "id": "security",
+    "title": "Security walk-through",
+    "summary": "Configure least-privilege access, logs, and audit exports in minutes.",
+    "videoId": "Y5qN-3o8Y9E",
+    "href": "https://www.youtube.com/watch?v=Y5qN-3o8Y9E"
+  }
+]
