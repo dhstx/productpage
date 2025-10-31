@@ -1,0 +1,5 @@
+[
+  { "title": "10-minute Quickstart", "summary": "Connect essentials and run your first automation.", "videoId": "REPLACE_ME_1", "duration": "10:12" },
+  { "title": "Workflows: from prompt to action", "summary": "Turn a high-level intent into a repeatable recipe.", "videoId": "REPLACE_ME_2", "duration": "07:45" },
+  { "title": "Security walk-through", "summary": "Scopes, logs, least privilege, and audits.", "videoId": "REPLACE_ME_3", "duration": "05:03" }
+]

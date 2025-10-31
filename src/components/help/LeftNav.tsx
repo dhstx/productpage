@@ -5,14 +5,16 @@ import { buildManualIndex } from '@/user-manual/searchIndex';
 export default function LeftNav() {
   const index = useMemo(() => buildManualIndex(), []);
   const location = useLocation();
-  const activePath = location.pathname;
+  const { pathname, hash } = location;
 
-  const items = index.docs.map((d) => ({ path: d.path, title: d.title }));
+  const items = index.docs
+    .map((d) => ({ path: d.path, title: d.title, anchor: false }))
+    .concat([{ path: '/user-manual#walkthroughs', title: 'Walkthroughs', anchor: true }]);
 
   return (
     <nav className="space-y-1 text-sm">
       {items.map((item) => {
-        const active = activePath === item.path;
+        const active = item.anchor ? pathname === '/user-manual' && hash === '#walkthroughs' : pathname === item.path;
         return (
           <Link
             key={item.path}

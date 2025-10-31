@@ -11,6 +11,7 @@ import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
+const WalkthroughsGrid = React.lazy(() => import('@/components/help/walkthroughs/WalkthroughsGrid'));
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
   useEffect(() => {
@@ -111,6 +112,18 @@ export default function UserManual() {
                 <div className="mt-6">
                   <LastUpdated updated={doc.updated} />
                 </div>
+                {!safeMode ? (
+                  <Suspense fallback={null}>
+                    <WalkthroughsGrid />
+                  </Suspense>
+                ) : (
+                  <section
+                    aria-labelledby="walkthroughs"
+                    className="mt-12 rounded border border-dashed border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900/40 dark:text-neutral-300"
+                  >
+                    Walkthrough videos are disabled in Safe Mode.
+                  </section>
+                )}
               </article>
               <aside aria-label="On this page" className="h-fit lg:sticky lg:top-6">
                 <RightTOC headings={doc.headings} />
