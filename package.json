@@ -42,6 +42,7 @@
     "mobile:test": "vitest run -c --reporter basic --dir src --environment jsdom",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
+    "sweep:emdash-safe": "node scripts/no-emdash-atomic.js",
     "api": "node api/server.js",
     "api:dev": "node --watch api/server.js"
   },
