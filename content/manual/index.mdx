@@ -27,3 +27,29 @@ Syntek Automations turns **plain-language requests** into **coordinated actions*
 
 ## Walkthroughs
 Watch the videos in the Walkthroughs tab to see Manus Hub route requests across Syntek agents and apps.
+
+## How Syntek Works
+1. **Capture intent** — A teammate types or records what they need done.
+2. **Route to Manus Hub** — The request lands in Manus Hub where context, guardrails, and recent activity are evaluated.
+3. **Pick a workflow** — The hub selects the right workflow, or asks for clarification when multiple fit.
+4. **Activate agents** — Conductor plans the sequence, Builder assembles artifacts, and Connector handles API actions.
+5. **Execute across apps** — GitHub, Vercel, Notion, and other integrations receive scoped actions with approvals when required.
+6. **Log the audit trail** — Every step records who approved it, what ran, and where outputs live.
+
+## Common Workflows
+- **Ship a site repo** — Scaffold a repo, push to GitHub, deploy to Vercel, then publish the link to Notion or email.
+- **Meeting → Action Items** — Ingest a transcript, highlight owners and deadlines, and post updates to the team hub.
+- **Lead capture → Outreach** — Collect a form submission, enrich it, and create follow-up tasks in CRM and Slack.
+
+## Security & Auditing
+- Enforce least-privilege tokens per connector; rotate or revoke without downtime.
+- Require approval gates for sensitive stages (production deploys, data exports, finance actions).
+- Stream logs to your SIEM, download exports for audits, and monitor changes via the activity feed.
+
+## Glossary
+- **Manus Hub** — The orchestration layer that evaluates context, workflows, and guardrails.
+- **Agent** — Specialized automation persona (Conductor, Builder, Connector) that executes a portion of work.
+- **Workflow** — A reusable sequence of steps, prompts, and integrations triggered by Manus Hub.
+- **Connector** — A scoped integration to an external tool (GitHub, Vercel, Notion, etc.).
+- **Approval Gate** — A manual checkpoint that pauses execution until a teammate confirms.
+- **Audit Log** — A detailed record of context, prompts, approvals, and results for compliance.

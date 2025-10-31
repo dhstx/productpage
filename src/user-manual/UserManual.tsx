@@ -11,6 +11,8 @@ import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
 import WalkthroughsView from '@/user-manual/WalkthroughsView';
 
+const ArrowSlider = React.lazy(() => import('../components/help/walkthroughs/ArrowSlider'));
+
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
@@ -65,6 +67,10 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
+  const tabBase = 'inline-flex items-center rounded-full px-3 py-1 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400';
+  const tabActive = 'bg-neutral-800 text-amber-300 border border-neutral-700 dark:bg-neutral-800 dark:text-amber-300';
+  const tabIdle = 'bg-transparent text-neutral-300 hover:text-amber-300 hover:bg-neutral-900';
+
   const subNavItems = [
     {
       label: 'Overview',
@@ -108,11 +114,7 @@ export default function UserManual() {
                     key={item.href}
                     to={item.href}
                     aria-current={item.active ? 'page' : undefined}
-                    className={`rounded px-3 py-1.5 transition-colors ${
-                      item.active
-                        ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-                        : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50'
-                    }`}
+                    className={`${tabBase} ${item.active ? tabActive : tabIdle}`}
                   >
                     {item.label}
                   </Link>
@@ -146,6 +148,13 @@ export default function UserManual() {
                 ) : (
                   <>
                     <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                    {!safeMode ? (
+                      <div className="mt-8">
+                        <Suspense fallback={<div className="h-64 rounded-lg border border-neutral-800 bg-neutral-950" />}>
+                          <ArrowSlider />
+                        </Suspense>
+                      </div>
+                    ) : null}
                     <div className="mt-6">
                       <LastUpdated updated={doc.updated} />
                     </div>
