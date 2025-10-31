@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LeftNav from '../components/help/LeftNav';
 import RightTOC from '../components/help/RightTOC';
@@ -61,6 +61,7 @@ export default function UserManual() {
   const location = useLocation();
   const path = location.pathname.replace(/\/$/, '') || '/user-manual';
   const isWalkthroughs = path === '/user-manual/walkthroughs';
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
   // Resolve article with a never-throw fallback
   const doc = (() => {
     if (isWalkthroughs) return null;
@@ -82,6 +83,30 @@ export default function UserManual() {
   const safeMode = isHelpSafeMode();
   const activeTab: 'overview' | 'walkthroughs' = isWalkthroughs ? 'walkthroughs' : 'overview';
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return () => undefined;
+    const node = titleRef.current;
+    if (!node) return () => undefined;
+
+    const frame = window.requestAnimationFrame(() => {
+      let color = '';
+      try {
+        color = window.getComputedStyle(node).color || '';
+      } catch {
+        color = '';
+      }
+      if (!color || color === 'rgba(0, 0, 0, 0)') {
+        color = '#d4941f';
+      }
+      document.documentElement.style.setProperty('--um-title-color', color);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.documentElement.style.removeProperty('--um-title-color');
+    };
+  }, [path]);
+
   if (isDevEnvironment()) {
     // eslint-disable-next-line no-console
     console.warn('[help] render', { path, docFound: !!doc, safeMode });
@@ -91,7 +116,7 @@ export default function UserManual() {
     <div className="w-full">
       {/* Explicit page colors so it's never a black screen */}
       <div className="min-h-screen bg-white text-black dark:bg-neutral-950 dark:text-neutral-100">
-        <div className="mx-auto max-w-5xl px-6 py-10" data-um>
+        <div className="um-shell mx-auto max-w-5xl px-6 py-10" data-um>
           <NoEmDash />
           <ErrorBoundary
             name="UserManualRoute"
@@ -99,21 +124,28 @@ export default function UserManual() {
               <ManualErrorUI error={error} onReset={resetError} />
             )}
           >
-            <header className="mb-8">
+            <header className="um-header mb-8">
               <div className="space-y-3">
-                <h1 className="text-3xl font-semibold">User Manual</h1>
+                <h1
+                  ref={titleRef}
+                  className="text-3xl font-semibold tracking-tight text-[color:var(--accent-gold)]"
+                >
+                  User Manual
+                </h1>
                 <p className="text-base text-neutral-600 dark:text-neutral-300">
                   Learn Syntek Automations—how it works, why it matters, and how to win with it.
                 </p>
-                {!isWalkthroughs && (
-                  <div className="um-heading-separator" aria-hidden="true">
-                    <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
-                    </svg>
-                  </div>
-                )}
+                <div className={`um-heading-separator ${isWalkthroughs ? 'invisible' : ''}`} aria-hidden="true">
+                  <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
+                  </svg>
+                </div>
               </div>
-              <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+              <div className="um-subnav mt-4 h-[44px]">
+                <nav aria-label="User manual sub navigation" className="flex h-full items-center">
+                  <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+                </nav>
+              </div>
             </header>
 
             {/* Inline Search (hydrated client-side only) */}
@@ -132,7 +164,7 @@ export default function UserManual() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
+            <div className="um-content grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
               <aside aria-label="Sections" className="h-fit lg:sticky lg:top-6">
                 {isWalkthroughs ? <LocalSidebarWalkthroughs /> : <LeftNav />}
               </aside>
