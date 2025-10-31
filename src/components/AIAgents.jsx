@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import { useMemo, useState } from 'react';
 import { Bot, Brain, Lightbulb, Target, Wrench, Palette, Megaphone, Users, Archive, DollarSign, Scale, Shield, TrendingUp } from 'lucide-react';
 import { getAgentColor } from './ui/agentThemes';
 import FadeInSection from './FadeInSection';
+import AgentsPopup from './agents/AgentsPopup';
+import { agents as enhancedAgents } from '../lib/agents-enhanced';
 
 export default function AIAgents() {
+  const [agentsPopupOpen, setAgentsPopupOpen] = useState(false);
+
   // All 13 specialized AI agents with icons, descriptions, and capabilities
-  const agents = [
+  const showcaseAgents = [
     {
       icon: <Target className="w-12 h-12" />,
-      name: 'Commander',
+      name: 'Chief of Staff',
       description: 'Strategic leadership and executive decision-making. Provides high-level oversight, aligns initiatives with business objectives, and drives long-term vision.',
       capabilities: [
         'Strategic planning',
@@ -16,7 +22,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: getAgentColor('Commander', '#e5aa5d'),
+      color: getAgentColor('Chief of Staff', '#e5aa5d'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -165,31 +171,32 @@ export default function AIAgents() {
   ];
 
   // UI-only filter: render a focused subset without mutating source data
-  const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
-  const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
+  const allowedAgentNames = useMemo(() => new Set(['Chief of Staff', 'Connector', 'Conductor']), []);
+  const visibleAgents = showcaseAgents.filter((agent) => allowedAgentNames.has(agent.name));
 
   return (
-    <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
-      <FadeInSection>
-        <div className="mb-12 text-center">
-          <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
-            AI-POWERED AGENTS
-          </h2>
-          <p className="mx-auto max-w-3xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
-            Thirteen specialized AI agents work together to enhance every aspect of your organization
-          </p>
-        </div>
-      </FadeInSection>
+    <>
+      <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
+        <FadeInSection>
+          <div className="mb-12 text-center">
+            <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
+              AI-POWERED AGENTS
+            </h2>
+            <p className="mx-auto max-w-3xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
+              Thirteen specialized AI agents work together to enhance every aspect of your organization
+            </p>
+          </div>
+        </FadeInSection>
 
-      <div
-        className="mt-8 grid gap-6 justify-center"
-        style={{
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          maxWidth: '980px',
-          margin: '2.5rem auto 0',
-        }}
-      >
-        {visibleAgents.map((agent, index) => (
+        <div
+          className="mt-8 grid gap-6 justify-center"
+          style={{
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            maxWidth: '980px',
+            margin: '2.5rem auto 0',
+          }}
+        >
+          {visibleAgents.map((agent, index) => (
           <FadeInSection key={agent.name} delay={0.05 * (index + 1)}>
             <div className="panel-system group flex h-full min-w-0 flex-col gap-4 p-6 transition-all duration-300 hover:bg-[#202020] min-h-[260px]">
               {/* Icon */}
@@ -221,7 +228,7 @@ export default function AIAgents() {
                       key={capability}
                       className="flex items-start gap-2 text-xs text-[#B3B3B3]"
                     >
-                      <span style={{ color: agent.color }}>▸</span>
+                      <span style={{ color: agent.color }}>?</span>
                       {capability}
                     </li>
                   ))}
@@ -229,32 +236,42 @@ export default function AIAgents() {
               </div>
             </div>
           </FadeInSection>
-        ))}
-      </div>
-
-      {/* Additional Info */}
-      <FadeInSection delay={0.6}>
-        <div className="mx-auto mt-12 max-w-4xl">
-          <div className="panel-system flex flex-col items-center gap-4 border border-[#FFC96C]/20 bg-[#1A1A1A] p-6 text-center sm:p-8">
-            <div className="flex justify-center text-[#FFC96C]">
-              <Bot className="h-8 w-8" />
-            </div>
-            <h4 className="h3 text-[#F2F2F2] uppercase tracking-tight">
-              Synergistic Collaboration
-            </h4>
-            <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">
-              Our AI agents work together seamlessly, coordinated by the Orchestrator to provide
-              comprehensive solutions. They continuously learn from your organization's patterns,
-              becoming more effective over time and adapting to your unique workflows.
-            </p>
-            <Link to="/login" className="btn-system">
-              <Bot className="h-4 w-4" />
-              View All Agents
-            </Link>
-          </div>
+          ))}
         </div>
-      </FadeInSection>
-    </section>
+
+        {/* Additional Info */}
+        <FadeInSection delay={0.6}>
+          <div className="mx-auto mt-12 max-w-4xl">
+            <div className="panel-system flex flex-col items-center gap-4 border border-[#FFC96C]/20 bg-[#1A1A1A] p-6 text-center sm:p-8">
+              <div className="flex justify-center text-[#FFC96C]">
+                <Bot className="h-8 w-8" />
+              </div>
+              <h4 className="h3 text-[#F2F2F2] uppercase tracking-tight">
+                Synergistic Collaboration
+              </h4>
+              <p className="text-sm text-[#B3B3B3] text-pretty sm:text-base">
+                Our AI agents work together seamlessly, coordinated by the Orchestrator to provide
+                comprehensive solutions. They continuously learn from your organization's patterns,
+                becoming more effective over time and adapting to your unique workflows.
+              </p>
+              <button
+                type="button"
+                className="btn-system"
+                onClick={() => setAgentsPopupOpen(true)}
+              >
+                <Bot className="h-4 w-4" />
+                View All Agents
+              </button>
+            </div>
+          </div>
+        </FadeInSection>
+      </section>
+      <AgentsPopup
+        open={agentsPopupOpen}
+        onClose={() => setAgentsPopupOpen(false)}
+        agents={enhancedAgents}
+      />
+  </>
   );
 }
 

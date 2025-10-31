@@ -1,11 +1,26 @@
 import { test, expect } from '@playwright/test';
 
-// Smoke test: ensure demo page mounts and suggestions container is present
-// Note: The app is a Vite SPA; demo is rendered under / (or /chat in Next).
+test.beforeEach(async ({ page }) => {
+  // Skip long animations so the UI renders in its final state immediately.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+});
 
-test('prompt suggester skeleton appears on typing', async ({ page }) => {
+test('landing hero greets Chief of Staff by default', async ({ page }) => {
   await page.goto('/');
-  // The app routes are numerous; ensure we can navigate to a simple page that loads.
-  // Try visiting a not-guarded page and inject the component? Instead, check the SPA renders.
-  await expect(page.locator('body')).toBeVisible();
+  await expect(page.locator('#hero-typed')).toHaveText(
+    'Welcome, Commander. Confer with your Chief of Staff'
+  );
+});
+
+test('view all agents popup opens and closes via Escape', async ({ page }) => {
+  await page.goto('/');
+
+  await page.getByRole('button', { name: 'View All Agents' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'All Agents' });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText('Chief of Staff')).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
 });
