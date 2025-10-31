@@ -114,6 +114,11 @@ app.get('/', (req, res) => {
   });
 });
 
+// Optional fallback POST handler for root to avoid 500s on POST /
+app.post('/', (req, res) => {
+  return res.status(405).json({ error: 'Method not allowed' });
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/stripe', stripeRoutes);
