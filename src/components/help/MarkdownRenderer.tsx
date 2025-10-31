@@ -74,6 +74,7 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
   let codeBuffer: string[] = [];
   let inList = false;
   let listBuffer: string[] = [];
+  let walkthroughsInjected = false;
 
   function flushCode() {
     if (!inCode) return;
@@ -161,6 +162,32 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
           {parseInline(text)}
         </h2>
       );
+
+      if (!walkthroughsInjected && text.toLowerCase() === 'walkthroughs') {
+        walkthroughsInjected = true;
+        if (!videoEnabled) {
+          elements.push(
+            <div
+              key={`walkthroughs-disabled-${elements.length}`}
+              className="my-4 rounded border border-neutral-200 bg-background p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+            >
+              Walkthrough videos are disabled in Safe Mode.
+            </div>
+          );
+        } else {
+          try {
+            const WalkthroughsCarousel = require('./walkthroughs/WalkthroughsCarousel').default as React.ComponentType;
+            const WalkthroughsGrid = require('./walkthroughs/WalkthroughsGrid').default as React.ComponentType;
+            elements.push(<WalkthroughsCarousel key={`walkthroughs-carousel-${elements.length}`} />);
+            elements.push(<WalkthroughsGrid key={`walkthroughs-grid-${elements.length}`} />);
+          } catch (e) {
+            if (process.env.NODE_ENV !== 'production') {
+              // eslint-disable-next-line no-console
+              console.warn('[user-manual:widget]', e);
+            }
+          }
+        }
+      }
       continue;
     }
 

@@ -1,0 +1,78 @@
+[
+  {
+    "title": "Quickstart: Wire Your First Flow",
+    "summary": "Connect core apps and kick off an automation in under 10 minutes.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_QUICKSTART",
+    "duration": "10:12",
+    "poster": "/manual/walkthroughs/quickstart.jpg"
+  },
+  {
+    "title": "Workspace Tour & Permissions",
+    "summary": "Review workspace roles, invite teammates, and set guardrails.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_WORKSPACE_TOUR",
+    "duration": "08:44"
+  },
+  {
+    "title": "Workflows: Prompt to Deployment",
+    "summary": "See how Manus Hub routes prompts to GitHub and Vercel automatically.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_WORKFLOWS",
+    "duration": "12:03",
+    "poster": "/manual/walkthroughs/workflows.jpg"
+  },
+  {
+    "title": "Security & Audit Logging",
+    "summary": "Monitor every agent action with immutable audit trails.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_SECURITY",
+    "duration": "09:17"
+  },
+  {
+    "title": "Integrations Deep Dive",
+    "summary": "Connect Google Workspace, Slack, Notion, and custom webhooks.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_INTEGRATIONS",
+    "duration": "11:26",
+    "poster": "/manual/walkthroughs/integrations.jpg"
+  },
+  {
+    "title": "Billing & Usage Insights",
+    "summary": "Track spend, configure alerts, and export detailed usage CSVs.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_BILLING",
+    "duration": "06:38"
+  },
+  {
+    "title": "Incident Response Playbook",
+    "summary": "Trigger containment workflows and notify stakeholders in one click.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_INCIDENT",
+    "duration": "07:55"
+  },
+  {
+    "title": "Sales Ops Command Center",
+    "summary": "Pipeline hygiene, CRM syncs, and forecast rollups in minutes.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_SALES",
+    "duration": "09:01",
+    "poster": "/manual/walkthroughs/sales.jpg"
+  },
+  {
+    "title": "Marketing Launch Checklist",
+    "summary": "Orchestrate launch assets, stakeholders, and approvals end-to-end.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_MARKETING",
+    "duration": "08:22"
+  },
+  {
+    "title": "Support Triage Excellence",
+    "summary": "Route tickets by priority, summarize incidents, and suggest next steps.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_SUPPORT",
+    "duration": "07:34"
+  },
+  {
+    "title": "Finance Month-End Close",
+    "summary": "Automate reconciliations, ledger updates, and variance reports.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_FINANCE",
+    "duration": "10:48"
+  },
+  {
+    "title": "Advanced Prompt Engineering",
+    "summary": "Design prompt chains and safeguard outputs for regulated teams.",
+    "videoId": "TODO_REPLACE_WITH_REAL_VIDEO_ID_PROMPTS",
+    "duration": "13:05"
+  }
+]
