@@ -1,0 +1,10 @@
+[
+  { "title": "10-minute Quickstart", "summary": "Connect essentials and run your first automation.", "videoId": "REPLACE_ME_1", "duration": "10:12" },
+  { "title": "Workflows: from prompt to action", "summary": "Turn a high-level intent into a repeatable recipe.", "videoId": "REPLACE_ME_2", "duration": "07:45" },
+  { "title": "Security walk-through", "summary": "Scopes, logs, least privilege, audits.", "videoId": "REPLACE_ME_3", "duration": "05:03" },
+  { "title": "Automation deep-dive", "summary": "Link Manus Hub triggers and conditional branches.", "videoId": "REPLACE_ME_4", "duration": "08:21" },
+  { "title": "Integration wiring lab", "summary": "Connect GitHub, Vercel, email, and calendar safely.", "videoId": "REPLACE_ME_5", "duration": "09:14" },
+  { "title": "Playbooks in practice", "summary": "Publish and reuse orchestrated playbooks across teams.", "videoId": "REPLACE_ME_6", "duration": "06:18" },
+  { "title": "Scaling orchestration", "summary": "Monitor usage, budget, and fallback strategies.", "videoId": "REPLACE_ME_7", "duration": "04:56" },
+  { "title": "Audit-ready operations", "summary": "Export logs, evidence captures, and compliance reports.", "videoId": "REPLACE_ME_8", "duration": "03:47" }
+]

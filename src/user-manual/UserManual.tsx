@@ -10,6 +10,9 @@ import { buildManualIndex } from '@/user-manual/searchIndex';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
 
+const WalkthroughsCarousel = React.lazy(() => import('@/components/help/walkthroughs/WalkthroughsCarousel'));
+const WalkthroughsGrid = React.lazy(() => import('@/components/help/walkthroughs/WalkthroughsGrid'));
+
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
@@ -62,11 +65,41 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
+  const walkthroughsForce = useMemo(() => {
+    try {
+      const candidates = [
+        (import.meta as any)?.env?.NEXT_PUBLIC_WALKTHROUGHS_FORCE,
+        (import.meta as any)?.env?.VITE_WALKTHROUGHS_FORCE,
+        typeof process !== 'undefined' ? (process as any)?.env?.NEXT_PUBLIC_WALKTHROUGHS_FORCE : undefined,
+        typeof process !== 'undefined' ? (process as any)?.env?.VITE_WALKTHROUGHS_FORCE : undefined,
+        typeof window !== 'undefined' ? window.localStorage?.getItem('NEXT_PUBLIC_WALKTHROUGHS_FORCE') : undefined,
+      ];
+      const raw = candidates.find((val) => typeof val === 'string' && val.length > 0);
+      return raw ? /^(1|true|yes|on)$/i.test(raw.toString()) : false;
+    } catch {
+      return false;
+    }
+  }, []);
+  const devMode = isDevEnvironment();
+  const allowWalkthroughs = !safeMode || walkthroughsForce || devMode;
 
-  if (isDevEnvironment()) {
+  if (devMode) {
     // eslint-disable-next-line no-console
     console.warn('[help] render', { path, docFound: !!doc, safeMode });
   }
+
+  useEffect(() => {
+    if (!devMode) {
+      return;
+    }
+    // eslint-disable-next-line no-console
+    console.log('[walkthroughs:page]', {
+      safeMode,
+      force: walkthroughsForce,
+      devMode,
+      allow: allowWalkthroughs,
+    });
+  }, [safeMode, walkthroughsForce, allowWalkthroughs, devMode]);
 
   return (
     <div className="w-full">
@@ -108,6 +141,16 @@ export default function UserManual() {
               </aside>
               <article id="help-article">
                 <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                {allowWalkthroughs ? (
+                  <Suspense fallback={<div className="mt-8 text-sm text-muted-foreground">Loading walkthrough videos…</div>}>
+                    <WalkthroughsCarousel />
+                    <WalkthroughsGrid />
+                  </Suspense>
+                ) : (
+                  <div className="mt-8 rounded-lg border border-dashed border-muted-foreground/40 bg-muted/20 p-4 text-sm text-muted-foreground">
+                    Walkthrough videos are disabled while help Safe Mode is active.
+                  </div>
+                )}
                 <div className="mt-6">
                   <LastUpdated updated={doc.updated} />
                 </div>
