@@ -63,6 +63,7 @@ export const OrchestratorIcon = (p: IconProps) => { const {size,color,rest}=S(p)
 export function getAgentIcon(name?: string) {
   const m: Record<string, React.FC<IconProps>> = {
     Commander: CommanderIcon,
+    'Chief of Staff': CommanderIcon,
     Conductor: ConductorIcon,
     Connector: ConnectorIcon,
     Scout: ScoutIcon,

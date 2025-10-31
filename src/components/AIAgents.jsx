@@ -1,14 +1,21 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import { useState, useCallback } from 'react';
 import { Bot, Brain, Lightbulb, Target, Wrench, Palette, Megaphone, Users, Archive, DollarSign, Scale, Shield, TrendingUp } from 'lucide-react';
 import { getAgentColor } from './ui/agentThemes';
 import FadeInSection from './FadeInSection';
+import AgentsPopup from './agents/AgentsPopup';
 
 export default function AIAgents() {
+  const [isAgentsPopupOpen, setIsAgentsPopupOpen] = useState(false);
+  const openAgentsPopup = useCallback(() => setIsAgentsPopupOpen(true), []);
+  const closeAgentsPopup = useCallback(() => setIsAgentsPopupOpen(false), []);
+
   // All 13 specialized AI agents with icons, descriptions, and capabilities
   const agents = [
     {
       icon: <Target className="w-12 h-12" />,
-      name: 'Commander',
+      name: 'Chief of Staff',
       description: 'Strategic leadership and executive decision-making. Provides high-level oversight, aligns initiatives with business objectives, and drives long-term vision.',
       capabilities: [
         'Strategic planning',
@@ -16,7 +23,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: getAgentColor('Commander', '#e5aa5d'),
+      color: getAgentColor('Chief of Staff', '#e5aa5d'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -165,21 +172,22 @@ export default function AIAgents() {
   ];
 
   // UI-only filter: render a focused subset without mutating source data
-  const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
+  const allowedAgentNames = new Set(['Chief of Staff', 'Connector', 'Conductor']);
   const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
 
   return (
-    <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
-      <FadeInSection>
-        <div className="mb-12 text-center">
-          <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
-            AI-POWERED AGENTS
-          </h2>
-          <p className="mx-auto max-w-3xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
-            Thirteen specialized AI agents work together to enhance every aspect of your organization
-          </p>
-        </div>
-      </FadeInSection>
+    <>
+      <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
+        <FadeInSection>
+          <div className="mb-12 text-center">
+            <h2 className="h2 mb-4 font-bold uppercase tracking-tight text-[#F2F2F2]">
+              AI-POWERED AGENTS
+            </h2>
+            <p className="mx-auto max-w-3xl text-[clamp(1rem,3.5vw,1.25rem)] text-[#B3B3B3] text-pretty">
+              Thirteen specialized AI agents work together to enhance every aspect of your organization
+            </p>
+          </div>
+        </FadeInSection>
 
       <div
         className="mt-8 grid gap-6 justify-center"
@@ -221,7 +229,7 @@ export default function AIAgents() {
                       key={capability}
                       className="flex items-start gap-2 text-xs text-[#B3B3B3]"
                     >
-                      <span style={{ color: agent.color }}>▸</span>
+                      <span style={{ color: agent.color }}>?</span>
                       {capability}
                     </li>
                   ))}
@@ -247,14 +255,20 @@ export default function AIAgents() {
               comprehensive solutions. They continuously learn from your organization's patterns,
               becoming more effective over time and adapting to your unique workflows.
             </p>
-            <Link to="/login" className="btn-system">
+            <button
+              type="button"
+              className="btn-system"
+              onClick={openAgentsPopup}
+            >
               <Bot className="h-4 w-4" />
               View All Agents
-            </Link>
+            </button>
           </div>
         </div>
-      </FadeInSection>
-    </section>
+        </FadeInSection>
+      </section>
+      <AgentsPopup open={isAgentsPopupOpen} onClose={closeAgentsPopup} />
+    </>
   );
 }
 

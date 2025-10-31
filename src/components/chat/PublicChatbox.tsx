@@ -3,8 +3,12 @@ import "@/styles/public-chatbox.css";
 import getIcon from "@/components/ui/agentIcons";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
 
-const PUBLIC_AGENTS = ["Commander","Conductor","Connector"] as const;
+const PUBLIC_AGENTS = ["Chief of Staff","Conductor","Connector"] as const;
 type PublicAgent = typeof PUBLIC_AGENTS[number];
+
+const LEGACY_AGENT_REMAP: Record<string, PublicAgent> = {
+  Commander: "Chief of Staff",
+};
 
 export default function PublicChatbox() {
   const rootRef = useRef<HTMLElement | null>(null);
@@ -12,9 +16,14 @@ export default function PublicChatbox() {
   const [selected, setSelected] = useState<PublicAgent>(() => {
     if (typeof window !== "undefined") {
       const s = window.localStorage.getItem("publicAgent");
-      if (s && PUBLIC_AGENTS.includes(s as PublicAgent)) return s as PublicAgent;
+      if (s) {
+        const mapped = LEGACY_AGENT_REMAP[s] ?? s;
+        if (PUBLIC_AGENTS.includes(mapped as PublicAgent)) {
+          return mapped as PublicAgent;
+        }
+      }
     }
-    return "Commander";
+    return "Chief of Staff";
   });
 
   useEffect(() => {

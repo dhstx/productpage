@@ -1,6 +1,7 @@
 // Canonical palette for ALL agents (used everywhere consistently)
 export const baseThemes: Record<string, { hex: string }> = {
   Commander:    { hex: "#FFC96C" }, // ORANGE - from deployment Pj8E7V3Td9GBFXYLY6t2ZSmp1LGN
+  'Chief of Staff': { hex: "#FFC96C" },
   Conductor:    { hex: "#A88CFF" }, // PURPLE
   Connector:    { hex: "#34D399" }, // GREEN
   // Additional agents
@@ -22,6 +23,7 @@ export const agentThemes = baseThemes;
 // Public overrides = ORIGINAL colors for the three only (icons unchanged)
 const publicOverrides: Partial<Record<string, { hex: string }>> = {
   Commander: { hex: "#FFC96C" },
+  'Chief of Staff': { hex: "#FFC96C" },
   Conductor: { hex: "#A88CFF" },
   Connector: { hex: "#34D399" },
 };
