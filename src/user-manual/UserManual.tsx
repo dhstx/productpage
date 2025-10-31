@@ -10,6 +10,7 @@ import { buildManualIndex } from '@/user-manual/searchIndex';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
 import WalkthroughsView from '@/user-manual/WalkthroughsView';
+import WalkthroughsSlider from '@/components/help/walkthroughs/SwipeCarousel';
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
@@ -46,6 +47,7 @@ export default function UserManual() {
   const location = useLocation();
   const path = location.pathname.replace(/\/$/, '') || '/user-manual';
   const isWalkthroughs = path === '/user-manual/walkthroughs';
+  const isOverview = !isWalkthroughs && path === '/user-manual';
   // Resolve article with a never-throw fallback
   const doc = (() => {
     if (isWalkthroughs) return null;
@@ -77,6 +79,12 @@ export default function UserManual() {
       active: isWalkthroughs,
     },
   ];
+  const tabBase =
+    'inline-flex items-center rounded-full px-3 py-1 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-100 dark:focus-visible:ring-offset-neutral-950';
+  const tabActive =
+    'border border-amber-300 bg-amber-200 text-neutral-900 shadow-sm dark:border-neutral-700 dark:bg-neutral-800 dark:text-amber-300';
+  const tabIdle =
+    'border border-transparent bg-transparent text-neutral-700 hover:bg-amber-50/70 hover:text-amber-500 dark:text-neutral-300 dark:hover:bg-neutral-900 dark:hover:text-amber-300';
 
   if (isDevEnvironment()) {
     // eslint-disable-next-line no-console
@@ -101,18 +109,14 @@ export default function UserManual() {
               </p>
               <nav
                 aria-label="User manual sub navigation"
-                className="mt-4 flex flex-wrap gap-2 border-b border-neutral-200 pb-2 text-sm font-medium dark:border-neutral-800"
+                className="mt-4 flex flex-wrap gap-2 text-sm font-medium"
               >
                 {subNavItems.map((item) => (
                   <Link
                     key={item.href}
                     to={item.href}
                     aria-current={item.active ? 'page' : undefined}
-                    className={`rounded px-3 py-1.5 transition-colors ${
-                      item.active
-                        ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900'
-                        : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50'
-                    }`}
+                    className={`${tabBase} ${item.active ? tabActive : tabIdle}`}
                   >
                     {item.label}
                   </Link>
@@ -146,6 +150,15 @@ export default function UserManual() {
                 ) : (
                   <>
                     <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                    {isOverview ? (
+                      <div className="mt-8 space-y-4">
+                        <p className="text-base text-neutral-700 dark:text-neutral-300">
+                          Watch Manus Hub route real user intents through the Conductor, Builder, and Connector to ship
+                          production-ready work in minutes, then mirror those steps inside your workspace.
+                        </p>
+                        <WalkthroughsSlider />
+                      </div>
+                    ) : null}
                     <div className="mt-6">
                       <LastUpdated updated={doc.updated} />
                     </div>

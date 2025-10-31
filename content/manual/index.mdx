@@ -2,7 +2,7 @@
 title: User Manual
 description: Your guide to Syntek Automations—what it is, how it works, and how to get value fast.
 tags: [overview, getting-started]
-updated: 2025-10-30
+updated: 2025-10-31
 ---
 
 ## Start here
@@ -25,5 +25,38 @@ Syntek Automations turns **plain-language requests** into **coordinated actions*
 - “Auto-summarize meetings to action items.”  
 - “Ship a site repo from a template.”
 
-## Walkthroughs
-Watch the videos in the Walkthroughs tab to see Manus Hub route requests across Syntek agents and apps.
+## How Syntek Works (bird’s-eye)
+Manus Hub (see internal `agent_execution_architecture.md`) interprets each user intent, selects the right workflow, and scopes the run against your current Automations Dashboard configuration. The hub expands context with workspace state, routes steps to the correct agents, and enforces approval gates before execution. Conductor sequences tasks, Builder drafts deliverables, and Connector executes API calls against connected apps with least-privilege tokens. Every action emits telemetry back to Manus Hub so it can branch, retry, or escalate when blockers surface. Outputs and interim artifacts are aggregated into a single timeline, making review effortless. Once complete, Manus publishes results to the Automations Dashboard, syncs downstream systems, and records a signed audit bundle. Speed, consistency, and auditability stay aligned from the very first request.
+
+## AI Agent Ecosystem Implementation
+Implementation starts by connecting GitHub, Notion, Vercel, calendars, inboxes, and finance apps through scoped connectors. Each integration is configured in the Automations Dashboard, where you can enable starter workflows or compose new ones with templates. Manus Hub keeps environments isolated: staging, production, and sandbox contexts inherit different policies so you never leak credentials. The result is a living catalog of workflows you can deploy or pause with one click.
+
+## Key Agents
+- **Conductor:** Orchestrates multi-step flows and approvals so every run matches policy.
+- **Builder:** Generates artifacts (draft emails, PRs, docs) and updates them as new context arrives.
+- **Connector:** Talks to tools (Notion, GitHub, Vercel, Gmail/Calendar/Drive, Stripe, Mercury, Xero) using rotateable credentials.
+- **Automations Dashboard:** Tracks workflow health, owners, and approvals in a single command center.
+
+## Common Workflows
+- **Ship a site repo.** Kick off from a GitHub template with environment secrets pre-scoped.  
+  Manus Hub routes CI checks and Vercel deployment through Connector, then files knowledge-base updates and changelog entries.  
+  Builder drafts the launch note while Conductor pings stakeholders in Slack or email for final sign-off.
+- **Meeting → Action Items.** Pull the calendar event, participant list, and transcript summary into Manus Hub.  
+  Builder extracts decisions, tasks, and owners while Conductor routes approvals to the meeting lead.  
+  Connector writes structured tasks back to Notion or Taskade and posts summaries to Slack channels.
+- **Lead capture → Outreach.** Take a form submission or CRM trigger and enrich it with firmographic intel.  
+  Builder drafts an intro email plus optional follow-up sequences for review inside Manus Hub.  
+  Once approved, Connector logs the touchpoint in CRM and schedules the send through Gmail.
+
+Automations Dashboard visualizes run status, SLA timers, and owners so teams can monitor every workflow end-to-end.
+
+## Security & Auditing
+Access scopes align with least-privilege controls referenced in NIST AC-6 and ISO/IEC 27001 Annex A: each connector receives narrowly defined permissions and rotates tokens automatically. Approval gates enforce separation of duties for high-impact actions (deployments, payments, data exports). Manus Hub maintains an immutable audit trail with step-level inputs, outputs, and reviewer decisions. Export the log to your SIEM or compliance datastore whenever required, ensuring audits stay lightweight.
+
+## Glossary
+- **Manus Hub:** The orchestration layer that routes intents, selects workflows, and aggregates results.
+- **Agent:** A specialized role (Conductor, Builder, Connector) that performs reasoning or execution within a workflow.
+- **Workflow:** A reusable automation that chains steps, policies, and integrations to reach an outcome.
+- **Connector:** The integration wrapper that authenticates to an external system with scoped credentials.
+- **Approval Gate:** A policy checkpoint that requires human or automated sign-off before continuing.
+- **Audit Log:** The chronological record of every step, artifact, and decision captured during a run.
