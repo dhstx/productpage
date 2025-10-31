@@ -6,12 +6,13 @@ import Feedback from '@/components/help/Feedback';
 import LastUpdated from '@/components/help/LastUpdated';
 import RelatedArticles from '@/components/help/RelatedArticles';
 import MarkdownRenderer from '@/components/help/MarkdownRenderer';
-import { buildManualIndex } from '@/user-manual/searchIndex';
 import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
-import WalkthroughsView from '@/user-manual/WalkthroughsView';
-
-const ArrowSlider = React.lazy(() => import('../components/help/walkthroughs/ArrowSlider'));
+import { buildManualIndex } from './searchIndex';
+import WalkthroughsView from './WalkthroughsView';
+import { UMTitle } from './components/UMTitle';
+import { sanitizeDashes } from './sanitizeDashes';
+import './manual.css';
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
 
@@ -67,9 +68,10 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
-  const tabBase = 'inline-flex items-center rounded-full px-3 py-1 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400';
-  const tabActive = 'bg-neutral-800 text-amber-300 border border-neutral-700 dark:bg-neutral-800 dark:text-amber-300';
-  const tabIdle = 'bg-transparent text-neutral-300 hover:text-amber-300 hover:bg-neutral-900';
+  const manualContent = doc ? sanitizeDashes(doc.content) : '';
+  const tabBase = 'inline-flex items-center rounded-full px-3 py-1 text-sm transition focus:outline-none focus-visible:ring-2';
+  const tabActive = 'border border-neutral-700 text-[color:var(--um-title)] bg-neutral-900';
+  const tabIdle = 'text-neutral-300 hover:text-[color:var(--um-title)] hover:bg-neutral-900';
 
   const subNavItems = [
     {
@@ -100,14 +102,37 @@ export default function UserManual() {
               <ManualErrorUI error={error} onReset={resetError} />
             )}
           >
-            <header className="mb-6">
-              <h1 className="text-3xl font-semibold">User Manual</h1>
-              <p className="text-base text-neutral-600 dark:text-neutral-300">
-                Learn Syntek Automations—how it works, why it matters, and how to win with it.
+            <header className="mb-8">
+              <UMTitle>User Manual</UMTitle>
+              <p className="mt-3 max-w-2xl text-base text-neutral-600 dark:text-neutral-300">
+                Learn how Syntek Automations works, why it matters, and the moves that help teams succeed with it.
               </p>
+              <div className="user-manual-underline" aria-hidden="true">
+                <svg viewBox="0 0 180 12" fill="none" role="presentation">
+                  <path
+                    d="M2 10C38 4 96 2 178 6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 4c8-2 20-3 34-2"
+                    stroke="url(#um-accent)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="um-accent" x1="12" y1="2" x2="46" y2="2" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#FBBF24" />
+                      <stop offset="1" stopColor="#60A5FA" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
               <nav
                 aria-label="User manual sub navigation"
-                className="mt-4 flex flex-wrap gap-2 border-b border-neutral-200 pb-2 text-sm font-medium dark:border-neutral-800"
+                className="mt-6 flex flex-wrap gap-2 border-b border-neutral-200 pb-2 text-sm font-medium dark:border-neutral-800"
               >
                 {subNavItems.map((item) => (
                   <Link
@@ -142,24 +167,17 @@ export default function UserManual() {
               <aside aria-label="Sections" className="h-fit lg:sticky lg:top-6">
                 <LeftNav />
               </aside>
-              <article id="help-article">
+              <article id="help-article" className={isWalkthroughs ? '' : 'um-grid-accent rounded-3xl border border-neutral-200/40 bg-white/40 p-6 shadow-sm backdrop-blur-sm dark:border-neutral-800/60 dark:bg-neutral-950/40'}>
                 {isWalkthroughs ? (
                   <WalkthroughsView />
-                ) : (
+                ) : doc ? (
                   <>
-                    <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
-                    {!safeMode ? (
-                      <div className="mt-8">
-                        <Suspense fallback={<div className="h-64 rounded-lg border border-neutral-800 bg-neutral-950" />}>
-                          <ArrowSlider />
-                        </Suspense>
-                      </div>
-                    ) : null}
+                    <MarkdownRenderer content={manualContent} videoEnabled={!safeMode} />
                     <div className="mt-6">
                       <LastUpdated updated={doc.updated} />
                     </div>
                   </>
-                )}
+                ) : null}
               </article>
               <aside aria-label="On this page" className="h-fit lg:sticky lg:top-6">
                 <RightTOC headings={doc?.headings ?? []} />

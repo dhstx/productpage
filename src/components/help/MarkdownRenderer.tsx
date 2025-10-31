@@ -182,12 +182,12 @@ export default function MarkdownRenderer({ content, videoEnabled = true }: { con
       const summary = /summary=\"([^\"]*)\"/.exec(attrs)?.[1];
       const videoId = /videoId=\"([^\"]*)\"/.exec(attrs)?.[1];
       if (!videoEnabled) {
-        elements.push(
-          <div key={`vb-${elements.length}`} className="my-4 rounded border border-neutral-200 p-3 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-            <div className="font-medium">{title ?? 'Video'}</div>
-            <div>Safe Mode is enabled — video disabled.</div>
-          </div>
-        );
+          elements.push(
+            <div key={`vb-${elements.length}`} className="my-4 rounded border border-neutral-200 p-3 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              <div className="font-medium">{title ?? 'Video'}</div>
+              <div>Safe Mode is enabled, so this video is unavailable.</div>
+            </div>
+          );
       } else {
         // lazy import to avoid circular dep
         try {

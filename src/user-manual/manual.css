@@ -1,0 +1,53 @@
+:root {
+  --um-title: currentColor;
+}
+
+.user-manual-underline {
+  display: inline-flex;
+  height: 10px;
+  margin-top: 1.25rem;
+  opacity: 0.7;
+}
+
+.user-manual-underline svg {
+  height: 100%;
+  width: 160px;
+  color: inherit;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.um-grid-accent {
+  position: relative;
+  isolation: isolate;
+}
+
+.um-grid-accent::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+    radial-gradient(circle at top left, rgba(250, 204, 21, 0.12), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.08), transparent 60%);
+  background-size: 140% 100%, 100% 100%, 100% 100%;
+  mix-blend-mode: screen;
+  opacity: 0.09;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-manual-underline svg {
+    filter: none;
+  }
+  .um-grid-accent::before {
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+  }
+}
