@@ -128,7 +128,12 @@ export default function SwipeCarousel() {
       dragging = false;
       try {
         el.releasePointerCapture(e.pointerId);
-      } catch {}
+      } catch (err) {
+        // In development, log errors from releasePointerCapture for debugging.
+        if (process.env.NODE_ENV === 'development') {
+          console.error('releasePointerCapture failed:', err);
+        }
+      }
       const style = window.getComputedStyle(el);
       const gap = parseFloat(style.columnGap || style.gap || `${GAP_PX}`) || GAP_PX;
       const slideWidth = (el.firstElementChild as HTMLElement)?.getBoundingClientRect().width ?? 0;
