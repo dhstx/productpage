@@ -11,6 +11,8 @@ import ErrorBoundary from '@/components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
 
 const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
+const WalkthroughsCarousel = React.lazy(() => import('@/components/help/walkthroughs/WalkthroughsCarousel'));
+const WalkthroughsGrid = React.lazy(() => import('@/components/help/walkthroughs/WalkthroughsGrid'));
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
   useEffect(() => {
@@ -108,6 +110,12 @@ export default function UserManual() {
               </aside>
               <article id="help-article">
                 <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                <Suspense fallback={null}>
+                  <WalkthroughsCarousel />
+                </Suspense>
+                <Suspense fallback={null}>
+                  <WalkthroughsGrid />
+                </Suspense>
                 <div className="mt-6">
                   <LastUpdated updated={doc.updated} />
                 </div>

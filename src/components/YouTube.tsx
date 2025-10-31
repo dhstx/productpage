@@ -1,0 +1,54 @@
+'use client';
+
+import React from 'react';
+
+type Props = {
+  videoId: string;
+  title?: string;
+  poster?: string;
+  className?: string;
+};
+
+export const YouTube: React.FC<Props> = ({ videoId, title = 'Video', poster, className }) => {
+  const src = React.useMemo(() => {
+    const base = 'https://www.youtube-nocookie.com/embed/';
+    const qs = new URLSearchParams({ rel: '0', modestbranding: '1', playsinline: '1' });
+    return `${base}${encodeURIComponent(videoId)}?${qs.toString()}`;
+  }, [videoId]);
+
+  const watchUrl = React.useMemo(
+    () => `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`,
+    [videoId],
+  );
+
+  return (
+    <div className={className}>
+      <div
+        style={{
+          position: 'relative',
+          paddingBottom: '56.25%',
+          height: 0,
+          overflow: 'hidden',
+          borderRadius: 12,
+          backgroundColor: poster ? undefined : 'rgba(0,0,0,0.05)',
+        }}
+      >
+        <iframe
+          src={src}
+          title={title}
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }}
+        />
+      </div>
+      <noscript>
+        <a href={watchUrl} target="_blank" rel="noopener noreferrer">
+          {title}
+        </a>
+      </noscript>
+    </div>
+  );
+};
+
