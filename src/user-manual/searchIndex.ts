@@ -27,7 +27,8 @@ export const SYNONYMS: Record<string, string[]> = {
 };
 
 const mdxModules = import.meta.glob('../../content/manual/**/*.mdx', {
-  as: 'raw',
+  query: '?raw',
+  import: 'default',
   eager: true,
 });
 
