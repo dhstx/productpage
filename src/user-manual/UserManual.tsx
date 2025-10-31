@@ -8,7 +8,7 @@ import RelatedArticles from '../components/help/RelatedArticles';
 import MarkdownRenderer from '../components/help/MarkdownRenderer';
 import { HeaderTabs, HeaderTabsLinkProps } from '../components/help/HeaderTabs';
 import NoEmDash from '../components/help/NoEmDash';
-import LocalSidebarWalkthroughs from '../components/help/walkthroughs/LocalSidebarWalkthroughs';
+import { UMTitle } from '../components/help/UMTitle';
 import { buildManualIndex } from './searchIndex';
 import ErrorBoundary from '../components/ErrorBoundary.jsx';
 import { isHelpSafeMode, isDevEnvironment } from '../lib/helpSafeMode';
@@ -101,7 +101,7 @@ export default function UserManual() {
           >
             <header className="mb-8">
               <div className="space-y-3">
-                <h1 className="text-3xl font-semibold">User Manual</h1>
+                <UMTitle>User Manual</UMTitle>
                 <p className="text-base text-neutral-600 dark:text-neutral-300">
                   Learn Syntek Automations—how it works, why it matters, and how to win with it.
                 </p>
@@ -113,7 +113,9 @@ export default function UserManual() {
                   </div>
                 )}
               </div>
-              <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+              <div className="mt-4 h-11">
+                <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+              </div>
             </header>
 
             {/* Inline Search (hydrated client-side only) */}
@@ -134,14 +136,14 @@ export default function UserManual() {
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
               <aside aria-label="Sections" className="h-fit lg:sticky lg:top-6">
-                {isWalkthroughs ? <LocalSidebarWalkthroughs /> : <LeftNav />}
+                <LeftNav />
               </aside>
               <article id="help-article">
                 {isWalkthroughs ? (
                   <WalkthroughsView />
                 ) : (
                   <>
-                    <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
+                    <MarkdownRenderer content={doc.content} videoEnabled={false} />
                     <div className="mt-6">
                       <LastUpdated updated={doc.updated} />
                     </div>

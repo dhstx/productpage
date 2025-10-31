@@ -1,0 +1,36 @@
+.video-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.video-embed {
+  display: flex;
+  justify-content: center;
+  background-color: #000;
+}
+
+.video-frame {
+  width: 100%;
+}
+
+.video-frame > div {
+  position: relative !important;
+  padding-bottom: 0 !important;
+  height: auto !important;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 640px;
+  background-color: #000;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+}
+
