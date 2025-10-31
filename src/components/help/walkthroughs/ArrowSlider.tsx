@@ -4,6 +4,8 @@ import * as React from 'react';
 import { YouTube } from '../../YouTube';
 import { WALKTHROUGHS } from '../../../../content/manual/walkthroughs.data';
 
+import './styles.css';
+
 export default function ArrowSlider() {
   const slides = Array.isArray(WALKTHROUGHS) ? WALKTHROUGHS : [];
   const [index, setIndex] = React.useState(0);
@@ -35,29 +37,33 @@ export default function ArrowSlider() {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950">
+      <div className="relative overflow-hidden">
         <div
           className="flex transition-transform duration-300 ease-out"
           style={{ transform: `translateX(-${index * 100}%)`, width: `${slides.length * 100}%` }}
         >
           {slides.map((v, i) => (
-            <figure id={`video-${i}`} key={i} className="w-full shrink-0 px-4 py-4">
-              <div className="mb-3">
-                <YouTube videoId={v.videoId} title={v.title} poster={v.poster} />
+            <figure id={`video-${i}`} key={i} className="w-full shrink-0 flex justify-center px-2 py-4">
+              <div className="w-full max-w-[960px]">
+                <div className="video-panel rounded-md border border-neutral-800 bg-neutral-900 shadow-lg shadow-black/20">
+                  <div className="video-embed overflow-hidden rounded-t-md">
+                    <YouTube videoId={v.videoId} title={v.title} />
+                  </div>
+                  <div className="p-4 bg-neutral-950 rounded-b-md">
+                    <h3 className="text-base font-medium line-clamp-2">{v.title}</h3>
+                    {v.summary && <p className="mt-1 text-sm text-neutral-300 line-clamp-3">{v.summary}</p>}
+                    {v.duration && <p className="mt-2 text-xs opacity-70">Duration: {v.duration}</p>}
+                    <a
+                      className="text-xs underline mt-2 inline-block"
+                      href={`https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Watch on YouTube
+                    </a>
+                  </div>
+                </div>
               </div>
-              <figcaption className="space-y-1">
-                <h3 className="text-base font-medium line-clamp-2">{v.title}</h3>
-                {v.summary && <p className="text-sm text-neutral-300 line-clamp-3">{v.summary}</p>}
-                {v.duration && <p className="text-xs opacity-70">Duration: {v.duration}</p>}
-                <a
-                  className="text-xs underline opacity-80"
-                  href={`https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Watch on YouTube
-                </a>
-              </figcaption>
             </figure>
           ))}
         </div>

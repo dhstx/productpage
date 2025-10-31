@@ -91,7 +91,7 @@ export default function UserManual() {
     <div className="w-full">
       {/* Explicit page colors so it's never a black screen */}
       <div className="min-h-screen bg-white text-black dark:bg-neutral-950 dark:text-neutral-100">
-        <div className="mx-auto max-w-5xl px-6 py-10" data-um>
+        <div className="um-shell mx-auto max-w-5xl px-6 py-10" data-um>
           <NoEmDash />
           <ErrorBoundary
             name="UserManualRoute"
@@ -99,21 +99,23 @@ export default function UserManual() {
               <ManualErrorUI error={error} onReset={resetError} />
             )}
           >
-            <header className="mb-8">
+            <header className="um-header mb-8">
               <div className="space-y-3">
                 <h1 className="text-3xl font-semibold">User Manual</h1>
                 <p className="text-base text-neutral-600 dark:text-neutral-300">
-                  Learn Syntek Automations—how it works, why it matters, and how to win with it.
+                  Learn Syntek Automations: how it works, why it matters, and how to win with it.
                 </p>
-                {!isWalkthroughs && (
-                  <div className="um-heading-separator" aria-hidden="true">
-                    <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
-                    </svg>
-                  </div>
-                )}
+                <div className={`um-heading-separator ${isWalkthroughs ? 'invisible' : ''}`} aria-hidden="true">
+                  <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
+                  </svg>
+                </div>
               </div>
-              <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+              <div className="um-subnav mt-4 h-[44px]">
+                <nav aria-label="User manual sections" className="flex h-full items-center">
+                  <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
+                </nav>
+              </div>
             </header>
 
             {/* Inline Search (hydrated client-side only) */}
@@ -132,7 +134,7 @@ export default function UserManual() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
+            <div className="um-content grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
               <aside aria-label="Sections" className="h-fit lg:sticky lg:top-6">
                 {isWalkthroughs ? <LocalSidebarWalkthroughs /> : <LeftNav />}
               </aside>

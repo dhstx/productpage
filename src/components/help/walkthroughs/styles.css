@@ -1,0 +1,16 @@
+.video-embed {
+  display: block;
+  width: 100%;
+}
+
+.video-embed > div,
+.video-embed iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  display: block;
+}
+
+.video-panel {
+  max-height: min(720px, 90vh);
+}
