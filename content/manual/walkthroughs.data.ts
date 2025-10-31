@@ -10,20 +10,20 @@ export const WALKTHROUGHS: Walkthrough[] = [
   {
     title: "Workflows: from prompt to action",
     summary:
-      "See Manus Hub route natural language through agents (Conductor, Builder, Connector) to apps like GitHub, Vercel, Notion.",
+      "Manus Hub routes natural language through agents (Conductor, Builder, Connector) to apps like GitHub, Vercel, Notion.",
     videoId: "wrfM7Yf0Q1c",
     duration: "07:12",
   },
   {
-    title: "Security walk-through",
-    summary: "Set scopes, audit logs, and approval gates for sensitive flows.",
+    title: "Security walkthrough",
+    summary: "Least privilege, approval gates, audit exports.",
     videoId: "sQ3Gk9HdTuV",
-    duration: "05:46",
+    duration: "05:03",
   },
   {
-    title: "Quickstart",
-    summary: "Connect Notion/GitHub/Vercel, ship a starter site, and post the link to your knowledge base.",
+    title: "10-minute Quickstart",
+    summary: "Connect core apps, deploy a starter, publish notes to your knowledge base.",
     videoId: "L9P2cNaXbJs",
-    duration: "04:58",
+    duration: "10:12",
   },
 ];

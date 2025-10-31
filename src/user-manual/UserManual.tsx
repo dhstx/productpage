@@ -1,19 +1,32 @@
 import React, { Suspense, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import LeftNav from '@/components/help/LeftNav';
-import RightTOC from '@/components/help/RightTOC';
-import Feedback from '@/components/help/Feedback';
-import LastUpdated from '@/components/help/LastUpdated';
-import RelatedArticles from '@/components/help/RelatedArticles';
-import MarkdownRenderer from '@/components/help/MarkdownRenderer';
-import { buildManualIndex } from '@/user-manual/searchIndex';
-import ErrorBoundary from '@/components/ErrorBoundary.jsx';
-import { isHelpSafeMode, isDevEnvironment } from '@/lib/helpSafeMode';
-import WalkthroughsView from '@/user-manual/WalkthroughsView';
+import LeftNav from '../components/help/LeftNav';
+import RightTOC from '../components/help/RightTOC';
+import Feedback from '../components/help/Feedback';
+import LastUpdated from '../components/help/LastUpdated';
+import RelatedArticles from '../components/help/RelatedArticles';
+import MarkdownRenderer from '../components/help/MarkdownRenderer';
+import { HeaderTabs, HeaderTabsLinkProps } from '../components/help/HeaderTabs';
+import NoEmDash from '../components/help/NoEmDash';
+import LocalSidebarWalkthroughs from '../components/help/walkthroughs/LocalSidebarWalkthroughs';
+import { buildManualIndex } from './searchIndex';
+import ErrorBoundary from '../components/ErrorBoundary.jsx';
+import { isHelpSafeMode, isDevEnvironment } from '../lib/helpSafeMode';
+import WalkthroughsView from './WalkthroughsView';
 
-const ArrowSlider = React.lazy(() => import('../components/help/walkthroughs/ArrowSlider'));
+import './user-manual.css';
 
-const SearchBox = React.lazy(() => import('@/components/help/SearchBox'));
+const SearchBox = React.lazy(() => import('../components/help/SearchBox'));
+
+const RouterLinkAdapter = React.forwardRef<HTMLAnchorElement, HeaderTabsLinkProps>(
+  ({ to, className, children, "aria-current": ariaCurrent }, ref) => (
+    <Link to={to} className={className} aria-current={ariaCurrent} ref={ref as React.Ref<HTMLAnchorElement>}>
+      {children}
+    </Link>
+  )
+);
+
+RouterLinkAdapter.displayName = 'RouterLinkAdapter';
 
 function ManualErrorUI({ error, onReset }: { error: Error; onReset: () => void }) {
   useEffect(() => {
@@ -67,22 +80,7 @@ export default function UserManual() {
     };
   })();
   const safeMode = isHelpSafeMode();
-  const tabBase = 'inline-flex items-center rounded-full px-3 py-1 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400';
-  const tabActive = 'bg-neutral-800 text-amber-300 border border-neutral-700 dark:bg-neutral-800 dark:text-amber-300';
-  const tabIdle = 'bg-transparent text-neutral-300 hover:text-amber-300 hover:bg-neutral-900';
-
-  const subNavItems = [
-    {
-      label: 'Overview',
-      href: '/user-manual',
-      active: !isWalkthroughs,
-    },
-    {
-      label: 'Walkthroughs',
-      href: '/user-manual/walkthroughs',
-      active: isWalkthroughs,
-    },
-  ];
+  const activeTab: 'overview' | 'walkthroughs' = isWalkthroughs ? 'walkthroughs' : 'overview';
 
   if (isDevEnvironment()) {
     // eslint-disable-next-line no-console
@@ -93,33 +91,29 @@ export default function UserManual() {
     <div className="w-full">
       {/* Explicit page colors so it's never a black screen */}
       <div className="min-h-screen bg-white text-black dark:bg-neutral-950 dark:text-neutral-100">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl px-6 py-10" data-um>
+          <NoEmDash />
           <ErrorBoundary
             name="UserManualRoute"
             fallback={({ error, resetError }: { error: Error; resetError: () => void }) => (
               <ManualErrorUI error={error} onReset={resetError} />
             )}
           >
-            <header className="mb-6">
-              <h1 className="text-3xl font-semibold">User Manual</h1>
-              <p className="text-base text-neutral-600 dark:text-neutral-300">
-                Learn Syntek Automations—how it works, why it matters, and how to win with it.
-              </p>
-              <nav
-                aria-label="User manual sub navigation"
-                className="mt-4 flex flex-wrap gap-2 border-b border-neutral-200 pb-2 text-sm font-medium dark:border-neutral-800"
-              >
-                {subNavItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    aria-current={item.active ? 'page' : undefined}
-                    className={`${tabBase} ${item.active ? tabActive : tabIdle}`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
+            <header className="mb-8">
+              <div className="space-y-3">
+                <h1 className="text-3xl font-semibold">User Manual</h1>
+                <p className="text-base text-neutral-600 dark:text-neutral-300">
+                  Learn Syntek Automations—how it works, why it matters, and how to win with it.
+                </p>
+                {!isWalkthroughs && (
+                  <div className="um-heading-separator" aria-hidden="true">
+                    <svg width="160" height="12" viewBox="0 0 160 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2 6H158" stroke="#F2C15B" strokeWidth="4" strokeLinecap="round" strokeOpacity="0.9" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              <HeaderTabs active={activeTab} LinkComponent={RouterLinkAdapter} />
             </header>
 
             {/* Inline Search (hydrated client-side only) */}
@@ -140,7 +134,7 @@ export default function UserManual() {
 
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-[240px_minmax(0,1fr)_220px]">
               <aside aria-label="Sections" className="h-fit lg:sticky lg:top-6">
-                <LeftNav />
+                {isWalkthroughs ? <LocalSidebarWalkthroughs /> : <LeftNav />}
               </aside>
               <article id="help-article">
                 {isWalkthroughs ? (
@@ -148,13 +142,6 @@ export default function UserManual() {
                 ) : (
                   <>
                     <MarkdownRenderer content={doc.content} videoEnabled={!safeMode} />
-                    {!safeMode ? (
-                      <div className="mt-8">
-                        <Suspense fallback={<div className="h-64 rounded-lg border border-neutral-800 bg-neutral-950" />}>
-                          <ArrowSlider />
-                        </Suspense>
-                      </div>
-                    ) : null}
                     <div className="mt-6">
                       <LastUpdated updated={doc.updated} />
                     </div>
