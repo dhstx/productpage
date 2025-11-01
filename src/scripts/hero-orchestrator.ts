@@ -20,15 +20,20 @@
 
   function waitForTypewriter() {
     return new Promise<void>((resolve) => {
-      const typedEl = document.querySelector('#hero-typed') as HTMLElement | null;
+      const primaryRoot = document.getElementById('syntek-welcome-typewriter') as HTMLElement | null;
+      const legacyRoot = primaryRoot ? null : (document.querySelector('#hero-typed') as HTMLElement | null);
+      const target = primaryRoot || legacyRoot;
       // If no typed target exists, do not delay visibility
-      if (!typedEl) return resolve();
+      if (!target) return resolve();
 
-      const done = () => { typedEl.removeEventListener('typed:complete', done as any); resolve(); };
+      const eventName = primaryRoot ? 'typewriter:done' : 'typed:complete';
+      const attrName = primaryRoot ? 'data-typewriter-complete' : 'data-typed-complete';
 
-      if (typedEl.getAttribute('data-typed-complete') === '1') return resolve();
+      const done = () => { target.removeEventListener(eventName, done as any); resolve(); };
 
-      typedEl.addEventListener('typed:complete', done as any);
+      if (target.getAttribute(attrName) === '1') return resolve();
+
+      target.addEventListener(eventName, done as any);
       // Never block forever
       setTimeout(resolve, 3000);
     });

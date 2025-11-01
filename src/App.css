@@ -304,6 +304,108 @@
   font-size: clamp(16px, 4.5vw, 24px);
 }
 
+#syntek-welcome-typewriter {
+  position: relative;
+  display: inline-block;
+}
+
+#syntek-welcome-typewriter .welcome-text {
+  position: relative;
+  display: inline-block;
+  white-space: pre-wrap;
+  text-align: center;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+#syntek-welcome-typewriter .welcome-placeholder {
+  visibility: hidden;
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+#syntek-welcome-typewriter .welcome-first,
+#syntek-welcome-typewriter .welcome-rest,
+#syntek-welcome-typewriter .typewriter-typed {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: #B3B3B3;
+}
+
+#syntek-welcome-typewriter .welcome-rest .agent-name,
+#syntek-welcome-typewriter .typewriter-typed .agent-name {
+  font-weight: inherit;
+}
+
+#syntek-welcome-typewriter .welcome-typewriter {
+  position: absolute;
+  inset: 0;
+  display: inline-block;
+  text-align: center;
+  white-space: pre-wrap;
+  pointer-events: none;
+}
+
+#syntek-welcome-typewriter .typewriter-typed {
+  display: inline;
+  vertical-align: middle;
+}
+
+#syntek-welcome-typewriter .typewriter-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: currentColor;
+  border-radius: 1px;
+  margin-left: 6px;
+  vertical-align: middle;
+  opacity: 1;
+  transition: opacity 300ms ease;
+  animation: tw-caret-blink 1s steps(1, end) infinite;
+  will-change: opacity;
+}
+
+@keyframes tw-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+#syntek-welcome-typewriter .typewriter-cursor.done {
+  animation: none;
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #syntek-welcome-typewriter .typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+
+  #syntek-welcome-typewriter .typewriter-cursor.done {
+    opacity: 0;
+    transition: opacity 200ms linear;
+  }
+}
+
+@media (max-width: 768px) {
+  #syntek-welcome-typewriter .welcome-rest {
+    display: block;
+    text-align: center;
+  }
+
+  #syntek-welcome-typewriter .welcome-rest .agent-name {
+    display: inline-block;
+  }
+}
+
 /* Agent selector dots */
 .agent-dot { vertical-align: middle; flex-shrink: 0; }
 .agent-label { vertical-align: middle; }
