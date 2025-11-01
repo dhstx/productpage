@@ -111,7 +111,7 @@ export default function AgentsPopup({ open, onClose, agents = [] }) {
       return;
     }
 
-    if (!open && shouldRender && !isClosing) {
+    if (shouldRender && !isClosing) {
       if (reduceMotion) {
         setShouldRender(false);
         setIsClosing(false);
