@@ -33,7 +33,7 @@ describe('PublicChatbox hero typewriter', () => {
 
     // advance enough time for the first agent name to finish typing (Chief of Staff)
     await act(async () => {
-      vi.advanceTimersByTime(600);
+      await vi.advanceTimersByTimeAsync(1200);
     });
 
     const typewriterText = container.querySelector('.typewriter-text');
