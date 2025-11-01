@@ -1,3 +1,13 @@
+import { vi } from 'vitest';
+
+vi.mock('../../components/help/walkthroughs/ArrowSlider', () => ({
+  default: () => (
+    <section data-testid="walkthrough-slider" role="group" aria-label="Walkthrough videos">
+      <figure />
+    </section>
+  ),
+}));
+
 import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';

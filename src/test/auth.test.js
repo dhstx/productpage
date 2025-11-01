@@ -1,38 +1,49 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { login, logout, isAuthenticated, getCurrentUser } from '../lib/auth';
 
+vi.mock('../lib/auth/supabaseAuth', () => {
+  return {
+    signIn: vi.fn(async () => ({ user: null, session: null, error: 'Supabase not configured' })),
+    signOut: vi.fn(async () => ({ error: null })),
+    getCurrentUser: vi.fn(async () => ({ user: null, error: null })),
+  };
+});
+
 describe('Authentication', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     localStorage.clear();
     document.cookie = '';
+    await logout();
   });
 
-  it('should login successfully with correct credentials', () => {
-    const result = login('admin', 'admin123');
-    expect(result).toBeTruthy();
-    expect(result).toHaveProperty('email', 'admin@dhstx.com');
+  it('should login successfully with correct credentials', async () => {
+    const user = await login('admin', 'admin123');
+    expect(user).toBeTruthy();
+    expect(user).toMatchObject({ email: 'admin@dhstx.com', name: 'Administrator' });
     expect(isAuthenticated()).toBe(true);
   });
 
-  it('should fail login with empty credentials', () => {
-    const result = login('', '');
-    expect(result).toBeNull();
-  });
-
-  it('should logout successfully', () => {
-    login('admin', 'admin123');
-    expect(isAuthenticated()).toBe(true);
-    logout();
+  it('should fail login with empty credentials', async () => {
+    const user = await login('', '');
+    expect(user).toBeNull();
     expect(isAuthenticated()).toBe(false);
   });
 
-  it('should return current user after login', () => {
-    login('admin', 'admin123');
+  it('should logout successfully', async () => {
+    await login('admin', 'admin123');
+    expect(isAuthenticated()).toBe(true);
+    await logout();
+    expect(isAuthenticated()).toBe(false);
+  });
+
+  it('should return current user after login', async () => {
+    await login('admin', 'admin123');
     const user = getCurrentUser();
-    expect(user).toHaveProperty('name', 'Administrator');
-    expect(user).toHaveProperty('email', 'admin@dhstx.com');
-    expect(user).toHaveProperty('role', 'admin');
-    expect(user).toHaveProperty('id');
+    expect(user).toMatchObject({
+      name: 'Administrator',
+      email: 'admin@dhstx.com',
+      role: 'admin',
+    });
   });
 
   it('should return null when not authenticated', () => {

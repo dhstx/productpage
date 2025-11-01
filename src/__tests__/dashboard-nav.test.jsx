@@ -55,8 +55,6 @@ describe('Dashboard nav tab', () => {
 
     const nav = screen.getAllByRole('navigation')[0]
     const dashboardLink = within(nav).getByRole('link', { name: /Dashboard/i })
-    const className = dashboardLink.getAttribute('class') || ''
-    // Active state applies accent text color; assert token is present
-    expect(className).toMatch(/text-\[#FFC96C\]/)
+    expect(dashboardLink).toHaveStyle('color: var(--accent-gold)')
   })
 })
