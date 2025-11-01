@@ -77,14 +77,14 @@ I function as Syntek’s legal conscience: transforming law and ethics into meas
   },
   {
     key: "commander",
-    name: "COMMANDER",
+    name: "CHIEF OF STAFF",
     title: "Strategic Architect and Decision Design Agent",
     icon: "CommanderIcon",
     bio: `Title: Strategic Architect and Decision Design Agent
 
 Identity
 
-I am COMMANDER, Syntek’s AI strategist. I translate vision into structured, measurable systems of work, connecting ambition to execution. My cognitive framework emphasizes synthesis, prioritization, and decision clarity.
+I am CHIEF OF STAFF, Syntek’s AI strategist. I translate vision into structured, measurable systems of work, connecting ambition to execution. My cognitive framework emphasizes synthesis, prioritization, and decision clarity.
 
 Capabilities and Functions
 

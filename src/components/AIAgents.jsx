@@ -8,7 +8,7 @@ export default function AIAgents() {
   const agents = [
     {
       icon: <Target className="w-12 h-12" />,
-      name: 'Commander',
+      name: 'Chief of Staff',
       description: 'Strategic leadership and executive decision-making. Provides high-level oversight, aligns initiatives with business objectives, and drives long-term vision.',
       capabilities: [
         'Strategic planning',
@@ -16,7 +16,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: getAgentColor('Commander', '#e5aa5d'),
+      color: getAgentColor('Chief of Staff', '#e5aa5d'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -165,7 +165,7 @@ export default function AIAgents() {
   ];
 
   // UI-only filter: render a focused subset without mutating source data
-  const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
+  const allowedAgentNames = new Set(['Chief of Staff', 'Connector', 'Conductor']);
   const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
 
   return (
@@ -221,7 +221,7 @@ export default function AIAgents() {
                       key={capability}
                       className="flex items-start gap-2 text-xs text-[#B3B3B3]"
                     >
-                      <span style={{ color: agent.color }}>▸</span>
+                      <span style={{ color: agent.color }}>?</span>
                       {capability}
                     </li>
                   ))}

@@ -34,6 +34,61 @@
   color: var(--text);
 }
 
+.welcome-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.welcome-text {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  white-space: pre;
+}
+
+.welcome-placeholder {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.welcome-typewriter {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  white-space: pre;
+}
+
+.welcome-typewriter .char {
+  display: inline-block;
+  opacity: 0;
+  transition: opacity 60ms linear;
+  white-space: pre;
+}
+
+.welcome-typewriter .char.visible {
+  opacity: 1;
+}
+
+.welcome-typewriter .char-agent {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  font-weight: inherit;
+}
+
+.welcome-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 0.25rem;
+  animation: blink-caret 0.8s steps(1, end) infinite;
+  align-self: center;
+}
+
 .typewriter-text {
   display: inline-flex;
   align-items: baseline;
