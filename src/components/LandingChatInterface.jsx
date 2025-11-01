@@ -32,13 +32,16 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     domain: agent.domain
   }));
 
-  // Restrict UI to Commander, Connector, Conductor (UI only)
-  const allowedSet = new Set(['Commander', 'Connector', 'Conductor']);
-  const menuAgents = agents.filter(a => allowedSet.has(a.name));
+  // Restrict UI to curated hero agents (UI only)
+  const allowedAgentNames = ['Chief of Staff', 'Commander', 'Conductor', 'Connector'];
+  const allowedSet = new Set(allowedAgentNames);
+  const menuAgents = agents
+    .filter(a => allowedSet.has(a.name))
+    .sort((a, b) => allowedAgentNames.indexOf(a.name) - allowedAgentNames.indexOf(b.name));
 
   const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
-  // Derive initial selected agent synchronously: props > URL > localStorage > Commander
+  // Derive initial selected agent synchronously: props > URL > localStorage > default hero agent
   const deriveInitialSelectedAgent = () => {
     try {
       if (typeof window !== 'undefined') {
@@ -52,8 +55,10 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
         if (stored && allowedSet.has(stored)) return stored;
       }
     } catch {}
+    const chiefOfStaff = menuAgents.find((agent) => agent.name === 'Chief of Staff');
+    if (chiefOfStaff) return chiefOfStaff.name;
     if (allowedSet.has(initialAgent)) return initialAgent;
-    return 'Commander';
+    return menuAgents[0]?.name || 'Commander';
   };
 
   // ensure dropdown initial value matches the typewriter to avoid flicker
@@ -284,7 +289,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
   // Removed font-size mutation on reveal to avoid layout shifts
 
-  // Orchestrate chatbox mount → fade, then chips → H1 reveal
+  // Orchestrate chatbox mount ? fade, then chips ? H1 reveal
   useEffect(() => {
     if (!typingDone) return;
     setChatboxMounted(true);
@@ -329,7 +334,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, [chatboxVisible]);
 
-  // H1 glitch + left→right reveal (run concurrently)
+  // H1 glitch + left?right reveal (run concurrently)
   useEffect(() => {
     if (!h1Visible) return;
     const reduceMotion =
@@ -493,25 +498,44 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span
-              ref={helloPrefixRef}
-              id="hero-typed"
+            {/* --- Centered typewriter greeting (responsive) --- */}
+            <div
+              className="w-full text-center"
               aria-live="polite"
-              className="inline-flex flex-wrap items-baseline gap-1"
             >
-              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
+              <span
+                id="hero-typed-prefix"
+                ref={helloPrefixRef}
+                className="inline-block text-lg md:text-2xl font-semibold leading-tight text-[#B3B3B3]"
+                aria-hidden="false"
+              >
+                {typedPrefix || typedText}
+              </span>
+
+              <span
+                id="hero-typed-agent"
+                className={`inline-block text-lg md:text-2xl font-semibold leading-tight ${typedAgentName ? 'ml-2' : ''}`}
+                style={{ color: currentAgentColor }}
+              >
                 {typedAgentName}
               </span>
-              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
-            </span>
-            <span
-              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
-              style={{
-                backgroundColor: currentAgentColor,
-                opacity: typingDone ? 0 : 1,
-              }}
-            />
+
+              <span
+                id="hero-typed-suffix"
+                className="inline-block text-lg md:text-2xl font-semibold leading-tight text-[#B3B3B3]"
+              >
+                {typedSuffix}
+              </span>
+
+              <span
+                aria-hidden="true"
+                className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
+                style={{
+                  backgroundColor: currentAgentColor,
+                  opacity: typingDone ? 0 : 1,
+                }}
+              />
+            </div>
           </h1>
           {/* Removed the small purple agent label line in hero per spec */}
         </div>
@@ -580,7 +604,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                       <button
                         key={agent.name}
                         onClick={() => handleAgentSelect(agent.name)}
-                        className="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020]"
+                        className={`flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020] ${selectedAgent === agent.name ? 'bg-[#161616]' : ''}`}
                         role="option"
                         aria-selected={selectedAgent === agent.name}
                       >
@@ -597,8 +621,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                             boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
                           }}
                         />
-                        <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
-                        {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
+                        <span className={`flex-1 text-sm text-[#F2F2F2] ${selectedAgent === agent.name ? 'font-medium' : ''}`}>{agent.name}</span>
                       </button>
                     ))}
                   </div>
@@ -665,7 +688,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                       ref={textareaRef}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Describe what you need help with…"
+                      placeholder="Describe what you need help with?"
                       className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
                       rows={3}
                       onKeyDown={(e) => {
