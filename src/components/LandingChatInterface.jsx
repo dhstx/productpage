@@ -60,6 +60,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const [selectedAgent, setSelectedAgent] = useState(deriveInitialSelectedAgent);
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
+  const [cursorDone, setCursorDone] = useState(false);
   // removed rotating auxiliary label phrases per updated hero spec
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,6 +79,9 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const titleRef = useRef(null);
   const subheadRef = useRef(null);
   const helloPrefixRef = useRef(null);
+  const typedContainerRef = useRef(null);
+  const cursorRef = useRef(null);
+  const agentSpanRef = useRef(null);
 
   // Sync ref to initial state ASAP (before any animation begins)
   useEffect(() => {
@@ -107,7 +111,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     }
 
     // Abort and restart typewriter if mid-animation
-    if (isAnimatingRef.current && !hasPlayedRef.current) {
+    if (isAnimatingRef.current) {
       abortAndRestartTyping();
     }
   };
@@ -116,6 +120,63 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
   const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
   const currentAgentColor = currentAgent ? getAgentColor(currentAgent.name, currentAgent.color) : '#FFC96C';
+
+  const getAgentColorForName = (name) => {
+    const entry = agents.find((agent) => agent.name === name);
+    if (entry) {
+      return getAgentColor(entry.name, entry.color);
+    }
+    return currentAgentColor;
+  };
+
+  const clearTypewriterDom = () => {
+    const typedEl = typedContainerRef.current;
+    if (!typedEl) return;
+    typedEl.textContent = '';
+    agentSpanRef.current = null;
+  };
+
+  const ensureAgentSpan = (color) => {
+    const typedEl = typedContainerRef.current;
+    if (!typedEl) return null;
+    if (agentSpanRef.current) {
+      agentSpanRef.current.style.color = color;
+      agentSpanRef.current.style.textDecorationColor = color;
+      return agentSpanRef.current;
+    }
+    const span = document.createElement('span');
+    span.className = 'typewriter-agent';
+    span.style.color = color;
+    span.style.textDecorationColor = color;
+    typedEl.appendChild(span);
+    agentSpanRef.current = span;
+    return span;
+  };
+
+  const appendCharacter = (char, phase, color) => {
+    const typedEl = typedContainerRef.current;
+    if (!typedEl) return;
+    if (phase === 'agent') {
+      const agentSpan = ensureAgentSpan(color);
+      if (agentSpan) {
+        agentSpan.textContent = `${agentSpan.textContent || ''}${char}`;
+      }
+      return;
+    }
+    typedEl.appendChild(document.createTextNode(char));
+  };
+
+  const renderFullGreeting = (agentName, color) => {
+    clearTypewriterDom();
+    const typedEl = typedContainerRef.current;
+    if (!typedEl) return;
+    typedEl.appendChild(document.createTextNode('Welcome. Confer with your '));
+    const agentSpan = ensureAgentSpan(color);
+    if (agentSpan) {
+      agentSpan.textContent = agentName;
+    }
+    typedEl.appendChild(document.createTextNode('.'));
+  };
 
   const clearAnimationTimers = () => {
     timeoutsRef.current.forEach((timeoutId) => clearTimeout(timeoutId));
@@ -128,6 +189,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     hasPlayedRef.current = false;
     setTypingDone(false);
     setTypedText('');
+    setCursorDone(false);
+    clearTypewriterDom();
     // Ensure the ref reflects the latest selection
     activeAgentRef.current = selectedAgent;
     // Only restart if the hero is in view
@@ -141,17 +204,33 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       return;
     }
 
-    // Respect reduced motion preferences
+    const typedEl = typedContainerRef.current;
+    if (!typedEl) {
+      return;
+    }
+
     const reduceMotion =
       typeof window !== 'undefined' &&
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const activeAgentName = activeAgentRef.current;
+    const agentColor = getAgentColorForName(activeAgentName);
+    const finalText = `Welcome. Confer with your ${activeAgentName}.`;
+
+    clearTypewriterDom();
+    setCursorDone(false);
+
     if (reduceMotion) {
-      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
+      renderFullGreeting(activeAgentName, agentColor);
+      setTypedText(finalText);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
+      const fadeId = setTimeout(() => {
+        setCursorDone(true);
+      }, 240);
+      timeoutsRef.current.push(fadeId);
       return;
     }
 
@@ -161,52 +240,39 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
     const greetingPart = 'Welcome.';
     const conferPart = ' Confer with your ';
-    const agentPart = `${activeAgentRef.current}.`;
-    // Slow typewriter by 15% (UI-only)
+    const agentNamePart = activeAgentName;
+    const suffixPart = '.';
     const typingSpeed = Math.round(TYPEWRITER_CHAR_MS * 1.15);
     const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
     let output = '';
 
-    // Type "Welcome."
-    greetingPart.split('').forEach((ch) => {
+    const scheduleChar = (char, phase) => {
       delay += typingSpeed;
       const id = setTimeout(() => {
-        output += ch;
+        output += char;
+        appendCharacter(char, phase, agentColor);
         setTypedText(output);
       }, delay);
       timeoutsRef.current.push(id);
-    });
+    };
 
-    // Pause
+    greetingPart.split('').forEach((ch) => scheduleChar(ch, 'prefix'));
+
     delay += pauseDuration;
 
-    // Type " Confer with your "
-    conferPart.split('').forEach((ch) => {
-      delay += typingSpeed;
-      const id = setTimeout(() => {
-        output += ch;
-        setTypedText(output);
-      }, delay);
-      timeoutsRef.current.push(id);
-    });
+    conferPart.split('').forEach((ch) => scheduleChar(ch, 'prefix'));
 
-    // Type "{Agent}."
-    agentPart.split('').forEach((ch) => {
-      delay += typingSpeed;
-      const id = setTimeout(() => {
-        output += ch;
-        setTypedText(output);
-      }, delay);
-      timeoutsRef.current.push(id);
-    });
+    agentNamePart.split('').forEach((ch) => scheduleChar(ch, 'agent'));
 
-    // Completion
+    scheduleChar(suffixPart, 'suffix');
+
     const completionId = setTimeout(() => {
-      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
+      setCursorDone(true);
+      setTypedText(finalText);
     }, delay + typingSpeed);
     timeoutsRef.current.push(completionId);
   };
@@ -258,16 +324,10 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, [selectedAgent]);
 
-  // Keep typewriter phrase reactive to selected agent
-  // - If animation already completed, just swap the agent name in-place
-  // - If animation is in-progress, abort and restart cleanly with the new agent
+  // Re-run typewriter animation when the selected agent changes
   useEffect(() => {
     activeAgentRef.current = selectedAgent;
-    if (hasPlayedRef.current) {
-      setTypedText(`Welcome. Confer with your ${selectedAgent}.`);
-    } else if (isAnimatingRef.current) {
-      abortAndRestartTyping();
-    }
+    abortAndRestartTyping();
   }, [selectedAgent]);
 
   // Computed-size adjustments (UI-only)
@@ -372,13 +432,10 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     .map(w => (w.length ? (w[0].toUpperCase() + w.slice(1).toLowerCase()) : w))
     .join(' ');
 
-  // Derive typed segments: prefix ("Welcome. Confer with your "), agent name (colored), and suffix (e.g., '.')
-  const prefixText = 'Welcome. Confer with your ';
-  const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
-  const restText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
-  const dotIndex = restText.indexOf('.')
-  const typedAgentName = dotIndex >= 0 ? restText.slice(0, dotIndex) : restText;
-  const typedSuffix = dotIndex >= 0 ? restText.slice(dotIndex) : '';
+  // Placeholder segments keep layout stable while animation runs
+  const placeholderPrefix = 'Welcome. Confer with your ';
+  const placeholderSuffix = '.';
+  const finalGreetingText = `Welcome. Confer with your ${selectedAgent}.`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -497,21 +554,34 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
               ref={helloPrefixRef}
               id="hero-typed"
               aria-live="polite"
-              className="inline-flex flex-wrap items-baseline gap-1"
+              aria-atomic="true"
+              className="hero-typewriter-shell"
             >
-              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
-                {typedAgentName}
+              <span
+                className="hero-typewriter-placeholder"
+                aria-hidden="true"
+                style={{ visibility: 'hidden' }}
+              >
+                <span className="hero-typewriter-prefix text-[#B3B3B3] whitespace-pre">{placeholderPrefix}</span>
+                <span
+                  className="hero-typewriter-agent underline underline-offset-4"
+                  style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}
+                >
+                  {selectedAgent}
+                </span>
+                <span className="hero-typewriter-suffix text-[#B3B3B3]">{placeholderSuffix}</span>
               </span>
-              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
+              <span className="hero-typewriter-overlay" role="presentation">
+                <span ref={typedContainerRef} className="typewriter-typed" />
+                <span
+                  ref={cursorRef}
+                  className={`typewriter-cursor${cursorDone ? ' done' : ''}`}
+                  style={{ opacity: cursorDone ? 0 : 1 }}
+                  aria-hidden="true"
+                />
+              </span>
+              <span className="sr-only">{typedText || finalGreetingText}</span>
             </span>
-            <span
-              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
-              style={{
-                backgroundColor: currentAgentColor,
-                opacity: typingDone ? 0 : 1,
-              }}
-            />
           </h1>
           {/* Removed the small purple agent label line in hero per spec */}
         </div>

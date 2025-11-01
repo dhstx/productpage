@@ -304,6 +304,77 @@
   font-size: clamp(16px, 4.5vw, 24px);
 }
 
+.hero-typewriter-shell {
+  position: relative;
+  display: inline-block;
+  text-align: inherit;
+}
+
+.hero-typewriter-placeholder,
+.hero-typewriter-overlay {
+  white-space: pre-wrap;
+}
+
+.hero-typewriter-placeholder {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.hero-typewriter-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: block;
+  text-align: inherit;
+  pointer-events: none;
+}
+
+.typewriter-typed {
+  display: inline;
+  color: #B3B3B3;
+  white-space: pre-wrap;
+}
+
+.typewriter-agent {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: currentColor;
+  border-radius: 1px;
+  margin-left: 4px;
+  vertical-align: middle;
+  opacity: 1;
+  transition: opacity 280ms ease;
+  animation: tw-caret-blink 1s steps(1, end) infinite;
+}
+
+@keyframes tw-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.typewriter-cursor.done {
+  animation: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor {
+    animation: none;
+    opacity: 1;
+  }
+  .typewriter-cursor.done {
+    opacity: 0;
+    transition: opacity 200ms linear;
+  }
+}
+
 /* Agent selector dots */
 .agent-dot { vertical-align: middle; flex-shrink: 0; }
 .agent-label { vertical-align: middle; }
