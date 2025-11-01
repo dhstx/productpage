@@ -322,7 +322,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       setTypedText(`Welcome. Confer with your ${selectedAgent}.`);
       resetTypewriterElements();
     }
-  }, [selectedAgent]);
+  }, [selectedAgent, abortAndRestartTyping, resetTypewriterElements]);
 
   // Computed-size adjustments (UI-only)
   // - Typewriter H1: 50% of computed size (run once on mount)
