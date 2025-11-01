@@ -32,27 +32,48 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     domain: agent.domain
   }));
 
-  // Restrict UI to Commander, Connector, Conductor (UI only)
-  const allowedSet = new Set(['Commander', 'Connector', 'Conductor']);
+  // Restrict UI to hero agents (UI only)
+  const allowedSet = new Set(['Chief of Staff', 'Commander', 'Connector', 'Conductor']);
   const menuAgents = agents.filter(a => allowedSet.has(a.name));
 
   const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
 
-  // Derive initial selected agent synchronously: props > URL > localStorage > Commander
+  // Prefer: props/url/localStorage -> Chief of Staff -> fallback (Commander)
   const deriveInitialSelectedAgent = () => {
     try {
       if (typeof window !== 'undefined') {
-        const qp = new URLSearchParams(window.location.search);
-        const agentParam = qp.get('agent');
-        if (agentParam) {
-          const matched = agents.find(a => slugifyAgent(a.name) === agentParam);
-          if (matched && allowedSet.has(matched.name)) return matched.name;
+        // 1) URL param agent=slug or exact name/key
+        const urlAgent = new URLSearchParams(window.location.search).get('agent');
+        if (urlAgent) {
+          const matched = (agents || []).find(a =>
+            (a.name && a.name.toLowerCase() === urlAgent.toLowerCase()) ||
+            (a.key && a.key.toLowerCase() === urlAgent.toLowerCase()) ||
+            (a.id && a.id.toLowerCase() === urlAgent.toLowerCase()) ||
+            (a.name && a.name.toLowerCase().replace(/\s+/g,'-') === urlAgent.toLowerCase())
+          );
+          if (matched) return matched.name;
         }
-        const stored = window.localStorage.getItem('selectedAgent');
-        if (stored && allowedSet.has(stored)) return stored;
+
+        // 2) localStorage
+        const stored = localStorage.getItem('dhstx_selected_agent');
+        if (stored) {
+          const matched = (agents || []).find(a => a.name === stored);
+          if (matched) return matched.name;
+        }
+
+        // 3) Prefer an agent named exactly "Chief of Staff" or a close match
+        const chief = (agents || []).find(a =>
+          (a.name && a.name.toLowerCase() === 'chief of staff') ||
+          (a.name && a.name.toLowerCase().includes('chief of staff')) ||
+          (a.key && a.key.toLowerCase().includes('chief')) ||
+          (a.id && a.id.toLowerCase().includes('chief'))
+        );
+        if (chief) return chief.name;
       }
-    } catch {}
-    if (allowedSet.has(initialAgent)) return initialAgent;
+    } catch (err) {
+      console.warn('deriveInitialSelectedAgent error', err);
+    }
+    // preserve existing fallback (Commander)
     return 'Commander';
   };
 
@@ -84,8 +105,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     // Persist the initial value if none stored
     try {
       if (typeof window !== 'undefined') {
-        const existing = window.localStorage.getItem('selectedAgent');
-        if (!existing) window.localStorage.setItem('selectedAgent', selectedAgent);
+        const existing = window.localStorage.getItem('dhstx_selected_agent');
+        if (!existing) window.localStorage.setItem('dhstx_selected_agent', selectedAgent);
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,7 +117,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     setShowAgentMenu(false);
     activeAgentRef.current = name;
     try { onAgentChange?.(name); } catch {}
-    try { if (typeof window !== 'undefined') window.localStorage.setItem('selectedAgent', name); } catch {}
+    try { if (typeof window !== 'undefined') window.localStorage.setItem('dhstx_selected_agent', name); } catch {}
 
     // Update URL query param
     try {
@@ -283,7 +304,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
   // Removed font-size mutation on reveal to avoid layout shifts
 
-  // Orchestrate chatbox mount → fade, then chips → H1 reveal
+  // Orchestrate chatbox mount ? fade, then chips ? H1 reveal
   useEffect(() => {
     if (!typingDone) return;
     setChatboxMounted(true);
@@ -328,7 +349,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, [chatboxVisible]);
 
-  // H1 glitch + left→right reveal (run concurrently)
+  // H1 glitch + left?right reveal (run concurrently)
   useEffect(() => {
     if (!h1Visible) return;
     const reduceMotion =
@@ -471,25 +492,33 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
             ref={titleRef}
             className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span
-              ref={helloPrefixRef}
-              id="hero-typed"
-              aria-live="polite"
-              className="inline-flex flex-wrap items-baseline gap-1"
-            >
-              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
+            {/* Centered typewriter */}
+            <div className="w-full text-center">
+              <span
+                ref={helloPrefixRef}
+                id="hero-typed"
+                aria-live="polite"
+                className="inline-block text-lg md:text-2xl font-semibold text-[#B3B3B3]"
+              >
+                {typedPrefix}
+              </span>
+              <span
+                className="inline-block text-lg md:text-2xl font-semibold"
+                style={{ color: currentAgentColor }}
+              >
                 {typedAgentName}
               </span>
-              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
-            </span>
-            <span
-              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
-              style={{
-                backgroundColor: currentAgentColor,
-                opacity: typingDone ? 0 : 1,
-              }}
-            />
+              <span className="inline-block text-lg md:text-2xl font-semibold text-[#B3B3B3]">
+                {typedSuffix}
+              </span>
+              <span
+                className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
+                style={{
+                  backgroundColor: currentAgentColor,
+                  opacity: typingDone ? 0 : 1,
+                }}
+              />
+            </div>
           </h1>
           {/* Removed the small purple agent label line in hero per spec */}
         </div>
@@ -571,7 +600,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                           }}
                         />
                         <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
-                        {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
+                        {selectedAgent === agent.name && <span className="text-[#FFC96C]">?</span>}
                       </button>
                     ))}
                   </div>
@@ -638,7 +667,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                       ref={textareaRef}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Describe what you need help with…"
+                      placeholder="Describe what you need help with?"
                       className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
                       rows={3}
                       onKeyDown={(e) => {

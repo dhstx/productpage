@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Bot, Brain, Lightbulb, Target, Wrench, Palette, Megaphone, Users, Archive, DollarSign, Scale, Shield, TrendingUp } from 'lucide-react';
 import { getAgentColor } from './ui/agentThemes';
 import FadeInSection from './FadeInSection';
+import AgentsHoverPanel from './AgentsHoverPanel';
 
 export default function AIAgents() {
   // All 13 specialized AI agents with icons, descriptions, and capabilities
@@ -167,6 +168,7 @@ export default function AIAgents() {
   // UI-only filter: render a focused subset without mutating source data
   const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
   const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
+  const [agentsPanelOpen, setAgentsPanelOpen] = useState(false);
 
   return (
     <section className="relative w-full overflow-x-hidden px-4 py-16 sm:px-6 mx-auto max-w-7xl">
@@ -221,7 +223,7 @@ export default function AIAgents() {
                       key={capability}
                       className="flex items-start gap-2 text-xs text-[#B3B3B3]"
                     >
-                      <span style={{ color: agent.color }}>▸</span>
+                      <span style={{ color: agent.color }}>?</span>
                       {capability}
                     </li>
                   ))}
@@ -247,13 +249,24 @@ export default function AIAgents() {
               comprehensive solutions. They continuously learn from your organization's patterns,
               becoming more effective over time and adapting to your unique workflows.
             </p>
-            <Link to="/login" className="btn-system">
+            <button
+              type="button"
+              className="btn-system inline-flex items-center gap-2"
+              onClick={() => setAgentsPanelOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={agentsPanelOpen}
+            >
               <Bot className="h-4 w-4" />
               View All Agents
-            </Link>
+            </button>
           </div>
         </div>
       </FadeInSection>
+      <AgentsHoverPanel
+        open={agentsPanelOpen}
+        agents={agents || []}
+        onClose={() => setAgentsPanelOpen(false)}
+      />
     </section>
   );
 }
