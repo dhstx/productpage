@@ -320,7 +320,7 @@
   inset: 0;
   display: inline-flex;
   align-items: baseline;
-  justify-content: center;
+  /* justify-content removed to ensure left alignment */
   pointer-events: none;
   white-space: pre-wrap;
 }
