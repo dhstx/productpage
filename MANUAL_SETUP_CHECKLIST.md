@@ -441,7 +441,7 @@
 **PT Balance:** `_________` PT (should be 100)
 
 ### 5.5 Test Chat Interface
-- [ ] Click on an agent (e.g., Commander)
+- [ ] Click on an agent (e.g., Chief of Staff)
 - [ ] Send test message: "Hello, test message"
 - [ ] Verify PT estimation shows before sending
 - [ ] Verify AI response received

@@ -26,12 +26,12 @@ I have successfully implemented a complete multi-agent orchestration system for 
 **Files**: 
 - `api/services/prompts.js` (300+ lines)
 - `api/services/prompts/Orchestrator.md`
-- `api/services/prompts/Commander.md`
+- `api/services/prompts/Chief of Staff.md`
 - Dynamic generation for remaining 11 agents
 
 - **Orchestrator**: Central intelligence hub for routing
 - **Department Leads** (6 agents): Plan, delegate, aggregate, report
-  - Commander, Conductor, Scout, Echo, Ledger, Counselor
+  - Chief of Staff, Conductor, Scout, Echo, Ledger, Counselor
 - **Specialist Agents** (6 agents): Execute specific tasks
   - Builder, Muse, Connector, Archivist, Sentinel, Optimizer
 
@@ -153,7 +153,7 @@ I have successfully implemented a complete multi-agent orchestration system for 
        ▼
 ┌─────────────────────┐
 │  Department Lead    │ ◄── Plans & Coordinates
-│  (Commander, Echo,  │
+│  (Chief of Staff, Echo,  │
 │   Conductor, etc.)  │
 └──────┬──────────────┘
        │
@@ -322,7 +322,7 @@ I have successfully implemented a complete multi-agent orchestration system for 
 2. `api/services/config.js` - Business categories and agent capabilities
 3. `api/services/prompts.js` - Dynamic prompt generation
 4. `api/services/prompts/Orchestrator.md` - Orchestrator system prompt
-5. `api/services/prompts/Commander.md` - Commander system prompt
+5. `api/services/prompts/Chief of Staff.md` - Chief of Staff system prompt
 6. `api/services/integrationManager.js` - Integration checking system
 7. `test-multi-agent-system.js` - Comprehensive test suite
 8. `MULTI_AGENT_SYSTEM_PROMPT.md` - Complete specification document

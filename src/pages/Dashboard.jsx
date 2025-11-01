@@ -61,7 +61,7 @@ export default function Dashboard() {
     }
   }
 
-  const [selectedAgent, setSelectedAgent] = useState('Commander');
+  const [selectedAgent, setSelectedAgent] = useState('Chief of Staff');
 
   return (
     <>

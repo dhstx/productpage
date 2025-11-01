@@ -7,7 +7,7 @@ export default function AIAgents() {
   const agents = [
     {
       icon: <Target className="w-12 h-12" />,
-      name: 'Commander',
+      name: 'Chief of Staff',
       description: 'Strategic leadership and executive decision-making. Provides high-level oversight, aligns initiatives with business objectives, and drives long-term vision.',
       capabilities: [
         'Strategic planning',

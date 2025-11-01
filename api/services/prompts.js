@@ -18,7 +18,7 @@ const AGENT_METADATA = {
     tone: 'Professional and efficient',
     file: 'Orchestrator.md'
   },
-  Commander: {
+  'Chief of Staff': {
     role: 'Strategic Leadership & Executive Decision-Making',
     primary_function: 'High-level strategic planning and coordination',
     expertise: ['strategic planning', 'business model development', 'goal-setting', 'executive decisions'],

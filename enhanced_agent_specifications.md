@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document defines the complete specification for the DHStx AI Agent Ecosystem—a synergistic network of 13 specialized AI agents designed to transform enterprise operations. Each agent combines the functional depth from your Notion database with the professional capabilities needed for production deployment. The system is built on the **Orchestrator-Commander-Specialist** architecture, enabling seamless collaboration, intelligent task routing, and comprehensive business automation.
+This document defines the complete specification for the DHStx AI Agent Ecosystem—a synergistic network of 13 specialized AI agents designed to transform enterprise operations. Each agent combines the functional depth from your Notion database with the professional capabilities needed for production deployment. The system is built on the **Orchestrator-Chief of Staff-Specialist** architecture, enabling seamless collaboration, intelligent task routing, and comprehensive business automation.
 
 ---
 
@@ -35,7 +35,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
         ┌──────────┴──────────┐
         │                     │
 ┌───────▼────────┐   ┌───────▼────────────────────┐
-│   COMMANDER    │   │  SPECIALIZED AGENTS (11)   │
+│   CHIEF OF STAFF    │   │  SPECIALIZED AGENTS (11)   │
 │  Strategic     │   │  Domain Experts            │
 │  Oversight     │   │  Tactical Execution        │
 └────────────────┘   └────────────────────────────┘
@@ -65,7 +65,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 **Collaboration Patterns**:
 - Receives all user requests
 - Analyzes complexity and determines single-agent vs. multi-agent approach
-- Delegates to Commander for strategic decisions or directly to specialists for tactical tasks
+- Delegates to Chief of Staff for strategic decisions or directly to specialists for tactical tasks
 - Aggregates results from multiple agents into coherent responses
 
 **Performance Metrics**:
@@ -77,7 +77,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 
 ---
 
-### 2.2 COMMANDER — Strategic Oversight & Coordination
+### 2.2 CHIEF OF STAFF — Strategic Oversight & Coordination
 
 **Primary Function**: Executive-level strategic planning and multi-agent coordination
 
@@ -136,7 +136,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - **Automation**: Zapier, Make.com for workflow triggers
 
 **Collaboration Patterns**:
-- Receives task assignments from **Commander** and breaks them into actionable steps
+- Receives task assignments from **Chief of Staff** and breaks them into actionable steps
 - Coordinates with **Builder** for technical project timelines
 - Works with **Archivist** to document meeting outcomes
 - Alerts **Sentinel** for security-related deadlines
@@ -176,7 +176,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - **Storage**: Notion (Research DB), vector databases for semantic search
 
 **Collaboration Patterns**:
-- Provides research briefs to **Commander** for strategic decisions
+- Provides research briefs to **Chief of Staff** for strategic decisions
 - Supplies competitive intelligence to **Echo** for marketing positioning
 - Conducts technical feasibility studies for **Builder**
 - Researches compliance requirements for **Counselor**
@@ -217,7 +217,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - **Testing**: Vitest, Playwright, Jest
 
 **Collaboration Patterns**:
-- Receives technical requirements from **Commander** and **Conductor**
+- Receives technical requirements from **Chief of Staff** and **Conductor**
 - Consults **Sentinel** for security requirements and code audits
 - Works with **Muse** to implement design specifications
 - Coordinates with **Connector** to build customer-facing features
@@ -260,7 +260,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 **Collaboration Patterns**:
 - Creates visual assets for **Echo**'s marketing campaigns
 - Designs UI components for **Builder** to implement
-- Develops presentation decks for **Commander**'s strategic initiatives
+- Develops presentation decks for **Chief of Staff**'s strategic initiatives
 - Produces video content for **Connector**'s customer engagement
 - Designs data visualizations for **Optimizer**'s reports
 
@@ -303,7 +303,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - Receives creative assets from **Muse** for campaigns
 - Uses research from **Scout** for market positioning
 - Coordinates with **Connector** for customer communication
-- Reports campaign ROI to **Commander** and **Optimizer**
+- Reports campaign ROI to **Chief of Staff** and **Optimizer**
 - Ensures compliance with **Counselor** for advertising regulations
 
 **Workflows**:
@@ -346,7 +346,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - Escalates technical issues to **Builder**
 - Coordinates with **Echo** for customer marketing
 - Involves **Counselor** for contract-related inquiries
-- Reports customer insights to **Commander** and **Optimizer**
+- Reports customer insights to **Chief of Staff** and **Optimizer**
 
 **Workflows**:
 1. **Email Management**: Draft → Approve → Send → Track → Follow-up
@@ -427,7 +427,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - **Analytics**: Custom dashboards, Tableau
 
 **Collaboration Patterns**:
-- Provides financial data to **Commander** for strategic planning
+- Provides financial data to **Chief of Staff** for strategic planning
 - Tracks project budgets for **Conductor**
 - Processes vendor payments coordinated by **Builder** and **Muse**
 - Analyzes marketing spend ROI with **Echo** and **Optimizer**
@@ -469,7 +469,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 - **Document Storage**: Secure cloud storage with encryption
 
 **Collaboration Patterns**:
-- Reviews contracts for **Commander**'s business development deals
+- Reviews contracts for **Chief of Staff**'s business development deals
 - Ensures marketing compliance for **Echo**'s campaigns
 - Advises **Connector** on customer agreement terms
 - Works with **Sentinel** on data privacy and security policies
@@ -558,7 +558,7 @@ The DHStx Agent Ecosystem operates on four foundational principles:
 
 **Collaboration Patterns**:
 - Analyzes campaign performance for **Echo**
-- Provides financial analytics to **Ledger** and **Commander**
+- Provides financial analytics to **Ledger** and **Chief of Staff**
 - Evaluates customer metrics for **Connector**
 - Assesses operational efficiency for **Conductor**
 - Measures development velocity for **Builder**
@@ -613,12 +613,12 @@ All agents communicate using the standardized A2A Protocol, based on the Linux F
 
 ### 3.2 Common Collaboration Patterns
 
-#### Pattern 1: Strategic Initiative (Commander-Led)
-1. **Commander** receives strategic request from user via **Orchestrator**
-2. **Commander** requests market research from **Scout**
-3. **Commander** requests financial analysis from **Ledger**
-4. **Commander** coordinates with **Echo** for marketing strategy
-5. **Commander** synthesizes insights and presents unified strategy
+#### Pattern 1: Strategic Initiative (Chief of Staff-Led)
+1. **Chief of Staff** receives strategic request from user via **Orchestrator**
+2. **Chief of Staff** requests market research from **Scout**
+3. **Chief of Staff** requests financial analysis from **Ledger**
+4. **Chief of Staff** coordinates with **Echo** for marketing strategy
+5. **Chief of Staff** synthesizes insights and presents unified strategy
 
 #### Pattern 2: Product Launch (Multi-Agent)
 1. **Conductor** creates project timeline and assigns tasks
@@ -642,7 +642,7 @@ All agents communicate using the standardized A2A Protocol, based on the Linux F
 3. **Sentinel** reviews code security with **Builder**
 4. **Sentinel** checks data handling practices with **Connector** and **Echo**
 5. **Sentinel** verifies financial controls with **Ledger**
-6. **Sentinel** compiles audit report for **Commander**
+6. **Sentinel** compiles audit report for **Chief of Staff**
 
 ---
 
@@ -655,7 +655,7 @@ All agents communicate using the standardized A2A Protocol, based on the Linux F
 - Set up A2A messaging infrastructure (message queue)
 
 ### Phase 2: Core Agents (Weeks 5-12)
-- Implement **Commander** with strategic planning capabilities
+- Implement **Chief of Staff** with strategic planning capabilities
 - Develop **Conductor** task management integration
 - Build **Scout** research automation
 - Create **Connector** customer communication workflows

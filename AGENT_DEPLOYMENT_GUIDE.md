@@ -124,7 +124,7 @@ Send a message to the AI agent system.
     "sessionId": "uuid",
     "agent": {
       "id": "commander",
-      "name": "Commander"
+      "name": "Chief of Staff"
     },
     "response": "Agent's response here",
     "metadata": {
@@ -170,7 +170,7 @@ The Orchestrator automatically routes requests based on keywords:
 
 | Keywords | Agent | Example |
 |----------|-------|---------|
-| strategy, strategic, vision, investor | **Commander** | "Help me develop our Q1 strategy" |
+| strategy, strategic, vision, investor | **Chief of Staff** | "Help me develop our Q1 strategy" |
 | task, schedule, meeting, deadline | **Conductor** | "Schedule a team meeting for next week" |
 | research, competitive, market, trend | **Scout** | "Research our top 3 competitors" |
 | develop, code, build, api, technical | **Builder** | "Build a REST API for user management" |
@@ -194,7 +194,7 @@ Users can also explicitly select an agent using the `agentId` parameter.
 | Model | Avg Tokens | Cost per 1K | Monthly (10K requests) |
 |-------|------------|-------------|------------------------|
 | Claude 3.5 Sonnet | 2,000 | $0.006 | $60 |
-| Claude 3 Opus | 2,500 | $0.038 | $380 (for Commander/Counselor only) |
+| Claude 3 Opus | 2,500 | $0.038 | $380 (for Chief of Staff/Counselor only) |
 | GPT-4 Turbo | 1,500 | $0.015 | $150 (for Builder/Muse/Echo only) |
 
 **Blended Cost Estimate**: ~$120-150/month for 10,000 agent executions
@@ -231,7 +231,7 @@ ORDER BY total_requests DESC;
 Test each agent with appropriate prompts:
 
 - [ ] **Orchestrator**: "What can you help me with?"
-- [ ] **Commander**: "Help me develop a strategic plan"
+- [ ] **Chief of Staff**: "Help me develop a strategic plan"
 - [ ] **Conductor**: "Create a project timeline"
 - [ ] **Scout**: "Research AI trends in 2025"
 - [ ] **Builder**: "Write a Python function to validate emails"

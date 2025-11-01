@@ -24,7 +24,7 @@ Based on your environment, you have access to:
   - Strong at following system prompts and maintaining persona
   - Multimodal capabilities (text, images, documents)
   - Cost-effective for high-volume usage
-- **Best For**: Commander, Scout, Counselor, Optimizer, Archivist
+- **Best For**: Chief of Staff, Scout, Counselor, Optimizer, Archivist
 - **Cost**: ~$3-15 per million tokens (depending on model)
 
 ### Option B: OpenAI API ✅ **AVAILABLE**
@@ -104,7 +104,7 @@ Based on your environment, you have access to:
 | Agent | Primary Model | Reasoning |
 |-------|--------------|-----------|
 | **Orchestrator** | Claude 3.5 Sonnet | Fast routing, excellent at intent classification |
-| **Commander** | Claude 3 Opus | Deep reasoning for strategic decisions |
+| **Chief of Staff** | Claude 3 Opus | Deep reasoning for strategic decisions |
 | **Conductor** | Claude 3.5 Sonnet | Efficient task management, structured output |
 | **Scout** | Claude 3.5 Sonnet | Superior research and analysis capabilities |
 | **Builder** | GPT-4 | Excellent code generation and technical tasks |
@@ -141,7 +141,7 @@ const openai = new OpenAI({
 // Agent system prompts
 const AGENT_PROMPTS = {
   orchestrator: `You are the Orchestrator, the central intelligence hub of the DHStx platform...`,
-  commander: `You are the Commander, providing executive-level strategic guidance...`,
+  commander: `You are the Chief of Staff, providing executive-level strategic guidance...`,
   // ... (full prompts for each agent)
 };
 
@@ -492,7 +492,7 @@ export async function storeInNotionKnowledgeBase(content) {
 
 **Primary Execution Engine**: **Anthropic Claude API**
 - Use Claude 3.5 Sonnet for 10 agents (fast, cost-effective)
-- Use Claude 3 Opus for Commander and Counselor (deep reasoning)
+- Use Claude 3 Opus for Chief of Staff and Counselor (deep reasoning)
 - Use OpenAI GPT-4 for Builder, Muse, Echo (specialized tasks)
 
 **State Management**: **Supabase PostgreSQL**

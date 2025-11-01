@@ -223,7 +223,7 @@
 ### Gaps for 12-Agent System
 1. Current agents are generic (not matching Notion specs)
 2. No Orchestrator agent matching Notion design
-3. Missing specialized agents: Scout, Builder, Muse, Echo, Connector, Archivist, Ledger, Counselor, Sentinel, Optimizer, Conductor, Commander
+3. Missing specialized agents: Scout, Builder, Muse, Echo, Connector, Archivist, Ledger, Counselor, Sentinel, Optimizer, Conductor, Chief of Staff
 4. No agent-to-agent communication (A2A protocol)
 5. No connection to Notion databases
 6. No workflow orchestration system

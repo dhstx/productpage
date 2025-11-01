@@ -18,7 +18,7 @@ Phase 1 of the DHStx AI Agent System has been **successfully completed, tested, 
 
 ### Routing Accuracy: 100% ✅
 All 12 test cases passing:
-- Strategic planning → Commander ✅
+- Strategic planning → Chief of Staff ✅
 - Project timeline → Conductor ✅
 - Research → Scout ✅
 - Python function → Builder ✅

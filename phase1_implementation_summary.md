@@ -15,7 +15,7 @@ Created production-ready specifications for all agents, combining insights from 
 | Agent | Domain | Primary Model | Use Case |
 |-------|--------|---------------|----------|
 | **Orchestrator** | Core System | Claude 3.5 Sonnet | Central intelligence hub, request routing |
-| **Commander** | Strategy & Leadership | Claude 3 Opus | Strategic planning, executive decisions |
+| **Chief of Staff** | Strategy & Leadership | Claude 3 Opus | Strategic planning, executive decisions |
 | **Conductor** | Operations | Claude 3.5 Sonnet | Task management, scheduling |
 | **Scout** | Research | Claude 3.5 Sonnet | Market research, competitive intelligence |
 | **Builder** | Development | GPT-4 Turbo | Software development, infrastructure |
@@ -134,7 +134,7 @@ Return to User
 
 The Orchestrator automatically routes requests based on keywords:
 
-- "strategy" → **Commander**
+- "strategy" → **Chief of Staff**
 - "task" → **Conductor**
 - "research" → **Scout**
 - "develop" → **Builder**
@@ -171,7 +171,7 @@ Send a message to the AI agent system.
     "sessionId": "uuid",
     "agent": {
       "id": "commander",
-      "name": "Commander"
+      "name": "Chief of Staff"
     },
     "response": "I'll help you develop a comprehensive Q1 strategic plan...",
     "metadata": {
@@ -294,7 +294,7 @@ curl -X POST http://localhost:3001/api/agents/chat \
 
 ### Advanced Features
 - [ ] Agent-to-agent communication (A2A Protocol)
-- [ ] Multi-agent workflows (e.g., Commander coordinates Scout + Ledger)
+- [ ] Multi-agent workflows (e.g., Chief of Staff coordinates Scout + Ledger)
 - [ ] User feedback system
 - [ ] Cost monitoring dashboard
 - [ ] Rate limiting and usage quotas
@@ -315,7 +315,7 @@ curl -X POST http://localhost:3001/api/agents/chat \
 Test each agent with appropriate prompts:
 
 - [ ] **Orchestrator**: "What can you help me with?"
-- [ ] **Commander**: "Help me develop a strategic plan"
+- [ ] **Chief of Staff**: "Help me develop a strategic plan"
 - [ ] **Conductor**: "Create a project timeline for Q1"
 - [ ] **Scout**: "Research AI trends in 2025"
 - [ ] **Builder**: "Write a Python function to validate emails"

@@ -19,7 +19,7 @@ export const BUSINESS_CATEGORIES = [
 ];
 
 export const LEADS = {
-  'Strategy & Leadership': 'Commander',
+  'Strategy & Leadership': 'Chief of Staff',
   'Operations & Project Management': 'Conductor',
   'Research & Intelligence': 'Scout',
   'Technical Development': 'Builder',
@@ -38,9 +38,9 @@ export const AGENT_CAPABILITIES = {
   Orchestrator: {
     primary: ['routing', 'coordination', 'multi-agent-orchestration'],
     integrations: ['all'],
-    can_delegate_to: ['Commander', 'Conductor', 'Scout', 'Builder', 'Muse', 'Echo', 'Connector', 'Archivist', 'Ledger', 'Counselor', 'Sentinel', 'Optimizer']
+    can_delegate_to: ['Chief of Staff', 'Conductor', 'Scout', 'Builder', 'Muse', 'Echo', 'Connector', 'Archivist', 'Ledger', 'Counselor', 'Sentinel', 'Optimizer']
   },
-  Commander: {
+  'Chief of Staff': {
     primary: ['strategic-planning', 'decision-making', 'goal-setting'],
     integrations: ['notion', 'taskade', 'google-docs'],
     can_delegate_to: ['Conductor', 'Scout', 'Ledger', 'Optimizer']

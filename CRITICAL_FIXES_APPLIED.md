@@ -244,7 +244,7 @@ These are **non-blocking** - the core multi-agent system will function correctly
 
 ### Manual Testing
 1. Send message to Orchestrator
-2. Select specific agent (e.g., Commander)
+2. Select specific agent (e.g., Chief of Staff)
 3. Request multi-agent task (e.g., "Create marketing campaign")
 4. Verify response structure
 5. Check error handling (invalid input)

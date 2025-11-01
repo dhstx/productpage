@@ -8,7 +8,7 @@ const S = ({ size = 20, color = 'currentColor', ...rest }: IconProps) => ({
   size, color, rest
 });
 
-export const CommanderIcon = (p: IconProps) => {
+export const ChiefOfStaffIcon = (p: IconProps) => {
   const { size, color, rest } = S(p);
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...rest}>
@@ -62,7 +62,7 @@ export const OrchestratorIcon = (p: IconProps) => { const {size,color,rest}=S(p)
 
 export function getAgentIcon(name?: string) {
   const m: Record<string, React.FC<IconProps>> = {
-    Commander: CommanderIcon,
+    'Chief of Staff': ChiefOfStaffIcon,
     Conductor: ConductorIcon,
     Connector: ConnectorIcon,
     Scout: ScoutIcon,
@@ -76,7 +76,7 @@ export function getAgentIcon(name?: string) {
     Optimizer: OptimizerIcon,
     Orchestrator: OrchestratorIcon,
   };
-  return m[name || ''] || CommanderIcon;
+  return m[name || ''] || ChiefOfStaffIcon;
 }
 
 export default getAgentIcon;

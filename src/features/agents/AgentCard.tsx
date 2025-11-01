@@ -10,7 +10,7 @@ export type AgentCardProps = {
 };
 
 export function AgentCard({ agent, color, onSelect }: AgentCardProps) {
-  const IconComponent = (Icons as any)[agent.icon] || (Icons as any).CommanderIcon;
+  const IconComponent = (Icons as any)[agent.icon] || (Icons as any).ChiefOfStaffIcon;
   const [enabled, setEnabled] = useState<boolean>(true);
   useEffect(() => {
     setEnabled(isEnabled(agent.key));

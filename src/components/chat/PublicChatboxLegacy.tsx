@@ -3,7 +3,7 @@ import "@/styles/public-chatbox-legacy.css";
 import getIcon from "@/components/ui/agentIcons";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
 
-const AGENTS = ["Commander","Conductor","Connector"] as const;
+const AGENTS = ["Chief of Staff","Conductor","Connector"] as const;
 type A = typeof AGENTS[number];
 
 /** EXACT legacy timings */
@@ -11,7 +11,7 @@ const CHAR_MS = 32;
 const WORD_PAUSE_MS = 850;
 
 export default function PublicChatboxLegacy() {
-  const [agent, setAgent] = useState<A>("Commander");
+  const [agent, setAgent] = useState<A>("Chief of Staff");
 
   // keep the first rendered word == selected to avoid any flicker
   const rotation = useMemo<A[]>(() => {
@@ -39,8 +39,8 @@ export default function PublicChatboxLegacy() {
     <section className="hero-legacy-wrap" aria-label="Public Chatbox (Legacy)">
       <h1 className="hero-legacy-title">SYNTEK AUTOMATIONS</h1>
       <h2 className="hero-legacy-sub">
-        WELCOME. CONFER WITH YOUR{" "}
-        <span ref={wordRef} className="legacy-typer" style={{ color }}>{agent}</span>.
+        Welcome, Commander. Meet your{" "}
+        <span ref={wordRef} className="legacy-typer" style={{ color }}>{agent}</span>
       </h2>
 
       <div className="legacy-controls">

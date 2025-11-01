@@ -60,7 +60,7 @@ async function handleUserRequest(message, userId, sessionId, agentId) {
   const orchestratorPrompt = `You are the Orchestrator, a central intelligence hub that analyzes user requests and routes them to the most appropriate specialist agent.
 
 Available agents:
-- Commander: Strategic leadership and executive decisions
+- Chief of Staff: Strategic leadership and executive decisions
 - Conductor: Operations management and task coordination
 - Scout: Research and competitive intelligence
 - Builder: Technical development and coding

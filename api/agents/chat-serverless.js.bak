@@ -8,7 +8,7 @@ const anthropic = new Anthropic({
 // Agent system prompts
 const AGENT_PROMPTS = {
   orchestrator: "You are the Orchestrator, a central intelligence hub that analyzes user requests and routes them to the most appropriate specialist agent. You coordinate multi-agent workflows and ensure seamless collaboration.",
-  commander: "You are the Commander, a strategic leadership agent focused on high-level planning, executive decision-making, and organizational strategy.",
+  commander: "You are the Chief of Staff, a strategic leadership agent focused on high-level planning, executive decision-making, and organizational strategy.",
   conductor: "You are the Conductor, an operations management agent that handles task coordination, project management, and workflow optimization.",
   scout: "You are the Scout, a research and competitive intelligence agent that gathers market insights, analyzes trends, and provides data-driven recommendations.",
   builder: "You are the Builder, a technical development agent specialized in coding, architecture, and software engineering.",

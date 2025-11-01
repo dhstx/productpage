@@ -12,7 +12,7 @@
 
 | Agent | Test Scenario | Response Time | Model | Tokens | Status |
 |-------|---------------|---------------|-------|--------|--------|
-| **Commander** | Strategic planning for Q1 2026 | 2.6s | Claude 3 Haiku | 637 | ✅ PASS |
+| **Chief of Staff** | Strategic planning for Q1 2026 | 2.6s | Claude 3 Haiku | 637 | ✅ PASS |
 | **Conductor** | Project timeline creation | 4.1s | Claude 3 Haiku | 816 | ✅ PASS |
 | **Scout** | AI trends research | 6.8s | Claude 3 Haiku | 1,191 | ✅ PASS |
 | **Muse** | Landing page design | 17.3s | GPT-4 Turbo | 904 | ✅ PASS |
@@ -31,7 +31,7 @@
 
 ### Response Times
 - **Average**: 8.5 seconds
-- **Fastest**: 2.6s (Commander)
+- **Fastest**: 2.6s (Chief of Staff)
 - **Slowest**: 17.3s (Muse with GPT-4)
 - **Claude 3 Haiku**: 2.6-6.8s
 - **GPT-4 Turbo**: 12.8-17.3s

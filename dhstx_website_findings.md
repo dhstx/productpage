@@ -109,7 +109,7 @@ https://dhstx.co
 ### Desired State (from Notion/Google Drive)
 - **12+ specialized AI agents** including:
   - Orchestrator (central hub)
-  - Commander (strategic oversight)
+  - Chief of Staff (strategic oversight)
   - Conductor (task management)
   - Scout (research)
   - Builder (development)

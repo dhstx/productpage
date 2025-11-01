@@ -13,7 +13,7 @@ const testScenarios = [
   {
     name: 'Strategic Planning',
     message: 'Help me develop a strategic plan for Q1 2026',
-    expectedAgent: 'Commander'
+    expectedAgent: 'Chief of Staff'
   },
   {
     name: 'Project Management',

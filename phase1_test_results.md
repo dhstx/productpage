@@ -19,7 +19,7 @@ All core functionality of the DHStx AI Agent System has been tested and verified
 | # | Agent | ID | Domain |
 |---|-------|-----|---------|
 | 1 | Orchestrator | orchestrator | Core System |
-| 2 | Commander | commander | Strategy & Leadership |
+| 2 | Chief of Staff | commander | Strategy & Leadership |
 | 3 | Conductor | conductor | Operations & Project Management |
 | 4 | Scout | scout | Research & Intelligence |
 | 5 | Builder | builder | Development & Infrastructure |
@@ -47,7 +47,7 @@ All core functionality of the DHStx AI Agent System has been tested and verified
 
 | Test Message | Expected Agent | Routed Agent | Status |
 |--------------|----------------|--------------|--------|
-| "Help me develop a strategic plan for Q1" | Commander | Commander | ✅ |
+| "Help me develop a strategic plan for Q1" | Chief of Staff | Chief of Staff | ✅ |
 | "Create a project timeline" | Conductor | Conductor | ✅ |
 | "Research AI trends in 2025" | Scout | Scout | ✅ |
 | "Write a Python function" | Builder | Builder | ✅ |
@@ -107,7 +107,7 @@ All core functionality of the DHStx AI Agent System has been tested and verified
 
 **Result**: All agent metadata properly structured
 
-### Sample Agent (Commander):
+### Sample Agent (Chief of Staff):
 - **ID**: commander
 - **Domain**: Strategy & Leadership
 - **Voice**: Authoritative, visionary, and decisive
@@ -275,7 +275,7 @@ if (message.match(/analytics|performance|optimize|dashboard|kpi|a\/b test|data|c
 7. **Agent-to-Agent Communication** 🤝
    - Implement A2A Protocol
    - Create multi-agent workflows
-   - Test complex scenarios (e.g., Commander → Scout → Ledger)
+   - Test complex scenarios (e.g., Chief of Staff → Scout → Ledger)
 
 8. **User Feedback System** 💬
    - Add rating system for responses

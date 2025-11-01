@@ -3,7 +3,7 @@ import "@/styles/public-chatbox.css";
 import getIcon from "@/components/ui/agentIcons";
 import { getAgentColorForContext } from "@/components/ui/agentThemes";
 
-const PUBLIC_AGENTS = ["Commander","Conductor","Connector"] as const;
+const PUBLIC_AGENTS = ["Chief of Staff","Conductor","Connector"] as const;
 type PublicAgent = typeof PUBLIC_AGENTS[number];
 
 export default function PublicChatbox() {
@@ -14,7 +14,7 @@ export default function PublicChatbox() {
       const s = window.localStorage.getItem("publicAgent");
       if (s && PUBLIC_AGENTS.includes(s as PublicAgent)) return s as PublicAgent;
     }
-    return "Commander";
+    return "Chief of Staff";
   });
 
   useEffect(() => {
@@ -115,9 +115,10 @@ export default function PublicChatbox() {
       {/* Legacy large rounded input */}
       <div className="mx-auto mb-4 rounded-3xl py-5 px-6 border"
            style={{ maxWidth: "900px", background:"var(--card-bg)", borderColor:"var(--card-border)" }}>
-        <div className="typewriter-container" aria-live="polite" aria-atomic="true">
+        <div className="typewriter-container chatbox-typewriter" aria-live="polite" aria-atomic="true">
           <span className="typewriter-text">
-            <span className="public-typer" aria-live="polite" aria-label="Active agent"></span>
+            <span className="typewriter-prefix">Welcome, Commander. Meet your </span>
+            <span className="public-typer agent-name" aria-live="polite" aria-label="Active agent"></span>
             <span className="cursor" aria-hidden="true">|</span>
           </span>
         </div>

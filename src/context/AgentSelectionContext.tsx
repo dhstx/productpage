@@ -9,8 +9,9 @@ export const useAgentSelection = () => {
   return v;
 };
 
-export const AgentSelectionProvider: React.FC<React.PropsWithChildren<{ initial?: string }>> = ({ initial = "Commander", children }) => {
-  const [selected, setSelected] = useState(initial);
+export const AgentSelectionProvider: React.FC<React.PropsWithChildren<{ initial?: string }>> = ({ initial = "Chief of Staff", children }) => {
+  const normalizedInitial = /^commander$/i.test(initial ?? '') ? "Chief of Staff" : initial;
+  const [selected, setSelected] = useState(normalizedInitial);
   const value = useMemo(() => ({ selected, setSelected }), [selected]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };

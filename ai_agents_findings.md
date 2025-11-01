@@ -30,7 +30,7 @@ Each agent has the following properties:
 - **Use Case**: Orchestrates all AI agent interactions, manages workflow delegation, provides unified user interface
 - **Role**: Analyzes user intent, selects workflows, delegates tasks, aggregates results
 
-### 2. **Commander**
+### 2. **Chief of Staff**
 - **Function**: Strategic oversight and multi-agent coordination
 - **Use Case**: Company-wide strategy, cross-department coordination, executive decisions, business development, investor relations
 - **Voice**: Authoritative and visionary
@@ -101,7 +101,7 @@ Each agent has the following properties:
 ## Agent Architecture Notes
 
 - **Orchestrator** serves as the central hub (Manus Hub)
-- Agents follow a hub-and-spoke model with Commander providing strategic oversight
+- Agents follow a hub-and-spoke model with Chief of Staff providing strategic oversight
 - Each agent has specialized SOPs and workflows
 - Agents communicate via Agent-to-Agent (A2A) Protocol (Linux Foundation open standard)
 - System emphasizes decentralized operations and blockchain enterprise focus

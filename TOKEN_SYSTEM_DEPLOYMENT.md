@@ -248,7 +248,7 @@ git push origin main
 
 1. Open incognito window
 2. Navigate to https://dhstx.co
-3. Try to chat with Commander (should work)
+3. Try to chat with Chief of Staff (should work)
 4. Try to chat again (should be blocked after 1 question)
 5. Try to select Builder agent (should show lock icon)
 
@@ -256,7 +256,7 @@ git push origin main
 
 1. Create a free account
 2. Verify you have 100 tokens
-3. Test chat with Commander, Connector, Conductor (should work)
+3. Test chat with Chief of Staff, Connector, Conductor (should work)
 4. Try to select Builder (should show upgrade prompt)
 5. Send multiple messages until tokens run low
 6. Verify token usage display updates

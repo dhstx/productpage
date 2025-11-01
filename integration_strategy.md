@@ -31,7 +31,7 @@ The GitHub repository is well-structured and utilizes a modern, production-ready
 *   **Database & Auth**: Supabase (PostgreSQL)
 *   **Payments**: Stripe
 
-Critically, the file `src/lib/agents.js` defines a set of 12 agents that are different from the 12 agents specified in your Notion database. The current agents in the codebase are more generic and system-oriented (e.g., "Master Coordinator", "Content Creation Orchestrator", "System Infrastructure & Optimization"), whereas your documented agents are business-function-specific (e.g., "Commander", "Scout", "Ledger").
+Critically, the file `src/lib/agents.js` defines a set of 12 agents that are different from the 12 agents specified in your Notion database. The current agents in the codebase are more generic and system-oriented (e.g., "Master Coordinator", "Content Creation Orchestrator", "System Infrastructure & Optimization"), whereas your documented agents are business-function-specific (e.g., "Chief of Staff", "Scout", "Ledger").
 
 ## 3. Desired State: The 12-Agent Ecosystem
 
@@ -40,7 +40,7 @@ Based on your Notion database, the target architecture is a sophisticated, hub-a
 | Agent Name   | Function                                       |
 | :----------- | :--------------------------------------------- |
 | Orchestrator | Central system orchestrator                    |
-| Commander    | Strategic oversight and multi-agent coordination |
+| Chief of Staff    | Strategic oversight and multi-agent coordination |
 | Conductor    | Task, schedule, and workflow management        |
 | Scout        | External research and competitive intelligence   |
 | Builder      | Development and technical implementation       |
@@ -63,7 +63,7 @@ The primary gap is the discrepancy between the agents defined in the codebase an
 
 **Action:** Replace the agent definitions in `src/lib/agents.js` with the 12 specialized agents from your Notion database.
 
-1.  **Update `src/lib/agents.js`**: Modify the existing array to reflect the names, descriptions, personas, and use cases of the 12 agents (Commander, Conductor, Scout, etc.).
+1.  **Update `src/lib/agents.js`**: Modify the existing array to reflect the names, descriptions, personas, and use cases of the 12 agents (Chief of Staff, Conductor, Scout, etc.).
 2.  **Update Frontend**: Ensure the "Select Agent" dropdown on the website populates with the new agent list.
 
 This initial step is low-effort and immediately aligns the user-facing presentation with your documented vision.

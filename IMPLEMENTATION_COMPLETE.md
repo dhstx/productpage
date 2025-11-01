@@ -182,7 +182,7 @@ Successfully implemented a complete AI agent system for dhstx.co with 13 special
 | Agent | Domain | Model | Purpose |
 |-------|--------|-------|---------|
 | **Orchestrator** | Central Intelligence | Claude Haiku | Routes requests to appropriate agents |
-| **Commander** | Strategic Leadership | Claude Opus | Executive decisions & strategic planning |
+| **Chief of Staff** | Strategic Leadership | Claude Opus | Executive decisions & strategic planning |
 | **Conductor** | Operations | Claude Haiku | Task & project management |
 | **Scout** | Research | Claude Haiku | Competitive intelligence & research |
 | **Builder** | Development | GPT-4 | Technical development & coding |

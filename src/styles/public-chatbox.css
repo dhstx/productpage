@@ -34,18 +34,28 @@
   color: var(--text);
 }
 
+.chatbox-typewriter {
+  text-align: center;
+}
+
 .typewriter-text {
   display: inline-flex;
   align-items: baseline;
+  justify-content: center;
   gap: 0.25rem;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
-  line-height: 1;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .typewriter-text .public-typer {
   display: inline-block;
   min-width: 4ch;
+}
+
+.typewriter-prefix {
+  display: inline-block;
 }
 
 .cursor {

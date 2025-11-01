@@ -30,7 +30,7 @@ Successfully implemented a production-ready AI agent system for dhstx.co with **
 **Function**: Routes requests, coordinates multi-agent workflows  
 **Color**: #FFC96C (Gold)
 
-### 2. **Commander** 🎯
+### 2. **Chief of Staff** 🎯
 **Role**: Strategic Leadership  
 **Model**: Claude 3 Haiku  
 **Function**: Executive decisions, business alignment, vision  
@@ -155,7 +155,7 @@ Successfully implemented a production-ready AI agent system for dhstx.co with **
 
 | Agent | Response Time | Tokens | Model | Status |
 |-------|---------------|--------|-------|--------|
-| Commander | 2.6s | 637 | Claude Haiku | ✅ |
+| Chief of Staff | 2.6s | 637 | Claude Haiku | ✅ |
 | Conductor | 4.1s | 816 | Claude Haiku | ✅ |
 | Scout | 6.8s | 1,191 | Claude Haiku | ✅ |
 | Builder | 12.8s | 707 | GPT-4 Turbo | ✅ |

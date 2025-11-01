@@ -30,7 +30,7 @@ Design and implement a sophisticated multi-agent orchestration system for DHStx 
   ],
   
   "LEADS": {
-    "Strategy & Leadership": "Commander",
+    "Strategy & Leadership": "Chief of Staff",
     "Operations & Project Management": "Conductor",
     "Research & Intelligence": "Scout",
     "Technical Development": "Builder",
@@ -57,7 +57,7 @@ Design and implement a sophisticated multi-agent orchestration system for DHStx 
       "integrations": ["all"],
       "can_delegate_to": ["all_agents"]
     },
-    "Commander": {
+    "Chief of Staff": {
       "primary": ["strategic-planning", "decision-making", "goal-setting"],
       "integrations": ["notion", "taskade", "google-docs"],
       "can_delegate_to": ["Conductor", "Scout", "Ledger", "Optimizer"]
@@ -633,7 +633,7 @@ const classifyRequest = (userMessage) => {
       category: "Strategy & Leadership",
       keywords: ["strategic", "plan", "vision", "goal", "leadership", "executive", "decision"],
       weight: 1.0,
-      lead: "Commander"
+      lead: "Chief of Staff"
     },
     {
       category: "Operations & Project Management",
@@ -825,9 +825,9 @@ Output:
 ```json
 {
   "category": "Strategy & Leadership",
-  "lead_agent": "Commander",
+  "lead_agent": "Chief of Staff",
   "confidence": 0.85,
-  "reasoning": "Request involves strategic planning (Commander's domain) with marketing component (will delegate to Echo)",
+  "reasoning": "Request involves strategic planning (Chief of Staff's domain) with marketing component (will delegate to Echo)",
   "requires_clarification": false,
   "clarification_question": null
 }
@@ -1602,7 +1602,7 @@ enum ErrorCode {
     {
       "id": "strategy_leadership",
       "name": "Strategy & Leadership",
-      "lead_agent": "Commander",
+      "lead_agent": "Chief of Staff",
       "description": "Strategic planning, executive decisions, organizational goals",
       "keywords": ["strategic", "plan", "vision", "goal", "leadership", "executive", "decision"]
     },
@@ -1702,13 +1702,13 @@ enum ErrorCode {
     },
     {
       "id": "commander",
-      "name": "Commander",
+      "name": "Chief of Staff",
       "type": "lead",
       "category": "Strategy & Leadership",
       "capabilities": ["strategic-planning", "decision-making", "goal-setting"],
       "integrations": ["notion", "taskade", "google-docs"],
       "can_delegate_to": ["Conductor", "Scout", "Ledger", "Optimizer"],
-      "system_prompt_file": "prompts/Commander.md"
+      "system_prompt_file": "prompts/Chief of Staff.md"
     },
     {
       "id": "conductor",

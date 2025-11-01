@@ -105,7 +105,7 @@ export const TIER_CONFIG = {
 };
 
 // Simple name-based availability with auth gating
-const CORE_THREE = ['Commander', 'Conductor', 'Connector'];
+const CORE_THREE = ['Chief of Staff', 'Conductor', 'Connector'];
 
 /**
  * Return list of agent names available for the given tier and auth state
