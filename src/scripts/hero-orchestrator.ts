@@ -20,7 +20,7 @@
 
   function waitForTypewriter() {
     return new Promise<void>((resolve) => {
-      const typedEl = document.querySelector('#hero-typed') as HTMLElement | null;
+      const typedEl = document.getElementById('syntek-welcome-typewriter') as HTMLElement | null;
       // If no typed target exists, do not delay visibility
       if (!typedEl) return resolve();
 
