@@ -36,7 +36,7 @@ export const agents = [
   },
   {
     id: 'commander',
-    name: 'Commander',
+    name: 'Chief of Staff',
     tagline: 'Strategic Vision & Leadership',
     description: 'Executive-level strategic planning and multi-agent coordination for company-wide initiatives and high-stakes decisions',
     version: '2.0.0',

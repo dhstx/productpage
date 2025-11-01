@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowUp, Sparkles, ChevronDown, Bot, Clock } from 'lucide-react';
@@ -12,6 +14,10 @@ import UpfadeOnOpen from './UpfadeOnOpen';
 // Timing controls for the hero typewriter greeting
 const TYPEWRITER_CHAR_MS = 61;
 const TYPEWRITER_PAUSE_MS = 650; // shorter pause per new spec
+const GREETING_PART = 'Welcome, Commander.';
+const TYPEWRITER_MIDDLE_PART = ' Meet your ';
+const DEFAULT_AGENT_ID = 'commander';
+const ALLOWED_AGENT_IDS = new Set(['commander', 'connector', 'conductor']);
 
 export default function AIChatInterface({ initialAgent = 'Commander', onAgentChange }) {
   const [typingDone, setTypingDone] = useState(false);
@@ -23,41 +29,67 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const [searchParams, setSearchParams] = useSearchParams();
   const [message, setMessage] = useState('');
   const [activeMode, setActiveMode] = useState('chat');
-  // Get all agents from the enhanced agents library
-  const agents = agentData.map(agent => ({
+  const agents = useMemo(() => agentData.map(agent => ({
     id: agent.id,
     name: agent.name,
     color: agent.color,
     icon: agent.icon,
     domain: agent.domain
-  }));
+  })), []);
 
-  // Restrict UI to Commander, Connector, Conductor (UI only)
-  const allowedSet = new Set(['Commander', 'Connector', 'Conductor']);
-  const menuAgents = agents.filter(a => allowedSet.has(a.name));
+  const menuAgents = useMemo(
+    () => agents.filter((agent) => ALLOWED_AGENT_IDS.has(agent.id)),
+    [agents]
+  );
 
-  const slugifyAgent = (name) => name.toLowerCase().replace(/\s+/g, '-');
+  const slugifyAgent = (value = '') =>
+    value
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '-');
 
-  // Derive initial selected agent synchronously: props > URL > localStorage > Commander
-  const deriveInitialSelectedAgent = () => {
+  const findAgentId = (value) => {
+    if (!value) return undefined;
+    return agents.find(
+      (agent) =>
+        agent.id === value ||
+        agent.name === value ||
+        slugifyAgent(agent.name) === value
+    )?.id;
+  };
+
+  const getAgentById = (id) =>
+    id ? agents.find((agent) => agent.id === id) : undefined;
+
+  // Derive initial selected agent synchronously: props > URL > localStorage > default
+  const deriveInitialSelectedAgentId = () => {
     try {
       if (typeof window !== 'undefined') {
         const qp = new URLSearchParams(window.location.search);
         const agentParam = qp.get('agent');
         if (agentParam) {
-          const matched = agents.find(a => slugifyAgent(a.name) === agentParam);
-          if (matched && allowedSet.has(matched.name)) return matched.name;
+          const matchedId = findAgentId(agentParam);
+          if (matchedId && ALLOWED_AGENT_IDS.has(matchedId)) return matchedId;
         }
         const stored = window.localStorage.getItem('selectedAgent');
-        if (stored && allowedSet.has(stored)) return stored;
+        if (stored) {
+          const storedId = findAgentId(stored);
+          if (storedId && ALLOWED_AGENT_IDS.has(storedId)) return storedId;
+        }
       }
     } catch {}
-    if (allowedSet.has(initialAgent)) return initialAgent;
-    return 'Commander';
+
+    const initialMatchId = findAgentId(initialAgent);
+    if (initialMatchId && ALLOWED_AGENT_IDS.has(initialMatchId)) {
+      return initialMatchId;
+    }
+
+    return DEFAULT_AGENT_ID;
   };
 
   // ensure dropdown initial value matches the typewriter to avoid flicker
-  const [selectedAgent, setSelectedAgent] = useState(deriveInitialSelectedAgent);
+  const [selectedAgentId, setSelectedAgentId] = useState(deriveInitialSelectedAgentId);
   const [showAgentMenu, setShowAgentMenu] = useState(false);
   const [typedText, setTypedText] = useState('');
   // removed rotating auxiliary label phrases per updated hero spec
@@ -69,39 +101,46 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
   const textareaRef = useRef(null);
   const sectionRef = useRef(null);
   const chatboxRootRef = useRef(null);
-  const contentRef = useRef(null);
   const timeoutsRef = useRef([]);
   const isAnimatingRef = useRef(false);
-  const activeAgentRef = useRef('Commander');
+  const activeAgentRef = useRef('Chief of Staff');
   const hasPlayedRef = useRef(false);
   const hasEnteredViewportRef = useRef(false);
   const titleRef = useRef(null);
   const subheadRef = useRef(null);
-  const helloPrefixRef = useRef(null);
 
   // Sync ref to initial state ASAP (before any animation begins)
   useEffect(() => {
-    activeAgentRef.current = selectedAgent;
+    const initialAgentData = getAgentById(selectedAgentId);
+    activeAgentRef.current = initialAgentData?.name ?? 'Chief of Staff';
     // Persist the initial value if none stored
     try {
       if (typeof window !== 'undefined') {
         const existing = window.localStorage.getItem('selectedAgent');
-        if (!existing) window.localStorage.setItem('selectedAgent', selectedAgent);
+        if (!existing) window.localStorage.setItem('selectedAgent', selectedAgentId);
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleAgentSelect = (name) => {
-    setSelectedAgent(name);
+  const handleAgentSelect = (agentId) => {
+    const matchedAgent = getAgentById(agentId) || getAgentById(DEFAULT_AGENT_ID);
+    const nextAgentId = matchedAgent?.id ?? DEFAULT_AGENT_ID;
+
+    setSelectedAgentId(nextAgentId);
     setShowAgentMenu(false);
-    activeAgentRef.current = name;
-    try { onAgentChange?.(name); } catch {}
-    try { if (typeof window !== 'undefined') window.localStorage.setItem('selectedAgent', name); } catch {}
+    activeAgentRef.current = matchedAgent?.name ?? 'Chief of Staff';
+
+    try { onAgentChange?.(nextAgentId); } catch {}
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('selectedAgent', nextAgentId);
+      }
+    } catch {}
 
     // Update URL query param
     try {
-      setSearchParams({ agent: slugifyAgent(name) }, { replace: true });
+      setSearchParams({ agent: nextAgentId }, { replace: true });
     } catch {
       // Fallback: ignore if router context not ready
     }
@@ -114,7 +153,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
   // (Removed) rotating agent phrases under hero to eliminate purple label
 
-  const currentAgent = agents.find((agent) => agent.name === selectedAgent) || menuAgents[0];
+  const currentAgent = getAgentById(selectedAgentId) || menuAgents[0] || getAgentById(DEFAULT_AGENT_ID);
   const currentAgentColor = currentAgent ? getAgentColor(currentAgent.name, currentAgent.color) : '#FFC96C';
 
   const clearAnimationTimers = () => {
@@ -129,7 +168,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     setTypingDone(false);
     setTypedText('');
     // Ensure the ref reflects the latest selection
-    activeAgentRef.current = selectedAgent;
+    const latestAgentName = getAgentById(selectedAgentId)?.name ?? 'Chief of Staff';
+    activeAgentRef.current = latestAgentName;
     // Only restart if the hero is in view
     if (hasEnteredViewportRef.current) {
       startTypingAnimation();
@@ -147,63 +187,46 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const agentPart = activeAgentRef.current || 'Chief of Staff';
+    const finalText = `${GREETING_PART}${TYPEWRITER_MIDDLE_PART}${agentPart}`;
+
     if (reduceMotion) {
-      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
+      setTypedText(finalText);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
       return;
     }
 
-    // Three-phase typewriter: "Welcome." then " Confer with your " then "{Agent}."
+    // Three-phase typewriter: greeting -> middle -> agent name (no trailing period)
     isAnimatingRef.current = true;
     setTypedText('');
 
-    const greetingPart = 'Welcome.';
-    const conferPart = ' Confer with your ';
-    const agentPart = `${activeAgentRef.current}.`;
+    const segments = [GREETING_PART, TYPEWRITER_MIDDLE_PART, agentPart];
     // Slow typewriter by 15% (UI-only)
     const typingSpeed = Math.round(TYPEWRITER_CHAR_MS * 1.15);
     const pauseDuration = TYPEWRITER_PAUSE_MS;
     let delay = 0;
     let output = '';
 
-    // Type "Welcome."
-    greetingPart.split('').forEach((ch) => {
-      delay += typingSpeed;
-      const id = setTimeout(() => {
-        output += ch;
-        setTypedText(output);
-      }, delay);
-      timeoutsRef.current.push(id);
-    });
+    segments.forEach((segment, segmentIndex) => {
+      segment.split('').forEach((ch) => {
+        delay += typingSpeed;
+        const id = setTimeout(() => {
+          output += ch;
+          setTypedText(output);
+        }, delay);
+        timeoutsRef.current.push(id);
+      });
 
-    // Pause
-    delay += pauseDuration;
-
-    // Type " Confer with your "
-    conferPart.split('').forEach((ch) => {
-      delay += typingSpeed;
-      const id = setTimeout(() => {
-        output += ch;
-        setTypedText(output);
-      }, delay);
-      timeoutsRef.current.push(id);
-    });
-
-    // Type "{Agent}."
-    agentPart.split('').forEach((ch) => {
-      delay += typingSpeed;
-      const id = setTimeout(() => {
-        output += ch;
-        setTypedText(output);
-      }, delay);
-      timeoutsRef.current.push(id);
+      if (segmentIndex < segments.length - 1) {
+        delay += pauseDuration;
+      }
     });
 
     // Completion
     const completionId = setTimeout(() => {
-      setTypedText(`Welcome. Confer with your ${activeAgentRef.current}.`);
+      setTypedText(finalText);
       hasPlayedRef.current = true;
       isAnimatingRef.current = false;
       setTypingDone(true);
@@ -215,23 +238,20 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     // Check if agent is specified in URL
     const agentParam = searchParams.get('agent');
     if (agentParam) {
-      const matchedAgent = agents.find(
-        a => slugifyAgent(a.name) === agentParam
-      );
-      if (matchedAgent && allowedSet.has(matchedAgent.name)) {
-        setSelectedAgent(matchedAgent.name);
-        activeAgentRef.current = matchedAgent.name;
+      const matchedId = findAgentId(agentParam);
+      if (matchedId && ALLOWED_AGENT_IDS.has(matchedId)) {
+        setSelectedAgentId(matchedId);
+        activeAgentRef.current = getAgentById(matchedId)?.name ?? 'Chief of Staff';
         return;
       }
     }
     // Fallback ensure selected is allowed
-    if (!allowedSet.has(selectedAgent)) {
-      const fallback = menuAgents[0]?.name || 'Commander';
-      setSelectedAgent(fallback);
-      activeAgentRef.current = fallback;
+    if (!ALLOWED_AGENT_IDS.has(selectedAgentId)) {
+      const fallbackId = menuAgents[0]?.id || DEFAULT_AGENT_ID;
+      setSelectedAgentId(fallbackId);
+      activeAgentRef.current = getAgentById(fallbackId)?.name ?? 'Chief of Staff';
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, selectedAgentId, menuAgents]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -239,7 +259,8 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
         if (entry.isIntersecting) {
           hasEnteredViewportRef.current = true;
           // Ensure the agent used by the typewriter matches current selection
-          activeAgentRef.current = selectedAgent;
+          const latestAgentName = getAgentById(selectedAgentId)?.name ?? 'Chief of Staff';
+          activeAgentRef.current = latestAgentName;
           startTypingAnimation();
         }
       },
@@ -256,19 +277,21 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
         observer.unobserve(sectionRef.current);
       }
     };
-  }, [selectedAgent]);
+  }, [selectedAgentId]);
 
   // Keep typewriter phrase reactive to selected agent
   // - If animation already completed, just swap the agent name in-place
   // - If animation is in-progress, abort and restart cleanly with the new agent
   useEffect(() => {
-    activeAgentRef.current = selectedAgent;
+    const agentName = getAgentById(selectedAgentId)?.name ?? 'Chief of Staff';
+    activeAgentRef.current = agentName;
+    const finalText = `${GREETING_PART}${TYPEWRITER_MIDDLE_PART}${agentName}`;
     if (hasPlayedRef.current) {
-      setTypedText(`Welcome. Confer with your ${selectedAgent}.`);
+      setTypedText(finalText);
     } else if (isAnimatingRef.current) {
       abortAndRestartTyping();
     }
-  }, [selectedAgent]);
+  }, [selectedAgentId]);
 
   // Computed-size adjustments (UI-only)
   // - Typewriter H1: 50% of computed size (run once on mount)
@@ -284,7 +307,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
   // Removed font-size mutation on reveal to avoid layout shifts
 
-  // Orchestrate chatbox mount → fade, then chips → H1 reveal
+  // Orchestrate chatbox mount ? fade, then chips ? H1 reveal
   useEffect(() => {
     if (!typingDone) return;
     setChatboxMounted(true);
@@ -329,7 +352,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     };
   }, [chatboxVisible]);
 
-  // H1 glitch + left→right reveal (run concurrently)
+  // H1 glitch + left?right reveal (run concurrently)
   useEffect(() => {
     if (!h1Visible) return;
     const reduceMotion =
@@ -372,14 +395,6 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
     .map(w => (w.length ? (w[0].toUpperCase() + w.slice(1).toLowerCase()) : w))
     .join(' ');
 
-  // Derive typed segments: prefix ("Welcome. Confer with your "), agent name (colored), and suffix (e.g., '.')
-  const prefixText = 'Welcome. Confer with your ';
-  const typedPrefix = typedText.slice(0, Math.min(typedText.length, prefixText.length));
-  const restText = typedText.length > prefixText.length ? typedText.slice(prefixText.length) : '';
-  const dotIndex = restText.indexOf('.')
-  const typedAgentName = dotIndex >= 0 ? restText.slice(0, dotIndex) : restText;
-  const typedSuffix = dotIndex >= 0 ? restText.slice(dotIndex) : '';
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim() || isLoading) return;
@@ -401,10 +416,10 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
 
     try {
       // Send message to API
-      const selectedAgentId = agents.find(a => a.name === selectedAgent)?.id || 'commander';
+      const agentIdForRequest = selectedAgentId || DEFAULT_AGENT_ID;
       const response = await sendMessageAPI(
         userMessage,
-        selectedAgentId,
+        agentIdForRequest,
         currentSessionId
       );
 
@@ -417,7 +432,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
       const agentMessage = {
         id: Date.now() + 1,
         role: 'agent',
-        agent: response.data?.agent || selectedAgent,
+        agent: response.data?.agent || currentAgent?.name || 'Chief of Staff',
         content: response.data?.response || 'No response',
         timestamp: new Date().toISOString(),
         metadata: response.data?.metadata || {},
@@ -491,27 +506,17 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
           </div>
           <h1
             ref={titleRef}
-            className="mb-3 font-bold uppercase tracking-tight text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
+            className="mb-3 font-bold text-[#F2F2F2] text-[clamp(1.25rem,4.5vw,1.75rem)]"
           >
-            <span
-              ref={helloPrefixRef}
-              id="hero-typed"
-              aria-live="polite"
-              className="inline-flex flex-wrap items-baseline gap-1"
-            >
-              <span className="whitespace-pre text-[#B3B3B3]">{typedPrefix}</span>
-              <span className="underline underline-offset-4" style={{ color: currentAgentColor, textDecorationColor: currentAgentColor }}>
-                {typedAgentName}
-              </span>
-              <span className="whitespace-pre text-[#B3B3B3]">{typedSuffix}</span>
-            </span>
-            <span
-              className="ml-2 inline-block h-[1em] w-[2px] animate-blink align-middle"
-              style={{
-                backgroundColor: currentAgentColor,
-                opacity: typingDone ? 0 : 1,
-              }}
-            />
+            <div className="mx-auto max-w-3xl text-center">
+              <p
+                id="hero-typed"
+                aria-live="polite"
+                className="hero-typewriter text-lg md:text-xl text-[#B3B3B3]"
+              >
+                {typedText}
+              </p>
+            </div>
           </h1>
           {/* Removed the small purple agent label line in hero per spec */}
         </div>
@@ -569,7 +574,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                         boxShadow: '0 0 0 2px rgba(0,0,0,0.2)'
                       }}
                     />
-                    <span>{selectedAgent}</span>
+                    <span>{currentAgent?.name ?? 'Chief of Staff'}</span>
                   </span>
                   <ChevronDown className={`h-4 w-4 text-[#B3B3B3] transition-transform ${showAgentMenu ? 'rotate-180' : ''}`} />
                 </button>
@@ -578,11 +583,11 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                   <div role="listbox" className="absolute left-1/2 z-10 mt-2 w-[min(20rem,90vw)] -translate-x-1/2 rounded-lg border border-[#202020] bg-[#0C0C0C] p-1 shadow-xl">
                     {menuAgents.map((agent) => (
                       <button
-                        key={agent.name}
-                        onClick={() => handleAgentSelect(agent.name)}
+                        key={agent.id}
+                        onClick={() => handleAgentSelect(agent.id)}
                         className="flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-[#202020]"
                         role="option"
-                        aria-selected={selectedAgent === agent.name}
+                        aria-selected={selectedAgentId === agent.id}
                       >
                         <span
                           aria-hidden="true"
@@ -598,7 +603,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                           }}
                         />
                         <span className="flex-1 text-sm text-[#F2F2F2]">{agent.name}</span>
-                        {selectedAgent === agent.name && <span className="text-[#FFC96C]">✓</span>}
+                        {selectedAgentId === agent.id && <span className="text-[#FFC96C]">Active</span>}
                       </button>
                     ))}
                   </div>
@@ -665,7 +670,7 @@ export default function AIChatInterface({ initialAgent = 'Commander', onAgentCha
                       ref={textareaRef}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Describe what you need help with…"
+                      placeholder="Describe what you need help with?"
                       className="w-full resize-none rounded-full bg-transparent px-4 py-3 text-[#F2F2F2] focus:outline-none"
                       rows={3}
                       onKeyDown={(e) => {

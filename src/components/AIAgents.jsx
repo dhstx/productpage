@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import { useRef, useState } from 'react';
 import { Bot, Brain, Lightbulb, Target, Wrench, Palette, Megaphone, Users, Archive, DollarSign, Scale, Shield, TrendingUp } from 'lucide-react';
 import { getAgentColor } from './ui/agentThemes';
 import FadeInSection from './FadeInSection';
+import AgentsPopup from './agents/AgentsPopup';
 
 export default function AIAgents() {
   // All 13 specialized AI agents with icons, descriptions, and capabilities
+  const [agentsOpen, setAgentsOpen] = useState(false);
+  const viewAllButtonRef = useRef(null);
+
   const agents = [
     {
       icon: <Target className="w-12 h-12" />,
-      name: 'Commander',
+      name: 'Chief of Staff',
       description: 'Strategic leadership and executive decision-making. Provides high-level oversight, aligns initiatives with business objectives, and drives long-term vision.',
       capabilities: [
         'Strategic planning',
@@ -16,7 +22,7 @@ export default function AIAgents() {
         'Business alignment',
         'Vision & roadmap',
       ],
-      color: getAgentColor('Commander', '#e5aa5d'),
+      color: getAgentColor('Chief of Staff', '#e5aa5d'),
     },
     {
       icon: <Brain className="w-12 h-12" />,
@@ -165,7 +171,7 @@ export default function AIAgents() {
   ];
 
   // UI-only filter: render a focused subset without mutating source data
-  const allowedAgentNames = new Set(['Commander', 'Connector', 'Conductor']);
+  const allowedAgentNames = new Set(['Chief of Staff', 'Connector', 'Conductor']);
   const visibleAgents = agents.filter((agent) => allowedAgentNames.has(agent.name));
 
   return (
@@ -221,7 +227,7 @@ export default function AIAgents() {
                       key={capability}
                       className="flex items-start gap-2 text-xs text-[#B3B3B3]"
                     >
-                      <span style={{ color: agent.color }}>▸</span>
+                      <span style={{ color: agent.color }}>?</span>
                       {capability}
                     </li>
                   ))}
@@ -247,13 +253,25 @@ export default function AIAgents() {
               comprehensive solutions. They continuously learn from your organization's patterns,
               becoming more effective over time and adapting to your unique workflows.
             </p>
-            <Link to="/login" className="btn-system">
+            <button
+              ref={viewAllButtonRef}
+              type="button"
+              className="btn-system"
+              onClick={() => setAgentsOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={agentsOpen}
+            >
               <Bot className="h-4 w-4" />
               View All Agents
-            </Link>
+            </button>
           </div>
         </div>
       </FadeInSection>
+      <AgentsPopup
+        open={agentsOpen}
+        onClose={() => setAgentsOpen(false)}
+        triggerRef={viewAllButtonRef}
+      />
     </section>
   );
 }

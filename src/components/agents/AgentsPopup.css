@@ -1,0 +1,221 @@
+.agents-popup-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.agents-popup-root.is-open,
+.agents-popup-root.is-closing {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.agents-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.dark .agents-popup-root .agents-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.agents-popup-root.is-open .agents-backdrop {
+  opacity: 1;
+}
+
+.agents-popup-root.is-closing .agents-backdrop {
+  opacity: 0;
+}
+
+.agents-panel {
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  transition: opacity 260ms ease, transform 260ms ease;
+  --tile-size: 160px;
+}
+
+.agents-popup-root.is-open .agents-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.agents-popup-root.is-closing .agents-panel {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition-duration: 200ms;
+}
+
+.agents-pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 0 0.5rem 1rem;
+}
+
+.agents-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.75rem;
+  flex-wrap: nowrap;
+}
+
+.agent-tile {
+  width: var(--tile-size, 160px);
+  min-height: 190px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  text-align: center;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  transform: translateY(-40px) scale(0.96);
+  opacity: 0;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  outline: none;
+}
+
+.dark .agent-tile {
+  background: rgba(39, 39, 42, 0.92);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.agent-tile:hover,
+.agent-tile:focus-visible {
+  transform: translateY(-6px) scale(1.06);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
+}
+
+.agent-tile:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 201, 108, 0.8), 0 18px 36px rgba(15, 23, 42, 0.18);
+}
+
+.dark .agent-tile:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 201, 108, 0.8), 0 18px 36px rgba(0, 0, 0, 0.55);
+}
+
+.agent-symbol {
+  font-size: calc(var(--tile-size, 160px) * 0.42);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: inherit;
+}
+
+.agent-tagline {
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: rgb(71 85 105);
+}
+
+.dark .agent-tagline {
+  color: rgb(226 232 240 / 0.78);
+}
+
+@keyframes agent-tile-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes agent-tile-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.96);
+  }
+}
+
+.agents-popup-root.is-open .agent-tile {
+  animation: agent-tile-enter 480ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--agent-enter-delay, 0ms);
+}
+
+.agents-popup-root.is-closing .agent-tile {
+  animation: agent-tile-exit 360ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--agent-exit-delay, 0ms);
+}
+
+.agents-popup-root.reduce-motion .agents-backdrop,
+.agents-popup-root.reduce-motion .agents-panel {
+  transition: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.agents-popup-root.reduce-motion .agent-tile {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.agents-popup-root.reduce-motion .agent-tile:hover,
+.agents-popup-root.reduce-motion .agent-tile:focus-visible {
+  transform: translateY(-6px) scale(1.06);
+}
+
+@media (max-width: 900px) {
+  .agents-row {
+    gap: 1.5rem;
+  }
+
+  .agent-tile {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .agents-backdrop {
+    background: rgba(0, 0, 0, 0.35);
+  }
+
+  .agents-panel {
+    border-radius: 0;
+    max-height: none;
+    height: 100%;
+  }
+
+  .agents-pyramid {
+    gap: 1.4rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .agents-row {
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+
+  .agent-tile {
+    width: calc(var(--tile-size, 160px) * 0.92);
+    min-height: 170px;
+  }
+
+  .agent-tagline {
+    font-size: 0.8125rem;
+  }
+}
